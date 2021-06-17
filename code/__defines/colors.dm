@@ -116,8 +116,6 @@
 #define COMMS_COLOR_COLONY     "#ceaf3e"
 #define COMMS_COLOR_VERNE      "#738465"
 
-#define	COMMS_COLOR_SOL_COMMAND "#ff00ff" // THE ARK PROJECT CODE
-
 #define WOOD_COLOR_GENERIC     "#d5a66e"
 #define WOOD_COLOR_RICH        "#792f27"
 #define WOOD_COLOR_PALE        "#d2bc9d"
