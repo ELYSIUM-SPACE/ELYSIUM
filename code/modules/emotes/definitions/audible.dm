@@ -2,6 +2,7 @@
 	key = "burp"
 	emote_message_3p = "USER burps."
 	message_type = AUDIBLE_MESSAGE
+	var/emote_sound
 
 /decl/emote/audible/do_extra(var/atom/user)
 	if(emote_sound)
@@ -196,7 +197,7 @@
 	key ="hiss_"
 	emote_message_3p_target = "USER hisses softly at TARGET."
 	emote_message_3p = "USER hisses softly."
-
+	
 /decl/emote/audible/lizard_bellow
 	key = "bellow"
 	emote_message_3p_target = "USER bellows deeply at TARGET!"

@@ -153,8 +153,6 @@ var/list/gamemode_cache = list()
 	var/admin_irc = ""
 	var/announce_evac_to_irc = FALSE
 
-	var/notify_role_id = "" // THE ARK PROJECT CODE
-
 	// Event settings
 	var/expected_round_length = 3 * 60 * 60 * 10 // 3 hours
 	// If the first delay has a custom start time
@@ -571,9 +569,6 @@ var/list/gamemode_cache = list()
 
 				if("admin_irc")
 					config.admin_irc = value
-
-				if("notify_role_id") // THE ARK PROJECT CODE
-					config.notify_role_id = value
 
 				if("announce_evac_to_irc")
 					config.announce_evac_to_irc = TRUE

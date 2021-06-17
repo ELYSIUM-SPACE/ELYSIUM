@@ -51,5 +51,5 @@
 		. += "[world.address]:[world.port]"
 
 /hook/startup/proc/ircNotify()
-	send2mainirc("[config.notify_role_id ? "<@&[config.notify_role_id]>, " : ""]Server starting up on [get_world_url()]") // THE ARK PROJECT CODE
+	send2mainirc("Server starting up on [get_world_url()]")
 	return 1

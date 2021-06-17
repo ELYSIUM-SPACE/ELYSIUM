@@ -128,9 +128,6 @@ var/const/EXP_FREQ = 1361
 var/const/MED_I_FREQ = 1485
 var/const/SEC_I_FREQ = 1475
 
-// THE ARK PROJECT FREQUENCIES
-var/const/SOL_COMM_FREQ = 1363 // THE ARK PROJECT CODE
-
 // Away Site Channels
 var/list/AWAY_FREQS_UNASSIGNED = list(1491, 1493, 1495, 1497, 1499, 1501, 1503, 1505, 1507, 1509)
 var/list/AWAY_FREQS_ASSIGNED = list("Hailing" = HAIL_FREQ)
@@ -166,8 +163,7 @@ var/list/radiochannels = list(
 	"AI Private"	= AI_FREQ,
 	"Entertainment" = ENT_FREQ,
 	"Medical (I)"	= MED_I_FREQ,
-	"Security (I)"	= SEC_I_FREQ,
-	"Sol Command"	= SOL_COMM_FREQ // THE ARK PROJECT CODE
+	"Security (I)"	= SEC_I_FREQ
 )
 
 var/list/channel_color_presets = list(
@@ -188,8 +184,7 @@ var/list/channel_color_presets = list(
 	"Raging Red" = COMMS_COLOR_SECURITY,
 	"Spectacular Silver" = COMMS_COLOR_ENTERTAIN,
 	"Tantalizing Turquoise" = COMMS_COLOR_MEDICAL,
-	"Viewable Violet" = COMMS_COLOR_SKRELL,
-	"Negotiating Blue" = COMMS_COLOR_SOL_COMMAND // THE ARK PROJECT CODE
+	"Viewable Violet" = COMMS_COLOR_SKRELL
 )
 
 // central command channels, i.e deathsquid & response teams
@@ -212,7 +207,7 @@ var/list/DEPT_FREQS = list(AI_FREQ, COMM_FREQ, ENG_FREQ, MED_FREQ, SEC_FREQ, SCI
 	if(frequency in CENT_FREQS)
 		return "centradio"
 	// command channel
-	if(frequency == COMM_FREQ | frequency == SOL_COMM_FREQ) // THE ARK PROJECT CODE
+	if(frequency == COMM_FREQ)
 		return "comradio"
 	// AI private channel
 	if(frequency == AI_FREQ)
