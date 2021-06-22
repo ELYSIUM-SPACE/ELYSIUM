@@ -15,6 +15,8 @@
 #define LANGUAGE_EAL               "Encoded Audio Language"
 #define LANGUAGE_UNATHI_SINTA      "Sinta'unathi"
 #define LANGUAGE_UNATHI_YEOSA      "Yeosa'unathi"
+#define LANGUAGE_SIIK_MAAS         "Siik'maas"	//Elysium
+#define LANGUAGE_SIIK_TAJR         "Siik'tajr"	//Elysium
 #define LANGUAGE_SKRELLIAN         "Skrellian"
 #define LANGUAGE_ROOTLOCAL         "Local Rootspeak"
 #define LANGUAGE_ROOTGLOBAL        "Global Rootspeak"

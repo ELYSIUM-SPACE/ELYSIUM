@@ -128,6 +128,10 @@ var/const/EXP_FREQ = 1361
 var/const/MED_I_FREQ = 1485
 var/const/SEC_I_FREQ = 1475
 
+// ELYSIUM
+var/const/SOL_COMM_FREQ = 1363
+var/const/SOL_PUB_FREQ = 1464	//1463в оригинале, пришлось сменить из-за HAIL_FREQ
+
 // Away Site Channels
 var/list/AWAY_FREQS_UNASSIGNED = list(1491, 1493, 1495, 1497, 1499, 1501, 1503, 1505, 1507, 1509)
 var/list/AWAY_FREQS_ASSIGNED = list("Hailing" = HAIL_FREQ)

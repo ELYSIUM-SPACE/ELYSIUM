@@ -15,6 +15,14 @@
 
 	var/list/areas_to_use = list()
 
+	//	Elysium vars
+	var/door_floor_type
+	var/ext_panel_x_adj
+	var/ext_panel_y_adj
+	var/int_panel_x_adj
+	var/int_panel_y_adj
+	//	Elysium vars
+
 /obj/turbolift_map_holder/Destroy()
 	turbolifts -= src
 	return ..()
