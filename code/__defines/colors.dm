@@ -66,6 +66,7 @@
 #define COLOR_LIGHT_CYAN       "#66ccff"
 #define COLOR_PAKISTAN_GREEN   "#006600"
 #define COLOR_SOL              "#436b8e"
+#define COLOR_HULL             "#436b8e"	//Elysium
 #define COLOR_AMBER            "#ffbf00"
 #define COLOR_COMMAND_BLUE     "#46698c"
 #define COLOR_SKY_BLUE         "#5ca1cc"
@@ -81,7 +82,7 @@
 #define COLOR_ASTEROID_ROCK    "#735555"
 #define COLOR_NULLGLASS        "#ff6088"
 #define COLOR_DIAMOND          "#d8d4ea"
-
+#define COLOR_SFP_BLUE 		   "#2c425f"	//Elysium
 
 #define	PIPE_COLOR_GREY        "#808080"
 #define	PIPE_COLOR_RED         "#ff0000"
@@ -115,6 +116,7 @@
 #define COMMS_COLOR_BEARCAT    "#590e2d"
 #define COMMS_COLOR_COLONY     "#ceaf3e"
 #define COMMS_COLOR_VERNE      "#738465"
+#define	COMMS_COLOR_SOL_COMMAND	"#0080ff"	//Elysium
 
 #define WOOD_COLOR_GENERIC     "#d5a66e"
 #define WOOD_COLOR_RICH        "#792f27"
