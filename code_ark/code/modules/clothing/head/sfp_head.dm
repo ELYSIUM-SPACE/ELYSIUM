@@ -25,4 +25,4 @@
 	icon_state = "sfp_blue_cap"
 
 /obj/item/clothing/head/helmet/sfp
-	starting_accessories = list(/obj/item/clothing/accessory/armor/helmcover/sfp)
+	accessories = list(/obj/item/clothing/accessory/armor/helmcover/sfp)

@@ -391,7 +391,7 @@
 //helmets and other such trash
 
 /obj/item/clothing/head/helmet/solgov
-	starting_accessories = list(/obj/item/clothing/accessory/armor/helmcover/blue/sol)
+	accessories = list(/obj/item/clothing/accessory/armor/helmcover/blue/sol)
 
 /obj/item/clothing/head/helmet/solgov/security
 	name = "security helmet"
@@ -399,7 +399,7 @@
 	icon_state = "helmet_security"
 	icon = 'code_ark/icons/obj/clothing/sol/obj_head_solgov.dmi'
 	item_icons = list(slot_head_str = 'code_ark/icons/mob/onmob/sol/onmob_head_solgov.dmi')
-	starting_accessories = null
+	accessories = null
 //ARK
 	sprite_sheets = list(
 //		SPECIES_VOX = 'icons/mob/species/vox/head.dmi',
@@ -414,13 +414,13 @@
 	icon_state = "helmet_command"
 	icon = 'code_ark/icons/obj/clothing/sol/obj_head_solgov.dmi'
 	item_icons = list(slot_head_str = 'code_ark/icons/mob/onmob/sol/onmob_head_solgov.dmi')
-	starting_accessories = null
+	accessories = null
 
 /obj/item/clothing/head/helmet/solgov/pilot
 	name = "pilot's helmet"
 	desc = "A pilot's helmet for operating the cockpit in style. For when you want to protect your noggin AND look stylish."
 	icon_state = "pilotgov"
-	starting_accessories = null
+	accessories = null
 
 /obj/item/clothing/head/helmet/solgov/pilot/fleet
 	name = "fleet pilot's helmet"
@@ -428,7 +428,7 @@
 	icon_state = "pilotfleet"
 	icon = 'code_ark/icons/obj/clothing/sol/obj_head_solgov.dmi'
 	item_icons = list(slot_head_str = 'code_ark/icons/mob/onmob/sol/onmob_head_solgov.dmi')
-	starting_accessories = null
+	accessories = null
 
 /obj/item/clothing/head/helmet/space/void/exploration
 	camera = /obj/machinery/camera/network/sol_exploration
