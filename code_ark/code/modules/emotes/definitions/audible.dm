@@ -3,10 +3,6 @@
 	emote_message_3p = "USER рыгает."
 	message_type = AUDIBLE_MESSAGE
 
-/decl/emote/audible/do_extra(var/atom/user)
-	if(emote_sound)
-		playsound(user.loc, emote_sound, 50, 0)
-
 /decl/emote/audible/deathgasp_alien
 	key = "deathgasp"
 	emote_message_3p = "USER издает слабеющий гортанный визг; зеленая кровь пузырится из пасти."
