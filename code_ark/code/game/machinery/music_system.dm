@@ -1,5 +1,3 @@
-//MOST IS DISABLED DURING REBASE BECAUSE CURRENT BAY USES DIFFERENT MUSIC SYSTEM, THIS ONE NEEDS TO BE ADAPTED
-
 /obj/machinery/media/mixing_console
 	name = "mixing console"
 	desc = "It's an advanced accoustic system control panel. It's connected to loudspeakers to cover a larger area. Along with some default tracks stored, it has access to a global music database."
@@ -18,10 +16,10 @@
 	var/sound_id
 	var/datum/sound_token/sound_token
 
-	var/datum/track/current_track
-	var/list/track/tracks
+	var/decl/audio/track/current_track
+	var/list/decl/audio/track/tracks
 
-	var/music_track/custom_track/custom_track
+	var/decl/audio/track/custom_track
 
 	var/list/obj/machinery/media/speaker/slaves = list()
 
@@ -42,11 +40,11 @@
 /obj/machinery/media/mixing_console/Initialize()
 	. = ..()
 	sound_id = "[type]_[sequential_id(type)]"
-	//tracks = setup_music_tracks(tracks)
 	return INITIALIZE_HINT_LATELOAD
 
 /obj/machinery/media/mixing_console/LateInitialize()
 	. = ..()
+	tracks = decls_repository.get_decls_of_subtype(/decl/audio/track)
 	for (var/obj/machinery/media/speaker/i in world)
 		if(i.id_tag == id_tag)
 			slaves += i
@@ -68,8 +66,8 @@
 
 /obj/machinery/media/mixing_console/Destroy()
 	StopPlaying()
-//	QDEL_NULL_LIST(tracks)
-//	current_track = null
+	QDEL_NULL_LIST(tracks)
+	current_track = null
 	. = ..()
 
 /obj/machinery/media/speaker/Destroy()
@@ -106,7 +104,7 @@
 	playing = 0
 	update_use_power(POWER_USE_IDLE)
 	update_icon()
-/*
+
 
 /obj/machinery/media/mixing_console/proc/StartPlaying()
 	if(emagged)
@@ -116,7 +114,7 @@
 		if(!current_track && !custom_track)
 			return
 
-		sound_token = GLOB.sound_player.PlayLoopingSound(src, sound_id, (custom_track != null ? custom_track.song : current_track.GetTrack()), volume = volume, range = 2, falloff = 1, prefer_mute = TRUE)
+		sound_token = GLOB.sound_player.PlayLoopingSound(src, sound_id, (custom_track ? custom_track.source : current_track.source), volume = volume, range = 2, falloff = 1, prefer_mute = TRUE)
 
 		playing = 1
 
@@ -212,7 +210,7 @@ obj/machinery/media/speaker/proc/emag_play()
 
 /obj/machinery/media/speaker/on_update_icon()
 	overlays.Cut()
-	if(!stat & (NOPOWER|BROKEN))
+	if(stat & ~(NOPOWER|BROKEN))
 		var/image/I = image('code_ark/icons/obj/machinery.dmi',(playing == 1 ? "speaker_playing" : "speaker_powered"))
 		overlays += I
 
@@ -224,11 +222,11 @@ obj/machinery/media/speaker/proc/emag_play()
 
 /obj/machinery/media/mixing_console/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	var/list/mixer_tracks = new
-	for(var/datum/track/T in tracks)
+	for(var/decl/audio/track/T in tracks)
 		mixer_tracks.Add(list(list("track"=T.title)))
 
 	var/list/data = list(
-		"current_track" = custom_track != null ? custom_track.title : (current_track != null ? current_track.title : "Track not set"),
+		"current_track" = custom_track ? custom_track.title : (current_track ? current_track.title : "Track not set"),
 		"playing" = playing,
 		"tracks" = mixer_tracks,
 		"volume" = volume
@@ -247,7 +245,7 @@ obj/machinery/media/speaker/proc/emag_play()
 
 /obj/machinery/media/mixing_console/OnTopic(var/mob/user, var/list/href_list, state)
 	if (href_list["title"])
-		for(var/datum/track/T in tracks)
+		for(var/decl/audio/track/T in tracks)
 			if(T.title == href_list["title"])
 				current_track = T
 				custom_track = null
@@ -269,8 +267,8 @@ obj/machinery/media/speaker/proc/emag_play()
 	if (href_list["open_track"])
 		custom_track = new
 		custom_track.title = input("Input the Song Name...") as null|text
-		custom_track.song = input(usr, "Choose a Song File to Load","Upload Song File") as null|file
-		if(!custom_track.song || (custom_track.song == 'sound/misc/null.ogg'))
+		custom_track.source = input(usr, "Choose a Song File to Load","Upload Song File") as null|file
+		if(!custom_track.source || (custom_track.source == 'sound/misc/null.ogg'))
 			return TOPIC_REFRESH
 		StartPlaying()
 		return TOPIC_REFRESH
@@ -278,4 +276,3 @@ obj/machinery/media/speaker/proc/emag_play()
 	if (href_list["volume"])
 		AdjustVolume(text2num(href_list["volume"]))
 		return TOPIC_REFRESH
-*/
