@@ -10583,8 +10583,7 @@
 "arR" = (
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/external/bolted{
-	name = "Maintenance Airlock External Access";
-	tag = "level1_maintairlock1_outer"
+	name = "Maintenance Airlock External Access"
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/techfloor/grid,
@@ -11349,7 +11348,7 @@
 	},
 /obj/machinery/body_scan_display{
 	pixel_x = 32;
-	tag = "med_or"
+
 	},
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/medbay/operating)
@@ -15601,7 +15600,7 @@
 	master_tag = "engine_airlock";
 	pixel_x = -8;
 	pixel_y = -24;
-	tag = "engine_airlock_interior_sensor"
+
 	},
 /obj/effect/floor_decal/corner/yellow/three_quarters{
 	dir = 4
@@ -15818,7 +15817,7 @@
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/airlock/external/bolted{
 	name = "Engine Internal Access";
-	tag = "engine_airlock_inner"
+
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden,
 /obj/structure/cable/yellow{
@@ -16675,7 +16674,7 @@
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/airlock/external/bolted{
 	name = "Engine External Access";
-	tag = "engine_airlock_outer"
+
 	},
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -17534,7 +17533,7 @@
 	master_tag = "engine_airlock";
 	pixel_x = -8;
 	pixel_y = 24;
-	tag = "engine_airlock_exterior_sensor"
+
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/liberty/engineering/supermatter_tegs)
@@ -21288,7 +21287,7 @@
 /obj/machinery/atmospherics/pipe/simple/hidden,
 /obj/machinery/door/airlock/external/bolted{
 	name = "Maintenance Airlock Internal Access";
-	tag = "level1_maintairlock1_inner"
+
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/techfloor/grid,
@@ -34970,7 +34969,7 @@
 	master_tag = "level1_maintairlock1_airlock";
 	pixel_x = 24;
 	pixel_y = -24;
-	tag = "level1_maintairlock1_exterior_sensor"
+
 	},
 /turf/space,
 /area/space)

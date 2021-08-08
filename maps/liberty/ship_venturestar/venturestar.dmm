@@ -271,8 +271,7 @@
 	alarm_id = "venturestar_airlock";
 	frequency = 1331;
 	id_tag = "venturestar_airlock";
-	pixel_y = 24;
-	tag = "venturestar_airlock"
+	pixel_y = 24
 	},
 /obj/random/ore_smug,
 /turf/simulated/floor/plating,
