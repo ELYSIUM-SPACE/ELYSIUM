@@ -6,7 +6,7 @@
 	icon = 'code_ark/icons/obj/machinery.dmi'
 	icon_state = "mixer"
 	anchored = 1
-	density = 1
+	density = TRUE
 	power_channel = EQUIP
 	idle_power_usage = 10
 	active_power_usage = 100

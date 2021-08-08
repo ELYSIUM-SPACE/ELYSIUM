@@ -4,7 +4,7 @@
 	icon = 'code_ark/icons/obj/machinery.dmi'
 	icon_state = "101"
 
-	density = 0
+	density = FALSE
 	power_channel = EQUIP
 	idle_power_usage = 10
 

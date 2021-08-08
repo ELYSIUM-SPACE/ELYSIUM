@@ -6,7 +6,7 @@ GLOBAL_LIST_INIT(control_rods, list())
 	icon = 'code_ark/icons/obj/machines/nuclearcore.dmi'
 	icon_state = "cr_0"
 	anchored = 1
-	density = 0
+	density = FALSE
 	use_power = 0
 	var/base_accp = 250  // how much radiation is blocked
 	var/rod_length = 0
@@ -94,15 +94,15 @@ GLOBAL_LIST_INIT(control_rods, list())
 	if(health > 0)
 		switch(rod_length)
 			if (-1 to 0.1)
-				density = 0
+				density = FALSE
 			if (0.1 to 1)
-				density = 0
+				density = FALSE
 			if (1 to 2)
-				density = 1
+				density = TRUE
 			if (2 to 3)
-				density = 1
+				density = TRUE
 			if (3 to 4.2)
-				density = 1
+				density = TRUE
 
 /obj/machinery/control_rod/on_update_icon()
 	if(health <= 0)
@@ -123,7 +123,7 @@ GLOBAL_LIST_INIT(control_rods, list())
 /obj/machinery/control_rod/proc/check()
 	if(health <= 0)
 		rod_length = 0
-		density = 1
+		density = TRUE
 	var/datum/gas_mixture/environment = loc.return_air()
 	if(environment.temperature > 3000)
 		health -= (environment.temperature - 3000)/10

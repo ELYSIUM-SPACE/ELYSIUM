@@ -1,6 +1,6 @@
 /obj/structure/font
 	icon = 'maps/liberty/ship_lucius/icons/structures/font.dmi'
-	density = 0
+	density = FALSE
 
 /obj/structure/font/l
 	name = "letter L"

@@ -9,7 +9,7 @@
 	idle_power_usage = 10
 	active_power_usage = 120 // No idea what the realistic amount would be.
 	use_power = 1
-	density = 0
+	density = FALSE
 	layer = 3
 	req_access = list(access_security)
 	var/ignore_access = 1 // It won't check persons who have security access

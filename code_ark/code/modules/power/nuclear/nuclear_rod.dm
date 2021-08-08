@@ -6,7 +6,7 @@ GLOBAL_LIST_INIT(nrods, list())
 	icon = 'code_ark/icons/obj/machines/nuclearcore.dmi'
 	icon_state = "base_rod"
 	anchored = 1
-	density = 1
+	density = TRUE
 	var/sealed = FALSE
 	use_power = 0
 	var/accepted_rads = 0

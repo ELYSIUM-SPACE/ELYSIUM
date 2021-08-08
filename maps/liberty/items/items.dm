@@ -7,7 +7,7 @@ Closets
 	desc = "Wall locker holding the boomstick."
 	req_access = list(access_sol_exp)
 	closet_appearance = /decl/closet_appearance/wall/explo_gun
-	density = 0
+	density = FALSE
 	anchored = 1
 	wall_mounted = 1
 	storage_types = CLOSET_STORAGE_ITEMS

@@ -24,7 +24,7 @@
 	name = "Fuel assembly fabricator"
 	icon = 'code_ark/icons/obj/machines/nuclearcore.dmi'
 	icon_state = "fabricator"
-	density = 1
+	density = TRUE
 	anchored = 1
 	layer = 4
 	var/list/areactants = new /list(0)
@@ -200,7 +200,7 @@
 	name = "Uranium processing centrifuge"
 	icon = 'code_ark/icons/obj/machines/nuclearcore.dmi'
 	icon_state = "centrifuge"
-	density = 1
+	density = TRUE
 	anchored = 1
 	layer = 4
 	use_power = 1

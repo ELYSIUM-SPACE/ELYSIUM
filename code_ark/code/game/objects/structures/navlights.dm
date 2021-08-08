@@ -4,7 +4,7 @@
 	icon = 'code_ark/icons/obj/structures.dmi'
 	icon_state = "navlight_green"
 	anchored = 1
-	density = 1
+	density = TRUE
 	light_outer_range = 10
 	light_max_bright = 1
 	light_color = "#00ee00"

@@ -5,7 +5,7 @@
 	icon_state = "uniform"
 	layer = BELOW_OBJ_LAYER
 	anchored = 1
-	density = 1
+	density = TRUE
 
 	// Power
 	use_power = 1

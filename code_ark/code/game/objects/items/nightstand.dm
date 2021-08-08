@@ -10,7 +10,7 @@
 	throwforce = 10
 	randpixel = 0
 	anchored = 1
-	density = 0
+	density = FALSE
 
 /obj/item/storage/nightstand/attackby(obj/item/W as obj, mob/user as mob)
 	if(isWrench(W))
