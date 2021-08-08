@@ -458,7 +458,7 @@ var/list/autodocs = list()
 /datum/nano_module/autodoc_console
 	name = "Autodoc control"
 	var/list/permitted_implants = list(/obj/item/implant/chem, /obj/item/implant/death_alarm, /obj/item/implant/loyalty, /obj/item/implant/adrenalin, /obj/item/implant/translator)
-	var/emagged = 0
+	var/emagged = TRUE
 	var/obj/item/organ/sellimb
 	var/list/organs = list()
 	var/list/operations = list()

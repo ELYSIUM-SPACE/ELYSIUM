@@ -140,7 +140,7 @@
 
 /obj/machinery/media/mixing_console/emag_act(var/remaining_charges, var/mob/user)
 	if(!emagged)
-		emagged = 1
+		emagged = TRUE
 		StopPlaying()
 		visible_message("<span class='danger'>\The [src] makes a fizzling sound.</span>")
 		return 1
