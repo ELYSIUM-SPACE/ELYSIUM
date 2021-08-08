@@ -3,7 +3,7 @@
 	layer = STRUCTURE_LAYER // Fixes pipeturbine display
 	connect_types = CONNECT_TYPE_REGULAR|CONNECT_TYPE_FUEL // Fixes fuel pipe connection
 
-/obj/machinery/atmospherics/pipeturbine/update_icon()
+/obj/machinery/atmospherics/pipeturbine/on_update_icon()
 	overlays.Cut()
 	if (dP > 10)
 		overlays += image(icon, "moto-turb")
