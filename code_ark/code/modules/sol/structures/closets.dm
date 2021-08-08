@@ -13,7 +13,6 @@
 		/obj/item/device/core_sampler,
 		/obj/item/device/gps,
 		/obj/item/pinpointer/radio,
-		/obj/item/device/radio/beacon,
 		/obj/item/clothing/glasses/meson,
 		/obj/item/clothing/glasses/science,
 		/obj/item/pickaxe,

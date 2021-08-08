@@ -32,7 +32,6 @@
 		/obj/item/device/tape/random,
 		/obj/item/device/gps,
 		/obj/item/pinpointer/radio,
-		/obj/item/device/radio/beacon,
 		/obj/item/taperoll/research,
 		/obj/item/material/hatchet/machete/deluxe,
 		/obj/item/storage/belt/holster/machete,
