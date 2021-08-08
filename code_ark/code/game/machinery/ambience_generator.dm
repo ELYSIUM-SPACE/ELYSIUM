@@ -7,7 +7,7 @@
 	idle_power_usage = 10
 	active_power_usage = 500
 	clicksound = 'sound/machines/buttonbeep.ogg'
-	anchored = 1
+	anchored = TRUE
 	pixel_x = -28
 	pixel_y = 38
 

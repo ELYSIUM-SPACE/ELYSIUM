@@ -5,7 +5,7 @@ GLOBAL_LIST_INIT(nrods, list())
 	desc = "A nuclear rod, that generates radiation, thermal energy and some problems ."
 	icon = 'code_ark/icons/obj/machines/nuclearcore.dmi'
 	icon_state = "base_rod"
-	anchored = 1
+	anchored = TRUE
 	density = TRUE
 	var/sealed = FALSE
 	use_power = 0
@@ -76,10 +76,10 @@ GLOBAL_LIST_INIT(nrods, list())
 				switch(anchored)
 					if(1.0)
 						user.visible_message("<span class='notice'>[user] unwrenched rod from the ground.</span>")
-						anchored = 0
+						anchored = FALSE
 					if(0.0)
 						user.visible_message("<span class='notice'>[user] wrenched rod into place.</span>")
-						anchored = 1
+						anchored = TRUE
 
 			else if(isWelder(W))
 				to_chat(user, "<span class='notice'>You are fixing the rod with [W].</span>")

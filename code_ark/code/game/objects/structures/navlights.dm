@@ -3,7 +3,7 @@
 	desc = "It's a large and extremely bright navigation light. Its green color is indicating the starboard side of the vessel."
 	icon = 'code_ark/icons/obj/structures.dmi'
 	icon_state = "navlight_green"
-	anchored = 1
+	anchored = TRUE
 	density = TRUE
 	light_outer_range = 10
 	light_max_bright = 1

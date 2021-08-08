@@ -4,7 +4,7 @@
 	icon = 'code_ark/icons/obj/furniture.dmi'
 	icon_state = "bed_double"
 	base_icon = "bed_double"
-	anchored = 1
+	anchored = TRUE
 	can_buckle = 1
 	buckle_dir = SOUTH
 	buckle_lying = 1

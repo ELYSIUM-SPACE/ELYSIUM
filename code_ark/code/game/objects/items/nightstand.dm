@@ -9,7 +9,7 @@
 	force = 8
 	throwforce = 10
 	randpixel = 0
-	anchored = 1
+	anchored = TRUE
 	density = FALSE
 
 /obj/item/storage/nightstand/attackby(obj/item/W as obj, mob/user as mob)

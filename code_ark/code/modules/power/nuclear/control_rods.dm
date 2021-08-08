@@ -5,7 +5,7 @@ GLOBAL_LIST_INIT(control_rods, list())
 	desc = "A control rods, keeping reactor from meltdown ."
 	icon = 'code_ark/icons/obj/machines/nuclearcore.dmi'
 	icon_state = "cr_0"
-	anchored = 1
+	anchored = TRUE
 	density = FALSE
 	use_power = 0
 	var/base_accp = 250  // how much radiation is blocked

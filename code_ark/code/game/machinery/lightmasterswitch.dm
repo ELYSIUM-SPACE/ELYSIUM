@@ -3,7 +3,7 @@
 	desc = "It turns lights on and off. It can be connected to several light switches in various areas to control the lights in a centralized manner."
 	icon = 'code_ark/icons/obj/power.dmi'
 	icon_state = "light"
-	anchored = 1
+	anchored = TRUE
 	idle_power_usage = 20
 	power_channel = EQUIP
 	var/on = 1

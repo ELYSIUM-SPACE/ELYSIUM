@@ -25,7 +25,7 @@
 	icon = 'code_ark/icons/obj/machines/nuclearcore.dmi'
 	icon_state = "fabricator"
 	density = TRUE
-	anchored = 1
+	anchored = TRUE
 	layer = 4
 	var/list/areactants = new /list(0)
 	var/list/buffer = new /list(0)
@@ -201,7 +201,7 @@
 	icon = 'code_ark/icons/obj/machines/nuclearcore.dmi'
 	icon_state = "centrifuge"
 	density = TRUE
-	anchored = 1
+	anchored = TRUE
 	layer = 4
 	use_power = 1
 	idle_power_usage = 10

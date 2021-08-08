@@ -2,7 +2,7 @@
 	name = "stairs"
 	desc = "It's section of stairs."
 	icon = 'icons/obj/stairs.dmi'
-	anchored = 1
+	anchored = TRUE
 	density = FALSE
 
 /obj/structure/fake_stairs/single

@@ -8,7 +8,7 @@ Closets
 	req_access = list(access_sol_exp)
 	closet_appearance = /decl/closet_appearance/wall/explo_gun
 	density = FALSE
-	anchored = 1
+	anchored = TRUE
 	wall_mounted = 1
 	storage_types = CLOSET_STORAGE_ITEMS
 

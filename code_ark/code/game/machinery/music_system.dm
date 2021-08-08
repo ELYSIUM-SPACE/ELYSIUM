@@ -5,7 +5,7 @@
 	desc = "It's an advanced accoustic system control panel. It's connected to loudspeakers to cover a larger area. Along with some default tracks stored, it has access to a global music database."
 	icon = 'code_ark/icons/obj/machinery.dmi'
 	icon_state = "mixer"
-	anchored = 1
+	anchored = TRUE
 	density = TRUE
 	power_channel = EQUIP
 	idle_power_usage = 10

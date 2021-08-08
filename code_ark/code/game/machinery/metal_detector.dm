@@ -3,7 +3,7 @@
 	desc = "Don't pass it with weapon or grenade if you don't want to be spotted..."
 	icon = 'code_ark/icons/obj/machinery.dmi'
 	icon_state = "metal-detector"
-	anchored = 1
+	anchored = TRUE
 	var/on = 0
 	var/locked = 1
 	idle_power_usage = 10
