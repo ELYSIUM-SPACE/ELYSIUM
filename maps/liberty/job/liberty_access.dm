@@ -10,3 +10,8 @@
 	id = access_liberty_hotel
 	desc = "Hotel"
 	region = ACCESS_REGION_GENERAL
+
+/datum/access/liberty/maintenance
+	id = access_maintenance
+	desc = "General"
+	region = ACCESS_REGION_GENERAL
