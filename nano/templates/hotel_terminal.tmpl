@@ -1,0 +1,142 @@
+<!-- 
+Title: Hotel Reservations System UI
+Used In File(s): code_ark\code\modules\hotel\reservation_computers.dm
+ -->
+
+{{if data.mode == 0}}
+    <H3><span class="bad">An error has occurred!</span></H3>
+    <div class="itemGroup" style = "width: 300px">The selected room may no longer be usable, the terminal might have been reset, or the new reservation has just timed out. <br><br>Do not hesitate to reach out to the hotel personnel for help!</div><br>{{:helper.link( 'Return', 'arrowreturn-1-w', {'return_to_main' : 1}, null, null, null)}}
+
+{{else data.mode == 1}}
+    {{if data.auto == 0}}
+        <br><br>
+        <div class="itemGroup">
+            <span class="white">The terminal is remotely blocked. Self-reservations are not possible. Please, contact the hotel personnel.</span>
+        </div>
+    {{else}}
+        <H2><span class="white">Self-Reservation</span></H2>
+        <div class="itemGroup" style = "width: 300px">Please, select a room type. Prepare your ID.{{if data.special_room}}<br><i>Special offers available - ask the hotel personnel.</i>{{/if}}</div>
+        <H3><span class="white">Single Room</span></H3>
+        <div class="itemGroup" style = "width: 300px">
+            <table><tr>
+                <td>
+                    {{if !data.single_room}}
+                        {{:helper.link( 'Not Available', null, {'room_select' : 1},'disabled', null)}}
+                    {{else}}
+                        {{:helper.link( 'Available', null, {'room_reserve' : 1}, null, 'greenButton', null)}}
+                    {{/if}}
+                </td><td>
+                    <span class="white">Status: </span>
+                    {{if data.single_room}}
+                        <span class="good">ready for reservation</span>
+                    {{else}}
+                        <span class="average">not available</span>
+                    {{/if}}
+                    <br>{{if data.single_room}}1 bed - {{:data.single_room}} thalers per hour{{else}}no information available{{/if}}
+                </td>
+            </tr></table>
+        </div>
+        <H3><span class="white">Double Room - Single Bed</span></H3>
+        <div class="itemGroup" style = "width: 300px">
+            <table><tr>
+                <td>
+                    {{if !data.double_single_room}}
+                        {{:helper.link( 'Not Available', null, {'room_select' : 2},'disabled', null)}}
+                    {{else}}
+                        {{:helper.link( 'Available', null, {'room_reserve' : 2}, null, 'greenButton', null)}}
+                    {{/if}}
+                </td><td>
+                    <span class="white">Status: </span>
+                    {{if data.double_single_room}}
+                        <span class="good">ready for reservation</span>
+                    {{else}}
+                        <span class="average">not available</span>
+                    {{/if}}
+                    <br>{{if data.double_single_room}}1 bed - {{:data.double_single_room}} thalers per hour{{else}}no information available{{/if}}
+                </td>
+            </tr></table>
+        </div>
+        <H3><span class="white">Double Room - Two Beds</span></H3>
+        <div class="itemGroup" style = "width: 300px">
+            <table><tr>
+                <td>
+                    {{if !data.double_double_room}}
+                        {{:helper.link( 'Not Available', null, {'room_select' : 2},'disabled', null)}}
+                    {{else}}
+                        {{:helper.link( 'Available', null, {'room_reserve' : 2}, null, 'greenButton', null)}}
+                    {{/if}}
+                </td><td>
+                    <span class="white">Status: </span>
+                    {{if data.double_double_room}}
+                        <span class="good">ready for reservation</span>
+                    {{else}}
+                        <span class="average">not available</span>
+                    {{/if}}
+                    <br>{{if data.double_double_room}}2 beds - {{:data.double_double_room}} thalers per hour{{else}}no information available{{/if}}
+                </td>
+            </tr></table>
+        </div>
+        <br><i>Note: you'll have 5 minutes to complete a reservation.</i>
+    {{/if}}
+
+{{else data.mode == 2}}
+    <div class="itemContent">
+        {{:helper.link( 'Return', 'arrowreturn-1-w', {'return_to_main' : 1}, null, null, null)}}
+        {{:helper.link( 'Print', 'print', {'print_reservation' : 1}, data.reservation == 1? null : 'disabled', null)}}
+    </div>
+    <H2><span class="white">Self-Reservation - Room {{:data.selected_room.number}}</span></H2>
+    <div class="itemGroup"> 
+        {{if data.selected_room.status == 3 }}
+            <span class="good">Payment successful. Reservation complete</span><br>You can print out the confirmation.
+        {{else}}
+            <span class="white">Guest ID Scanning - </span>{{if data.selected_room.capacity - data.selected_room.guest_count > 0}}<span class="good">capacity remaining: {{:data.selected_room.capacity -data.selected_room.guest_count}}</span>{{else}}<span class="average">room full</span>{{/if}}<br>
+            {{if data.selected_room.guest_count == data.selected_room.capacity}}You can proceed to payment.{{else data.selected_room.guest_count > 0}}Add a guest or proceed to payment.{{else}}Please add a guest.{{/if}}
+        {{/if}}
+    </div>
+    <div class="statusDisplay">
+        <table>
+            <tr>
+                <td><span class="white">Room ID:</span></td>
+                <td>{{:data.selected_room.number}}</td>
+            </tr><tr>
+                <td style="vertical-align: top;"><span class="white">Guest List:</span></td>
+                <td><table>{{for data.selected_room.guests_as_list}}
+                        <tr><td>{{:value}}</td><td>{{:helper.link( '', 'close', {'remove_guest' : value}, data.selected_room.status == 2 ? null : 'disabled', null)}}</td></tr>
+                    {{/for}}</table></td>
+            </tr><tr>
+                <td><span class="white">Final Price:</span></td>
+                <td>{{if data.duration >= 24}}{{:data.selected_room.price*data.duration*0.75}} <span class="good">(-25%)</span>{{else}}{{:data.selected_room.price*data.duration}}{{/if}}</td>
+            </tr><tr>
+                <td><span class="white">Start Time:</span></td>
+                <td>{{:data.selected_room.start}}</td>
+            </tr><tr>
+                <td><span class="white">End Time:</span></td>
+                <td>{{:data.selected_room.end}}</td>
+            </tr>
+        </table>
+            <span class="white">Reservation Duration (hours):</span><br>
+            {{:helper.link( '1', null, {'set_duration' : 1}, data.duration == 1 || data.reservation > 0 ? 'disabled' : null, null)}}
+            {{:helper.link( '3', null, {'set_duration' : 3}, data.duration == 3 || data.reservation > 0 ? 'disabled' : null, null)}}
+            {{:helper.link( '6', null, {'set_duration' : 6}, data.duration == 6 || data.reservation > 0 ? 'disabled' : null, null)}}
+            {{:helper.link( '12', null, {'set_duration' : 12}, data.duration == 12 || data.reservation > 0 ? 'disabled' : null, null)}}
+            {{:helper.link( '24', null, {'set_duration' : 24}, data.duration == 24 || data.reservation > 0 ? 'disabled' : null, null)}}
+            {{:helper.link( '48', null, {'set_duration' : 48}, data.duration == 48 || data.reservation > 0 ? 'disabled' : null, null)}}
+    </div>
+    <div class="itemContent">
+        {{if data.selected_room.status == 2 && data.selected_room.guest_count}}
+            {{:helper.link( 'Payment', 'check', {'room_pay' : 1}, 'greenButton', null, null)}}
+        {{else}}
+            {{:helper.link( 'Payment', 'check', {'room_pay' : 1}, 'disabled', null)}}
+        {{/if}}
+        {{:helper.link( 'Add Guest', 'plusthick', {'add_guest' : 1}, data.selected_room.capacity > data.selected_room.guest_count && data.selected_room.status == 2 ? null : 'disabled', null)}}
+        {{if data.selected_room.status == 2 && (data.selected_room.guest_count || data.duration != 1)}}
+            {{:helper.link( 'Clear', 'closethick', {'room_cancel' : 1}, null, null)}}
+        {{else}}
+            {{:helper.link( 'Clear', 'closethick', {'room_cancel' : 1}, 'disabled', null)}}
+        {{/if}}
+    </div>
+
+{{else data.mode == 3}}
+    <H3><span class="average">Guest ID Scan in Progress</span></H3>
+    <div class="itemGroup" style = "width: 300px">Please, swipe your ID card through the terminal for room guest registration.</div><br>{{if data.auto}}{{:helper.link( 'Return', 'arrowreturn-1-w', {'return_to_room' : 1}, null, null, null)}}{{/if}}
+{{/if}}
