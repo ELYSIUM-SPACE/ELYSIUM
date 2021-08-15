@@ -10134,7 +10134,6 @@
 /area/shuttle/merchant/home)
 "aTB" = (
 /obj/structure/bed/chair/office/comfy/black{
-;
 	icon_state = "comfyofficechair_preview";
 	dir = 4
 	},
