@@ -156,3 +156,20 @@
 	parent_organ = BP_R_ARM
 	joint = "right wrist"
 	amputation_point = "right wrist"
+
+/obj/item/organ/external/arm/human
+	limb_flags = ORGAN_FLAGS_GENDERED_ICON
+/obj/item/organ/external/arm/right/human
+	limb_flags = ORGAN_FLAGS_GENDERED_ICON
+/obj/item/organ/external/leg/human
+	limb_flags = ORGAN_FLAGS_GENDERED_ICON
+/obj/item/organ/external/leg/right/human
+	limb_flags = ORGAN_FLAGS_GENDERED_ICON
+/obj/item/organ/external/hand/human
+	limb_flags = ORGAN_FLAGS_GENDERED_ICON
+/obj/item/organ/external/hand/right/human
+	limb_flags = ORGAN_FLAGS_GENDERED_ICON
+/obj/item/organ/external/foot/human
+	limb_flags = ORGAN_FLAGS_GENDERED_ICON
+/obj/item/organ/external/foot/right/human
+	limb_flags = ORGAN_FLAGS_GENDERED_ICON

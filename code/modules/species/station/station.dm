@@ -14,6 +14,17 @@
 	hidden_from_codex = FALSE
 	bandages_icon = 'icons/mob/bandage.dmi'
 
+	override_limb_types = list(
+		BP_L_ARM = /obj/item/organ/external/arm/human,
+		BP_R_ARM = /obj/item/organ/external/arm/right/human,
+		BP_L_LEG = /obj/item/organ/external/leg/human,
+		BP_R_LEG = /obj/item/organ/external/leg/right/human,
+		BP_L_HAND = /obj/item/organ/external/hand/human,
+		BP_R_HAND = /obj/item/organ/external/hand/right/human,
+		BP_L_FOOT = /obj/item/organ/external/foot/human,
+		BP_R_FOOT = /obj/item/organ/external/foot/right/human
+	)
+
 	spawn_flags = SPECIES_CAN_JOIN
 	appearance_flags = HAS_HAIR_COLOR | HAS_SKIN_TONE_NORMAL | HAS_LIPS | HAS_UNDERWEAR | HAS_EYE_COLOR
 
@@ -244,14 +255,14 @@
 	else if (effective_dose > 10)
 		M.vomit(4, 2, rand(3 SECONDS, 10 SECONDS))
 	else
-		M.vomit(1, 1, rand(5 SECONDS, 15 SECONDS))	
+		M.vomit(1, 1, rand(5 SECONDS, 15 SECONDS))
 
 /datum/species/skrell/get_sex(var/mob/living/carbon/human/H)
 	return istype(H) && (H.descriptors["headtail length"] == 1 ? MALE : FEMALE)
 
 /datum/species/skrell/check_background()
 	return TRUE
-	
+
 /datum/species/skrell/can_float(mob/living/carbon/human/H)
 	if(!H.is_physically_disabled())
 		if(H.encumbrance() < 2)
@@ -397,7 +408,7 @@
 		if(101 to 200)	. = 12 // age bracket before this is 46 to 100 . = 8 making this +4
 		if(201 to 300)	. = 16 // + 8
 		else			. = ..()
-		
+
 // Dionaea spawned by hand or by joining will not have any
 // nymphs passed to them. This should take care of that.
 /datum/species/diona/handle_post_spawn(var/mob/living/carbon/human/H)
