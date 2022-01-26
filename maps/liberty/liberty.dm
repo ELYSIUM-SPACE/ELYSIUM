@@ -18,7 +18,11 @@
 	#include "objects/misc.dm"
 	#include "structures/flooring_decals.dm"
 
-// TORCH DEFINES
+// TORCH DEFINES (it's still Torch's stuff)
+
+	#include "items/clothing/solgov-accessory.dm"
+	#include "items/clothing/ec_skillbadges.dm"
+	#include "items/explo_shotgun.dm"
 
 //	#include "../torch/torch_ranks.dm" // FIX ME
 
