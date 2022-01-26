@@ -1,19 +1,20 @@
 // Taj clothing
-/datum/gear/eyes/medical/tajblind
+///datum/gear/eyes/(security|medical|meson) has different gear_tweaks, that should not be inherited
+/datum/gear/tajara/eyes/medical
 	display_name = "(Tajara) veil, medical"
 	path = /obj/item/clothing/glasses/hud/health/tajblind
 	whitelisted = list(SPECIES_TAJARA)
 	sort_category = "Xenowear"
 	cost = 1
 
-/datum/gear/eyes/meson/tajblind
+/datum/gear/tajara/eyes/meson
 	display_name = "(Tajara) veil, industrial"
 	path = /obj/item/clothing/glasses/meson/prescription/tajblind
 	whitelisted = list(SPECIES_TAJARA)
 	sort_category = "Xenowear"
 	cost = 1
 
-/datum/gear/eyes/security/tajblind
+/datum/gear/tajara/eyes/security
 	display_name = "(Tajara) veil, sleek"
 	path = /obj/item/clothing/glasses/sunglasses/sechud/tajblind
 	whitelisted = list(SPECIES_TAJARA)
