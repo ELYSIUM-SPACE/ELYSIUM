@@ -1,27 +1,42 @@
-/******
-Closets
-******/
+/*******************
+Random item spawning
+*******************/
 
-/obj/structure/closet/secure_closet/explo_gun
-	name = "gun locker"
-	desc = "Wall locker holding the boomstick."
-	req_access = list(access_sol_exp)
-	closet_appearance = /decl/closet_appearance/wall/explo_gun
-	density = FALSE
-	anchored = TRUE
-	wall_mounted = 1
-	storage_types = CLOSET_STORAGE_ITEMS
+/obj/random/solgov
+	name = "random solgov equipment"
+	desc = "This is a random piece of solgov equipment or clothing."
+	icon = 'code_ark/icons/obj/clothing/sol/obj_head_solgov.dmi'
+	icon_state = "solsoft"
 
-/obj/structure/closet/secure_closet/explo_gun/WillContain()
-	return list(
-		/obj/item/storage/box/ammo/explo_shells = 3,
-		/obj/item/gun/projectile/shotgun/pump/exploration
-	)
+/obj/random/solgov/spawn_choices()
+	return list(/obj/item/clothing/head/solgov/utility/fleet = 4,
+				/obj/item/clothing/head/soft/solgov/expedition = 2,
+				/obj/item/clothing/head/soft/solgov/fleet = 4,
+				/obj/item/clothing/head/helmet/solgov = 1,
+				/obj/item/clothing/suit/storage/vest/solgov = 2,
+				/obj/item/clothing/under/solgov/utility = 5,
+				/obj/item/clothing/under/solgov/utility/fleet = 3,
+				/obj/item/clothing/under/solgov/pt/expeditionary = 4,
+				/obj/item/clothing/under/solgov/pt/fleet = 4
+				)
 
-/decl/closet_appearance/wall/explo_gun
-	color = COLOR_GRAY20
-	decals = null
-	can_lock = 1
-	extra_decals = list(
-		"stripe_outer" = COLOR_PURPLE
-	)
+/obj/random/maintenance/solgov
+	name = "random maintenance item"
+	desc = "This is a random maintenance item."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "gift1"
+
+/obj/random/maintenance/solgov/spawn_choices()
+	return list(/obj/random/junk = 4,
+				/obj/random/trash = 4,
+				/obj/random/maintenance/solgov/clean = 5)
+
+/obj/random/maintenance/solgov/clean
+	name = "random maintenance item"
+	desc = "This is a random maintenance item."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "gift2"
+
+/obj/random/maintenance/solgov/clean/spawn_choices()
+	return list(/obj/random/solgov = 3,
+				/obj/random/maintenance/clean = 800)
