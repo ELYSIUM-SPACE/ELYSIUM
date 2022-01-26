@@ -11,7 +11,7 @@
 	desc = "A plaque with Expeditionary Corps logo etched in it."
 	icon = 'maps/torch/icons/obj/solgov-decals.dmi'
 	icon_state = "ecplaque"
-	directives = {"<hr><center>
+	var/directives = {"<hr><center>
 		1. <b>Exploring the unknown is your Primary Mission</b><br>
 
 		You are to look for land and resources that can be used by Humanity to advance and prosper. Explore. Document. Explain. Knowledge is the most valuable resource.<br>

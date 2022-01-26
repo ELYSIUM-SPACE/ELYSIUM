@@ -274,7 +274,7 @@ badges
 	var/owner_name
 	var/owner_branch
 
-/obj/item/clothing/accessory/badge/solgov/tags/loadout_setup(mob/M)
+/obj/item/clothing/accessory/badge/solgov/tags/proc/loadout_setup(mob/M)
 	set_name(M.real_name)
 	set_desc(M)
 

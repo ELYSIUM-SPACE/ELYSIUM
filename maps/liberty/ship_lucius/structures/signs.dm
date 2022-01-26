@@ -73,7 +73,7 @@
 	if (distance <= 2 && fallen.len)
 		to_chat(user, "<b>The fallen:</b> [jointext(fallen, "<br>")]")
 
-// Duplicate
+// Duplicate in Liberty
 /obj/structure/sign/double/solgovflag
 	name = "Sol Central Government Flag"
 	desc = "The flag of the Sol Central Government, a symbol of many things to many people."

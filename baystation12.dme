@@ -3298,7 +3298,6 @@
 #include "code_ark\code\modules\sol\items\manuals.dm"
 #include "code_ark\code\modules\sol\items\mecha.dm"
 #include "code_ark\code\modules\sol\items\rigs.dm"
-#include "code_ark\code\modules\sol\items\solbanner.dm"
 #include "code_ark\code\modules\sol\items\stamps.dm"
 #include "code_ark\code\modules\sol\items\clothing\solgov-feet.dm"
 #include "code_ark\code\modules\sol\items\clothing\solgov-hands.dm"

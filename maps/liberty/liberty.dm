@@ -27,6 +27,7 @@
 	#include "items/clothing/solgov-suit.dm"
 	#include "items/clothing/solgov-under.dm"
 	#include "items/explo_shotgun.dm"
+	#include "items/solbanner.dm"
 
 	#include "structures/closets.dm"
 	#include "structures/closets/closet_appearances.dm"
