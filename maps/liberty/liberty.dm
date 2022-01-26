@@ -30,7 +30,7 @@
 
 	#include "machinery/machinery.dm"
 
-	#include "items/weapons/storage/wallets.dm"
+	#include "items/weapon/storage/wallets.dm"
 
 //	#include "../torch/torch_ranks.dm" // FIX ME
 

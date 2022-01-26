@@ -3311,7 +3311,6 @@
 #include "code_ark\code\modules\sol\machinery\faxmachine.dm"
 #include "code_ark\code\modules\sol\machinery\suit_storage.dm"
 #include "code_ark\code\modules\sol\structures\closets.dm"
-#include "code_ark\code\modules\sol\structures\signs.dm"
 #include "code_ark\code\modules\sol\structures\closets\closet_appearances.dm"
 #include "code_ark\code\modules\sol\structures\closets\command.dm"
 #include "code_ark\code\modules\sol\structures\closets\engineering.dm"
