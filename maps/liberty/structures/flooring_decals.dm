@@ -1,3 +1,8 @@
+/obj/effect/floor_decal/scglogo
+	alpha = 230
+	icon = 'code_ark/icons/obj/solgov_floor.dmi' // MOVE ME HERE
+	icon_state = "center"
+
 /obj/effect/floor_decal/borderfloorsfp
 	name = "border floor"
 	icon_state = "borderfloor_white"

@@ -18,11 +18,19 @@
 	#include "objects/misc.dm"
 	#include "structures/flooring_decals.dm"
 
-// TORCH DEFINES (it's still Torch's stuff)
+// TORCH DEFINES (it's still Torch's stuff (manual revision recommended))
 
 	#include "items/clothing/solgov-accessory.dm"
 	#include "items/clothing/ec_skillbadges.dm"
+	#include "items/clothing/solgov-armor.dm"
+	#include "items/clothing/solgov-head.dm"
+	#include "items/clothing/solgov-suit.dm"
+	#include "items/clothing/solgov-under.dm"
 	#include "items/explo_shotgun.dm"
+
+	#include "machinery/machinery.dm"
+
+	#include "items/weapons/storage/wallets.dm"
 
 //	#include "../torch/torch_ranks.dm" // FIX ME
 
