@@ -5774,8 +5774,8 @@
 "alf" = (
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/external/bolted{
-	name = "Maintenance Airlock External Access";
-	id_tag = "level1_maintairlock1_outer"
+	id_tag = "level1_maintairlock1_outer";
+	name = "Maintenance Airlock External Access"
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/techfloor/grid,
@@ -8636,8 +8636,8 @@
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/simple/hidden,
 /obj/machinery/door/airlock/external/bolted{
-	name = "Maintenance Airlock Internal Access";
-	id_tag = "level1_maintairlock1_inner"
+	id_tag = "level1_maintairlock1_inner";
+	name = "Maintenance Airlock Internal Access"
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/techfloor/grid,
@@ -10970,21 +10970,6 @@
 /obj/machinery/light_construct/small,
 /turf/simulated/floor/tiled/old_tile,
 /area/liberty/maintenance/construction/zero/medbay)
-"avd" = (
-/obj/machinery/atmospherics/pipe/cap/visible/supply{
-	dir = 1
-	},
-/obj/machinery/atmospherics/pipe/cap/visible/scrubbers{
-	dir = 1
-	},
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/structure/catwalk,
-/turf/simulated/floor/plating,
-/area/liberty/maintenance/one/fore_port)
 "ave" = (
 /obj/structure/bed/chair/wood/walnut,
 /turf/simulated/floor/wood/walnut,
@@ -11533,6 +11518,8 @@
 	icon_state = "1-2"
 	},
 /obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/fore_port)
 "awq" = (
@@ -12822,21 +12809,27 @@
 	icon_state = "1-4"
 	},
 /obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
+	dir = 5
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/supply{
+	dir = 5
+	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/fore_port)
 "aza" = (
-/obj/machinery/atmospherics/pipe/cap/visible/supply{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/cap/visible/scrubbers{
-	dir = 4
-	},
 /obj/structure/cable/green{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
 /obj/machinery/door/airlock/hatch/maintenance,
+/obj/machinery/atmospherics/pipe/simple/hidden/supply{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
+	dir = 4
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/one/fore_port)
 "azb" = (
@@ -17442,8 +17435,8 @@
 "aGV" = (
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/airlock/external/bolted{
-	name = "Engine Internal Access";
-	id_tag = "engine_airlock_inner"
+	id_tag = "engine_airlock_inner";
+	name = "Engine Internal Access"
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden,
 /obj/structure/cable/yellow{
@@ -19961,8 +19954,8 @@
 "aLJ" = (
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/airlock/external/bolted{
-	name = "Engine External Access";
-	id_tag = "engine_airlock_outer"
+	id_tag = "engine_airlock_outer";
+	name = "Engine External Access"
 	},
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -39505,14 +39498,20 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/space)
 "btP" = (
-/obj/effect/floor_decal/corner/grey{
-	dir = 6
+/obj/structure/cable/green{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
 	},
-/obj/machinery/light{
-	dir = 1
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
+	dir = 4
 	},
-/turf/simulated/floor/tiled/techmaint,
-/area/space)
+/obj/machinery/atmospherics/pipe/simple/hidden/supply{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/one/fore_port)
 "btQ" = (
 /obj/effect/floor_decal/corner/grey{
 	dir = 9
@@ -39835,9 +39834,12 @@
 /area/space)
 "buM" = (
 /obj/effect/floor_decal/corner/grey{
-	dir = 6
+	dir = 9
 	},
-/obj/machinery/light,
+/obj/machinery/computer/cryopod{
+	pixel_x = 33;
+	pixel_y = 25
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/space)
 "buN" = (
@@ -40345,6 +40347,16 @@
 /obj/structure/railing/mapped,
 /turf/space,
 /area/space)
+"neL" = (
+/obj/machinery/cryopod{
+	dir = 4;
+	icon_state = "body_scanner_0"
+	},
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/space)
 "nJV" = (
 /obj/structure/lattice,
 /obj/effect/floor_decal/industrial/outline/yellow,
@@ -40355,6 +40367,14 @@
 /obj/effect/wallframe_spawn/reinforced,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/construction/zero/medbay)
+"oNj" = (
+/obj/machinery/cryopod{
+	dir = 4;
+	icon_state = "body_scanner_0"
+	},
+/obj/machinery/light,
+/turf/simulated/floor/tiled/techmaint,
+/area/space)
 "peE" = (
 /obj/structure/lattice,
 /obj/structure/railing/mapped{
@@ -40443,6 +40463,11 @@
 	dir = 1
 	},
 /turf/simulated/floor/reinforced/airless,
+/area/space)
+"ucr" = (
+/obj/machinery/cryopod,
+/obj/machinery/light,
+/turf/simulated/floor/tiled/techmaint,
 /area/space)
 "vFH" = (
 /obj/structure/cable/green{
@@ -50880,7 +50905,7 @@ apn
 ara
 asz
 atM
-avd
+awp
 awp
 awp
 ayZ
@@ -51085,7 +51110,7 @@ akg
 ajf
 awq
 aep
-asx
+btP
 ayX
 aBB
 aCU
@@ -51287,7 +51312,7 @@ atN
 ajf
 awr
 axz
-asx
+btP
 ayX
 ayX
 aCV
@@ -51489,7 +51514,7 @@ akg
 ajf
 aws
 axA
-asx
+btP
 aAy
 aBC
 aCW
@@ -51691,7 +51716,7 @@ akh
 ajf
 awq
 aep
-asx
+btP
 aAy
 avu
 aCX
@@ -51893,7 +51918,7 @@ atO
 ajf
 awt
 axB
-asx
+btP
 aAy
 avu
 aCY
@@ -52095,7 +52120,7 @@ atP
 ajf
 awu
 aeO
-asx
+btP
 aAz
 aBD
 aCY
@@ -52297,7 +52322,7 @@ akg
 ajf
 awv
 aeO
-asx
+btP
 aAy
 avu
 aCY
@@ -63653,7 +63678,7 @@ aXL
 cVr
 aaa
 aaa
-btH
+btr
 btO
 bub
 buj
@@ -63661,7 +63686,7 @@ buv
 buG
 bub
 btO
-btH
+btr
 brG
 brG
 brG
@@ -63855,15 +63880,15 @@ aXL
 cVr
 aaa
 aaa
-btr
-btP
+btH
+buc
 buc
 buc
 buw
 buc
 buc
-buM
-btr
+buc
+btH
 aaa
 aaa
 aaa
@@ -64058,7 +64083,7 @@ cVr
 aaa
 aaa
 btH
-btQ
+buM
 btQ
 btQ
 buw
@@ -64266,7 +64291,7 @@ buk
 buv
 btR
 btR
-btR
+ucr
 btr
 aaa
 aaa
@@ -64461,15 +64486,15 @@ aaa
 aaa
 aaa
 btB
-btH
-btS
+btr
+neL
 btS
 bul
 buv
 btS
 btS
-btS
-btH
+oNj
+btr
 btB
 aaa
 aaa
@@ -64663,15 +64688,15 @@ aaa
 aaa
 btq
 btB
-btr
-btP
+btH
+buc
 buc
 buc
 buw
 buc
 buc
-buM
-btr
+buc
+btH
 btB
 btq
 aaa
