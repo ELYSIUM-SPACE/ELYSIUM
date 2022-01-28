@@ -24,7 +24,7 @@
 	sort_category = "Xenowear"
 	cost = 1
 
-/datum/gear/eyes/tajara
+/datum/gear/eyes/tajara/visor
 	display_name = "(Tajara) visor selection"
 	description = "Simply corrects eyesight."
 	path = /obj/item/clothing/glasses/tajvisor
@@ -32,7 +32,7 @@
 	whitelisted = list(SPECIES_TAJARA)
 	cost = 1
 
-/datum/gear/eyes/tajara/New()
+/datum/gear/eyes/tajara/visor/New()
 	..()
 	var/visors = list()
 	visors["visor type-A (Tajara)"] = /obj/item/clothing/glasses/tajvisor/a
@@ -67,7 +67,8 @@
 	sort_category = "Xenowear"
 	cost = 1
 
-/datum/gear/eyes/tajara/meson/visor/hybr
+///datum/gear/eyes/tajara should be defined so here we are
+/datum/gear/eyes/tajara
 	display_name = "(Tajara) visor, engineering"
 	path = /obj/item/clothing/glasses/meson/prescription/tajvisor/hybrid
 	whitelisted = list(SPECIES_TAJARA)
