@@ -18,7 +18,33 @@
 	#include "objects/misc.dm"
 	#include "structures/flooring_decals.dm"
 
-// TORCH DEFINES
+// TORCH DEFINES (it's still Torch's stuff (manual revision recommended))
+
+	#include "items/clothing/solgov-accessory.dm"
+	#include "items/clothing/ec_skillbadges.dm"
+	#include "items/clothing/solgov-armor.dm"
+	#include "items/clothing/solgov-head.dm"
+	#include "items/clothing/solgov-suit.dm"
+	#include "items/clothing/solgov-under.dm"
+	#include "items/explo_shotgun.dm"
+	#include "items/solbanner.dm"
+
+	#include "structures/closets.dm"
+	#include "structures/closets/closet_appearances.dm"
+	#include "structures/closets/command.dm"
+	#include "structures/closets/engineering.dm"
+	#include "structures/closets/medical.dm"
+	#include "structures/closets/misc.dm"
+	#include "structures/closets/research.dm"
+	#include "structures/closets/security.dm"
+	#include "structures/closets/services.dm"
+	#include "structures/closets/supply.dm"
+	#include "structures/closets/exploration.dm"
+
+	#include "machinery/suit_storage.dm"
+	#include "machinery/machinery.dm"
+
+	#include "items/weapon/storage/wallets.dm"
 
 //	#include "../torch/torch_ranks.dm" // FIX ME
 

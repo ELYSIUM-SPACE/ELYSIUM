@@ -12,7 +12,7 @@
 /obj/structure/sign/ecplaque
 	name = "\improper Expeditionary Directives"
 	desc = "A plaque with Expeditionary Corps logo etched in it."
-	icon = 'code_ark/icons/obj/solgov-decals.dmi'
+	icon = 'code_ark/icons/obj/solgov-decals.dmi' // MOVE ME HERE
 	icon_state = "ecplaque"
 	var/directives = {"<hr><center>
 		1. <b>Exploring the unknown is your Primary Mission</b><br>
@@ -54,28 +54,6 @@
 	else
 		..()
 
-/obj/effect/floor_decal/scglogo
-	alpha = 230
-	icon = 'code_ark/icons/obj/solgov_floor.dmi'
-	icon_state = "center"
-
-/obj/structure/sign/solgov
-	name = "\improper SolGov Seal"
-	desc = "A sign which signifies who this vessel belongs to."
-	icon = 'code_ark/icons/obj/solgov-decals.dmi'
-	icon_state = "solgovseal"
-
-/obj/structure/sign/double/solgovflag
-	name = "Sol Central Government Flag"
-	desc = "The flag of the Sol Central Government, a symbol of many things to many people."
-	icon = 'code_ark/icons/obj/solgov-decals.dmi'
-
-/obj/structure/sign/double/solgovflag/left
-	icon_state = "solgovflag-left"
-
-/obj/structure/sign/double/solgovflag/right
-	icon_state = "solgovflag-right"
-
 /obj/structure/sign/floorplaque
 	name = "\improper commemorative plaque"
 	desc = "A list of dead explorers who gave their lives in search of the next great discovery. Hope you don't join them. Add the dog tags of the fallen to the plaque to memorialize them."
@@ -94,3 +72,15 @@
 	. = ..()
 	if (distance <= 2 && fallen.len)
 		to_chat(user, "<b>The fallen:</b> [jointext(fallen, "<br>")]")
+
+// Duplicate in Liberty
+/obj/structure/sign/double/solgovflag
+	name = "Sol Central Government Flag"
+	desc = "The flag of the Sol Central Government, a symbol of many things to many people."
+	icon = 'code_ark/icons/obj/solgov-decals.dmi' // MOVE ME HERE
+
+/obj/structure/sign/double/solgovflag/left
+	icon_state = "solgovflag-left"
+
+/obj/structure/sign/double/solgovflag/right
+	icon_state = "solgovflag-right"

@@ -11,6 +11,7 @@
 
 	#include "structures/closets.dm"
 	#include "structures/font.dm"
+	#include "structures/signs.dm"
 
 // TEMPLATE
 

@@ -128,7 +128,7 @@
 	desc       = "Swirling cloud of unknown matter."
 	icon       = 'icons/obj/machines/power/fusion.dmi'
 	icon_state = "emfield_s1"
-	anchored   = 1
+	anchored   = TRUE
 
 /obj/effect/bs_catcher/Initialize()
 	. = ..()

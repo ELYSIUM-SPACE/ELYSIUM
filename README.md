@@ -1,4 +1,4 @@
-# baystation12 [![CI Status](https://github.com/Baystation12/Baystation12/workflows/Run%20Tests/badge.svg)](https://github.com/Baystation12/Baystation12/actions)
+# baystation12 [![CI Status](https://github.com/ELYSIUM-SPACE/ELYSIUM/actions/workflows/test.yml/badge.svg)](https://github.com/ELYSIUM-SPACE/ELYSIUM/actions)
 
 [Website](https://baystation12.net/) - [Code](https://github.com/Baystation12/Baystation12/) - [Discord](https://discord.baystation12.net/) - [IRC](https://kiwiirc.com/client/irc.sorcery.net/codershuttle): irc://irc.sorcery.net/#codershuttle
 

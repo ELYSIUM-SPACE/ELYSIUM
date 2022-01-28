@@ -187,20 +187,20 @@ GLOBAL_LIST_INIT(jukebox_tracks, list(
 	/decl/audio/track/wake,
 	/decl/audio/track/wildencounters,
 
-	//arc music from here
+	//arc music from here,
 	/decl/audio/track/bensound_relaxing,
 	/decl/audio/track/bensound_better_days,
-	// INSTRUMENTAL
+	// INSTRUMENTAL,
 	/decl/audio/track/bensound_sad_day,
 	/decl/audio/track/bensound_tomorrow,
 	/decl/audio/track/emininni_sicilian_cafe,
-	// JAZZ
+	// JAZZ,
 	/decl/audio/track/bensound_love,
 	/decl/audio/track/bensound_the_jazz_piano,
 	/decl/audio/track/kmacleod_night_on_the_docks_sax,
 	/decl/audio/track/kmacleod_shades_of_spring,
 	/decl/audio/track/pedro_noire_one,
-	// CURRENTLY UNSORTED
+	// CURRENTLY UNSORTED,
 	/decl/audio/track/kom_voice_of_eternity,
 	/decl/audio/track/sbuckley_beautiful_oblivion,
 	/decl/audio/track/sbuckley_discovery,
