@@ -193,10 +193,6 @@
 	desc = "Medbay - Chemistry"
 	region = ACCESS_REGION_GENERAL
 
-// Hydro
-
-/datum/access/hydroponics
-
 // Chapel
 
 /var/const/chapl = "access_liberty_chapl"
@@ -228,14 +224,6 @@
 	id = conference
 	desc = "Conference Room"
 	region = ACCESS_REGION_GENERAL
-
-//  Janitor
-
-/datum/access/janitor
-
-// Bridge
-
-/datum/access/bridge
 
 // Director
 
