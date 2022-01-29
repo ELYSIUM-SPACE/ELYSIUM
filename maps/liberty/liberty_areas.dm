@@ -546,7 +546,7 @@
 	name = "\improper Level One - Hydroponics"
 	icon_state = "hydroponics"
 	sound_env = LARGE_ENCLOSED
-	req_access = hydro
+	req_access = access_hydroponics
 
 // BRIG
 
@@ -939,7 +939,7 @@
 	name = "\improper Level Two - Custodial Closet"
 	icon_state = "janitor"
 	sound_env = SMALL_ENCLOSED
-	req_access = custodian
+	req_access = list(access_janitor)
 
 // MAINTENANCE
 
@@ -997,7 +997,7 @@
 /area/liberty/command
 	name = "\improper Command - Bridge"
 	icon_state = "command_bridge"
-	req_access = bridge
+	req_access = list(access_bridge)
 	// icon = 'icons/turf/areas.dmi'	// WIP
 
 // TELECOMMS
