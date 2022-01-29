@@ -1026,7 +1026,7 @@
 /area/liberty/aparment/secretary
 	name = "\improper Level Three - Corporate Representative's Apartment"
 	icon_state = "secretary_apt"
-	req_access = clerk
+	req_access = corpapart
 
 // DIRECTOR
 
