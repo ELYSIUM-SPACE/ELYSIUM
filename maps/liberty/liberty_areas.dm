@@ -1036,7 +1036,7 @@
 /area/liberty/director/reception
 	name = "\improper Director's Office - Reception"
 	icon_state = "reception"
-	req_access = list(bigboss)list(
+	req_access = list(bigboss)
 
 /area/liberty/director/office
 	name = "\improper Director's Office - Working Area"
