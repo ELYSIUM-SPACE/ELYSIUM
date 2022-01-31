@@ -295,7 +295,7 @@
 /area/liberty/engineering/shower
 	name = "\improper Engineering - Shower"
 	icon_state = "eng_shower"
-	req_access = engmain
+	req_access = list(engmain)
 
 /area/liberty/engineering/primary_storage // склад, что находится над атмосом
 	name = "\improper Engineering - Primary Storage"
