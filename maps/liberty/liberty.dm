@@ -2,6 +2,10 @@
 	#include "ship_lucius/lucius.dm"
 	#include "ship_venturestar/venturestar.dm"
 
+	#include "job/_sol_access_defs.dm"
+	#include "job/sol_access.dm"
+	#include "job/liberty_access.dm"
+
 	#include "liberty_areas.dm"
 	#include "liberty_elevators.dm"
 	#include "liberty_overmap.dm"
@@ -12,9 +16,6 @@
 
 	#include "items/items.dm"
 	#include "items/rigs.dm"
-	#include "job/_sol_access_defs.dm"
-	#include "job/sol_access.dm"
-	#include "job/liberty_access.dm"
 	#include "machinery/doors.dm"
 	#include "machinery/misc.dm"
 	#include "objects/misc.dm"
