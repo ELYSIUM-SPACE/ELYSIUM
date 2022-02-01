@@ -8721,6 +8721,9 @@
 	dir = 8;
 	pixel_x = -24
 	},
+/obj/machinery/atmospherics/unary/vent_pump/on{
+	dir = 4
+	},
 /obj/structure/catwalk,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/zero/port)
@@ -16684,7 +16687,9 @@
 	icon_state = "1-2"
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
-/obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/machinery/atmospherics/pipe/manifold/hidden/supply{
+	dir = 4
+	},
 /obj/structure/catwalk,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/zero/port)
@@ -18455,6 +18460,13 @@
 	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/engineering/atmos)
+"lIR" = (
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 4
+	},
+/obj/structure/catwalk,
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/zero/port)
 "lIS" = (
 /obj/structure/table/rack,
 /obj/structure/railing/mapped,
@@ -26753,6 +26765,19 @@
 /obj/random/junk,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/zero/casino)
+"uov" = (
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
+	dir = 4
+	},
+/obj/structure/catwalk,
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/zero/port)
 "uoP" = (
 /obj/machinery/atmospherics/unary/tank/air{
 	dir = 4
@@ -42091,7 +42116,7 @@ jtg
 jtg
 aip
 jtg
-jtg
+lIR
 jtg
 bep
 jtg
@@ -42293,7 +42318,7 @@ aio
 sMu
 aiq
 sMu
-aoT
+uov
 aoT
 jKp
 eDq

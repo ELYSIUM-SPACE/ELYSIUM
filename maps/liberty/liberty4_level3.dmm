@@ -1403,29 +1403,6 @@
 	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/command)
-"eo" = (
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden/supply{
-	dir = 4
-	},
-/obj/structure/cable/green{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/machinery/power/apc{
-	dir = 1;
-	name = "north bump";
-	pixel_y = 24
-	},
-/obj/structure/cable/green{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/turf/simulated/floor/plating,
-/area/liberty/maintenance/three/starboard)
 "er" = (
 /obj/item/device/radio/intercom{
 	dir = 1;
@@ -7449,16 +7426,6 @@
 "QX" = (
 /obj/structure/ladder,
 /obj/effect/floor_decal/industrial/outline/yellow,
-/turf/simulated/floor/plating,
-/area/liberty/maintenance/three/starboard)
-"Ra" = (
-/obj/effect/wallframe_spawn/reinforced,
-/obj/machinery/door/firedoor,
-/obj/machinery/door/blast/regular/open{
-	dir = 4;
-	id_tag = "controlroomwindow";
-	name = "Control Room Window Blast Doors"
-	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/three/starboard)
 "Rc" = (
@@ -29269,7 +29236,7 @@ mZ
 mZ
 ap
 an
-Ra
+an
 jR
 Tq
 tp
@@ -36739,7 +36706,7 @@ ky
 kT
 RM
 RM
-eo
+mG
 kT
 kT
 qH

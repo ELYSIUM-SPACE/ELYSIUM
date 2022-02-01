@@ -1,6 +1,3 @@
-/area/liberty
-	icon = 'maps/liberty/icons/area.dmi'
-
 /* sound_env options:
 	STANDARD_STATION
 	LARGE_ENCLOSED
@@ -18,6 +15,9 @@
 //////////////////////////////////// TECHNICAL /////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
+/area/liberty
+	icon = 'maps/liberty/icons/area.dmi'
+
 // Actual panels area. Not controls
 /area/liberty/solar
 	area_flags = AREA_FLAG_EXTERNAL
@@ -25,18 +25,65 @@
 	always_unpowered = 1
 	has_gravity = FALSE
 	base_turf = /turf/space
-//	req_access = list(инженерный доступ)
-	// icon = 'icons/turf/areas.dmi'	// WIP
+	req_access = list(engmain)
 
 // MAINTENANCE
 
 /area/liberty/maintenance
-	// icon = 'icons/turf/areas.dmi'	// WIP
+	sound_env = SMALL_ENCLOSED
+	req_access = list(maint)
 
 /area/liberty/maintenance/construction	// NO_APC for unit_test
 
+// BRIG
+
+/area/liberty/sfp
+	req_access = list(sfpmain)
+
+// ENGINEERING
+
+/area/liberty/engineering
+	req_access = list(engmain)
+
+/area/liberty/engineering/substation
+	sound_env = SMALL_ENCLOSED
+
+// CARGO
+
 /area/liberty/cargo_bay
-	// icon = 'icons/turf/areas.dmi'	// WIP
+	req_access = list(cargonia)
+
+// MEDBAY
+
+/area/liberty/medbay
+	req_access = list(doctor)
+
+/area/liberty/medbay/ward
+	sound_env = SMALL_SOFTFLOOR
+
+// PSYCHOLOGIST
+
+/area/liberty/psychologist
+	sound_env = MEDIUM_SOFTFLOOR
+
+// HOTEL
+
+/area/liberty/hotel/room
+	sound_env = SMALL_SOFTFLOOR
+
+/area/liberty/hotel/hallway
+	sound_env = MEDIUM_SOFTFLOOR
+
+// CHAPEL
+
+/area/liberty/chapel
+	ambience = list('sound/ambience/ambicha1.ogg','sound/ambience/ambicha2.ogg','sound/ambience/ambicha3.ogg','sound/ambience/ambicha4.ogg','sound/music/traitor.ogg')
+
+// DIRECTOR
+
+/area/liberty/director
+	sound_env = MEDIUM_SOFTFLOOR
+	req_access = list(bigboss)
 
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// LEVEL ZERO ////////////////////////////////////
@@ -47,76 +94,60 @@
 /area/liberty/solar/zero
 	name = "\improper Level Zero - Solar Array"
 	icon_state = "eng_solar_00_array"
-	req_access = list(engmain)
 
 // MAINTENANCE
-
-/area/liberty/maintenance
-	sound_env = SMALL_ENCLOSED
 
 /area/liberty/maintenance/zero
 	name = "\improper Level Zero - Emergency Storage"
 	icon_state = "emergency_storage_00"
-	req_access = list(maint)
+
 
 /area/liberty/maintenance/zero/hangar
 	name = "\improper Maintenance - Level Zero - Hangar"
 	icon_state = "maintance_zero_hangar"
-	req_access = list(maint)
+
 /area/liberty/maintenance/zero/engineering
 	name = "\improper Maintenance - Level Zero - Engineering"
 	icon_state = "maintance_zero_engineering"
-	req_access = list(maint)
 
 /area/liberty/maintenance/zero/port
 	name = "\improper Maintenance - Level Zero - Port"
 	icon_state = "maintance_zero_port"
-	req_access = list(maint)
 
 /area/liberty/maintenance/zero/monitoring
 	name = "\improper Aux Station Monitoring"
 	icon_state = "abandoned_aux_station_monitoring"
-	req_access = list(maint)
 
 /area/liberty/maintenance/zero/casino
 	name = "\improper Maintenance - Level Zero - Casino"
 	icon_state = "maintance_zero_casino"
-	req_access = list(maint)
-
 /area/liberty/maintenance/zero/aft
 	name = "\improper Maintenance - Level Zero - Port"
 	icon_state = "maintance_zero_aft"
-	req_access = list(maint)
 
 /area/liberty/maintenance/zero/laundry
 	name = "\improper Level Zero - Abandoned Laundry"
 	icon_state = "abandoned_laundry"
-	req_access = list(maint)
 
 /area/liberty/maintenance/zero/solitary
 	name = "\improper SFP Field Office - Solitary"
 	icon_state = "abandoned_solitary"
-	req_access = list(maint)
 
 /area/liberty/maintenance/zero/brig
 	name = "\improper Maintenance - Level Zero - SFP"
 	icon_state = "maintance_zero_sfp_office"
-	req_access = list(maint)
 
 /area/liberty/maintenance/zero/fore_port
 	name = "\improper Maintenance - Level Zero - Fore Port"
 	icon_state = "maintance_zero_fore_port"
-	req_access = list(maint)
 
 /area/liberty/maintenance/construction/zero/chapel
 	name = "\improper Level Zero - Abandoned Chapel"
 	icon_state = "abandoned_chapel_zero"
-	req_access = list(maint)
 
 /area/liberty/maintenance/construction/zero/shop
 	name = "\improper Level Zero - Abandoned Shop"
 	icon_state = "abandoned_shop"
-	req_access = list(maint)
 
 // HALLWAYS
 
@@ -146,33 +177,28 @@
 /area/liberty/hangar/canister_storage
 	name = "\improper Aux Fuel Storage"
 	icon_state = "hangar_canister_storage"
-	req_access = list(hangar)
 
 // CARGO
 
 /area/liberty/cargo_bay/zero
 	name = "\improper Cargo - Warehouse"
-	icon_state = "cargo_warehouse"
-	req_access = list(cargonia)
 
 /area/liberty/cargo_bay/zero/mailroom
 	name = "\improper Cargo - Mailroom"
 	icon_state = "cargo_mailroom"
-	req_access = list(cargonia)
 
 /area/liberty/cargo_bay/zero/fuel_bay
 	name = "\improper Cargo - Fuel Bay"
 	icon_state = "cargo_fuel_bay"
-	req_access = list(cargonia)
 
 /area/liberty/cargo_bay/zero/train
 	name = "\improper Cargo - Cargotrain Garage"
 	icon_state = "cargo_train_storage"
-	req_access = list(cargonia)
 
 /area/liberty/cargo_bay/zero/public_storage
 	name = "\improper Cargo - Public Warehouse"
 	icon_state = "cargo_primary_public_warehouse"
+	//req_access = list() uncomment for free access
 
 /area/liberty/cargo_bay/zero/public_storage/second
 	name = "\improper Cargo - Secondary Public Warehouse"
@@ -213,23 +239,17 @@
 
 // BRIG
 
-/area/liberty/sfp
-	req_access = list("ACCESS_SOL_SFP")
-
 /area/liberty/sfp/hallway/zero
 	name = "\improper SFP Field Office - Level Zero Hallway"
 	icon_state = "department_lvl0"
-	req_access = list(sfpmain)
 
 /area/liberty/sfp/cells
 	name = "\improper SFP Field Office - Holding Cells"
 	icon_state = "department_cell"
-	req_access = list(sfpmain)
 
 /area/liberty/sfp/prison
 	name = "\improper SFP Field Office - Long Term Cell"
 	icon_state = "department_prison"
-	req_access = list(sfpmain)
 
 /area/liberty/sfp/laboratory
 	name = "\improper SFP Field Office - Forensic Laboratory"
@@ -240,12 +260,10 @@
 	name = "\improper SFP Field Office - Morgue"
 	icon_state = "department_morgue"
 	sound_env = LARGE_ENCLOSED
-	req_access = list(sfpmain)
 
 /area/liberty/sfp/archive
 	name = "\improper SFP Field Office - Archive"
 	icon_state = "department_archive"
-	req_access = list(sfpmain)
 
 // ENGINEERING
 
@@ -257,7 +275,6 @@
 /area/liberty/engineering/canister_storage
 	name = "\improper Engineering - Canister Storage"
 	icon_state = "eng_canister_storage"
-	req_access = list(engmain)
 
 /area/liberty/engineering/engine_monitoring_room
 	name = "\improper Engineering - Engine Monitoring Room"
@@ -273,20 +290,14 @@
 /area/liberty/engineering/hallway/engineering_hall_level_zero
 	name = "\improper Engineering - Hallway Level Zero"
 	icon_state = "eng_hall_00"
-	req_access = list(engmain)
 
 /area/liberty/engineering/engineering_prep_room
 	name = "\improper Engineering - Prep Room"
 	icon_state = "eng_prep_room"
-	req_access = list(engmain)
-
-/area/liberty/engineering/substation
-	sound_env = SMALL_ENCLOSED
 
 /area/liberty/engineering/substation/substation_level_zero
 	name = "\improper Engineering - Substation Level Zero"
 	icon_state = "eng_substation_00"
-	req_access = list(engmain)
 
 /area/liberty/engineering/restroom
 	name = "\improper Engineering - Restroom"
@@ -295,17 +306,14 @@
 /area/liberty/engineering/shower
 	name = "\improper Engineering - Shower"
 	icon_state = "eng_shower"
-	req_access = list(engmain)
 
 /area/liberty/engineering/primary_storage // склад, что находится над атмосом
 	name = "\improper Engineering - Primary Storage"
 	icon_state = "eng_primary_storage"
-	req_access = list(engmain)
 
 /area/liberty/engineering/solar/engineering_solar_level_zero
 	name = "\improper Engineering - Solar Level Zero"
 	icon_state = "eng_solar_00"
-	req_access = list(engmain)
 
 ///////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// LEVEL ONE ////////////////////////////////////
@@ -316,59 +324,48 @@
 /area/liberty/maintenance/one
 	name = "\improper Maintenance - Level One - Central"
 	icon_state = "maintance_one_central"
-	req_access = list(maint)
 
 /area/liberty/maintenance/one/aft
 	name = "\improper Maintenance - Level One - Aft"
 	icon_state = "maintance_one_aft"
-	req_access = list(maint)
 
 /area/liberty/maintenance/one/fore_port
 	name = "\improper Maintenance - Level One - Fore Port"
 	icon_state = "maintance_one_fore_port"
-	req_access = list(maint)
 
 /area/liberty/maintenance/one/aft_port
 	name = "\improper Maintenance - Level One - Aft Port"
 	icon_state = "maintance_one_aft_port"
-	req_access = list(maint)
 
 /area/liberty/maintenance/one/chapel
 	name = "\improper Level One - Abandoned Chapel"
 	icon_state = "abandoned_chapel_one"
-	req_access = list(maint)
 
 /area/liberty/maintenance/one/shower
 	name = "\improper Level One - Abandoned Bathroom"
 	icon_state = "abandoned_bathroom"
-	req_access = list(maint)
 
 /area/liberty/maintenance/one/mechbay
 	name = "\improper Level One - Abandoned Mech Bay"
 	icon_state = "abandoned_mechbay"
-	req_access = list(maint)
 
 /area/liberty/maintenance/one/fore_starboard
 	name = "\improper Maintenance - Level One - Fore Starboard"
 	icon_state = "maintance_one_fore_starboard"
-	req_access = list(maint)
 
 /area/liberty/maintenance/one/aft_starboard
 	name = "\improper Maintenance - Level One - Aft Starboard"
 	icon_state = "maintance_one_aft_starboard"
-	req_access = list(maint)
 
 /area/liberty/maintenance/construction/zero/medbay
 	name = "\improper Level Zero - Abandoned Medbay"
 	icon_state = "abandoned_medbay"
-	req_access = list(maint)
 
 // SHOPPING HALL
 
 /area/liberty/shopping
 	name = "\improper Shopping Hall"
 	icon_state = "shop_hall"
-	// icon = 'icons/turf/areas.dmi'	// WIP
 
 /area/liberty/shopping/keeper
 	name = "\improper Shop Keeper"
@@ -385,7 +382,6 @@
 /area/liberty/rnd
 	name = "\improper RnD - Shop"
 	icon_state = "rnd_shop"
-	// icon = 'icons/turf/areas.dmi'	// WIP
 
 /area/liberty/rnd/equip
 	name = "\improper RnD - Equipment Storage"
@@ -427,19 +423,16 @@
 /area/liberty/hangar/tower
 	name = "\improper Traffic Tower"
 	icon_state = "hangar_tower"
-	req_access = list(hangar)
 
 // CARGO
 
 /area/liberty/cargo_bay/one
 	name = "\improper Cargo - Elevator"
 	icon_state = "cargo_elevator"
-	req_access = list(cargonia)
 
 /area/liberty/cargo_bay/one/office
 	name = "\improper Cargo - Office"
 	icon_state = "cargo_office"
-	req_access = list(cargonia)
 
 /area/liberty/cargo_bay/one/quartermaster
 	name = "\improper Cargo - Quartermaster"
@@ -459,7 +452,6 @@
 /area/liberty/medbay/reception
 	name = "\improper Medbay - Reception"
 	icon_state = "medbay_reception"
-	req_access = list(doctor)
 
 /area/liberty/medbay/chemistry
 	name = "\improper Medbay - Chemistry Lab"
@@ -469,12 +461,10 @@
 /area/liberty/medbay/exam
 	name = "\improper Medbay - Examination Room"
 	icon_state = "medbay_exam"
-	req_access = list(doctor)
 
 /area/liberty/medbay/emergency
 	name = "\improper Medbay - Emergency Treatment Center"
 	icon_state = "medbay_emergency"
-	req_access = list(doctor)
 
 /area/liberty/medbay/preop_ward
 	name = "\improper Medbay - Preoperating Ward"
@@ -483,18 +473,15 @@
 /area/liberty/medbay/operating
 	name = "\improper Medbay - Operating Room"
 	icon_state = "medbay_operating"
-	req_access = list(doctor)
 
 /area/liberty/medbay/operating_storage
 	name = "\improper Medbay - Operating Room Storage"
 	icon_state = "medbay_operating_storage"
-	req_access = list(doctor)
 	sound_env = SMALL_ENCLOSED
 
 /area/liberty/medbay/hallway/one
 	name = "\improper Medbay - Level One Hallway"
 	icon_state = "medbay_lvl1"
-	req_access = list(doctor)
 
 // HOTEL
 
@@ -553,7 +540,6 @@
 /area/liberty/sfp/aft_checkpoint
 	name = "\improper Level One - Aft Docks Checkpoint"
 	icon_state = "aft_docks_checkpoint"
-	req_access = list(sfpmain)
 
 /area/liberty/sfp/lobby
 	name = "\improper SFP Field Office - Lobby"
@@ -567,7 +553,6 @@
 	name = "\improper SFP Field Office - Interrogation"
 	icon_state = "department_interrogation"
 	sound_env = SMALL_ENCLOSED
-	req_access = list(sfpmain)
 
 /area/liberty/sfp/recreation
 	name = "\improper SFP Field Office - Break Room"
@@ -582,7 +567,6 @@
 /area/liberty/sfp/reception
 	name = "\improper SFP Field Office - Reception"
 	icon_state = "department_reception"
-	req_access = list(sfpmain)
 
 /area/liberty/sfp/armory
 	name = "\improper SFP Field Office - Armory"
@@ -596,18 +580,15 @@
 /area/liberty/sfp/hallway/one_north
 	name = "\improper SFP Field Office - Level One North Hallway"
 	icon_state = "department_lvl1n"
-	req_access = list(sfpmain)
 
 /area/liberty/sfp/hallway/one_south
 	name = "\improper SFP Field Office - Level One South Hallway"
 	icon_state = "department_lvl1s"
-	req_access = list(sfpmain)
 
 /area/liberty/sfp/server
 	name = "\improper SFP Field Office - Server Room"
 	icon_state = "department_server"
 	ambience = list('sound/ambience/ambisin2.ogg', 'sound/ambience/signal.ogg', 'sound/ambience/signal.ogg', 'sound/ambience/ambigen10.ogg')
-	req_access = list(sfpmain)
 
 // SCG
 
@@ -659,17 +640,14 @@
 /area/liberty/engineering/substation/substation_level_one
 	name = "\improper Engineering - Substation Level One"
 	icon_state = "eng_substation_01"
-	req_access = list(engmain)
 
 /area/liberty/engineering/hard_storage
 	name = "\improper Engineering - Hard Storage"
 	icon_state = "eng_hard_storage"
-	req_access = list(engmain)
 
 /area/liberty/engineering/substation/substation_main
 	name = "\improper Engineering - Substation Main"
 	icon_state = "eng_substation_main"
-	req_access = list(engmain)
 
 /area/liberty/engineering/supermatter_tegs
 	name = "\improper Engineering - Supermatter Tegs"
@@ -679,12 +657,10 @@
 /area/liberty/engineering/technical_storage
 	name = "\improper Engineering - Technical Storage"
 	icon_state = "eng_technical_storage"
-	req_access = list(engmain)
 
 /area/liberty/engineering/hallway/engineering_hall_level_one
 	name = "\improper Engineering - Hallway level one"
 	icon_state = "eng_hall_01"
-	req_access = list(engmain)
 
 /area/liberty/engineering/breakroom
 	name = "\improper Engineering - Breakroom"
@@ -735,54 +711,41 @@
 /area/liberty/medbay/hallway/two
 	name = "\improper Medbay - Level Two Hallway"
 	icon_state = "medbay_lvl2"
-	req_access = list(doctor)
 
 /area/liberty/medbay/storage
 	name = "\improper Medbay - Storage"
 	icon_state = "medbay_storage"
-	req_access = list(doctor)
 
 /area/liberty/medbay/oncall_room
 	name = "\improper Medbay - On-Call Room"
 	icon_state = "medbay_oncall_room"
-	req_access = list(doctor)
 
 /area/liberty/medbay/locker_room
 	name = "\improper Medbay - Locker Room"
 	icon_state = "medbay_locker_room"
-	req_access = list(doctor)
 
 /area/liberty/medbay/cmo
 	name = "\improper Medbay - Chief Medical Officer"
 	icon_state = "medbay_cmo"
 	req_access = list(chmo)
 
-/area/liberty/medbay/ward
-	sound_env = SMALL_SOFTFLOOR
-
 /area/liberty/medbay/ward/one
 	name = "\improper Medbay - Ward One"
 	icon_state = "medbay_ward1"
-	req_access = list(doctor)
 
 /area/liberty/medbay/ward/two
 	name = "\improper Medbay - Ward Two"
 	icon_state = "medbay_ward2"
-	req_access = list(doctor)
 
 /area/liberty/medbay/ward/three
 	name = "\improper Medbay - Ward Three"
 	icon_state = "medbay_ward3"
-	req_access = list(doctor)
 
 // HOTEL
 
 /area/liberty/hotel/restaurant/upper
 	name = "\improper Hotel - Restraurant Upper Level"
 	icon_state = "hotel_restaurant_lvl2"
-
-/area/liberty/hotel/room
-	sound_env = SMALL_SOFTFLOOR
 
 /area/liberty/hotel/room/one_zero_one
 	name = "\improper Hotel - Room 101"
@@ -820,9 +783,6 @@
 	name = "\improper Hotel - Room 303"
 	icon_state = "hotel_room_303"
 
-/area/liberty/hotel/hallway
-	sound_env = MEDIUM_SOFTFLOOR
-
 /area/liberty/hotel/hallway/west
 	name = "\improper Hotel - West Hallway"
 	icon_state = "hotel_west"
@@ -854,9 +814,6 @@
 
 // CHAPEL
 
-/area/liberty/chapel
-	ambience = list('sound/ambience/ambicha1.ogg','sound/ambience/ambicha2.ogg','sound/ambience/ambicha3.ogg','sound/ambience/ambicha4.ogg','sound/music/traitor.ogg')
-
 /area/liberty/chapel/lobby
 	name = "\improper Chapel - Lobby"
 	icon_state = "chapel_lobby"
@@ -884,9 +841,6 @@
 	req_access = list(priveye)
 
 // PSYCHOLOGIST
-
-/area/liberty/psychologist
-	sound_env = MEDIUM_SOFTFLOOR
 
 /area/liberty/psychologist/waiting_room
 	name = "\improper Psychologist - Waiting Room"
@@ -946,29 +900,24 @@
 /area/liberty/maintenance/two
 	name = "\improper Level Two - Central Maintenance"
 	icon_state = "lvl_2_central_maintenance"
-	req_access = list(maint)
 
 /area/liberty/maintenance/two/fore
 	name = "\improper Level Two - Fore Maintenance"
 	icon_state = "lvl_2_fore_maintenance"
-	req_access = list(maint)
 
 /area/liberty/maintenance/two/starboard
 	name = "\improper Level Two - Starboard Maintenance"
 	icon_state = "lvl_2_starboard_maintenance"
-	req_access = list(maint)
 
 /area/liberty/maintenance/two/port
 	name = "\improper Level Two - Port Maintenance"
 	icon_state = "lvl_2_port_maintenance"
-	req_access = list(maint)
 
 // ENGINEERING
 
 /area/liberty/engineering/substation/substation_level_two
 	name = "\improper Engineering - Substation Level Two"
 	icon_state = "lvl_2_substation"
-	req_access = list(engmain)
 
 ///////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// LEVEL THREE ///////////////////////////////////
@@ -1024,29 +973,22 @@
 	req_access = list(corpapart)
 
 /area/liberty/aparment/secretary
-	name = "\improper Level Three - Corporate Representative's Apartment"
+	name = "\improper Level Three - Corporate Representative's Secretary"
 	icon_state = "secretary_apt"
 	req_access = list(corpapart)
 
 // DIRECTOR
-
-/area/liberty/director
-	sound_env = MEDIUM_SOFTFLOOR
-
 /area/liberty/director/reception
 	name = "\improper Director's Office - Reception"
 	icon_state = "reception"
-	req_access = list(bigboss)
 
 /area/liberty/director/office
 	name = "\improper Director's Office - Working Area"
 	icon_state = "director_office"
-	req_access = list(bigboss)
 
 /area/liberty/director/apartment
 	name = "\improper Director's Quarters - Apartment"
 	icon_state = "director_apartment"
-	req_access = list(bigboss)
 
 // HOLODECK
 
