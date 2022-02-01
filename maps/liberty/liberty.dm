@@ -12,6 +12,8 @@
 
 	#include "items/items.dm"
 	#include "items/rigs.dm"
+	#include "job/_sol_access_defs.dm"
+	#include "job/sol_access.dm"
 	#include "job/liberty_access.dm"
 	#include "machinery/doors.dm"
 	#include "machinery/misc.dm"
