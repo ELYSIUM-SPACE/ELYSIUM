@@ -1,3 +1,6 @@
+/obj/machinery/photocopier/faxmachine/sol
+	send_access = list(list(access_sol_command, access_sol_sfp_command, access_sol_diplomacy))
+
 //Shouldn't be a lot in here, only torch versions of existing machines that need a different access req or something along those lines.
 
 // Suit cyclers and storage
