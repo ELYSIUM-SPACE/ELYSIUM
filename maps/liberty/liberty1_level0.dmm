@@ -13279,6 +13279,14 @@
 	},
 /turf/simulated/floor/tiled/dark/monotile,
 /area/liberty/cargo_bay/zero)
+"gnU" = (
+/obj/effect/floor_decal/corner/black/full,
+/obj/structure/fitness/weightlifter,
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/dark,
+/area/liberty/hotel/gym)
 "gog" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -47373,7 +47381,7 @@ hlC
 aec
 adM
 adP
-adW
+gnU
 adU
 adW
 adU

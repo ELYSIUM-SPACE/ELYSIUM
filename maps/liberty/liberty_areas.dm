@@ -1011,29 +1011,24 @@
 /area/liberty/maintenance/three/aft
 	name = "\improper Level Three - Aft Maintenance"
 	icon_state = "lvl_3_aft_maintenance"
-	req_access = list(maint)
 
 /area/liberty/maintenance/three/fore
 	name = "\improper Level Three - Fore Maintenance"
 	icon_state = "lvl_3_fore_maintenance"
-	req_access = list(maint)
 
 /area/liberty/maintenance/three/starboard
 	name = "\improper Level Three - Starboard Maintenance"
 	icon_state = "lvl_3_starboard_maintenance"
-	req_access = list(maint)
 
 /area/liberty/maintenance/three/port
 	name = "\improper Level Three - Port Maintenance"
 	icon_state = "lvl_3_port_maintenance"
-	req_access = list(maint)
 
 // ENGINEERING
 
 /area/liberty/engineering/substation/substation_level_three
 	name = "\improper Engineering - Substation Level Three"
 	icon_state = "lvl_3_substation"
-	req_access = list(engmain)
 
 ///////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// TURBOLIFT ////////////////////////////////////
