@@ -193,14 +193,6 @@
 	desc = "Medbay - Chemistry"
 	region = ACCESS_REGION_GENERAL
 
-// Hydro
-
-/var/const/hydro = "access_liberty_hydro"
-/datum/access/liberty/hydro
-	id = hydro
-	desc = "Hydroponics"
-	region = ACCESS_REGION_GENERAL
-
 // Chapel
 
 /var/const/chapl = "access_liberty_chapl"
@@ -233,22 +225,6 @@
 	desc = "Conference Room"
 	region = ACCESS_REGION_GENERAL
 
-//  Janitor
-
-/var/const/custodian = "access_liberty_custodian"
-/datum/access/liberty/custodian
-	id = custodian
-	desc = "Custodial Closet"
-	region = ACCESS_REGION_GENERAL
-
-// Bridge
-
-/var/const/bridge = "access_liberty_bridge"
-/datum/access/liberty/bridge
-	id = bridge
-	desc = "Bridge"
-	region = ACCESS_REGION_GENERAL
-
 // Director
 
 /var/const/bigboss = "access_liberty_bigboss"
@@ -271,11 +247,6 @@
 	desc = "Corporate Representative's Apartment"
 	region = ACCESS_REGION_GENERAL
 
-/var/const/clerk = "access_liberty_clerk"
-/datum/access/liberty/clerk
-	id = clerk
-	desc = "Corporate Representative's Apartment"
-	region = ACCESS_REGION_GENERAL
 
 //Shuttles
 
