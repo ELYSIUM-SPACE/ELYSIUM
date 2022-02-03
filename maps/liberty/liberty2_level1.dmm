@@ -14944,6 +14944,11 @@
 /obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
 	dir = 1
 	},
+/obj/structure/cable/green{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/one/fore_port)
 "aCY" = (
@@ -15711,6 +15716,11 @@
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/one/fore_port)
 "aEe" = (
@@ -16831,11 +16841,6 @@
 	d2 = 4;
 	icon_state = "0-4"
 	},
-/obj/structure/cable/green{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hydroponics)
 "aFK" = (
@@ -16926,6 +16931,11 @@
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/one/fore_port)
 "aFR" = (
@@ -17577,6 +17587,11 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/atmospherics/pipe/manifold/hidden/supply{
 	dir = 4
+	},
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/one/fore_port)
@@ -18305,17 +18320,6 @@
 /obj/effect/floor_decal/steeldecal/steel_decals4{
 	dir = 1
 	},
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden/supply{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
-	dir = 4
-	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hydroponics)
 "aIL" = (
@@ -18335,6 +18339,11 @@
 /obj/machinery/atmospherics/valve/shutoff/supply,
 /obj/machinery/atmospherics/valve/shutoff/scrubbers,
 /obj/effect/floor_decal/industrial/shutoff,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/one/fore_port)
 "aIO" = (
@@ -19186,16 +19195,18 @@
 /obj/effect/floor_decal/corner/green{
 	dir = 10
 	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/supply{
+	dir = 6
+	},
 /obj/effect/floor_decal/steeldecal/steel_decals4{
 	dir = 8
 	},
 /obj/effect/floor_decal/steeldecal/steel_decals4{
 	dir = 5
 	},
-/obj/machinery/atmospherics/pipe/manifold/hidden/supply{
-	dir = 8
-	},
-/obj/machinery/atmospherics/pipe/manifold4w/hidden/scrubbers,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hydroponics)
 "aKs" = (
@@ -20046,6 +20057,11 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/one/fore_port)
 "aLV" = (
@@ -20909,6 +20925,11 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 5
 	},
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 4;
+	icon_state = "1-4"
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_port)
 "aND" = (
@@ -20927,6 +20948,11 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 10
+	},
+/obj/structure/cable/green{
+	d1 = 2;
+	d2 = 8;
+	icon_state = "2-8"
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_port)
@@ -21920,6 +21946,11 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/structure/catwalk,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/hallway/one/fore_port)
 "aPo" = (
@@ -22762,6 +22793,11 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/structure/catwalk,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/hallway/one/fore_port)
 "aQO" = (
@@ -23460,6 +23496,11 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/structure/catwalk,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/hallway/one/fore_port)
 "aSc" = (
@@ -24104,6 +24145,11 @@
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/one/aft_port)
 "aTn" = (
@@ -24636,11 +24682,21 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
+/obj/structure/cable/green{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/maintenance/one/aft_port)
 "aUm" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/aft_port)
 "aUn" = (
@@ -35037,25 +35093,17 @@
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/aft_starboard)
 "bmb" = (
-/obj/structure/catwalk,
-/obj/machinery/atmospherics/pipe/simple/hidden/supply{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
-	dir = 4
+/obj/machinery/power/apc{
+	dir = 1;
+	name = "north bump";
+	pixel_y = 18
 	},
 /obj/structure/cable/green{
-	d1 = 2;
 	d2 = 4;
-	icon_state = "2-4"
+	icon_state = "0-4"
 	},
-/obj/structure/cable/green{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/turf/simulated/floor/plating,
-/area/liberty/maintenance/one/aft_starboard)
+/turf/simulated/floor/tiled/dark,
+/area/liberty/maintenance/one/aft_port)
 "bmc" = (
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
@@ -35740,11 +35788,6 @@
 /area/liberty/maintenance/one/aft_starboard)
 "bni" = (
 /obj/structure/table,
-/obj/machinery/power/apc{
-	name = "south bump";
-	pixel_y = -24
-	},
-/obj/structure/cable/green,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/aft_starboard)
 "bnj" = (
@@ -40266,47 +40309,24 @@
 	},
 /turf/space,
 /area/space)
-"czD" = (
-/obj/structure/catwalk,
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/machinery/atmospherics/pipe/cap/visible/supply{
-	dir = 1
-	},
-/obj/machinery/atmospherics/pipe/cap/visible/scrubbers{
-	dir = 1
-	},
-/turf/simulated/floor/plating,
-/area/liberty/maintenance/one/aft_port)
 "cGF" = (
 /obj/machinery/atmospherics/pipe/manifold4w/hidden,
 /turf/simulated/floor/tiled/techfloor,
 /area/liberty/maintenance/one/fore_port)
-"cOR" = (
-/obj/machinery/door/airlock/maintenance,
-/obj/effect/floor_decal/industrial/hatch/yellow,
-/obj/structure/cable/green{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden/supply{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
-	dir = 4
-	},
-/turf/simulated/floor/tiled/techfloor/grid,
-/area/liberty/hydroponics)
 "cVr" = (
 /obj/structure/railing/mapped{
 	dir = 1
 	},
 /turf/space,
 /area/space)
+"dsH" = (
+/obj/structure/cable/green{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/one/aft_port)
 "dtg" = (
 /obj/structure/railing/mapped,
 /turf/space,
@@ -40346,19 +40366,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/fore_port)
-"ekA" = (
-/obj/item/stool,
-/obj/structure/cable/green{
-	d2 = 8;
-	icon_state = "0-8"
-	},
-/obj/machinery/power/apc{
-	dir = 4;
-	name = "east bump";
-	pixel_x = 24
-	},
-/turf/simulated/floor/plating,
-/area/liberty/maintenance/one/aft_port)
 "haX" = (
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/simple/hidden{
@@ -40366,36 +40373,22 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/fore_port)
-"iEY" = (
+"hoL" = (
 /obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/structure/cable/green{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
-/obj/machinery/atmospherics/valve/shutoff/scrubbers{
-	dir = 4
-	},
-/obj/machinery/atmospherics/valve/shutoff/supply{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/liberty/maintenance/one/aft_port)
-"iFx" = (
-/obj/structure/catwalk,
 /obj/structure/cable/green{
 	d1 = 2;
 	d2 = 4;
 	icon_state = "2-4"
 	},
-/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
-	dir = 8
-	},
-/obj/machinery/atmospherics/pipe/manifold/hidden/supply{
-	dir = 8
-	},
 /turf/simulated/floor/plating,
-/area/liberty/maintenance/one/aft_port)
+/area/liberty/maintenance/one/aft_starboard)
 "jib" = (
 /obj/structure/lattice,
 /obj/item/stack/material/rods,
@@ -40404,6 +40397,14 @@
 	},
 /turf/space,
 /area/space)
+"jlX" = (
+/obj/structure/cable/green{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/tiled/dark,
+/area/liberty/maintenance/one/aft_port)
 "jyQ" = (
 /obj/structure/railing/mapped{
 	dir = 1
@@ -40425,12 +40426,6 @@
 /obj/structure/lattice,
 /turf/space,
 /area/space)
-"maY" = (
-/obj/structure/catwalk,
-/obj/machinery/atmospherics/pipe/cap/visible/supply,
-/obj/machinery/atmospherics/pipe/cap/visible/scrubbers,
-/turf/simulated/floor/plating,
-/area/liberty/maintenance/one/aft_port)
 "mhQ" = (
 /obj/structure/railing/mapped{
 	dir = 1
@@ -40444,17 +40439,6 @@
 /obj/structure/railing/mapped,
 /turf/space,
 /area/space)
-"mXM" = (
-/obj/machinery/portable_atmospherics/hydroponics,
-/obj/effect/floor_decal/corner/green/mono,
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
-	dir = 10
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden/supply{
-	dir = 10
-	},
-/turf/simulated/floor/tiled/monotile,
-/area/liberty/hydroponics)
 "neL" = (
 /obj/machinery/cryopod{
 	dir = 4;
@@ -40471,15 +40455,6 @@
 /obj/structure/ladder,
 /turf/simulated/floor/airless/ceiling,
 /area/space)
-"oeW" = (
-/obj/structure/catwalk,
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 4;
-	icon_state = "1-4"
-	},
-/turf/simulated/floor/plating,
-/area/liberty/maintenance/one/aft_port)
 "orX" = (
 /obj/effect/wallframe_spawn/reinforced,
 /turf/simulated/floor/plating,
@@ -40536,32 +40511,12 @@
 	},
 /turf/space,
 /area/space)
-"rgn" = (
-/obj/structure/catwalk,
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/plating,
-/area/liberty/maintenance/one/aft_port)
 "rhr" = (
 /obj/structure/railing/mapped{
 	dir = 4
 	},
 /turf/simulated/floor/reinforced/airless,
 /area/space)
-"rBe" = (
-/obj/effect/floor_decal/corner/green{
-	dir = 9
-	},
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/turf/simulated/floor/tiled/techmaint,
-/area/liberty/hydroponics)
 "sAe" = (
 /obj/structure/railing/mapped{
 	dir = 8
@@ -40592,6 +40547,19 @@
 	},
 /turf/simulated/floor/reinforced/airless,
 /area/space)
+"sYO" = (
+/obj/structure/catwalk,
+/obj/machinery/power/apc{
+	dir = 4;
+	name = "east bump";
+	pixel_x = 24
+	},
+/obj/structure/cable/green{
+	d2 = 8;
+	icon_state = "0-8"
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/one/aft_starboard)
 "sYW" = (
 /obj/structure/railing/mapped{
 	dir = 4
@@ -48425,11 +48393,11 @@ axv
 axv
 axv
 axv
-maY
-iFx
-czD
-rgn
-oeW
+axv
+axv
+axv
+axv
+axv
 axv
 aAs
 axv
@@ -48628,10 +48596,10 @@ aAt
 aDZ
 aFI
 aHg
-iEY
+axv
 aKp
 aLO
-ekA
+aII
 aPc
 aQF
 aKn
@@ -48830,7 +48798,7 @@ ayX
 ayX
 ayX
 ayX
-cOR
+aIJ
 ayX
 ayX
 ayX
@@ -49031,7 +48999,7 @@ aBt
 aCQ
 aCT
 aFJ
-rBe
+aCT
 aIK
 aKq
 aLP
@@ -49234,7 +49202,7 @@ aCR
 aCR
 aFK
 aCR
-mXM
+aCR
 aKr
 aLQ
 aNt
@@ -50858,7 +50826,7 @@ aPi
 aQJ
 aNv
 ayX
-aUj
+bmb
 aHf
 aDZ
 aXT
@@ -51060,7 +51028,7 @@ aPj
 aQK
 aRX
 ayX
-aUj
+jlX
 aVH
 aDZ
 axv
@@ -51262,7 +51230,7 @@ aPk
 aNw
 aQH
 ayX
-aUj
+jlX
 aUj
 aDZ
 aXU
@@ -51464,7 +51432,7 @@ ayX
 ayX
 ayX
 ayX
-aUj
+jlX
 aUj
 aDZ
 aDZ
@@ -51666,7 +51634,7 @@ aPl
 aQL
 aRZ
 aTl
-aHf
+dsH
 aUj
 aVF
 aXV
@@ -69052,7 +69020,7 @@ bgt
 bgt
 bjQ
 bfm
-bmb
+bmc
 bni
 bdX
 bee
@@ -70259,7 +70227,7 @@ aXA
 bcI
 bed
 bfn
-bgv
+hoL
 bgv
 biT
 biT
@@ -70461,7 +70429,7 @@ bbz
 bcJ
 bee
 bfo
-bee
+sYO
 bhI
 biU
 bjR
