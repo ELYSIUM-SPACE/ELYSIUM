@@ -73,7 +73,7 @@
 	name = "fancy sofa"
 	icon = 'code_ark/icons/obj/furniture.dmi'
 	icon_state = "sofamiddle"
-	anchored = 1
+	anchored = TRUE
 	buckle_lying = 0
 	buckle_dir = SOUTH
 
@@ -81,7 +81,7 @@
 	icon_state = "sofaend_left"
 
 /*
-/obj/structure/bed/chair/sofa/update_icon()
+/obj/structure/bed/chair/sofa/on_update_icon()
 	if(applies_material_colour && sofa_material)
 		material = get_material_by_name(sofa_material)
 		color = material.icon_colour
