@@ -3231,6 +3231,7 @@
 #include "code_ark\code\game\objects\structures\wood.dm"
 #include "code_ark\code\game\objects\structures\stool_bed_chair_nest\bed.dm"
 #include "code_ark\code\game\objects\structures\stool_bed_chair_nest\chairs.dm"
+#include "code_ark\code\game\objects\structures\stool_bed_chair_nest\sofa.dm"
 #include "code_ark\code\game\verbs\sound.dm"
 #include "code_ark\code\game\verbs\who.dm"
 #include "code_ark\code\modules\hygiene.dm"
