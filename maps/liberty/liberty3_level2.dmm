@@ -6597,6 +6597,21 @@
 	},
 /turf/simulated/floor/carpet/red,
 /area/liberty/hotel/hallway/east)
+"my" = (
+/obj/machinery/atmospherics/pipe/manifold/hidden/supply{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
+	dir = 1
+	},
+/obj/structure/cable/green{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/structure/catwalk,
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "mz" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 4
@@ -10857,6 +10872,18 @@
 /obj/effect/floor_decal/industrial/outline/yellow,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/fore)
+"vr" = (
+/obj/structure/catwalk,
+/obj/machinery/oxygen_pump{
+	pixel_x = 32
+	},
+/obj/effect/floor_decal/industrial/warning/full,
+/obj/machinery/atmospherics/unary/vent_pump/high_volume/airlock{
+	dir = 8;
+	id_tag = "lucius_aft_pump"
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "vt" = (
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/hatch/yellow,
@@ -11012,6 +11039,13 @@
 /obj/effect/floor_decal/steeldecal/steel_decals4,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two/fore)
+"vM" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/manifold/hidden{
+	dir = 8
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "vO" = (
 /obj/structure/bed/double/wood/walnut,
 /obj/item/bedsheet/double/brown,
@@ -11354,6 +11388,12 @@
 /obj/structure/railing/mapped{
 	dir = 1
 	},
+/obj/machinery/atmospherics/binary/pump/on{
+	dir = 4
+	},
+/obj/effect/floor_decal/industrial/warning/cee{
+	dir = 4
+	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/port)
 "wG" = (
@@ -11571,6 +11611,24 @@
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/chapel/lobby)
+"xp" = (
+/obj/machinery/atmospherics/pipe/simple/hidden/supply{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
+	dir = 4
+	},
+/obj/structure/cable/green{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/catwalk,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "xq" = (
 /obj/structure/filingcabinet/chestdrawer,
 /obj/effect/floor_decal/spline/fancy{
@@ -12503,7 +12561,15 @@
 /obj/structure/railing/mapped{
 	dir = 8
 	},
-/obj/structure/railing/mapped,
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 4
+	},
+/obj/effect/floor_decal/industrial/warning/cee{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/port)
 "zA" = (
@@ -13118,6 +13184,13 @@
 	},
 /turf/simulated/floor/carpet/red,
 /area/liberty/hotel/hallway/east)
+"Bm" = (
+/obj/structure/railing/mapped{
+	dir = 8
+	},
+/obj/machinery/light/small,
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "Bn" = (
 /obj/machinery/light/small{
 	dir = 1
@@ -13391,6 +13464,21 @@
 "Cc" = (
 /turf/simulated/open,
 /area/liberty/hotel/hallway/east)
+"Cd" = (
+/obj/structure/catwalk,
+/obj/machinery/light/small/red{
+	dir = 4
+	},
+/obj/machinery/airlock_sensor{
+	pixel_y = 24
+	},
+/obj/effect/floor_decal/industrial/warning/full,
+/obj/machinery/atmospherics/unary/vent_pump/high_volume/airlock{
+	dir = 8;
+	id_tag = "lucius_aft_pump"
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "Ce" = (
 /obj/structure/bed/double/wood/walnut,
 /obj/item/bedsheet/double/brown,
@@ -13469,9 +13557,6 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 4
 	},
 /turf/simulated/floor/plating,
@@ -14830,6 +14915,18 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two)
+"FT" = (
+/obj/structure/catwalk,
+/obj/machinery/light/small/red{
+	dir = 8
+	},
+/obj/effect/floor_decal/industrial/warning/full,
+/obj/machinery/atmospherics/unary/vent_pump/high_volume/airlock{
+	dir = 4;
+	id_tag = "lucius_center_pump"
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "FU" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 5
@@ -14848,6 +14945,13 @@
 	},
 /turf/simulated/floor/carpet,
 /area/liberty/library)
+"FX" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "FY" = (
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 8
@@ -14896,6 +15000,13 @@
 	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hotel/room/three_zero_three)
+"Ge" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/hidden/supply{
+	dir = 6
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "Gf" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1
@@ -14909,11 +15020,18 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 10
 	},
+/obj/machinery/light/small{
+	dir = 1
+	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/port)
 "Gi" = (
 /turf/simulated/floor/carpet/blue,
 /area/liberty/hotel/room/three_zero_two)
+"Gj" = (
+/obj/machinery/atmospherics/pipe/manifold4w/hidden,
+/turf/simulated/floor/tiled/techfloor,
+/area/liberty/maintenance/two/port)
 "Gl" = (
 /obj/structure/cable/green{
 	d1 = 4;
@@ -15186,6 +15304,13 @@
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/library)
+"Hb" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 5
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "Hc" = (
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/hatch/yellow,
@@ -15206,21 +15331,13 @@
 /area/liberty/chapel/office)
 "Hd" = (
 /obj/structure/catwalk,
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
-	dir = 9
-	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
 	dir = 9
 	},
 /obj/structure/cable/green{
-	d1 = 1;
+	d1 = 2;
 	d2 = 8;
-	icon_state = "1-8"
-	},
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
+	icon_state = "2-8"
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/port)
@@ -15419,9 +15536,6 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
-	dir = 1
-	},
 /obj/machinery/atmospherics/pipe/manifold/hidden/supply{
 	dir = 1
 	},
@@ -15429,6 +15543,16 @@
 	d1 = 2;
 	d2 = 8;
 	icon_state = "2-8"
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
+	dir = 10
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
+"Hy" = (
+/obj/structure/catwalk,
+/obj/machinery/light{
+	dir = 8
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/port)
@@ -15697,12 +15821,7 @@
 /area/liberty/medbay/oncall_room)
 "Io" = (
 /obj/structure/catwalk,
-/obj/machinery/atmospherics/pipe/cap/visible/scrubbers,
-/obj/machinery/atmospherics/pipe/cap/visible/supply,
-/obj/structure/cable/green{
-	d2 = 2;
-	icon_state = "0-2"
-	},
+/obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/port)
 "Ip" = (
@@ -16041,9 +16160,6 @@
 /area/liberty/hotel/restaurant/upper)
 "Je" = (
 /obj/machinery/door/airlock/maintenance,
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
 	dir = 4
 	},
@@ -16499,6 +16615,12 @@
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/chapel/main)
+"Kn" = (
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/maintenance/two/port)
 "Kp" = (
 /turf/simulated/wall/r_wall/prepainted,
 /area/liberty/engineering/substation/substation_level_two)
@@ -16606,6 +16728,15 @@
 	},
 /turf/simulated/floor/wood/maple,
 /area/liberty/medbay/hallway/two)
+"KF" = (
+/obj/structure/railing/mapped{
+	dir = 8
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "KG" = (
 /obj/effect/floor_decal/corner/grey{
 	dir = 1
@@ -17014,6 +17145,11 @@
 /obj/machinery/light/small,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hotel/over_stage)
+"LE" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/hidden,
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "LH" = (
 /obj/structure/cable/green{
 	d1 = 4;
@@ -17142,6 +17278,21 @@
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/one_zero_four)
+"LS" = (
+/obj/structure/catwalk,
+/obj/machinery/light/small/red{
+	dir = 8
+	},
+/obj/effect/floor_decal/industrial/warning/full,
+/obj/machinery/atmospherics/unary/vent_pump/high_volume/airlock{
+	dir = 4;
+	id_tag = "lucius_center_pump"
+	},
+/obj/machinery/camera/network/security{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "LT" = (
 /obj/effect/paint/white,
 /obj/effect/paint_stripe/green,
@@ -17308,6 +17459,11 @@
 /obj/effect/paint_stripe/yellow,
 /turf/simulated/wall/prepainted,
 /area/liberty/hotel/hallway/east)
+"Mr" = (
+/obj/structure/catwalk,
+/obj/machinery/light,
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "Ms" = (
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
@@ -17551,6 +17707,12 @@
 /obj/structure/flora/pottedplant/minitree,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two)
+"Nf" = (
+/obj/machinery/door/airlock/external/bolted,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/atmospherics/pipe/simple/hidden,
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "Ng" = (
 /obj/effect/floor_decal/corner/black/mono,
 /obj/structure/hygiene/shower{
@@ -17743,6 +17905,13 @@
 	},
 /turf/simulated/floor/carpet/red,
 /area/liberty/hotel/hallway/east)
+"ND" = (
+/obj/structure/catwalk,
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "NF" = (
 /obj/effect/floor_decal/corner/grey{
 	dir = 5
@@ -17853,6 +18022,12 @@
 /obj/structure/railing/mapped{
 	dir = 1
 	},
+/obj/machinery/atmospherics/pipe/simple/hidden/universal{
+	dir = 4
+	},
+/obj/effect/floor_decal/industrial/warning/cee{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/port)
 "NV" = (
@@ -17868,6 +18043,9 @@
 /obj/random/junk,
 /obj/random/maintenance,
 /obj/random/junk,
+/obj/machinery/light/small{
+	dir = 1
+	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/port)
 "NX" = (
@@ -18184,6 +18362,25 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two)
+"OO" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 9
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
+"OP" = (
+/obj/structure/catwalk,
+/obj/machinery/light/small/red{
+	dir = 4
+	},
+/obj/effect/floor_decal/industrial/warning/full,
+/obj/machinery/atmospherics/unary/vent_pump/high_volume/airlock{
+	dir = 8;
+	id_tag = "lucius_aft_pump"
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "OQ" = (
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/firedoor,
@@ -18672,6 +18869,13 @@
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/chapel/funeral_room)
+"PY" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/hidden/supply{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "PZ" = (
 /obj/structure/table/woodentable/walnut,
 /obj/item/device/flashlight/lamp/green{
@@ -19711,6 +19915,19 @@
 /obj/effect/paint_stripe/green,
 /turf/simulated/wall,
 /area/liberty/medbay/storage)
+"SH" = (
+/obj/structure/railing/mapped{
+	dir = 4
+	},
+/obj/machinery/atmospherics/portables_connector{
+	dir = 8
+	},
+/obj/machinery/portable_atmospherics/canister/air/airlock,
+/obj/effect/floor_decal/industrial/warning/cee{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "SI" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 4
@@ -19838,6 +20055,12 @@
 /obj/effect/paint_stripe/white,
 /turf/simulated/wall/r_wall/prepainted,
 /area/liberty/hallway/two)
+"SU" = (
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/maintenance/two/port)
 "SV" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 5
@@ -20187,6 +20410,12 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hotel/warehouse)
+"TG" = (
+/obj/machinery/atmospherics/pipe/manifold/hidden{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techfloor,
+/area/liberty/maintenance/two/port)
 "TH" = (
 /obj/effect/paint_stripe/green,
 /obj/effect/paint/white,
@@ -20549,6 +20778,9 @@
 /obj/effect/decal/cleanable/blood/oil,
 /obj/random/maintenance,
 /obj/random/junk,
+/obj/machinery/light/small{
+	dir = 1
+	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/port)
 "UD" = (
@@ -20582,6 +20814,13 @@
 /obj/effect/paint_stripe/green,
 /turf/simulated/wall/r_wall/prepainted,
 /area/liberty/medbay/storage)
+"UJ" = (
+/obj/structure/catwalk,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "UL" = (
 /obj/structure/bed/double/wood/walnut,
 /obj/item/bedsheet/double/red,
@@ -20610,19 +20849,16 @@
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two)
 "UO" = (
-/obj/machinery/atmospherics/pipe/manifold/hidden/supply{
-	dir = 1
-	},
-/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
-	dir = 1
-	},
-/obj/structure/cable/green{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /obj/structure/catwalk,
-/obj/structure/catwalk,
+/obj/machinery/embedded_controller/radio/airlock/airlock_controller{
+	dir = 4;
+	pixel_x = -24
+	},
+/obj/effect/floor_decal/industrial/warning/full,
+/obj/machinery/atmospherics/unary/vent_pump/high_volume/airlock{
+	dir = 4;
+	id_tag = "lucius_center_pump"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/port)
 "UP" = (
@@ -21216,6 +21452,13 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hotel/warehouse)
+"Wg" = (
+/obj/structure/railing/mapped{
+	dir = 4
+	},
+/obj/machinery/light/small,
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "Wh" = (
 /obj/machinery/atmospherics/pipe/manifold/hidden/supply{
 	dir = 4
@@ -21544,6 +21787,13 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two)
+"WX" = (
+/obj/structure/catwalk,
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 10
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "WY" = (
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/starboard)
@@ -21596,6 +21846,13 @@
 /obj/machinery/atmospherics/pipe/manifold/hidden/supply,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/chapel/lobby)
+"Xl" = (
+/obj/structure/lattice,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/open,
+/area/liberty/maintenance/two/port)
 "Xm" = (
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 8
@@ -22421,6 +22678,15 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hotel/dorm)
+"ZQ" = (
+/obj/structure/railing/mapped{
+	dir = 4
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two/port)
 "ZR" = (
 /obj/structure/bed/roller/ironingboard,
 /obj/effect/floor_decal/corner/pink/mono,
@@ -29827,7 +30093,7 @@ GO
 WU
 bo
 AU
-AU
+SU
 AU
 AU
 Gb
@@ -30628,8 +30894,8 @@ ac
 af
 ag
 Gb
-NG
-UO
+ND
+my
 PF
 PF
 vm
@@ -31036,11 +31302,11 @@ NG
 Rj
 bo
 bo
-Rj
+xp
 NG
 NG
 bo
-AU
+Kn
 Hk
 NG
 bo
@@ -31234,7 +31500,7 @@ ac
 af
 ag
 Gb
-NG
+ND
 Rj
 bo
 Ah
@@ -32248,7 +32514,7 @@ AU
 AU
 AU
 bo
-Lf
+Xl
 Tc
 NG
 NG
@@ -32457,7 +32723,7 @@ MR
 bo
 Cq
 bo
-NG
+UJ
 tP
 zn
 zn
@@ -32850,9 +33116,9 @@ Fo
 ag
 ag
 Gb
-WU
-WU
-WU
+FT
+UO
+LS
 Gb
 NG
 NG
@@ -33052,14 +33318,14 @@ ag
 ag
 ag
 zH
-WU
-WU
-WU
-zH
+TG
+Gj
+Gj
+Nf
+vM
+Hb
 NG
-NG
-NG
-NG
+Ge
 Io
 Hd
 PQ
@@ -33254,17 +33520,17 @@ ag
 ag
 ag
 Gb
-WU
-WU
-WU
+Cd
+vr
+OP
 Gb
+FX
+FX
+NG
+PY
 NG
 NG
-NG
-NG
-NG
-NG
-NG
+Mr
 bo
 tP
 Uo
@@ -33461,7 +33727,7 @@ Gb
 Gb
 Gb
 zz
-NG
+FX
 NG
 NU
 bo
@@ -33658,12 +33924,12 @@ UC
 NG
 NG
 bo
+ZQ
 Dr
-Dr
-Dr
+Wg
 bo
-XV
-NG
+SH
+FX
 NG
 wF
 bo
@@ -33865,9 +34131,9 @@ NG
 NG
 NG
 NG
-NG
-NG
-NG
+WX
+LE
+OO
 NG
 NG
 oy
@@ -34062,9 +34328,9 @@ NW
 NG
 NG
 bo
+KF
 Rl
-Rl
-Rl
+Bm
 bo
 Rl
 Rl
@@ -34474,7 +34740,7 @@ mv
 HV
 NG
 NG
-NG
+Hy
 NG
 NG
 NG
@@ -38704,7 +38970,7 @@ Aq
 ab
 ab
 Pr
-aI
+rx
 aI
 aI
 jj
