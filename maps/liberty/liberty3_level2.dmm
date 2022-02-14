@@ -8578,6 +8578,9 @@
 "qH" = (
 /obj/structure/closet,
 /obj/machinery/atmospherics/unary/vent_scrubber/on,
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 9
+	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)
 "qI" = (
@@ -12248,6 +12251,9 @@
 	controlled = 0;
 	dir = 8
 	},
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 6
+	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)
 "yU" = (
@@ -12768,6 +12774,9 @@
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	controlled = 0;
 	dir = 1
+	},
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 6
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)
@@ -17502,6 +17511,9 @@
 	dir = 4;
 	pixel_x = 24
 	},
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 5
+	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)
 "MB" = (
@@ -17856,6 +17868,9 @@
 /area/liberty/chapel/office)
 "Nu" = (
 /obj/structure/closet,
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 10
+	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)
 "Nw" = (
@@ -18698,6 +18713,9 @@
 /obj/machinery/alarm{
 	dir = 1;
 	pixel_y = -24
+	},
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 10
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)
@@ -19668,6 +19686,9 @@
 	dir = 1;
 	pixel_y = -24
 	},
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 10
+	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)
 "Sd" = (
@@ -19946,6 +19967,9 @@
 	},
 /obj/machinery/alarm{
 	pixel_y = 24
+	},
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 5
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)
@@ -20828,6 +20852,9 @@
 	controlled = 0;
 	dir = 8
 	},
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 6
+	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)
 "UM" = (
@@ -21124,6 +21151,9 @@
 /obj/item/device/flashlight/lamp/modern{
 	pixel_x = 5;
 	pixel_y = 5
+	},
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 5
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)
@@ -21584,6 +21614,9 @@
 /obj/machinery/firealarm{
 	dir = 8;
 	pixel_x = -24
+	},
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 9
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)

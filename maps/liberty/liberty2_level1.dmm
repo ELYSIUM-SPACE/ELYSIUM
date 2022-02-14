@@ -39573,6 +39573,9 @@
 /obj/effect/floor_decal/corner/grey{
 	dir = 9
 	},
+/obj/effect/floor_decal/small_carpet{
+	dir = 6
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/space)
 "btR" = (
@@ -39652,6 +39655,9 @@
 /area/space)
 "buc" = (
 /obj/effect/floor_decal/corner/grey{
+	dir = 6
+	},
+/obj/effect/floor_decal/small_carpet{
 	dir = 6
 	},
 /turf/simulated/floor/tiled/techmaint,
@@ -39896,6 +39902,9 @@
 /obj/machinery/computer/cryopod{
 	pixel_x = 33;
 	pixel_y = 25
+	},
+/obj/effect/floor_decal/small_carpet{
+	dir = 6
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/space)
@@ -40366,6 +40375,24 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/fore_port)
+"fao" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 6
+	},
+/obj/effect/floor_decal/small_carpet{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/space)
+"gbQ" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 6
+	},
+/obj/effect/floor_decal/small_carpet{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/space)
 "haX" = (
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/simple/hidden{
@@ -40373,6 +40400,15 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/fore_port)
+"hba" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 9
+	},
+/obj/effect/floor_decal/small_carpet{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/space)
 "hoL" = (
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
@@ -40425,6 +40461,15 @@
 /obj/structure/railing/mapped,
 /obj/structure/lattice,
 /turf/space,
+/area/space)
+"lUN" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 9
+	},
+/obj/effect/floor_decal/small_carpet{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/techmaint,
 /area/space)
 "mhQ" = (
 /obj/structure/railing/mapped{
@@ -63987,12 +64032,12 @@ aaa
 aaa
 btH
 buc
-buc
-buc
+gbQ
+fao
 buw
 buc
-buc
-buc
+gbQ
+fao
 btH
 aaa
 aaa
@@ -64189,12 +64234,12 @@ aaa
 aaa
 btH
 buM
-btQ
-btQ
+hba
+lUN
 buw
 btQ
-btQ
-btQ
+hba
+lUN
 btH
 aaa
 aaa
@@ -64795,12 +64840,12 @@ btq
 btB
 btH
 buc
-buc
-buc
+gbQ
+fao
 buw
 buc
-buc
-buc
+gbQ
+fao
 btH
 btB
 btq
@@ -64997,12 +65042,12 @@ btq
 btB
 btH
 btQ
-btQ
-btQ
+hba
+lUN
 buw
 btQ
-btQ
-btQ
+hba
+lUN
 btH
 btB
 btq
