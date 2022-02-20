@@ -1018,7 +1018,7 @@
 /area/liberty/maintenance/three/port
 	name = "\improper Level Three - Port Maintenance"
 
-/area/liberty/maintenance/three/director's_maint
+/area/liberty/maintenance/three/directors_maint
 	name = "\improper Level Three - Central Maintenhance"
 
 // ENGINEERING
