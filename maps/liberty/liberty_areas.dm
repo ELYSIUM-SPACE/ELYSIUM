@@ -35,6 +35,11 @@
 
 /area/liberty/maintenance/construction	// NO_APC for unit_test
 
+/area/liberty/maintenance/lounge
+	name = "\improper Level Zero - Maint Lounge"
+	
+	
+
 // BRIG
 
 /area/liberty/sfp
@@ -913,6 +918,9 @@
 	name = "\improper Level Two - Port Maintenance"
 	icon_state = "lvl_2_port_maintenance"
 
+/area/liberty/maintenance/two/room
+	name = "\improper Level Two - Maintenance Room"
+
 // ENGINEERING
 
 /area/liberty/engineering/substation/substation_level_two
@@ -957,25 +965,6 @@
 	ambience = list('sound/ambience/ambisin2.ogg', 'sound/ambience/signal.ogg', 'sound/ambience/signal.ogg', 'sound/ambience/ambigen10.ogg')
 	req_access = list(engtcom)
 
-// APARTMENTS
-
-/area/liberty/aparment
-	sound_env = MEDIUM_SOFTFLOOR
-
-/area/liberty/aparment/scg
-	name = "\improper Level Three - SCG Representative's Apartment"
-	icon_state = "councilor_apartments"
-	req_access = list(scgapart)
-
-/area/liberty/aparment/corporate
-	name = "\improper Level Three - Corporate Representative's Apartment"
-	icon_state = "corporate_apartment"
-	req_access = list(corpapart)
-
-/area/liberty/aparment/secretary
-	name = "\improper Level Three - Corporate Representative's Secretary"
-	icon_state = "secretary_apt"
-	req_access = list(corpapart)
 
 // DIRECTOR
 /area/liberty/director/reception
@@ -1006,6 +995,12 @@
 	name = "\improper Level Three - Starboard Hallway"
 	icon_state = "lvl_3_starboard_hall"
 
+/area/liberty/hallway/emergency_terminal
+	name = "\improper Emergency Terminal"
+
+/area/liberty/hallway/three/starboard
+	name = "\improper Level Three - Zadovsky's Hallway"
+
 // MAINTENANCE
 
 /area/liberty/maintenance/three/aft
@@ -1022,7 +1017,9 @@
 
 /area/liberty/maintenance/three/port
 	name = "\improper Level Three - Port Maintenance"
-	icon_state = "lvl_3_port_maintenance"
+
+/area/liberty/maintenance/three/directors_maint
+	name = "\improper Level Three - Central Maintenhance"
 
 // ENGINEERING
 
