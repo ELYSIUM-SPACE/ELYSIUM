@@ -246,16 +246,26 @@
 	GLOB.universe.OnPlayerLatejoin(character)
 	spawnpoint.after_join(character)
 	if(job.create_record)
-		if(character.mind.assigned_role != "Robot")
+		if(character.mind.assigned_role == "Robot")
+			AnnounceCyborg(character, job, spawnpoint.msg)
+		else
+			//if char is not a robot and there is cryopod available nearby,
+			//char is unbuckled from the wheelchair if any, and then put into the cryopod.
+			var/obj/machinery/cryopod/Pod
+			for(Pod in orange(spawn_turf, 1))
+				if(Pod.occupant)
+					continue
+				var/obj/structure/bed/chair/wheelchair/W = character.buckled
+				if(istype(W))
+					W.unbuckle_mob()
+				Pod.set_occupant(character)
+				break
+
 			CreateModularRecord(character)
 			SSticker.minds += character.mind//Cyborgs and AIs handle this in the transform proc.	//TODO!!!!! ~Carn
 			AnnounceArrival(character, job, spawnpoint.msg)
-		else
-			AnnounceCyborg(character, job, spawnpoint.msg)
-	log_and_message_admins("has joined the round as [character.mind.assigned_role].", character)
 
-	if(character.needs_wheelchair())
-		equip_wheelchair(character)
+	log_and_message_admins("has joined the round as [character.mind.assigned_role].", character)
 
 	qdel(src)
 
