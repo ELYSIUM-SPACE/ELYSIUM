@@ -4,7 +4,7 @@
 	icon = 'code_ark/icons/obj/machinery.dmi'
 	icon_state = "101"
 
-	density = FALSE
+	density = 0
 	power_channel = EQUIP
 	idle_power_usage = 10
 
@@ -22,21 +22,19 @@
 /obj/machinery/hotel_room_sign/on_update_icon()
 	overlays.Cut()
 	var/image/I = image(icon, icon_state)
-	if(!hotel_room && !(stat & NOPOWER))
-		I.color = "#ffffff"
-		I.plane = EFFECTS_ABOVE_LIGHTING_PLANE
-		I.layer = ABOVE_LIGHTING_LAYER
-		set_light(0.3, 0.1, 1, 2, "#ffffff")
-		overlays += I
-		return
-	if((stat & NOPOWER) || hotel_room.room_status == 0)
-		I.color = "#999999"
-		set_light(0)
+	if(hotel_room)
+		if((stat & NOPOWER) || hotel_room.room_status == 0)
+			I.color = "#999999"
+			set_light(0)
+			overlays += I
+			return
+		else
+			I.color = (hotel_room.room_requests > 1) ? "#f5ea84" : hotel_room.room_requests == 1 ? "#f58484" : "#ffffff"
 	else
-		I.plane = EFFECTS_ABOVE_LIGHTING_PLANE
-		I.layer = ABOVE_LIGHTING_LAYER
-		I.color = (hotel_room.room_requests > 1) ? "#f5ea84" : hotel_room.room_requests == 1 ? "#f58484" : "#ffffff"
-		set_light(0.3, 0.1, 1, 2, (hotel_room.room_requests > 1) ? "#f5ea84" : hotel_room.room_requests == 1 ? "#f58484" : "#ffffff")
+		I.color = "#ffffff"
+	set_light(0.3, 0.1, 1, 2, I.color)
+	I.plane = EFFECTS_ABOVE_LIGHTING_PLANE
+	I.layer = ABOVE_LIGHTING_LAYER
 	overlays += I
 
 /obj/machinery/hotel_room_sign/one_zero_one

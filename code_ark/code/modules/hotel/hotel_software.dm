@@ -6,7 +6,7 @@
 	program_icon_state = "crew"
 	program_key_state = "generic_key"
 	program_menu_icon = "calendar"
-	extended_desc = "This program connects to the hotel reservations system and enables it to be managed."
+	extended_desc = "This program connects to hotel reservations system and enables it to be managed."
 	required_access = "ACCESS_LIBERTY_HOTEL"
 	requires_ntnet = 1
 	network_destination = "hotel reservations database"

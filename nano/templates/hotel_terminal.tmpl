@@ -5,17 +5,17 @@ Used In File(s): code_ark\code\modules\hotel\reservation_computers.dm
 
 {{if data.mode == 0}}
     <H3><span class="bad">An error has occurred!</span></H3>
-    <div class="itemGroup" style = "width: 300px">The selected room may no longer be usable, the terminal might have been reset, or the new reservation has just timed out. <br><br>Do not hesitate to reach out to the hotel personnel for help!</div><br>{{:helper.link( 'Return', 'arrowreturn-1-w', {'return_to_main' : 1}, null, null, null)}}
+    <div class="itemGroup" style = "width: 300px">The selected room may no longer be usable, the terminal might have been reset, or the new reservation has just timed out. <br><br>Do not hesitate to reach out to hotel personnel for help!</div><br>{{:helper.link( 'Return', 'arrowreturn-1-w', {'return_to_main' : 1}, null, null, null)}}
 
 {{else data.mode == 1}}
     {{if data.auto == 0}}
         <br><br>
         <div class="itemGroup">
-            <span class="white">The terminal is remotely blocked. Self-reservations are not possible. Please, contact the hotel personnel.</span>
+            <span class="white">The terminal is remotely blocked. Self-reservations are not possible. Please, contact hotel personnel.</span>
         </div>
     {{else}}
         <H2><span class="white">Self-Reservation</span></H2>
-        <div class="itemGroup" style = "width: 300px">Please, select a room type. Prepare your ID.{{if data.special_room}}<br><i>Special offers available - ask the hotel personnel.</i>{{/if}}</div>
+        <div class="itemGroup" style = "width: 300px">Please, select a room type. Prepare your ID.{{if data.special_room}}<br><i>Special offers available - ask hotel personnel.</i>{{/if}}</div>
         <H3><span class="white">Single Room</span></H3>
         <div class="itemGroup" style = "width: 300px">
             <table><tr>

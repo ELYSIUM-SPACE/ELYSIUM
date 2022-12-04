@@ -12,7 +12,7 @@
 	desc = "It can be used either for self-serivce reservations when set to automatic mode or as an ID scanner and payment terminal when operating in connection with a console."
 	icon = 'code_ark/icons/obj/machinery.dmi'
 	icon_state = "hotel_terminal"
-	density = TRUE
+	density = 1
 
 	var/auto_mode = 1		// 0 - manual, 1 - auto
 	var/program_mode = 1	// 0 - error, 1 - room selection, 2 - reservation, 3 - ID scan, 4 - payment
