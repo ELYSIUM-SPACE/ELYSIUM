@@ -6,8 +6,8 @@
 	eyes beneath a prominent brow in order to shield them from the glare of a dangerously \
 	bright, alien sun. This comes at the cost of mobility, flexibility, and increased \
 	oxygen requirements to support their robust metabolism."
-	icobase =     'icons/mob/human_races/species/human/subspecies/gravworlder_body.dmi'
-	preview_icon= 'icons/mob/human_races/species/human/subspecies/gravworlder_preview.dmi'
+	icobase =     'icons/mob/human_races/species/human/subspecies/gravworldersnew.dmi'
+	preview_icon= 'icons/mob/human_races/species/human/subspecies/gravworldersnew_preview.dmi'
 	health_hud_intensity = 3
 
 	flash_mod =     0.9
@@ -29,15 +29,15 @@
 	. = ..()
 	if(.)
 		return H.skill_check(SKILL_HAULING, SKILL_EXPERT) //Hard for them to swim
-	
+
 /datum/species/human/spacer
 	name = SPECIES_SPACER
 	name_plural = "Space-Adapted Humans"
 	description = "Lithe and frail, these sickly folk were engineered for work in environments that \
 	lack both light and atmosphere. As such, they're quite resistant to asphyxiation as well as \
 	toxins, but they suffer from weakened bone structure and a marked vulnerability to bright lights."
-	icobase =     'icons/mob/human_races/species/human/subspecies/spacer_body.dmi'
-	preview_icon= 'icons/mob/human_races/species/human/subspecies/spacer_preview.dmi'
+	icobase =     'icons/mob/human_races/species/human/subspecies/spaceadaptsnew.dmi'
+	preview_icon= 'icons/mob/human_races/species/human/subspecies/spaceadaptsnew_preview.dmi'
 
 	oxy_mod =   0.8
 	breath_pressure = 14
@@ -76,8 +76,8 @@
 	with darker skin better display the dull, greenish hue resulting from their artificial growth. \
 	Vat-grown humans have no appendix and fewer inherited genetic disabilities but have a weakened \
 	metabolism."
-	icobase =     'icons/mob/human_races/species/human/subspecies/vatgrown_body.dmi'
-	preview_icon= 'icons/mob/human_races/species/human/subspecies/vatgrown_preview.dmi'
+	icobase =     'icons/mob/human_races/species/human/subspecies/newvatgrown.dmi'
+	preview_icon= 'icons/mob/human_races/species/human/subspecies/newvatgrown_preview.dmi'
 
 	toxins_mod =   1.1
 	has_organ = list(
@@ -106,8 +106,8 @@
 	of aquatic and non-aquatic environments. Their heavy, seal-like bodies have sharp teeth, recessed eyes, \
 	and thick blue-grey skin with a layer of dense blubber for insulation and protection, but they find \
 	it difficult to move quickly on land due to their bulk."
-	icobase =     'icons/mob/human_races/species/human/subspecies/tritonian_body.dmi'
-	preview_icon= 'icons/mob/human_races/species/human/subspecies/tritonian_preview.dmi'
+	icobase =     'icons/mob/human_races/species/human/subspecies/tritoniansnew.dmi'
+	preview_icon= 'icons/mob/human_races/species/human/subspecies/tritoniansnew_preview.dmi'
 	slowdown = 1
 
 	oxy_mod =             0.5
