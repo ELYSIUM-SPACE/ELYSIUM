@@ -111,7 +111,7 @@
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		locate_n_check_terminal() // We'll try to locate the terminal upon the first use of the program
-		setup_hotel_rooms() // The proc does check if the rooms have already been set up
+		// setup_hotel_rooms() // disabled since terminal will initialize them
 		ui = new(user, src, ui_key, "hotel.tmpl", "Hotel Reservations System", 390, 550, state = state)
 		ui.set_initial_data(data)
 		ui.open()
@@ -226,7 +226,7 @@
 		connected_terminal.flick_screen("hotel_terminal_loading")
 
 		selected_room.room_reservation_start_time = station_time_in_ticks
-		selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
+		selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
 		selected_room.room_log.Add("\[[stationtime2text()]\] Room reservation process was initiated by [selected_room.get_user_id_name()]. Room not available.")
 		timeout_timer_id = addtimer(CALLBACK(src, /datum/nano_module/hotel_reservations/proc/give_error), 5 MINUTES, TIMER_UNIQUE|TIMER_STOPPABLE)
 		return TOPIC_REFRESH
@@ -234,19 +234,22 @@
 	if (href_list["room_cancel"])
 		if(!selected_room)
 			return TOPIC_REFRESH
+		if(selected_room.room_status == 3)
+			if(alert("This will immediately cancel the reservation, invalidating keycards of the guests. Are you sure?",,"Yes","No")=="No")
+				return
 		selected_room.clear_reservation(just_reset = text2num(href_list["room_cancel"]) == 2 ? 1 : 0)
 		if (program_mode == 4)
 			reservation_duration = 1
 			program_mode = 4
 			reservation_status = 0
 			selected_room.room_reservation_start_time = station_time_in_ticks
-			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
+			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
 		return TOPIC_REFRESH
 
 	if(href_list["set_duration"])
 		reservation_duration = text2num(href_list["set_duration"])
 		if(program_mode == 4 && selected_room)
-			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
+			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
 		return TOPIC_REFRESH
 
 	if(href_list["remove_guest"])
@@ -274,10 +277,15 @@
 		return TOPIC_REFRESH
 
 /datum/nano_module/hotel_reservations/proc/give_error()
+	if(timeout_timer_id)
+		deltimer(timeout_timer_id)
+		timeout_timer_id = null
+
 	if(reservation_status == 2)
 		program_mode = 1
 		selected_room = null
 		reservation_status = 0
+		return
 	if(!selected_room)
 		return
 	selected_room.clear_reservation(auto_clear = 1)
@@ -285,9 +293,6 @@
 	if(istype(connected_terminal))
 		connected_terminal.program_mode = 1
 		connected_terminal.flick_screen("hotel_terminal_loading")
-	if(timeout_timer_id)
-		deltimer(timeout_timer_id)
-		timeout_timer_id = null
 	program_mode = 0
 
 /datum/nano_module/hotel_reservations/proc/locate_n_check_terminal()

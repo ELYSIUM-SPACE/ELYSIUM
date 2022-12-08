@@ -14,6 +14,8 @@
 	icon_state = "hotel_terminal"
 	density = TRUE
 	anchored = TRUE
+	power_channel = EQUIP
+	idle_power_usage = 50
 
 	var/auto_mode = 1		// 0 - manual, 1 - auto
 	var/program_mode = 1	// 0 - error, 1 - room selection, 2 - reservation, 3 - ID scan, 4 - payment
@@ -32,6 +34,7 @@
 /obj/machinery/hotel_terminal/Initialize()
 	. = ..()
 	update_icon()
+	setup_hotel_rooms()
 
 
 /obj/machinery/hotel_terminal/Destroy()
@@ -79,12 +82,12 @@
 
 			if(auto_mode)
 				transaction_amount = reservation_duration * selected_room.hourly_price * (reservation_duration >= 24 ? 0.75 : 1)
-				if(selected_room.room_status != 1) // one last check for the room before charging someone
+				if(selected_room.room_status != 2) // one last check for the room before charging someone
 					give_error()
 					return
 			else
 				transaction_amount = master_program.reservation_duration * master_program.selected_room.hourly_price * (master_program.reservation_duration >= 24 ? 0.75 : 1)
-				if(master_program.selected_room.room_status != 1) // one last check for the room before charging someone
+				if(master_program.selected_room.room_status != 2) // one last check for the room before charging someone
 					give_error()
 					return
 
@@ -98,7 +101,7 @@
 				var/attempt_pin = ""
 				var/datum/money_account/D = get_account(I.associated_account_number)
 				if(D && D.security_level)
-					attempt_pin = input("Enter pin code", "EFTPOS transaction") as num
+					attempt_pin = input("Enter pin code", "Hotel transaction") as num
 					D = null
 					D = attempt_account_access(I.associated_account_number, attempt_pin, 2)
 				if(D)
@@ -120,26 +123,32 @@
 
 			if(paid)
 				playsound(src, 'sound/machines/chime.ogg', 50, 1)
-				src.visible_message("[icon2html(src, viewers(get_turf(src)))] \The [src] chimes.")
+				src.visible_message("[icon2html(src, viewers(get_turf(src)))] \The [src] chimes and initiates keycard printing.")
 				to_chat(user, "<span class='info'>Payment processed successfully.</span>")
 
 				if(auto_mode)
 					program_mode = 2
 					selected_room.complete_reservation()
+					print_keycards(selected_room)
 				else
 					program_mode = 1
 					master_program.reservation_status = 2
 					master_program.selected_room.complete_reservation()
+					print_keycards(master_program.selected_room)
+
 				flick_screen(screen_icon_state = "hotel_terminal_loading")
 
 /obj/machinery/hotel_terminal/power_change()
 	. = ..()
 	update_icon()
+	if(stat & (NOPOWER))
+		give_error()
 
 /obj/machinery/hotel_terminal/on_update_icon()
 	overlays.Cut()
 	if(stat & (NOPOWER|BROKEN))
 		set_light(0)
+		return
 	var/screen_icon_state
 	switch(program_mode)
 		if(0)
@@ -175,7 +184,7 @@
 
 /obj/machinery/hotel_terminal/interface_interact(var/mob/user)
 	flick_screen("hotel_terminal_screensaver")
-	setup_hotel_rooms()
+	// setup_hotel_rooms() - disabled since it was added in the initialization
 	ui_interact(user)
 	return TRUE
 
@@ -285,7 +294,7 @@
 			reservation_duration = 1
 			selected_room.room_status = 2
 			selected_room.room_reservation_start_time = station_time_in_ticks
-			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
+			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
 			selected_room.room_log.Add("\[[stationtime2text()]\] Room reservation process was initiated in a guest terminal. Room not available.")
 			timeout_timer_id = addtimer(CALLBACK(src, /obj/machinery/hotel_terminal/proc/give_error), 5 MINUTES, TIMER_UNIQUE|TIMER_STOPPABLE)
 			program_mode = 2
@@ -295,7 +304,7 @@
 	if(href_list["set_duration"])
 		reservation_duration = text2num(href_list["set_duration"])
 		if(program_mode == 2 && selected_room)
-			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
+			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
 		return TOPIC_REFRESH
 
 	if(href_list["room_cancel"])
@@ -304,7 +313,7 @@
 		selected_room.clear_reservation(just_reset = 1)
 		reservation_duration = 1
 		selected_room.room_reservation_start_time = station_time_in_ticks
-		selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
+		selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
 		return TOPIC_REFRESH
 
 	if(href_list["remove_guest"])
@@ -339,11 +348,23 @@
 		else
 			selected_room.clear_reservation(auto_clear = 1, terminal_clear = terminal_reset)
 			selected_room = null
+			program_mode = 0
 	if(timeout_timer_id)
 		deltimer(timeout_timer_id)
 		timeout_timer_id = null
 	flick_screen(screen_icon_state = "hotel_terminal_loading")
-	program_mode = 0
+
+/obj/machinery/hotel_terminal/proc/print_keycards(var/datum/hotel_room/room_for_cards)
+	if(room_for_cards)
+		for (var/guest in room_for_cards.room_guests)
+			var/obj/item/card/id/hotel_key/key_created = new(src.loc)
+			key_created.room_number = room_for_cards.room_number
+			key_created.temp_access = list("ACCESS_LIBERTY_ROOM_[room_for_cards.room_number]")
+			key_created.registered_name = guest
+			key_created.expiration_time = room_for_cards.room_end_time2text()
+			room_for_cards.room_keys += key_created
+
+			key_created.pixel_x = 10
 
 // PLACEHOLDERS - REMOVE - SHALL REPORT TO THE MASTER UPON DESTRUCTION
 

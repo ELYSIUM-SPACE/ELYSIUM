@@ -22,20 +22,21 @@
 /obj/machinery/hotel_room_sign/on_update_icon()
 	overlays.Cut()
 	var/image/I = image(icon, icon_state)
-	if(hotel_room)
-		if((stat & NOPOWER) || hotel_room.room_status == 0)
-			I.color = "#999999"
-			set_light(0)
-			overlays += I
-			return
-		else
-			I.color = (hotel_room.room_requests > 1) ? "#f5ea84" : hotel_room.room_requests == 1 ? "#f58484" : "#ffffff"
+	if((stat & NOPOWER) || hotel_room.room_status == 0)
+		I.color = "#999999"
+		set_light(0)
+		overlays += I
+		return
 	else
-		I.color = "#ffffff"
+		I.color = (hotel_room.room_requests > 1) ? "#f5ea84" : hotel_room.room_requests == 1 ? "#f58484" : "#ffffff"
 	set_light(0.3, 0.1, 1, 2, I.color)
 	I.plane = EFFECTS_ABOVE_LIGHTING_PLANE
 	I.layer = ABOVE_LIGHTING_LAYER
 	overlays += I
+
+/obj/machinery/hotel_room_sign/power_change()
+	. = ..()
+	update_icon()
 
 /obj/machinery/hotel_room_sign/one_zero_one
 	icon_state = "101"
