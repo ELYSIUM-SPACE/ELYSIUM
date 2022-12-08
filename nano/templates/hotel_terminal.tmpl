@@ -15,7 +15,7 @@ Used In File(s): code_ark\code\modules\hotel\reservation_computers.dm
         </div>
     {{else}}
         <H2><span class="white">Self-Reservation</span></H2>
-        <div class="itemGroup" style = "width: 300px">Please, select a room type. Prepare your ID.{{if data.special_room}}<br><i>Special offers available - ask hotel personnel.</i>{{/if}}</div>
+        <div class="itemGroup" style = "width: 300px">Please, select a room type. Have your ID ready.{{if data.special_room}}<br><i>Special offers available - ask hotel personnel.</i>{{/if}}</div>
         <H3><span class="white">Single Room</span></H3>
         <div class="itemGroup" style = "width: 300px">
             <table><tr>
@@ -76,18 +76,18 @@ Used In File(s): code_ark\code\modules\hotel\reservation_computers.dm
                 </td>
             </tr></table>
         </div>
-        <br><i>Note: you'll have 5 minutes to complete a reservation.</i>
+        <br><i>Note: you'll have 5 minutes to complete the reservation.</i>
     {{/if}}
 
 {{else data.mode == 2}}
     <div class="itemContent">
         {{:helper.link( 'Return', 'arrowreturn-1-w', {'return_to_main' : 1}, null, null, null)}}
-        {{:helper.link( 'Print', 'print', {'print_reservation' : 1}, data.reservation == 1? null : 'disabled', null)}}
+        {{:helper.link( 'Print', 'print', {'print_reservation' : 1}, data.selected_room.status == 3? null : 'disabled', null)}}
     </div>
     <H2><span class="white">Self-Reservation - Room {{:data.selected_room.number}}</span></H2>
     <div class="itemGroup"> 
         {{if data.selected_room.status == 3 }}
-            <span class="good">Payment successful. Reservation complete</span><br>You can print out the confirmation.
+            <span class="good">Payment successful. Reservation complete</span><br>You can print out the confirmation now.
         {{else}}
             <span class="white">Guest ID Scanning - </span>{{if data.selected_room.capacity - data.selected_room.guest_count > 0}}<span class="good">capacity remaining: {{:data.selected_room.capacity -data.selected_room.guest_count}}</span>{{else}}<span class="average">room full</span>{{/if}}<br>
             {{if data.selected_room.guest_count == data.selected_room.capacity}}You can proceed to payment.{{else data.selected_room.guest_count > 0}}Add a guest or proceed to payment.{{else}}Please add a guest.{{/if}}
@@ -115,16 +115,16 @@ Used In File(s): code_ark\code\modules\hotel\reservation_computers.dm
             </tr>
         </table>
             <span class="white">Reservation Duration (hours):</span><br>
-            {{:helper.link( '1', null, {'set_duration' : 1}, data.duration == 1 || data.reservation > 0 ? 'disabled' : null, null)}}
-            {{:helper.link( '3', null, {'set_duration' : 3}, data.duration == 3 || data.reservation > 0 ? 'disabled' : null, null)}}
-            {{:helper.link( '6', null, {'set_duration' : 6}, data.duration == 6 || data.reservation > 0 ? 'disabled' : null, null)}}
-            {{:helper.link( '12', null, {'set_duration' : 12}, data.duration == 12 || data.reservation > 0 ? 'disabled' : null, null)}}
-            {{:helper.link( '24', null, {'set_duration' : 24}, data.duration == 24 || data.reservation > 0 ? 'disabled' : null, null)}}
-            {{:helper.link( '48', null, {'set_duration' : 48}, data.duration == 48 || data.reservation > 0 ? 'disabled' : null, null)}}
+            {{:helper.link( '1', null, {'set_duration' : 1}, data.duration == 1 || data.selected_room.status == 3 ? 'disabled' : null, null)}}
+            {{:helper.link( '3', null, {'set_duration' : 3}, data.duration == 3 || data.selected_room.status == 3 ? 'disabled' : null, null)}}
+            {{:helper.link( '6', null, {'set_duration' : 6}, data.duration == 6 || data.selected_room.status == 3 ? 'disabled' : null, null)}}
+            {{:helper.link( '12', null, {'set_duration' : 12}, data.duration == 12 || data.selected_room.status == 3 ? 'disabled' : null, null)}}
+            {{:helper.link( '24', null, {'set_duration' : 24}, data.duration == 24 || data.selected_room.status == 3 ? 'disabled' : null, null)}}
+            {{:helper.link( '48', null, {'set_duration' : 48}, data.duration == 48 || data.selected_room.status == 3 ? 'disabled' : null, null)}}
     </div>
     <div class="itemContent">
         {{if data.selected_room.status == 2 && data.selected_room.guest_count}}
-            {{:helper.link( 'Payment', 'check', {'room_pay' : 1}, 'greenButton', null, null)}}
+            {{:helper.link( 'Payment', 'check', {'room_pay' : 1}, null, 'greenButton', null)}}
         {{else}}
             {{:helper.link( 'Payment', 'check', {'room_pay' : 1}, 'disabled', null)}}
         {{/if}}
@@ -139,4 +139,8 @@ Used In File(s): code_ark\code\modules\hotel\reservation_computers.dm
 {{else data.mode == 3}}
     <H3><span class="average">Guest ID Scan in Progress</span></H3>
     <div class="itemGroup" style = "width: 300px">Please, swipe your ID card through the terminal for room guest registration.</div><br>{{if data.auto}}{{:helper.link( 'Return', 'arrowreturn-1-w', {'return_to_room' : 1}, null, null, null)}}{{/if}}
+
+{{else data.mode = 4}}
+    <H3><span class="average">Payment in Progress</span></H3>
+    <div class="itemGroup" style = "width: 300px">Please, swipe your ID card or chargecard through the terminal to pay.</div><br>{{if data.auto}}{{:helper.link( 'Return', 'arrowreturn-1-w', {'return_to_room' : 1}, null, null, null)}}{{/if}}
 {{/if}}

@@ -226,7 +226,7 @@
 		connected_terminal.flick_screen("hotel_terminal_loading")
 
 		selected_room.room_reservation_start_time = station_time_in_ticks
-		selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
+		selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
 		selected_room.room_log.Add("\[[stationtime2text()]\] Room reservation process was initiated by [selected_room.get_user_id_name()]. Room not available.")
 		timeout_timer_id = addtimer(CALLBACK(src, /datum/nano_module/hotel_reservations/proc/give_error), 5 MINUTES, TIMER_UNIQUE|TIMER_STOPPABLE)
 		return TOPIC_REFRESH
@@ -237,14 +237,16 @@
 		selected_room.clear_reservation(just_reset = text2num(href_list["room_cancel"]) == 2 ? 1 : 0)
 		if (program_mode == 4)
 			reservation_duration = 1
+			program_mode = 4
+			reservation_status = 0
 			selected_room.room_reservation_start_time = station_time_in_ticks
-			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
+			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
 		return TOPIC_REFRESH
 
 	if(href_list["set_duration"])
 		reservation_duration = text2num(href_list["set_duration"])
 		if(program_mode == 4 && selected_room)
-			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
+			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
 		return TOPIC_REFRESH
 
 	if(href_list["remove_guest"])
@@ -256,10 +258,19 @@
 		return TOPIC_REFRESH
 
 	if(href_list["room_pay"])
+		if(department_accounts["Service"].suspended)
+			to_chat(usr, "<span class='warning'>Payment gateway currently is unable to process the transaction. Please, contact hotel bank account administration.</span>") // replace USR //////////////!!!
+			return TOPIC_REFRESH
 		if(locate_n_check_terminal() == 3)
 			reservation_status = 1
 			connected_terminal.program_mode = 4
 			connected_terminal.flick_screen("hotel_terminal_loading")
+		return TOPIC_REFRESH
+
+	if(href_list["payment_cancel"])
+		reservation_status = 0
+		connected_terminal.program_mode = LAZYLEN(selected_room.room_guests) >= selected_room.guest_count ? 1 : 3
+		connected_terminal.flick_screen("hotel_terminal_loading")
 		return TOPIC_REFRESH
 
 /datum/nano_module/hotel_reservations/proc/give_error()

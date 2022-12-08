@@ -30,7 +30,7 @@ hr {
     height: 1px;
 }
 
-.link, .linkOn, .linkOff, .selected, .disabled, .yellowButton, .redButton, .greenButton {
+.link, .linkOn, .linkOff, .selected, .disabled, .yellowButton, .redButton, .greenButton { /* ARK - greenButton added */
     float: left;
     min-width: 15px;
     height: 16px;
@@ -187,10 +187,10 @@ abbr {
 }
 
 .yellowButton {
-    background: #cacc00;
+    background: #4f7529;
 }
 
-.greenButton {
+.greenButton { /* ARK */
     background: #4f7529;
 }
 

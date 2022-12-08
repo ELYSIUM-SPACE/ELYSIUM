@@ -12,7 +12,8 @@
 	desc = "It can be used either for self-serivce reservations when set to automatic mode or as an ID scanner and payment terminal when operating in connection with a console."
 	icon = 'code_ark/icons/obj/machinery.dmi'
 	icon_state = "hotel_terminal"
-	density = 1
+	density = TRUE
+	anchored = TRUE
 
 	var/auto_mode = 1		// 0 - manual, 1 - auto
 	var/program_mode = 1	// 0 - error, 1 - room selection, 2 - reservation, 3 - ID scan, 4 - payment
@@ -45,7 +46,7 @@
 
 		visible_message("<span class='info'>\The [usr] swipes \the [I == W || W == null ? I : W] through \the [src].</span>")
 
-		if(program_mode == 3)
+		if(program_mode == 3) // in case of guest scanning
 			if(!I)
 				to_chat(user, "<span class='warning'>ID error. Check your ID.</span>")
 				return
@@ -55,7 +56,7 @@
 					room_to_add_to = master_program.selected_room
 			if(auto_mode && selected_room)
 				room_to_add_to = selected_room
-			if(room_to_add_to && I.registered_name != "Unknown")
+			if(room_to_add_to && I.registered_name != "unknown")
 				if(room_to_add_to.add_guest(I.registered_name))
 					to_chat(user, "<span class='info'>Guest successfully added.</span>")
 					if(auto_mode)
@@ -65,10 +66,75 @@
 						if(LAZYLEN(room_to_add_to.room_guests) == room_to_add_to.guest_count)
 							program_mode = 1
 							flick_screen(screen_icon_state = "hotel_terminal_loading")
+				else
+					to_chat(user, "<span class='warning'>Unable to add the guest to the room. Please, check your ID.</span>")
 			else
-				to_chat(user, "<span class='warning'>Unable to add the guest to the room.</span>")
+				to_chat(user, "<span class='warning'>Unable to add the guest to the room. Please, check your ID.</span>")
 			return
 
+		if(program_mode == 4) // in case of payment
+
+			var/paid = 0
+			var/transaction_amount
+
+			if(auto_mode)
+				transaction_amount = reservation_duration * selected_room.hourly_price * (reservation_duration >= 24 ? 0.75 : 1)
+				if(selected_room.room_status != 1) // one last check for the room before charging someone
+					give_error()
+					return
+			else
+				transaction_amount = master_program.reservation_duration * master_program.selected_room.hourly_price * (master_program.reservation_duration >= 24 ? 0.75 : 1)
+				if(master_program.selected_room.room_status != 1) // one last check for the room before charging someone
+					give_error()
+					return
+
+
+			if(department_accounts["Service"].suspended) // In case department account is not available
+				to_chat(user, "<span class='warning'>Payment gateway is currently unable to process the transaction.</span>")
+				program_mode = 3
+				return
+
+			if(I) // Payment with an ID card
+				var/attempt_pin = ""
+				var/datum/money_account/D = get_account(I.associated_account_number)
+				if(D && D.security_level)
+					attempt_pin = input("Enter pin code", "EFTPOS transaction") as num
+					D = null
+					D = attempt_account_access(I.associated_account_number, attempt_pin, 2)
+				if(D)
+					if(D.transfer(department_accounts["Service"], transaction_amount, "Hotel reservation"))
+						paid = 1
+					else
+						to_chat(user, "<span class='warning'>Transaction failed. Please, try again.</span>")
+				else
+					to_chat(user, "<span class='warning'>Please, check your card and PIN-code.</span>")
+
+			if(istype(W, /obj/item/spacecash/ewallet)) // Payment with chargecard
+				var/obj/item/spacecash/ewallet/chargecard = W
+				if(transaction_amount > chargecard.worth)
+					to_chat(user, "<span class='warning'>Payment error. Inssuficient funds on chargecard.</span>")
+				else
+					chargecard.worth -= transaction_amount
+					department_accounts["Service"].deposit(transaction_amount, "Hotel room reservation", "[chargecard.owner_name] (chargecard)")
+					paid = 1
+
+			if(paid)
+				playsound(src, 'sound/machines/chime.ogg', 50, 1)
+				src.visible_message("[icon2html(src, viewers(get_turf(src)))] \The [src] chimes.")
+				to_chat(user, "<span class='info'>Payment processed successfully.</span>")
+
+				if(auto_mode)
+					program_mode = 2
+					selected_room.complete_reservation()
+				else
+					program_mode = 1
+					master_program.reservation_status = 2
+					master_program.selected_room.complete_reservation()
+				flick_screen(screen_icon_state = "hotel_terminal_loading")
+
+/obj/machinery/hotel_terminal/power_change()
+	. = ..()
+	update_icon()
 
 /obj/machinery/hotel_terminal/on_update_icon()
 	overlays.Cut()
@@ -115,7 +181,7 @@
 
 /obj/machinery/hotel_terminal/CanUseTopic(user, state)
 	if(stat & (NOPOWER|BROKEN))
-		to_chat(user, "<span class='warning'>\The [src] is broken!</span>")
+		to_chat(user, "<span class='warning'>\The [src] is not working!</span>")
 		return STATUS_CLOSE
 	return ..()
 
@@ -195,7 +261,9 @@
 	if (href_list["return_to_room"])
 		if(selected_room && auto_mode)
 			program_mode = 2
+			flick_screen(screen_icon_state = "hotel_terminal_loading")
 		return TOPIC_REFRESH
+
 	if (href_list["room_reserve"])
 		for(var/datum/hotel_room/R in GLOB.hotel_rooms)
 
@@ -217,7 +285,7 @@
 			reservation_duration = 1
 			selected_room.room_status = 2
 			selected_room.room_reservation_start_time = station_time_in_ticks
-			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
+			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
 			selected_room.room_log.Add("\[[stationtime2text()]\] Room reservation process was initiated in a guest terminal. Room not available.")
 			timeout_timer_id = addtimer(CALLBACK(src, /obj/machinery/hotel_terminal/proc/give_error), 5 MINUTES, TIMER_UNIQUE|TIMER_STOPPABLE)
 			program_mode = 2
@@ -227,7 +295,7 @@
 	if(href_list["set_duration"])
 		reservation_duration = text2num(href_list["set_duration"])
 		if(program_mode == 2 && selected_room)
-			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
+			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
 		return TOPIC_REFRESH
 
 	if(href_list["room_cancel"])
@@ -236,7 +304,7 @@
 		selected_room.clear_reservation(just_reset = 1)
 		reservation_duration = 1
 		selected_room.room_reservation_start_time = station_time_in_ticks
-		selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
+		selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration MINUTES /////////////////////////////////////////////// ************ TEMP - change to HOURS
 		return TOPIC_REFRESH
 
 	if(href_list["remove_guest"])
@@ -250,7 +318,20 @@
 			flick_screen("hotel_terminal_loading")
 		return TOPIC_REFRESH
 
+	if(href_list["room_pay"])
+		if(department_accounts["Service"].suspended)
+			to_chat(user, "<span class='warning'>Payment gateway currently is unable to process the transaction. Please, contact hotel bank account administration.</span>")
+			return TOPIC_REFRESH
+		if(selected_room && program_mode == 2)
+			program_mode = 4
+			flick_screen("hotel_terminal_loading")
+		return TOPIC_REFRESH
+
 /obj/machinery/hotel_terminal/proc/give_error(var/terminal_reset = 0)
+	if(!auto_mode) // If it's the console setting the rules, let it get the error pop up
+		master_program.give_error()
+		return
+
 	if(selected_room)
 		if(selected_room.room_status == 3)
 			program_mode = 1

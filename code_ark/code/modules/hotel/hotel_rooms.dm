@@ -99,6 +99,7 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 	var/list/room_guests = list()
 	var/room_reservation_start_time
 	var/room_reservation_end_time
+	var/room_timer_id
 
 	var/list/room_log = list()
 
@@ -259,6 +260,15 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 		return 1
 	return 0
 
+/datum/hotel_room/proc/complete_reservation()
+	var/log_entry = "\[[stationtime2text()]\] The room reservation was created. Guest list: [room_guests2text()]. Reservation start / end times: [time2text(room_reservation_start_time, "hh:mm")] / [room_end_time2text()]."
+	room_log.Add(log_entry)
+	room_status = 3
+	room_timer_id = addtimer(CALLBACK(src, /datum/hotel_room/proc/end_reservation), room_reservation_end_time - station_time_in_ticks, TIMER_UNIQUE|TIMER_STOPPABLE)
+
+/datum/hotel_room/proc/end_reservation()
+	clear_reservation(auto_clear = 1)
+
 /datum/hotel_room/proc/clear_reservation(var/auto_clear = 0, var/terminal_clear = 0, var/just_reset = 0)
 
 	if(room_status != 2 && room_status != 3 && room_status != 0)  // If the room has no reservation or hasn't been broken there's nothing to cancel
@@ -272,9 +282,11 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 			log_entry = "\[[stationtime2text()]\] An active room reservation was canceled by [get_user_id_name()]. Keycards of the following guests were rendered invalid: [room_guests2text()]. Room turnover required."
 		room_status = 4
 		room_requests = 3
+		deltimer(room_timer_id)
 	else
-		if (room_reservation_end_time && room_status == 0) // A broken room with an end time set indicates an existing reservation
+		if (room_reservation_end_time && room_status == 0) // A broken room with end time set indicates an existing reservation
 			log_entry = "\[[stationtime2text()]\] An active room reservation was automatically cancelled due to a fatal error! Keycards of the following guests were rendered invalid: [room_guests2text()]. Room unusable."
+			deltimer(room_timer_id)
 		else
 			if(auto_clear)
 				log_entry = "\[[stationtime2text()]\] Room reservation process was automatically terminated due to a"
@@ -295,6 +307,7 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 
 	room_reservation_start_time = null
 	room_reservation_end_time = null
+	room_timer_id = null
 	for(var/obj/item/card/id/hotel_key/K in room_keys)
 		K.expire()
 	room_keys = list()

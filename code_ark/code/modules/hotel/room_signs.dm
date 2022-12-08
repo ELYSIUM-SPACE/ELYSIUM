@@ -16,7 +16,7 @@
 
 /obj/machinery/hotel_room_sign/Destroy()
 	if(hotel_room)
-		hotel_room.room_test_n_update()
+		spawn(10) hotel_room.room_test_n_update()
 	. = ..()
 
 /obj/machinery/hotel_room_sign/on_update_icon()

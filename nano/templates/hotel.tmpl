@@ -241,7 +241,7 @@ Used In File(s): code_ark\code\modules\hotel\hotel_software.dm
             <span class="white">End Time: </span> {{:data.selected_room.end}} <br>
             <span class="white">Guest List: </span> {{:data.selected_room.guests}}
         {{else}}
-            <span class="white">No active reservation has been filed for the room</span>
+            No active reservation has been filed for the room.
         {{/if}}
     </div>
 
@@ -269,9 +269,9 @@ Used In File(s): code_ark\code\modules\hotel\hotel_software.dm
     <H2><span class="white">New Reservation - Room {{:data.selected_room.number}}</span></H2>
     <div class="itemGroup"> 
         {{if data.reservation == 2 }}
-            <span class="good">Payment successful. Reservation complete</span><br>You can print out the confirmation.
+            <span class="good">Payment successful. Reservation complete</span><br>You can print out the confirmation now.
         {{else data.reservation == 1}}
-            <span class="normal">Pending payment</span><br>Please swipe an ID through the terminal.
+            <span class="white">Pending payment</span><br>Please swipe an ID through the terminal.
         {{else}}
             <span class="white">Guest ID Scanning - </span>{{if data.selected_room.capacity - data.selected_room.guest_count > 0}}<span class="good">capacity remaining: {{:data.selected_room.capacity -data.selected_room.guest_count}}</span>{{else}}<span class="average">room full</span>{{/if}}<br>
             {{if data.selected_room.guest_count == data.selected_room.capacity}}You can proceed to payment.{{else data.selected_room.guest_count > 0}}Add a guest or proceed to payment.{{else}}Please swipe an ID through the terminal.{{/if}}
@@ -308,14 +308,14 @@ Used In File(s): code_ark\code\modules\hotel\hotel_software.dm
     </div>
     <div class="itemContent">
         {{if data.reservation == 0 && data.selected_room.guest_count}}
-            {{:helper.link( 'Payment', 'check', {'room_pay' : 1}, 'greenButton', null, null)}}
+            {{:helper.link( 'Payment', 'check', {'room_pay' : 1}, null, 'greenButton', null)}}
         {{else}}
             {{:helper.link( 'Payment', 'check', {'room_pay' : 1}, 'disabled', null)}}
         {{/if}}
         {{if data.reservation == 0 && (data.selected_room.guest_count || data.duration != 1)}}
             {{:helper.link( 'Clear', 'closethick', {'room_cancel' : 2}, null, null)}}
         {{else data.reservation == 1}}
-            {{:helper.link( 'Cancel', 'check', {'payment_cancel' : 1}, 'redButton', null, null)}}
+            {{:helper.link( 'Cancel', 'closethick', {'payment_cancel' : 1}, null, 'redButton', null)}}
         {{else}}
             {{:helper.link( 'Clear', 'closethick', {'payment_cancel' : 1}, 'disabled', null)}}
         {{/if}}
