@@ -104,7 +104,7 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 	var/list/room_log = list()
 
 	var/obj/machinery/hotel_room_sign/room_sign
-	var/obj/machinery/computer/hotel_room_controller/room_controller
+	var/obj/machinery/hotel_room_controller/room_controller
 	var/obj/machinery/door/airlock/room_airlock
 
 /datum/hotel_room/New(var/room_number, var/hotel_room_preset_path)
@@ -124,24 +124,25 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 				room_sign = S
 				break
 		if(!room_sign)
-			crash_with("A hotel room ([room_number]) is unable to find its sign!")
+			crash_with("Hotel room ([room_number]) is unable to find its sign!")
 
-		for(var/obj/machinery/computer/hotel_room_controller/C in world)
+		for(var/obj/machinery/hotel_room_controller/C in world)
 			if (C.id_tag == "room_[room_number]_controller")
 				room_controller = C
+				room_controller.hotel_room = src
 				break
 		if(!room_controller)
-			crash_with("A hotel room ([room_number]) is unable to find its controller!")
+			crash_with("Hotel room ([room_number]) is unable to find its controller!")
 
 		for(var/obj/machinery/door/airlock/A in world)
 			if (A.id_tag == "room_[room_number]_airlock")
 				room_airlock = A
 				break
 		if(!room_airlock)
-			crash_with("A hotel room ([room_number]) is unable to find its door!")
+			crash_with("Hotel room ([room_number]) is unable to find its door!")
 
 	else
-		crash_with("A hotel room preset ([room_number]) is incorrect!")
+		crash_with("Hotel room preset ([room_number]) is incorrect!")
 
 	room_airlock.autoset_access = 0
 	room_airlock.req_access = list(list("ACCESS_LIBERTY_HOTEL", "ACCESS_LIBERTY_ROOM_[room_number]"))

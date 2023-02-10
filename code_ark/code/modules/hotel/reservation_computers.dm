@@ -365,8 +365,3 @@
 			room_for_cards.room_keys += key_created
 
 			key_created.pixel_x = 10
-
-// PLACEHOLDERS - REMOVE - SHALL REPORT TO THE MASTER UPON DESTRUCTION
-
-/obj/machinery/computer/hotel_room_controller
-	var/datum/hotel_room/hotel_room
