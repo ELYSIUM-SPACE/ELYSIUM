@@ -8,8 +8,8 @@
 	var/list/genes = list()
 	var/genesource = "unknown"
 
-/obj/item/disk/botany/attack_self(var/mob/user as mob)
-	if(genes.len)
+/obj/item/disk/botany/attack_self(mob/user as mob)
+	if(length(genes))
 		var/choice = alert(user, "Are you sure you want to wipe the disk?", "Xenobotany Data", "No", "Yes")
 		if(src && user && genes && choice && choice == "Yes" && user.Adjacent(get_turf(src)))
 			to_chat(user, "You wipe the disk data.")
@@ -80,7 +80,7 @@
 
 	if(isScrewdriver(W))
 		open = !open
-		to_chat(user, "<span class='notice'>You [open ? "open" : "close"] the maintenance panel.</span>")
+		to_chat(user, SPAN_NOTICE("You [open ? "open" : "close"] the maintenance panel."))
 		return
 
 	if(open)
@@ -95,7 +95,7 @@
 		else
 			var/obj/item/disk/botany/B = W
 
-			if(B.genes && B.genes.len)
+			if(B.genes && length(B.genes))
 				if(!disk_needs_genes)
 					to_chat(user, "That disk already has gene data loaded.")
 					return
@@ -119,7 +119,7 @@
 	var/datum/seed/genetics // Currently scanned seed genetic structure.
 	var/degradation = 0     // Increments with each scan, stops allowing gene mods after a certain point.
 
-/obj/machinery/botany/extractor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/botany/extractor/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 
 	if(!user)
 		return
@@ -168,7 +168,7 @@
 		seed.dropInto(loc)
 
 		if(seed.seed.name == "new line" || isnull(SSplants.seeds[seed.seed.name]))
-			seed.seed.uid = SSplants.seeds.len + 1
+			seed.seed.uid = length(SSplants.seeds) + 1
 			seed.seed.name = "[seed.seed.uid]"
 			SSplants.seeds[seed.seed.name] = seed.seed
 
@@ -234,7 +234,7 @@
 		degradation += rand(20,60) + user.skill_fail_chance(SKILL_BOTANY, 100, SKILL_ADEPT)
 		var/expertise = max(0, user.get_skill_value(SKILL_BOTANY) - SKILL_ADEPT)
 		degradation = max(0, degradation - 10*expertise)
-	
+
 		if(degradation >= 100)
 			failed_task = 1
 			genetics = null
@@ -255,7 +255,7 @@
 	icon_state = "traitgun"
 	disk_needs_genes = 1
 
-/obj/machinery/botany/editor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/botany/editor/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 
 	if(!user)
 		return
@@ -269,7 +269,7 @@
 	else
 		data["degradation"] = 0
 
-	if(loaded_disk && loaded_disk.genes.len)
+	if(loaded_disk && length(loaded_disk.genes))
 		data["disk"] = 1
 		data["sourceName"] = loaded_disk.genesource
 		data["locus"] = ""

@@ -1,6 +1,6 @@
-var/const/TELEBEACON_WIRE_POWER     = 1
-var/const/TELEBEACON_WIRE_RELAY     = 2
-var/const/TELEBEACON_WIRE_SIGNALLER = 4
+var/global/const/TELEBEACON_WIRE_POWER     = 1
+var/global/const/TELEBEACON_WIRE_RELAY     = 2
+var/global/const/TELEBEACON_WIRE_SIGNALLER = 4
 
 
 // Targetable beacon used by teleporters
@@ -12,13 +12,13 @@ var/const/TELEBEACON_WIRE_SIGNALLER = 4
 	idle_power_usage = 10
 	active_power_usage = 50
 	anchored = TRUE
-	level = 1
+	level = ATOM_LEVEL_UNDER_TILE
 
 	machine_name = "teleporter beacon"
 	machine_desc = "Teleporter beacons allow teleporter systems to target them, for accurate, instantaneous transport of objects and people."
 	base_type = /obj/machinery/tele_beacon
 	wires = /datum/wires/tele_beacon
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 
 	/// Name of the beacon in the teleporter UI.
 	var/beacon_name
@@ -60,11 +60,11 @@ var/const/TELEBEACON_WIRE_SIGNALLER = 4
 				SPAN_NOTICE("You start to [anchored ? "disconnect" : "connect"] \the [src] [anchored ? "to" : "from"] \the [T].")
 			)
 
-			if (!do_after(user, 3 SECONDS, src, DO_DEFAULT | DO_BOTH_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
+			if (!do_after(user, 3 SECONDS, src, DO_REPAIR_CONSTRUCT))
 				return TRUE
 
 			anchored = !anchored
-			level = anchored ? 1 : 2
+			level = anchored ? ATOM_LEVEL_UNDER_TILE : ATOM_LEVEL_OVER_TILE
 			user.visible_message(
 				SPAN_NOTICE("\The [user] [anchored ? "connects" : "disconnects"] \the [src] [anchored ? "to" : "from"] \the [T] with \the [I]."),
 				SPAN_NOTICE("You [anchored ? "connect" : "disconnect"] \the [src] [anchored ? "to" : "from"] \the [T] with \the [I].")
@@ -106,14 +106,14 @@ var/const/TELEBEACON_WIRE_SIGNALLER = 4
 	..()
 
 	if (use_power && !stat)
-		stat |= EMPED
+		set_stat(MACHINE_STAT_EMPED, TRUE)
 		disconnect_computers()
 		var/emp_time = rand(15 SECONDS, 30 SECONDS) / severity
-		addtimer(CALLBACK(src, .proc/emp_act_end), emp_time, TIMER_UNIQUE | TIMER_OVERRIDE)
+		addtimer(new Callback(src, .proc/emp_act_end), emp_time, TIMER_UNIQUE | TIMER_OVERRIDE)
 
 
 /obj/machinery/tele_beacon/proc/emp_act_end()
-	stat &= ~EMPED
+	set_stat(MACHINE_STAT_EMPED, FALSE)
 	update_icon()
 
 
@@ -145,7 +145,7 @@ var/const/TELEBEACON_WIRE_SIGNALLER = 4
 		disconnect_computers()
 
 
-/obj/machinery/tele_beacon/is_powered(additional_flags)
+/obj/machinery/tele_beacon/is_powered()
 	. = ..()
 	if (!.)
 		return
@@ -172,17 +172,18 @@ var/const/TELEBEACON_WIRE_SIGNALLER = 4
 /obj/machinery/tele_beacon/get_mechanics_info()
 	. = ..()
 	. += "<p>\The [src] can be targeted by teleporter control consoles to allow teleporter pads to send mobs and objects to this [src]'s location. \
-		It can only be targeted and used while \the [src] is powered and anchored (wrenched) to the floor.</p>\
-		<p>While the panel is closed:</p>\
-		<ul>\
-			<li>Use a Wrench to anchor/unanchor the beacon, allowing it to be moved. The beacon is not functional unless anchored.</li>\
-			<li>Use a Multitool to rename the beacon. The name will be displayed in teleport control consoles.</li>\
-		</ul>"
+		It can only be targeted and used while \the [src] is powered and anchored (wrenched) to the floor.</p>"
 
 
-/obj/machinery/tele_beacon/get_antag_info()
+/obj/machinery/tele_beacon/get_interactions_info()
 	. = ..()
-	. += "<p>If EMP'd, \the [src] will lose all established teleporter locks and will be disabled for up to 30 seconds.</p>"
+	.["Multitool"] += "<p>If the maintenance panel is closed, renames the beacon. The name will be displayed in teleport control consoles.</p>"
+	.["Wrench"] += "<p>If the maintenance panel is closed, anchors/unanchors the beacon, allowing it to be moved. The beacon is not functional unless anchored.</p>"
+
+
+/obj/machinery/tele_beacon/get_antag_interactions_info()
+	. = ..()
+	.[CODEX_INTERACTION_EMP] += "<p>Disables all established teleporter locks and disables the beacon for up to 30 seconds.</p>"
 
 
 /// Connects the beacon to a computer that's locking onto it. Returns TRUE on connection, FALSE if the connection fails.
@@ -239,7 +240,7 @@ var/const/TELEBEACON_WIRE_SIGNALLER = 4
 	if (!anchored)
 		return FALSE
 
-	if (inoperable(EMPED))
+	if (inoperable() || GET_FLAGS(stat, MACHINE_STAT_EMPED))
 		return FALSE
 
 	var/turf/T = get_turf(src)
@@ -318,7 +319,7 @@ var/const/TELEBEACON_WIRE_SIGNALLER = 4
 	switch (index)
 		if (TELEBEACON_WIRE_POWER)
 			tele_beacon.set_power_cut()
-			addtimer(CALLBACK(src, .proc/ResetPulsed), rand(15 SECONDS, 45 SECONDS), TELEBEACON_WIRE_POWER)
+			addtimer(new Callback(src, .proc/ResetPulsed), rand(15 SECONDS, 45 SECONDS), TELEBEACON_WIRE_POWER)
 		if (TELEBEACON_WIRE_RELAY)
 			tele_beacon.disconnect_computers()
 		if (TELEBEACON_WIRE_SIGNALLER)

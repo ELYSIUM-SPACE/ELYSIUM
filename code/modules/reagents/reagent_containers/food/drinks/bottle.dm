@@ -24,7 +24,7 @@
 	return ..()
 
 
-/obj/item/reagent_containers/food/drinks/bottle/throw_impact(atom/hit_atom, var/datum/thrownthing/TT)
+/obj/item/reagent_containers/food/drinks/bottle/throw_impact(atom/hit_atom, datum/thrownthing/TT)
 	..()
 	if (can_shatter && TT.thrower)
 		if (TT.speed > throw_speed || smash_check(TT.dist_travelled))
@@ -47,7 +47,7 @@
 		return
 	var/static/list/chance_table = list(95, 95, 90, 85, 75, 60, 40, 15)
 	var/idx = max(distance + 1, 1)
-	if (idx > chance_table.len)
+	if (idx > length(chance_table))
 		return
 	return prob(chance_table[idx])
 
@@ -134,10 +134,10 @@
 	if (istype(H) && H.headcheck(hit_zone))
 		var/obj/item/organ/affecting = H.get_organ(hit_zone)
 		user.visible_message(SPAN_DANGER("\The [user] smashes \the [src] into \the [H]'s [affecting.name]!"))
-		var/blocked = target.get_blocked_ratio(hit_zone, BRUTE, damage = 10) * 100
+		var/blocked = target.get_blocked_ratio(hit_zone, DAMAGE_BRUTE, damage = 10) * 100
 		var/weaken_duration = smash_duration + min(0, force - blocked + 10)
 		if (weaken_duration)
-			target.apply_effect(min(weaken_duration, 5), WEAKEN, blocked)
+			target.apply_effect(min(weaken_duration, 5), EFFECT_WEAKEN, blocked)
 	else
 		user.visible_message(SPAN_DANGER("\The [user] smashes [src] into [target]!"))
 	if (reagents)
@@ -424,7 +424,7 @@
 
 /obj/item/reagent_containers/food/drinks/bottle/blackstrap
 	name = "Two Brothers Blackstrap"
-	desc = "A bottle of Blackstrap, distilled in Two Brothers, Tersten."
+	desc = "A bottle of Blackstrap, distilled in Two Brothers, Earth."
 	icon_state = "blackstrap"
 	center_of_mass = "x=16;y=4"
 
@@ -446,16 +446,16 @@
 	reagents.add_reagent(/datum/reagent/ethanol/sake, 100)
 
 
-/obj/item/reagent_containers/food/drinks/bottle/lordaniawine
-	name = "New Aresian Vintage 2230"
+/obj/item/reagent_containers/food/drinks/bottle/tadmorwine
+	name = "Palmyran Vintage 2230"
 	desc = "The kind of wine that just demands attention, and a big wallet."
-	icon_state = "lordaniawine"
+	icon_state = "tadmorwine"
 	center_of_mass = "x=16;y=4"
 
 
-/obj/item/reagent_containers/food/drinks/bottle/lordaniawine/Initialize()
+/obj/item/reagent_containers/food/drinks/bottle/tadmorwine/Initialize()
 	. = ..()
-	reagents.add_reagent(/datum/reagent/ethanol/lordaniawine, 100)
+	reagents.add_reagent(/datum/reagent/ethanol/tadmorwine, 100)
 
 
 /obj/item/reagent_containers/food/drinks/bottle/champagne
@@ -508,7 +508,7 @@
 
 /obj/item/reagent_containers/food/drinks/bottle/cachaca
 	name = "Acacara Cachaca"
-	desc = "Cachaca, distilled from fermented sugarcane.  This one was bottled in Acacara, Yuklid."
+	desc = "Cachaca, distilled from fermented sugarcane.  This one was bottled in New Aarhus, Brahe."
 	icon_state = "cachaca"
 	center_of_mass = "x=16;y=6"
 

@@ -29,9 +29,6 @@
 
 	var/sensor_mode = 0 //Determines the current HUD.
 
-	var/next_alarm_notice
-	var/list/datum/alarm/queued_alarms = new()
-
 	var/list/access_rights
 	var/obj/item/card/id/idcard = /obj/item/card/id/synthetic
 
@@ -41,7 +38,7 @@
 	#define MED_HUD 2 //Medical HUD mode
 
 /mob/living/silicon/Initialize()
-	GLOB.silicon_mob_list += src
+	GLOB.silicon_mobs += src
 	. = ..()
 
 	if(silicon_radio)
@@ -55,10 +52,10 @@
 	init_subsystems()
 
 /mob/living/silicon/Destroy()
-	GLOB.silicon_mob_list -= src
+	GLOB.silicon_mobs -= src
 	QDEL_NULL(silicon_radio)
 	QDEL_NULL(silicon_camera)
-	for(var/datum/alarm_handler/AH in SSalarm.all_handlers)
+	for(var/datum/alarm_handler/AH as anything in SSalarm.alarm_handlers)
 		AH.unregister_alarm(src)
 	return ..()
 
@@ -80,23 +77,25 @@
 	return
 
 /mob/living/silicon/emp_act(severity)
+	if (status_flags & GODMODE)
+		return
 	switch(severity)
-		if(1)
+		if(EMP_ACT_HEAVY)
 			take_organ_damage(0, 16, ORGAN_DAMAGE_SILICON_EMP)
 			if(prob(50)) Stun(rand(5,10))
 			else confused = (min(confused + 2, 40))
-		if(2)
+		if(EMP_ACT_LIGHT)
 			take_organ_damage(0, 7, ORGAN_DAMAGE_SILICON_EMP)
 			confused = (min(confused + 2, 30))
 	flash_eyes(affect_silicon = 1)
-	to_chat(src, "<span class='danger'><B>*BZZZT*</B></span>")
-	to_chat(src, "<span class='danger'>Warning: Electromagnetic pulse detected.</span>")
+	to_chat(src, SPAN_DANGER("<B>*BZZZT*</B>"))
+	to_chat(src, SPAN_DANGER("Warning: Electromagnetic pulse detected."))
 	..()
 
-/mob/living/silicon/stun_effect_act(var/stun_amount, var/agony_amount)
+/mob/living/silicon/stun_effect_act(stun_amount, agony_amount)
 	return	//immune
 
-/mob/living/silicon/electrocute_act(var/shock_damage, var/obj/source, var/siemens_coeff = 1.0, def_zone = null)
+/mob/living/silicon/electrocute_act(shock_damage, obj/source, siemens_coeff = 1.0, def_zone = null)
 
 	if (istype(source, /obj/machinery/containment_field))
 		var/datum/effect/effect/system/spark_spread/s = new /datum/effect/effect/system/spark_spread
@@ -105,36 +104,38 @@
 
 		shock_damage *= 0.75	//take reduced damage
 		take_overall_damage(0, shock_damage)
-		visible_message("<span class='warning'>\The [src] was shocked by \the [source]!</span>", \
-			"<span class='danger'>Energy pulse detected, system damaged!</span>", \
-			"<span class='warning'>You hear an electrical crack</span>")
+		visible_message(SPAN_WARNING("\The [src] was shocked by \the [source]!"), \
+			SPAN_DANGER("Energy pulse detected, system damaged!"), \
+			SPAN_WARNING("You hear an electrical crack"))
 		if(prob(20))
 			Stun(2)
 		return
 
-/mob/living/silicon/proc/damage_mob(var/brute = 0, var/fire = 0, var/tox = 0)
+/mob/living/silicon/proc/damage_mob(brute = 0, fire = 0, tox = 0)
 	return
 
 /mob/living/silicon/IsAdvancedToolUser()
 	return 1
 
-/mob/living/silicon/bullet_act(var/obj/item/projectile/Proj)
+/mob/living/silicon/bullet_act(obj/item/projectile/Proj)
+	if (status_flags & GODMODE)
+		return PROJECTILE_FORCE_MISS
 
 	if(!Proj.nodamage)
 		switch(Proj.damage_type)
-			if(BRUTE)
+			if (DAMAGE_BRUTE)
 				adjustBruteLoss(Proj.damage)
-			if(BURN)
+			if (DAMAGE_BURN)
 				adjustFireLoss(Proj.damage)
 
 	Proj.on_hit(src,100) //wow this is a terrible hack
 	updatehealth()
 	return 100
 
-/mob/living/silicon/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
+/mob/living/silicon/apply_effect(effect = 0, effecttype = EFFECT_STUN, blocked = 0)
 	return 0//The only effect that can hit them atm is flashes and they still directly edit so this works for now
 
-/proc/islinked(var/mob/living/silicon/robot/bot, var/mob/living/silicon/ai/ai)
+/proc/islinked(mob/living/silicon/robot/bot, mob/living/silicon/ai/ai)
 	if(!istype(bot) || !istype(ai))
 		return 0
 	if (bot.connected_ai == ai)
@@ -171,8 +172,8 @@
 	. = ..()
 
 //can't inject synths
-/mob/living/silicon/can_inject(var/mob/user, var/target_zone)
-	to_chat(user, "<span class='warning'>The armoured plating is too tough.</span>")
+/mob/living/silicon/can_inject(mob/user, target_zone)
+	to_chat(user, SPAN_WARNING("The armoured plating is too tough."))
 	return 0
 
 
@@ -181,7 +182,7 @@
 /mob/living/silicon/can_speak(datum/language/speaking)
 	return universal_speak || (speaking in src.speech_synthesizer_langs)	//need speech synthesizer support to vocalize a language
 
-/mob/living/silicon/add_language(var/language, var/can_speak=1)
+/mob/living/silicon/add_language(language, can_speak=1)
 	var/datum/language/added_language = all_languages[language]
 	if(!added_language)
 		return
@@ -191,7 +192,7 @@
 		speech_synthesizer_langs += added_language
 		return 1
 
-/mob/living/silicon/remove_language(var/rem_language)
+/mob/living/silicon/remove_language(rem_language)
 	var/datum/language/removed_language = all_languages[rem_language]
 	if(!removed_language)
 		return
@@ -204,7 +205,7 @@
 	set category = "IC"
 	set src = usr
 
-	var/dat = "<b><font size = 5>Known Languages</font></b><br/><br/>"
+	var/dat = "<b>[FONT_GIANT("Known Languages")]</b><br/><br/>"
 
 	if(default_language)
 		dat += "Current default language: [default_language] - <a href='byond://?src=\ref[src];default_lang=reset'>reset</a><br/><br/>"
@@ -228,10 +229,10 @@
 	switch(sensor_type)
 		if ("Security")
 			sensor_mode = SEC_HUD
-			to_chat(src, "<span class='notice'>Security records overlay enabled.</span>")
+			to_chat(src, SPAN_NOTICE("Security records overlay enabled."))
 		if ("Medical")
 			sensor_mode = MED_HUD
-			to_chat(src, "<span class='notice'>Life signs monitor overlay enabled.</span>")
+			to_chat(src, SPAN_NOTICE("Life signs monitor overlay enabled."))
 		if ("Disable")
 			sensor_mode = 0
 			to_chat(src, "Sensor augmentations disabled.")
@@ -254,79 +255,30 @@
 	return 1
 
 /mob/living/silicon/ex_act(severity)
+	if (status_flags & GODMODE)
+		return
 	if(!blinded)
 		flash_eyes()
 
 	var/brute
 	var/burn
 	switch(severity)
-		if(1.0)
+		if(EX_ACT_DEVASTATING)
 			brute = 400
 			burn = 100
-		if(2.0)
+		if(EX_ACT_HEAVY)
 			brute = 60
 			burn = 60
-		if(3.0)
+		if(EX_ACT_LIGHT)
 			brute = 30
 
-	apply_damage(brute, BRUTE, damage_flags = DAM_EXPLODE)
-	apply_damage(burn, BURN, damage_flags = DAM_EXPLODE)
+	apply_damage(brute, DAMAGE_BRUTE, damage_flags = DAMAGE_FLAG_EXPLODE)
+	apply_damage(burn, DAMAGE_BURN, damage_flags = DAMAGE_FLAG_EXPLODE)
 
-/mob/living/silicon/proc/receive_alarm(var/datum/alarm_handler/alarm_handler, var/datum/alarm/alarm, was_raised)
-	if(!(alarm.alarm_z() in GetConnectedZlevels(get_z(src))))
-		return // Didn't actually hear it as far as we're concerned.
-	if(!next_alarm_notice)
-		next_alarm_notice = world.time + SecondsToTicks(10)
-
-	var/list/alarms = queued_alarms[alarm_handler]
-	if(was_raised)
-		// Raised alarms are always set
-		alarms[alarm] = 1
-	else
-		// Alarms that were raised but then cleared before the next notice are instead removed
-		if(alarm in alarms)
-			alarms -= alarm
-		// And alarms that have only been cleared thus far are set as such
-		else
-			alarms[alarm] = -1
-
-/mob/living/silicon/proc/process_queued_alarms()
-	if(next_alarm_notice && (world.time > next_alarm_notice))
-		next_alarm_notice = 0
-
-		var/alarm_raised = 0
-		for(var/datum/alarm_handler/AH in queued_alarms)
-			var/list/alarms = queued_alarms[AH]
-			var/reported = 0
-			for(var/datum/alarm/A in alarms)
-				if(alarms[A] == 1)
-					alarm_raised = 1
-					if(!reported)
-						reported = 1
-						to_chat(src, "<span class='warning'>--- [AH.category] Detected ---</span>")
-					raised_alarm(A)
-
-		for(var/datum/alarm_handler/AH in queued_alarms)
-			var/list/alarms = queued_alarms[AH]
-			var/reported = 0
-			for(var/datum/alarm/A in alarms)
-				if(alarms[A] == -1)
-					if(!reported)
-						reported = 1
-						to_chat(src, "<span class='notice'>--- [AH.category] Cleared ---</span>")
-					to_chat(src, "\The [A.alarm_name()].")
-
-		if(alarm_raised)
-			to_chat(src, "<A HREF=?src=\ref[src];showalerts=1>\[Show Alerts\]</A>")
-
-		for(var/datum/alarm_handler/AH in queued_alarms)
-			var/list/alarms = queued_alarms[AH]
-			alarms.Cut()
-
-/mob/living/silicon/proc/raised_alarm(var/datum/alarm/A)
+/mob/living/silicon/proc/raised_alarm(datum/alarm/A)
 	to_chat(src, "[A.alarm_name()]!")
 
-/mob/living/silicon/ai/raised_alarm(var/datum/alarm/A)
+/mob/living/silicon/ai/raised_alarm(datum/alarm/A)
 	var/cameratext = ""
 	for(var/obj/machinery/camera/C in A.cameras())
 		cameratext += "[(cameratext == "")? "" : "|"]<A HREF=?src=\ref[src];switchcamera=\ref[C]>[C.c_tag]</A>"
@@ -358,7 +310,7 @@
 	if(mind)
 		if(mind.assigned_job)
 			mind.assigned_job.clear_slot()
-		if(mind.objectives.len)
+		if(length(mind.objectives))
 			qdel(mind.objectives)
 			mind.special_role = null
 		clear_antag_roles(mind)
@@ -372,5 +324,5 @@
 /mob/living/silicon/seizure()
 	flash_eyes(affect_silicon = TRUE)
 
-/mob/living/silicon/get_bullet_impact_effect_type(var/def_zone)
+/mob/living/silicon/get_bullet_impact_effect_type(def_zone)
 	return BULLET_IMPACT_METAL

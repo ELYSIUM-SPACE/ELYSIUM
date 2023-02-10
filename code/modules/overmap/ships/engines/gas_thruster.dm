@@ -3,7 +3,7 @@
 	name = "gas thruster"
 	var/obj/machinery/atmospherics/unary/engine/nozzle
 
-/datum/ship_engine/gas_thruster/New(var/obj/machinery/_holder)
+/datum/ship_engine/gas_thruster/New(obj/machinery/_holder)
 	..()
 	nozzle = _holder
 
@@ -20,7 +20,7 @@
 /datum/ship_engine/gas_thruster/burn()
 	return nozzle.burn()
 
-/datum/ship_engine/gas_thruster/set_thrust_limit(var/new_limit)
+/datum/ship_engine/gas_thruster/set_thrust_limit(new_limit)
 	nozzle.thrust_limit = new_limit
 
 /datum/ship_engine/gas_thruster/get_thrust_limit()
@@ -42,7 +42,7 @@
 			if(nozzle.check_blockage())
 				return
 		nozzle.update_use_power(POWER_USE_IDLE)
-		if(nozzle.stat & NOPOWER)//try again
+		if(!nozzle.is_powered())//try again
 			nozzle.power_change()
 		if(nozzle.is_on())//if everything is in working order, start booting!
 			nozzle.next_on = world.time + nozzle.boot_time
@@ -62,14 +62,14 @@
 	atmos_canpass = CANPASS_NEVER
 	connect_types = CONNECT_TYPE_REGULAR|CONNECT_TYPE_FUEL
 
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	maximum_component_parts = list(/obj/item/stock_parts = 6)//don't want too many, let upgraded component shine
 	uncreated_component_parts = list(/obj/item/stock_parts/power/apc/buildable = 1)
 
 	use_power = POWER_USE_OFF
 	power_channel = EQUIP
 	idle_power_usage = 21600 //6 Wh per tick for default 2 capacitor. Gives them a reason to turn it off, really to nerf backup battery
-	
+
 	machine_name = "gas thruster"
 	machine_desc = "A heavy-duty spaceship thruster that throws gas out of its nozzle to allow propulsion."
 
@@ -110,14 +110,14 @@
 /obj/machinery/atmospherics/unary/engine/proc/get_status()
 	. = list()
 	.+= "Location: [get_area(src)]."
-	if(stat & NOPOWER)
-		.+= "<span class='average'>Insufficient power to operate.</span>"
+	if(!is_powered())
+		.+= SPAN_CLASS("average", "Insufficient power to operate.")
 	if(!check_fuel())
-		.+= "<span class='average'>Insufficient fuel for a burn.</span>"
-	if(stat & BROKEN)
-		.+= "<span class='average'>Inoperable engine configuration.</span>"
+		.+= SPAN_CLASS("average", "Insufficient fuel for a burn.")
+	if(MACHINE_IS_BROKEN(src))
+		.+= SPAN_CLASS("average", "Inoperable engine configuration.")
 	if(blockage)
-		.+= "<span class='average'>Obstruction of airflow detected.</span>"
+		.+= SPAN_CLASS("average", "Obstruction of airflow detected.")
 
 	.+= "Propellant total mass: [round(air_contents.get_mass(),0.01)] kg."
 	.+= "Propellant used per burn: [round(air_contents.specific_mass() * moles_per_burn * thrust_limit,0.01)] kg."
@@ -126,7 +126,7 @@
 
 /obj/machinery/atmospherics/unary/engine/power_change()
 	. = ..()
-	if(stat & NOPOWER)
+	if(!is_powered())
 		update_use_power(POWER_USE_OFF)
 
 /obj/machinery/atmospherics/unary/engine/update_use_power()
@@ -163,7 +163,7 @@
 	if(!is_on())
 		return 0
 	if(!check_fuel() || (0 < use_power_oneoff(charge_per_burn)) || check_blockage())
-		audible_message(src,"<span class='warning'>[src] coughs once and goes silent!</span>")
+		audible_message(SPAN_WARNING("[src] coughs once and goes silent!"))
 		update_use_power(POWER_USE_OFF)
 		return 0
 
@@ -187,11 +187,11 @@
 /obj/machinery/atmospherics/unary/engine/RefreshParts()
 	..()
 	//allows them to upgrade the max limit of fuel intake (which only gives diminishing returns) for increase in max thrust but massive reduction in fuel economy
-	var/bin_upgrade = 0.5 * Clamp(total_component_rating_of_type(/obj/item/stock_parts/matter_bin), 0, 0.6)//5 litre per rank
+	var/bin_upgrade = 0.5 * clamp(total_component_rating_of_type(/obj/item/stock_parts/matter_bin), 0, 0.6)//5 litre per rank
 	moles_per_burn = bin_upgrade ? initial(moles_per_burn) + bin_upgrade : 0.5 //Penalty missing part: 10% fuel use, no thrust
 	boot_time = bin_upgrade ? initial(boot_time) - bin_upgrade : initial(boot_time) * 2
 	//energy cost - thb all of this is to limit the use of back up batteries
-	var/energy_upgrade = Clamp(total_component_rating_of_type(/obj/item/stock_parts/capacitor), 0.1, 6)
+	var/energy_upgrade = clamp(total_component_rating_of_type(/obj/item/stock_parts/capacitor), 0.1, 6)
 	charge_per_burn = initial(charge_per_burn) / energy_upgrade
 	change_power_consumption(initial(idle_power_usage) / energy_upgrade, POWER_USE_IDLE)
 
@@ -225,5 +225,5 @@
 
 /obj/machinery/atmospherics/unary/engine/terminal
 	base_type = /obj/machinery/atmospherics/unary/engine
-	stock_part_presets = list(/decl/stock_part_preset/terminal_setup)
+	stock_part_presets = list(/singleton/stock_part_preset/terminal_setup)
 	uncreated_component_parts = list(/obj/item/stock_parts/power/terminal/buildable = 1)

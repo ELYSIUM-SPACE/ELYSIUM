@@ -1,4 +1,4 @@
-//Point defense 
+//Point defense
 /obj/machinery/pointdefense_control
 	name = "fire assist mainframe"
 	desc = "A specialized computer designed to synchronize a variety of weapon systems and a vessel's astronav data."
@@ -9,7 +9,7 @@
 	density = TRUE
 	anchored = TRUE
 	base_type =       /obj/machinery/pointdefense_control
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	var/list/targets = list()
 	atom_flags =  ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_CLIMBABLE
 	machine_name = "fire assist mainframe"
@@ -25,10 +25,10 @@
 		var/datum/local_network/lan = pointdefense.get_local_network()
 		if(lan)
 			var/list/pointdefense_controllers = lan.get_devices(/obj/machinery/pointdefense_control)
-			if(pointdefense_controllers.len > 1)
+			if(length(pointdefense_controllers) > 1)
 				lan.remove_device(src)
 
-/obj/machinery/pointdefense_control/ui_interact(var/mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/pointdefense_control/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 	if(ui_template)
 		var/list/data = build_ui_data()
 		ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
@@ -38,11 +38,11 @@
 			ui.open()
 			ui.set_auto_update(1)
 
-/obj/machinery/pointdefense_control/interface_interact(var/mob/user)
+/obj/machinery/pointdefense_control/interface_interact(mob/user)
 	ui_interact(user)
 	return TRUE
 
-/obj/machinery/pointdefense_control/OnTopic(var/mob/user, var/href_list, var/datum/topic_state/state)
+/obj/machinery/pointdefense_control/OnTopic(mob/user, href_list, datum/topic_state/state)
 
 	if(href_list["toggle_active"])
 		var/obj/machinery/pointdefense/PD = locate(href_list["toggle_active"])
@@ -82,7 +82,7 @@
 	data["turrets"] = turrets
 	return data
 
-/obj/machinery/pointdefense_control/attackby(var/obj/item/thing, var/mob/user)
+/obj/machinery/pointdefense_control/attackby(obj/item/thing, mob/user)
 	if(isMultitool(thing))
 		var/datum/extension/local_network_member/pointdefense = get_extension(src, /datum/extension/local_network_member)
 		pointdefense.get_new_tag(user)
@@ -90,7 +90,7 @@
 		var/datum/local_network/lan = pointdefense.get_local_network()
 		if(lan)
 			var/list/pointdefense_controllers = lan.get_devices(/obj/machinery/pointdefense_control)
-			if(pointdefense_controllers && pointdefense_controllers.len > 1)
+			if(pointdefense_controllers && length(pointdefense_controllers) > 1)
 				lan.remove_device(src)
 		return
 	else
@@ -105,10 +105,10 @@
 	anchored = TRUE
 	atom_flags =  ATOM_FLAG_NO_TEMP_CHANGE | ATOM_FLAG_CLIMBABLE
 	idle_power_usage = 0.1 KILOWATTS
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	maximum_component_parts = list(/obj/item/stock_parts = 10)         //null - no max. list(type part = number max).
 	base_type = /obj/machinery/pointdefense
-	stock_part_presets = list(/decl/stock_part_preset/terminal_setup)
+	stock_part_presets = list(/singleton/stock_part_preset/terminal_setup)
 	uncreated_component_parts = null
 	appearance_flags = DEFAULT_APPEARANCE_FLAGS | PIXEL_SCALE
 	machine_name = "point defense battery"
@@ -128,10 +128,12 @@
 		var/datum/extension/local_network_member/pointdefense = get_extension(src, /datum/extension/local_network_member)
 		pointdefense.set_tag(null, initial_id_tag)
 
-/obj/machinery/pointdefense/attackby(var/obj/item/thing, var/mob/user)
+/obj/machinery/pointdefense/attackby(obj/item/thing, mob/user)
 	if(isMultitool(thing))
 		var/datum/extension/local_network_member/pointdefense = get_extension(src, /datum/extension/local_network_member)
 		pointdefense.get_new_tag(user)
+		return TRUE
+	return ..()
 
 //Guns cannot shoot through hull or generally dense turfs.
 /obj/machinery/pointdefense/proc/space_los(meteor)
@@ -140,20 +142,23 @@
 			return FALSE
 	return TRUE
 
-/obj/machinery/pointdefense/proc/Shoot(var/weakref/target)
+/obj/machinery/pointdefense/proc/Shoot(weakref/target)
 	var/obj/effect/meteor/M = target.resolve()
 	if(!istype(M))
 		return
 	engaging = TRUE
-	var/Angle = round(Get_Angle(src,M))
-	var/matrix/rot_matrix = matrix()
-	rot_matrix.Turn(Angle)
-	addtimer(CALLBACK(src, .proc/finish_shot, target), rotation_speed)
-	animate(src, transform = rot_matrix, rotation_speed, easing = SINE_EASING)
-			
+	addtimer(new Callback(src, .proc/finish_shot, target), rotation_speed)
+	var/Angle = round(Get_Angle(src, M))
+	animate(
+		src,
+		transform = matrix().Update(rotation = Angle),
+		rotation_speed,
+		easing = SINE_EASING
+	)
+
 	set_dir(transform.get_angle() > 0 ? NORTH : SOUTH)
 
-/obj/machinery/pointdefense/proc/finish_shot(var/weakref/target)
+/obj/machinery/pointdefense/proc/finish_shot(weakref/target)
 	//Cleanup from list
 	var/datum/extension/local_network_member/pointdefense = get_extension(src, /datum/extension/local_network_member)
 	var/datum/local_network/lan = pointdefense.get_local_network()
@@ -180,7 +185,7 @@
 
 /obj/machinery/pointdefense/Process()
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(inoperable())
 		return
 	if(!active)
 		return
@@ -189,8 +194,8 @@
 		set_dir(desiredir)
 	if(engaging || ((world.time - last_shot) < charge_cooldown))
 		return
-	
-	if(GLOB.meteor_list.len == 0)
+
+	if(length(GLOB.meteor_list) == 0)
 		return
 	var/datum/extension/local_network_member/pointdefense = get_extension(src, /datum/extension/local_network_member)
 	var/datum/local_network/lan = pointdefense.get_local_network()
@@ -219,6 +224,10 @@
 			continue
 		if(get_dist(M, src) > kill_range)
 			continue
+
+		if (!can_see(src, M, kill_range))
+			continue
+
 		if(!emagged && space_los(M))
 			var/weakref/target = weakref(M)
 			PC.targets +=target

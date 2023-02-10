@@ -4,7 +4,7 @@
 
 /obj/item/implant
 	name = "implant"
-	icon = 'icons/obj/device.dmi'
+	icon = 'icons/obj/implant.dmi'
 	icon_state = "implant"
 	w_class = ITEM_SIZE_TINY
 	var/implanted = null
@@ -24,12 +24,12 @@
 /obj/item/implant/proc/activate()
 	return
 
-/obj/item/implant/proc/disable(var/time = 100)
+/obj/item/implant/proc/disable(time = 100)
 	if(malfunction)
 		return 0
 
 	malfunction = MALFUNCTION_TEMPORARY
-	addtimer(CALLBACK(src,.proc/restore),time)
+	addtimer(new Callback(src,.proc/restore),time)
 	return 1
 
 /obj/item/implant/proc/restore()
@@ -42,17 +42,17 @@
 // What does the implant do upon injection?
 // return 0 if the implant fails (ex. Revhead and loyalty implant.)
 // return TRUE if the implant succeeds (ex. Nonrevhead and loyalty implant.)
-/obj/item/implant/proc/implanted(var/mob/source)
+/obj/item/implant/proc/implanted(mob/source)
 	return TRUE
 
-/obj/item/implant/proc/can_implant(mob/M, mob/user, var/target_zone)
+/obj/item/implant/proc/can_implant(mob/M, mob/user, target_zone)
 	var/mob/living/carbon/human/H = M
 	if(istype(H) && !H.get_organ(target_zone))
-		to_chat(user, "<span class='warning'>\The [M] is missing that body part.</span>")
+		to_chat(user, SPAN_WARNING("\The [M] is missing that body part."))
 		return FALSE
 	return TRUE
 
-/obj/item/implant/proc/implant_in_mob(mob/M, var/target_zone)
+/obj/item/implant/proc/implant_in_mob(mob/M, target_zone)
 	if (ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/obj/item/organ/external/affected = H.get_organ(target_zone)
@@ -60,7 +60,7 @@
 			affected.implants += src
 			part = affected
 
-		BITSET(H.hud_updateflag, IMPLOYAL_HUD)
+		SET_BIT(H.hud_updateflag, IMPLOYAL_HUD)
 
 	forceMove(M)
 	imp_in = M
@@ -102,7 +102,7 @@
 		part.take_external_damage(burn = 15, used_weapon = "Electronics meltdown")
 	else
 		var/mob/living/M = imp_in
-		M.apply_damage(15,BURN)
+		M.apply_damage(15, DAMAGE_BURN)
 	name = "melted implant"
 	desc = "Charred circuit in melted plastic case. Wonder what that used to be..."
 	icon_state = "implant_melted"
@@ -112,10 +112,11 @@
 	var/power = 4 - severity
 	if(prob(power * 15))
 		meltdown()
-	else if(prob(power * 25))
-		activate()
 	else if(prob(power * 33))
 		disable(rand(power*100,power*1000))
+	else if(prob(power * 25))
+		activate()
+	..()
 
 /obj/item/implant/Destroy()
 	if(part)

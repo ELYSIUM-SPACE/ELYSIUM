@@ -31,9 +31,9 @@
 
 /obj/effect/submap_landmark/joinable_submap/scavver_gantry
 	name =  "Salvage Gantry"
-	archetype = /decl/submap_archetype/derelict/scavver_gantry
+	archetype = /singleton/submap_archetype/derelict/scavver_gantry
 
-/decl/submap_archetype/derelict/scavver_gantry
+/singleton/submap_archetype/derelict/scavver_gantry
 	descriptor = "Salvage Gantry turned Ship."
 	map = "Salvage Gantry"
 	crew_jobs = list(
@@ -49,7 +49,7 @@
 	fore_dir = NORTH
 	burn_delay = 2 SECONDS
 	hide_from_reports = TRUE
-	known = 0
+	known = FALSE
 	initial_generic_waypoints = list(
 		"nav_gantry_one",
 		"nav_gantry_two",
@@ -193,5 +193,5 @@
 	return list(
 		/obj/item/reagent_containers/food/drinks/milk = 6,
 		/obj/item/reagent_containers/food/drinks/soymilk = 4,
-		/obj/item/storage/fancy/egg_box = 4
+		/obj/item/storage/fancy/egg_box/full = 4
 	)

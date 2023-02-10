@@ -2,9 +2,8 @@
 #include "blueriver_areas.dm"
 /obj/effect/overmap/visitable/sector/arcticplanet
 	name = "arctic planetoid"
-	desc = "Sensor array detects an arctic planet with a small vessle on the planet's surface. Scans further indicate strange energy levels below the planet's surface."
-	in_space = 0
-	known = 1
+	desc = "Sensor array detects an arctic planet with a small vessel on the planet's surface. Scans further indicate strange energy emissions from below the planet's surface."
+	in_space = FALSE
 	icon_state = "globe"
 	initial_generic_waypoints = list(
 		"nav_blueriv_1",
@@ -21,7 +20,7 @@
 	name = "Bluespace River"
 	id = "awaysite_blue"
 	spawn_cost = 2
-	description = "Two z-level map with an arctic planet and an alien underground surface"
+	description = "An arctic planet and an alien underground surface"
 	suffixes = list("blueriver/blueriver-1.dmm", "blueriver/blueriver-2.dmm")
 	generate_mining_by_z = 2
 	area_usage_test_exempted_root_areas = list(/area/bluespaceriver)
@@ -47,7 +46,7 @@
 
 	harm_intent_damage = 8
 	natural_weapon = /obj/item/natural_weapon/defender_blades
-	ai_holder_type = /datum/ai_holder/simple_animal/melee/defender
+	ai_holder = /datum/ai_holder/simple_animal/melee/defender
 	var/attack_mode = FALSE
 
 	var/transformation_delay_min = 4
@@ -182,7 +181,7 @@
 /obj/structure/deity
 	icon = 'icons/obj/cult.dmi'
 	icon_state = "tomealtar"
-	var/health = 10
+	health_max = 10
 	density = TRUE
 	anchored = TRUE
 
@@ -191,17 +190,15 @@
 	user.do_attack_animation(src)
 	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 50, 1)
 	user.visible_message(
-		"<span class='danger'>[user] hits \the [src] with \the [W]!</span>",
-		"<span class='danger'>You hit \the [src] with \the [W]!</span>",
-		"<span class='danger'>You hear something breaking!</span>"
+		SPAN_DANGER("[user] hits \the [src] with \the [W]!"),
+		SPAN_DANGER("You hit \the [src] with \the [W]!"),
+		SPAN_DANGER("You hear something breaking!")
 		)
-	take_damage(W.force)
+	damage_health(W.force, W.damtype)
 
-/obj/structure/deity/take_damage(var/amount)
-	health -= amount
-	if(health < 0)
-		src.visible_message("\The [src] crumbles!")
-		qdel(src)
+/obj/structure/deity/on_death()
+	visible_message(SPAN_DANGER("\The [src] crumbles!"))
+	qdel(src)
 
-/obj/structure/deity/bullet_act(var/obj/item/projectile/P)
-	take_damage(P.damage)
+/obj/structure/deity/bullet_act(obj/item/projectile/P)
+	damage_health(P.get_structure_damage(), P.damage_type)

@@ -66,7 +66,7 @@
 	if(!starter)
 		return
 	overlays.Cut()
-	if(stat & BROKEN)
+	if(MACHINE_IS_BROKEN(src))
 		return
 	rpm = 0.9* rpm + 0.1 * rpmtarget
 	var/datum/gas_mixture/environment = inturf.return_air()
@@ -78,7 +78,7 @@
 	rpm = max(0, rpm - (rpm*rpm)/COMPFRICTION)
 
 
-	if(starter && !(stat & NOPOWER))
+	if(starter && is_powered())
 		use_power_oneoff(2800)
 		if(rpm<1000)
 			rpmtarget = 1000
@@ -123,7 +123,7 @@
 	if(!compressor.starter)
 		return
 	overlays.Cut()
-	if(stat & BROKEN)
+	if(MACHINE_IS_BROKEN(src))
 		return
 	lastgen = ((compressor.rpm / TURBGENQ)**TURBGENG) *TURBGENQ
 
@@ -150,7 +150,7 @@
 
 /obj/machinery/power/turbine/interact(mob/user)
 
-	if ( (get_dist(src, user) > 1 ) || (stat & (NOPOWER|BROKEN)) && (!istype(user, /mob/living/silicon/ai)) )
+	if ( (get_dist(src, user) > 1 ) || (inoperable()) && (!istype(user, /mob/living/silicon/ai)) )
 		user.machine = null
 		close_browser(user, "window=turbine")
 		return
@@ -173,7 +173,7 @@
 
 	return
 
-/obj/machinery/power/turbine/CanUseTopic(var/mob/user, href_list)
+/obj/machinery/power/turbine/CanUseTopic(mob/user, href_list)
 	if(!user.IsAdvancedToolUser())
 		to_chat(user, FEEDBACK_YOU_LACK_DEXTERITY)
 		return min(..(), STATUS_UPDATE)
@@ -216,7 +216,7 @@
 	interact(user)
 	return TRUE
 
-/obj/machinery/computer/turbine_computer/interact(var/mob/user)
+/obj/machinery/computer/turbine_computer/interact(mob/user)
 	user.machine = src
 	var/dat
 	if(src.compressor)
@@ -232,7 +232,7 @@
 		\n<BR>
 		\n"}
 	else
-		dat += "<span class='danger'>No compatible attached compressor found.</span>"
+		dat += SPAN_DANGER("No compatible attached compressor found.")
 
 	show_browser(user, dat, "window=computer;size=400x500")
 	onclose(user, "computer")

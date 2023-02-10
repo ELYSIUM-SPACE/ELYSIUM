@@ -13,7 +13,7 @@
 	icon_state = "steel"
 	obj_flags = 0
 	var/plantedby
-	
+
 /obj/structure/solbanner/exo/Initialize()
 	. = ..()
 	flick("deploy",src)
@@ -21,7 +21,7 @@
 /obj/structure/solbanner/exo/examine(mob/user)
 	. = ..()
 	if(plantedby)
-		to_chat(user, "<span class='notice'>[plantedby]</span>")
+		to_chat(user, SPAN_NOTICE("[plantedby]"))
 
 /obj/item/solbanner
 	name = "\improper SCG banner capsule"
@@ -36,18 +36,18 @@
 	if(!istype(user))
 		return
 	if(!allowed(user))
-		to_chat(user, "<span class='warning'>\The [src] does not recognize your authority!</span>")
+		to_chat(user, SPAN_WARNING("\The [src] does not recognize your authority!"))
 		return
 	var/turf/T = get_turf(src)
 	if(!istype(T) && !istype(T,/turf/space))
-		to_chat(user, "<span class='warning'>\The [src] is unable to deploy here!</span>")
+		to_chat(user, SPAN_WARNING("\The [src] is unable to deploy here!"))
 		return
 	if(user.unEquip(src))
 		forceMove(T)
 		if(GLOB.using_map.use_overmap)
 			var/obj/effect/overmap/visitable/sector/exoplanet/P = map_sectors["[z]"]
 			if(istype(P))
-				SSstatistics.add_field(STAT_FLAGS_PLANTED, 1)
+				GLOB.stat_flags_planted += 1
 		qdel(src)
 		var/obj/structure/solbanner/exo/E = new(T)
 		var/obj/item/card/id/ID = user.GetIdCard()
@@ -55,5 +55,4 @@
 		if(istype(ID.military_rank))
 			dudename = "[ID.military_rank.name] [dudename]"
 		E.plantedby = "Planted on [stationdate2text()] by [dudename], [user.get_assignment()] of [GLOB.using_map.full_name]."
-		T.visible_message("<span class='notice'>[user] successfully claims this world with \the [E]!</span>")
-		
+		T.visible_message(SPAN_NOTICE("[user] successfully claims this world with \the [E]!"))

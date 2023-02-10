@@ -1,25 +1,25 @@
-var/const/NETWORK_AQUILA      = "Aquila"
-var/const/NETWORK_BRIDGE      = "Bridge"
-var/const/NETWORK_CALYPSO     = "Charon"
-var/const/NETWORK_EXPEDITION  = "Expedition"
-var/const/NETWORK_FIRST_DECK  = "First Deck"
-var/const/NETWORK_FOURTH_DECK = "Fourth Deck"
-var/const/NETWORK_POD         = "General Utility Pod"
-var/const/NETWORK_SECOND_DECK = "Second Deck"
-var/const/NETWORK_SUPPLY      = "Supply"
-var/const/NETWORK_HANGAR      = "Hangar"
-var/const/NETWORK_EXPLO       = "Exploration"
-var/const/NETWORK_THIRD_DECK  = "Third Deck"
-var/const/NETWORK_FIFTH_DECK  = "Fifth Deck"
-var/const/NETWORK_PETROV  = "Petrov"
+var/global/const/NETWORK_AQUILA      = "Aquila"
+var/global/const/NETWORK_BRIDGE      = "Bridge"
+var/global/const/NETWORK_CHARON     = "Charon"
+var/global/const/NETWORK_EXPEDITION  = "Expedition"
+var/global/const/NETWORK_FIRST_DECK  = "First Deck"
+var/global/const/NETWORK_FOURTH_DECK = "Fourth Deck"
+var/global/const/NETWORK_POD         = "General Utility Pod"
+var/global/const/NETWORK_SECOND_DECK = "Second Deck"
+var/global/const/NETWORK_SUPPLY      = "Supply"
+var/global/const/NETWORK_HANGAR      = "Hangar"
+var/global/const/NETWORK_EXPLO       = "Exploration"
+var/global/const/NETWORK_THIRD_DECK  = "Third Deck"
+var/global/const/NETWORK_FIFTH_DECK  = "Fifth Deck"
+var/global/const/NETWORK_PETROV  = "Petrov"
 
-/datum/map/torch/get_network_access(var/network)
+/datum/map/torch/get_network_access(network)
 	switch(network)
 		if(NETWORK_AQUILA)
 			return access_aquila
 		if(NETWORK_BRIDGE)
 			return access_heads
-		if(NETWORK_CALYPSO)
+		if(NETWORK_CHARON)
 			return access_expedition_shuttle
 		if(NETWORK_POD)
 			return access_guppy
@@ -36,7 +36,6 @@ var/const/NETWORK_PETROV  = "Petrov"
 /datum/map/torch
 	// Networks that will show up as options in the camera monitor program
 	station_networks = list(
-		NETWORK_ROBOTS,
 		NETWORK_FIRST_DECK,
 		NETWORK_SECOND_DECK,
 		NETWORK_THIRD_DECK,
@@ -54,7 +53,7 @@ var/const/NETWORK_PETROV  = "Petrov"
 		NETWORK_EXPLO,
 		NETWORK_HANGAR,
 		NETWORK_AQUILA,
-		NETWORK_CALYPSO,
+		NETWORK_CHARON,
 		NETWORK_POD,
 		NETWORK_PETROV,
 		NETWORK_ALARM_ATMOS,
@@ -77,7 +76,7 @@ var/const/NETWORK_PETROV  = "Petrov"
 	network = list(NETWORK_BRIDGE)
 
 /obj/machinery/camera/network/exploration_shuttle
-	network = list(NETWORK_CALYPSO)
+	network = list(NETWORK_CHARON)
 
 /obj/machinery/camera/network/expedition
 	network = list(NETWORK_EXPEDITION)
@@ -184,11 +183,11 @@ var/const/NETWORK_PETROV  = "Petrov"
 	_output_on = TRUE
 	_fully_charged = TRUE
 
-var/const/NETWORK_COMMAND = "Command"
-var/const/NETWORK_ENGINE  = "Engine"
-var/const/NETWORK_ENGINEERING_OUTPOST = "Engineering Outpost"
+var/global/const/NETWORK_COMMAND = "Command"
+var/global/const/NETWORK_ENGINE  = "Engine"
+var/global/const/NETWORK_ENGINEERING_OUTPOST = "Engineering Outpost"
 
-/datum/map/proc/get_shared_network_access(var/network)
+/datum/map/proc/get_shared_network_access(network)
 	switch(network)
 		if(NETWORK_COMMAND)
 			return access_heads
@@ -214,26 +213,26 @@ var/const/NETWORK_ENGINEERING_OUTPOST = "Engineering Outpost"
 		num2text(HAIL_FREQ)  = list(),
 	)
 
-/decl/stock_part_preset/radio/receiver/vent_pump/guppy
+/singleton/stock_part_preset/radio/receiver/vent_pump/guppy
 	frequency = 1431
 
-/decl/stock_part_preset/radio/event_transmitter/vent_pump/guppy
+/singleton/stock_part_preset/radio/event_transmitter/vent_pump/guppy
 	frequency = 1431
 
 /obj/machinery/atmospherics/unary/vent_pump/high_volume/guppy
 	stock_part_presets = list(
-		/decl/stock_part_preset/radio/receiver/vent_pump/guppy = 1,
-		/decl/stock_part_preset/radio/event_transmitter/vent_pump/guppy = 1
+		/singleton/stock_part_preset/radio/receiver/vent_pump/guppy = 1,
+		/singleton/stock_part_preset/radio/event_transmitter/vent_pump/guppy = 1
 	)
 
-/decl/stock_part_preset/radio/receiver/vent_scrubber/guppy
+/singleton/stock_part_preset/radio/receiver/vent_scrubber/guppy
 	frequency = 1431
 
-/decl/stock_part_preset/radio/event_transmitter/vent_scrubber/guppy
+/singleton/stock_part_preset/radio/event_transmitter/vent_scrubber/guppy
 	frequency = 1431
 
 /obj/machinery/atmospherics/unary/vent_scrubber/guppy
 	stock_part_presets = list(
-		/decl/stock_part_preset/radio/receiver/vent_scrubber/guppy = 1,
-		/decl/stock_part_preset/radio/event_transmitter/vent_scrubber/guppy = 1
+		/singleton/stock_part_preset/radio/receiver/vent_scrubber/guppy = 1,
+		/singleton/stock_part_preset/radio/event_transmitter/vent_scrubber/guppy = 1
 	)

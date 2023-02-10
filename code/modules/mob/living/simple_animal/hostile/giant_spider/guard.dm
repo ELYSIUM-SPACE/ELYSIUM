@@ -1,8 +1,8 @@
 /mob/living/simple_animal/hostile/giant_spider/guard
-	desc = "A monstrously huge brown spider with shimmering eyes."
-	icon_state = "brown"
-	icon_living = "brown"
-	icon_dead = "brown_dead"
+	desc = "A monstrously huge brown spider. This one has terrible red eyes."
+	icon_state = "guard"
+	icon_living = "guard"
+	icon_dead = "guard_dead"
 	meat_amount = 4
 	maxHealth = 200
 	health = 200
@@ -66,7 +66,7 @@
 		W.force = initial(W.force) + 5
 	move_to_delay--
 	break_stuff_probability = 45
-	addtimer(CALLBACK(src, .proc/calm_down), 3 MINUTES)
+	addtimer(new Callback(src, .proc/calm_down), 3 MINUTES)
 
 /mob/living/simple_animal/hostile/giant_spider/guard/proc/calm_down()
 	berserking = FALSE

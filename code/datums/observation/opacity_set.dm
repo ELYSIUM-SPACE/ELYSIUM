@@ -8,15 +8,21 @@
 //			/old_opacity: The opacity before the change.
 //			/new_opacity: The opacity after the change.
 
-GLOBAL_DATUM_INIT(opacity_set_event, /decl/observ/opacity_set, new)
+GLOBAL_DATUM_INIT(opacity_set_event, /singleton/observ/opacity_set, new)
 
-/decl/observ/opacity_set
+/singleton/observ/opacity_set
 	name = "Opacity Set"
 	expected_type = /atom
 
 /*******************
 * Opacity Handling *
 *******************/
+/**
+ * Sets the atom's opacity, calls the opacity set event, and update's the atom's turf's opacity information.
+ *
+ * **Parameters**:
+ * - `new_opacity` boolean - The new opacity value.
+ */
 /atom/proc/set_opacity(new_opacity)
 	if(new_opacity != opacity)
 		var/old_opacity = opacity

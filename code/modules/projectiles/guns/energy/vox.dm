@@ -1,16 +1,16 @@
 /datum/extension/voxform
 	base_type = /datum/extension/voxform
 
-/datum/extension/voxform/proc/check_held_user(var/mob/living/carbon/human/user, var/atom/movable/thing)
+/datum/extension/voxform/proc/check_held_user(mob/living/carbon/human/user, atom/movable/thing)
 	if(!istype(user))
 		return FALSE
-	if(user.species.get_bodytype(user) != SPECIES_VOX && user.species.get_bodytype(user) != SPECIES_VOX_ARMALIS && user.unEquip(thing))
+	if(user.species.get_bodytype(user) != SPECIES_VOX && user.unEquip(thing))
 		to_chat(user, SPAN_WARNING("\The [thing] hisses and wriggles out of your grasp!"))
 		playsound(user, 'sound/voice/BugHiss.ogg', 50, 1)
 		return FALSE
 	return TRUE
 
-/obj/item/gun/special_check(var/mob/living/carbon/human/user)
+/obj/item/gun/special_check(mob/living/carbon/human/user)
 	. = ..()
 	if(!QDELETED(src) && src.loc == user && has_extension(src, /datum/extension/voxform))
 		var/datum/extension/voxform/voxform = get_extension(src, /datum/extension/voxform)

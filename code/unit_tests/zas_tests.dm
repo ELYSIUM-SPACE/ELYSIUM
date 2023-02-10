@@ -41,7 +41,7 @@
 //
 //	The primary helper proc.
 //
-/proc/test_air_in_area(var/test_area, var/expectation = UT_NORMAL)
+/proc/test_air_in_area(test_area, expectation = UT_NORMAL)
 	var/test_result = list("result" = FAILURE, "msg"    = "")
 
 	var/area/A = locate(test_area)
@@ -75,7 +75,7 @@
 					return test_result
 
 
-			if(UT_NORMAL || UT_NORMAL_COLD)
+			if(UT_NORMAL, UT_NORMAL_COLD)
 				if(abs(pressure - ONE_ATMOSPHERE) > 10)
 					test_result["msg"] = "Pressure out of bounds: [pressure] | [t_msg]"
 					return test_result
@@ -94,9 +94,9 @@
 
 		GM_checked.Add(GM)
 
-	if(GM_checked.len)
+	if(length(GM_checked))
 		test_result["result"] = SUCCESS
-		test_result["msg"] = "Checked [GM_checked.len] zones"
+		test_result["msg"] = "Checked [length(GM_checked)] zones"
 	else
 		test_result["msg"] = "No zones checked."
 
@@ -121,7 +121,7 @@
 	if(!SSshuttle)
 		fail("Shuttle Controller not setup at time of test.")
 		return 1
-	if(!SSshuttle.shuttles.len)
+	if(!length(SSshuttle.shuttles))
 		skip("No shuttles have been setup for this map.")
 		return 1
 

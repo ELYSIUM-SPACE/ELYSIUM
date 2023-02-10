@@ -8,11 +8,11 @@
 		new /datum/wire_description(NUCLEARBOMB_WIRE_SAFETY, "This wire connects to a safety override.")
 	)
 
-var/const/NUCLEARBOMB_WIRE_LIGHT		= 1
-var/const/NUCLEARBOMB_WIRE_TIMING		= 2
-var/const/NUCLEARBOMB_WIRE_SAFETY		= 4
+var/global/const/NUCLEARBOMB_WIRE_LIGHT		= 1
+var/global/const/NUCLEARBOMB_WIRE_TIMING		= 2
+var/global/const/NUCLEARBOMB_WIRE_SAFETY		= 4
 
-/datum/wires/nuclearbomb/CanUse(var/mob/living/L)
+/datum/wires/nuclearbomb/CanUse(mob/living/L)
 	var/obj/machinery/nuclearbomb/N = holder
 	return N.panel_open && N.extended
 
@@ -23,7 +23,7 @@ var/const/NUCLEARBOMB_WIRE_SAFETY		= 4
 	. += "The device is is [N.safety ? "quiet" : "whirring"].<BR>"
 	. += "The lights are [N.lighthack ? "static" : "functional"].<BR>"
 
-/datum/wires/nuclearbomb/UpdatePulsed(var/index)
+/datum/wires/nuclearbomb/UpdatePulsed(index)
 	var/obj/machinery/nuclearbomb/N = holder
 	switch(index)
 		if(NUCLEARBOMB_WIRE_LIGHT)
@@ -42,12 +42,12 @@ var/const/NUCLEARBOMB_WIRE_SAFETY		= 4
 			spawn(100)
 				N.safety = !N.safety
 				if(N.safety == 1)
-					N.visible_message("<span class='notice'>\The [N] quiets down.</span>")
+					N.visible_message(SPAN_NOTICE("\The [N] quiets down."))
 					N.secure_device()
 				else
-					N.visible_message("<span class='notice'>\The [N] emits a quiet whirling noise!</span>")
+					N.visible_message(SPAN_NOTICE("\The [N] emits a quiet whirling noise!"))
 
-/datum/wires/nuclearbomb/UpdateCut(var/index, var/mended)
+/datum/wires/nuclearbomb/UpdateCut(index, mended)
 	var/obj/machinery/nuclearbomb/N = holder
 	switch(index)
 		if(NUCLEARBOMB_WIRE_SAFETY)

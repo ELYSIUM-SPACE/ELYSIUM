@@ -20,15 +20,15 @@
 	return list(/obj/item/clothing/suit/hospital/blue, /obj/item/clothing/suit/hospital/green, /obj/item/clothing/suit/hospital/pink)
 
 /obj/structure/closet/secure_closet/personal/cabinet
-	closet_appearance = /decl/closet_appearance/cabinet/secure
+	closet_appearance = /singleton/closet_appearance/cabinet/secure
 
 /obj/structure/closet/secure_closet/personal/cabinet/WillContain()
 	return list(/obj/item/storage/backpack/satchel/grey/withwallet, /obj/item/device/radio/headset)
 
-/obj/structure/closet/secure_closet/personal/CanToggleLock(var/mob/user, var/obj/item/card/id/id_card)
+/obj/structure/closet/secure_closet/personal/CanToggleLock(mob/user, obj/item/card/id/id_card)
 	return ..() || (istype(id_card) && id_card.registered_name && (!registered_name || (registered_name == id_card.registered_name)))
 
-/obj/structure/closet/secure_closet/personal/togglelock(var/mob/user, var/obj/item/card/id/id_card)
+/obj/structure/closet/secure_closet/personal/togglelock(mob/user, obj/item/card/id/id_card)
 	if (..())
 		if(locked)
 			id_card = istype(id_card) ? id_card : user.GetIdCard()
@@ -37,7 +37,7 @@
 		else
 			set_owner(null)
 
-/obj/structure/closet/secure_closet/personal/proc/set_owner(var/registered_name)
+/obj/structure/closet/secure_closet/personal/proc/set_owner(registered_name)
 	if (registered_name)
 		src.registered_name = registered_name
 		src.SetName(name + " ([registered_name])")

@@ -5,12 +5,12 @@
 	color = "#666666"
 	base_icon = "chair"
 	buckle_dir = 0
-	buckle_lying = 0 //force people to sit up in chairs when buckled
+	buckle_stance = BUCKLE_FORCE_STAND
 	obj_flags = OBJ_FLAG_ROTATABLE
 	var/propelled = 0 // Check for fire-extinguisher-driven chairs
 	buckle_movable = TRUE
 
-/obj/structure/bed/chair/do_simple_ranged_interaction(var/mob/user)
+/obj/structure/bed/chair/do_simple_ranged_interaction(mob/user)
 	if(!buckled_mob && user)
 		rotate(user)
 	return TRUE
@@ -20,7 +20,7 @@
 	if(!padding_material && istype(W, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/SK = W
 		if(!SK.status)
-			to_chat(user, "<span class='notice'>\The [SK] is not ready to be attached!</span>")
+			to_chat(user, SPAN_NOTICE("\The [SK] is not ready to be attached!"))
 			return
 		if(!user.unEquip(SK))
 			return
@@ -236,22 +236,22 @@
 		var/mob/living/occupant = unbuckle_mob()
 
 		var/def_zone = ran_zone()
-		var/blocked = 100 * occupant.get_blocked_ratio(def_zone, BRUTE, damage = 10)
+		var/blocked = 100 * occupant.get_blocked_ratio(def_zone, DAMAGE_BRUTE, damage = 10)
 		occupant.throw_at(A, 3, propelled)
-		occupant.apply_effect(6, STUN, blocked)
-		occupant.apply_effect(6, WEAKEN, blocked)
-		occupant.apply_effect(6, STUTTER, blocked)
-		occupant.apply_damage(10, BRUTE, def_zone)
+		occupant.apply_effect(6, EFFECT_STUN, blocked)
+		occupant.apply_effect(6, EFFECT_WEAKEN, blocked)
+		occupant.apply_effect(6, EFFECT_STUTTER, blocked)
+		occupant.apply_damage(10, DAMAGE_BRUTE, def_zone)
 		playsound(src.loc, 'sound/weapons/punch1.ogg', 50, 1, -1)
 		if(istype(A, /mob/living))
 			var/mob/living/victim = A
 			def_zone = ran_zone()
-			blocked = 100 * victim.get_blocked_ratio(def_zone, BRUTE, damage = 10)
-			victim.apply_effect(6, STUN, blocked)
-			victim.apply_effect(6, WEAKEN, blocked)
-			victim.apply_effect(6, STUTTER, blocked)
-			victim.apply_damage(10, BRUTE, def_zone)
-		occupant.visible_message("<span class='danger'>[occupant] crashed into \the [A]!</span>")
+			blocked = 100 * victim.get_blocked_ratio(def_zone, DAMAGE_BRUTE, damage = 10)
+			victim.apply_effect(6, EFFECT_STUN, blocked)
+			victim.apply_effect(6, EFFECT_WEAKEN, blocked)
+			victim.apply_effect(6, EFFECT_STUTTER, blocked)
+			victim.apply_damage(10, DAMAGE_BRUTE, def_zone)
+		occupant.visible_message(SPAN_DANGER("[occupant] crashed into \the [A]!"))
 
 /obj/structure/bed/chair/office/light/New(newloc, newmaterial = DEFAULT_FURNITURE_MATERIAL)
 	..(newloc, newmaterial, MATERIAL_CLOTH)
@@ -300,7 +300,7 @@
 	desc = "A comfortable, secure seat. It has a sturdy-looking buckling system for smoother flights."
 	base_icon = "shuttle_chair"
 	icon_state = "shuttle_chair_preview"
-	buckling_sound = 'sound/effects/metal_close.ogg'
+	buckle_sound = 'sound/effects/metal_close.ogg'
 	buckle_movable = FALSE
 
 /obj/structure/bed/chair/shuttle/post_buckle_mob()
@@ -342,7 +342,7 @@
 		return
 	..()
 
-/obj/structure/bed/chair/wood/New(var/newloc)
+/obj/structure/bed/chair/wood/New(newloc)
 	..(newloc, chair_material)
 
 /obj/structure/bed/chair/wood/mahogany
@@ -396,7 +396,7 @@
 	icon_state = "pew_left"
 	base_icon = "pew_left"
 
-/obj/structure/bed/chair/pew/New(var/newloc)
+/obj/structure/bed/chair/pew/New(newloc)
 	..(newloc, pew_material)
 
 /obj/structure/bed/chair/pew/mahogany

@@ -15,7 +15,7 @@ Thus, the two variables affect pump operation are set in New():
 /obj/machinery/atmospherics/binary/pump
 	icon = 'icons/atmos/pump.dmi'
 	icon_state = "map_off"
-	level = 1
+	level = ATOM_LEVEL_UNDER_TILE
 
 	name = "gas pump"
 	desc = "A pump."
@@ -38,22 +38,22 @@ Thus, the two variables affect pump operation are set in New():
 		/obj/item/stock_parts/power/apc
 	)
 	public_variables = list(
-		/decl/public_access/public_variable/input_toggle,
-		/decl/public_access/public_variable/identifier,
-		/decl/public_access/public_variable/use_power,
-		/decl/public_access/public_variable/pump_target_output
+		/singleton/public_access/public_variable/input_toggle,
+		/singleton/public_access/public_variable/identifier,
+		/singleton/public_access/public_variable/use_power,
+		/singleton/public_access/public_variable/pump_target_output
 	)
 	public_methods = list(
-		/decl/public_access/public_method/toggle_power,
-		/decl/public_access/public_method/refresh	
+		/singleton/public_access/public_method/toggle_power,
+		/singleton/public_access/public_method/refresh
 	)
 	stock_part_presets = list(
-		/decl/stock_part_preset/radio/receiver/pump = 1,
-		/decl/stock_part_preset/radio/event_transmitter/pump = 1
+		/singleton/stock_part_preset/radio/receiver/pump = 1,
+		/singleton/stock_part_preset/radio/event_transmitter/pump = 1
 	)
 
 	frame_type = /obj/item/pipe
-	construct_state = /decl/machine_construction/default/item_chassis
+	construct_state = /singleton/machine_construction/default/item_chassis
 	base_type = /obj/machinery/atmospherics/binary/pump
 
 /obj/machinery/atmospherics/binary/pump/Initialize()
@@ -84,14 +84,14 @@ Thus, the two variables affect pump operation are set in New():
 		add_underlay(T, node1, turn(dir, -180))
 		add_underlay(T, node2, dir)
 
-/obj/machinery/atmospherics/binary/pump/hide(var/i)
+/obj/machinery/atmospherics/binary/pump/hide(i)
 	update_underlays()
 
 /obj/machinery/atmospherics/binary/pump/Process()
 	last_power_draw = 0
 	last_flow_rate = 0
 
-	if((stat & (NOPOWER|BROKEN)) || !use_power)
+	if((inoperable()) || !use_power)
 		return
 
 	var/power_draw = -1
@@ -120,8 +120,8 @@ Thus, the two variables affect pump operation are set in New():
 	else
 		return air2
 
-/obj/machinery/atmospherics/binary/pump/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
-	if(stat & (BROKEN|NOPOWER))
+/obj/machinery/atmospherics/binary/pump/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
+	if(inoperable())
 		return
 
 	// this is the data which will be sent to the ui
@@ -166,15 +166,15 @@ Thus, the two variables affect pump operation are set in New():
 			. = 1
 		if ("set")
 			var/new_pressure = input(usr,"Enter new output pressure (0-[max_pressure_setting]kPa)","Pressure control",src.target_pressure) as num
-			src.target_pressure = between(0, new_pressure, max_pressure_setting)
+			src.target_pressure = clamp(new_pressure, 0, max_pressure_setting)
 			. = 1
 
 	if(.)
 		src.update_icon()
 
 /obj/machinery/atmospherics/binary/pump/cannot_transition_to(state_path, mob/user)
-	if(state_path == /decl/machine_construction/default/deconstructed)
-		if (!(stat & NOPOWER) && use_power)
+	if(state_path == /singleton/machine_construction/default/deconstructed)
+		if (is_powered() && use_power)
 			return SPAN_WARNING("You cannot take this [src] apart, turn it off first.")
 		var/datum/gas_mixture/int_air = return_air()
 		var/datum/gas_mixture/env_air = loc.return_air()
@@ -182,7 +182,7 @@ Thus, the two variables affect pump operation are set in New():
 			return SPAN_WARNING("You cannot take this [src] apart, it too exerted due to internal pressure.")
 	return ..()
 
-/decl/public_access/public_variable/pump_target_output
+/singleton/public_access/public_variable/pump_target_output
 	expected_type = /obj/machinery/atmospherics/binary/pump
 	name = "output pressure"
 	desc = "The output pressure of the pump."
@@ -190,33 +190,33 @@ Thus, the two variables affect pump operation are set in New():
 	has_updates = FALSE
 	var_type = IC_FORMAT_NUMBER
 
-/decl/public_access/public_variable/pump_target_output/access_var(obj/machinery/atmospherics/binary/pump/machine)
+/singleton/public_access/public_variable/pump_target_output/access_var(obj/machinery/atmospherics/binary/pump/machine)
 	return machine.target_pressure
 
-/decl/public_access/public_variable/pump_target_output/write_var(obj/machinery/atmospherics/binary/pump/machine, new_value)
-	new_value = Clamp(new_value, 0, machine.max_pressure_setting)
+/singleton/public_access/public_variable/pump_target_output/write_var(obj/machinery/atmospherics/binary/pump/machine, new_value)
+	new_value = clamp(new_value, 0, machine.max_pressure_setting)
 	. = ..()
 	if(.)
 		machine.target_pressure = new_value
 
-/decl/stock_part_preset/radio/event_transmitter/pump
+/singleton/stock_part_preset/radio/event_transmitter/pump
 	frequency = PUMP_FREQ
 	filter = RADIO_ATMOSIA
-	event = /decl/public_access/public_variable/input_toggle
+	event = /singleton/public_access/public_variable/input_toggle
 	transmit_on_event = list(
-		"device" = /decl/public_access/public_variable/identifier,
-		"power" = /decl/public_access/public_variable/use_power,
-		"target_output" = /decl/public_access/public_variable/pump_target_output
+		"device" = /singleton/public_access/public_variable/identifier,
+		"power" = /singleton/public_access/public_variable/use_power,
+		"target_output" = /singleton/public_access/public_variable/pump_target_output
 	)
 
-/decl/stock_part_preset/radio/receiver/pump
+/singleton/stock_part_preset/radio/receiver/pump
 	frequency = PUMP_FREQ
 	filter = RADIO_ATMOSIA
 	receive_and_call = list(
-		"power_toggle" = /decl/public_access/public_method/toggle_power,
-		"status" = /decl/public_access/public_method/refresh
+		"power_toggle" = /singleton/public_access/public_method/toggle_power,
+		"status" = /singleton/public_access/public_method/refresh
 	)
 	receive_and_write = list(
-		"set_power" = /decl/public_access/public_variable/use_power,
-		"set_output_pressure" = /decl/public_access/public_variable/pump_target_output
+		"set_power" = /singleton/public_access/public_variable/use_power,
+		"set_output_pressure" = /singleton/public_access/public_variable/pump_target_output
 	)

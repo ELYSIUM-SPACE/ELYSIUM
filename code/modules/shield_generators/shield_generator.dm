@@ -5,7 +5,7 @@
 	icon_state = "generator0"
 	density = TRUE
 	base_type = /obj/machinery/power/shield_generator
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	wires = /datum/wires/shield_generator
 	uncreated_component_parts = null
 	stat_immune = 0
@@ -54,7 +54,7 @@
 	connect_to_network()
 
 	mode_list = list()
-	for(var/st in subtypesof(/datum/shield_mode/))
+	for(var/st in subtypesof(/datum/shield_mode))
 		var/datum/shield_mode/SM = new st()
 		mode_list.Add(SM)
 
@@ -73,12 +73,12 @@
 	for(var/obj/item/stock_parts/smes_coil/S in component_parts)
 		full_shield_strength += (S.ChargeCapacity / CELLRATE) * 5
 	max_energy = full_shield_strength * 20
-	current_energy = between(0, current_energy, max_energy)
+	current_energy = clamp(current_energy, 0, max_energy)
 
 	mitigation_max = MAX_MITIGATION_BASE + MAX_MITIGATION_RESEARCH * total_component_rating_of_type(/obj/item/stock_parts/capacitor)
-	mitigation_em = between(0, mitigation_em, mitigation_max)
-	mitigation_physical = between(0, mitigation_physical, mitigation_max)
-	mitigation_heat = between(0, mitigation_heat, mitigation_max)
+	mitigation_em = clamp(mitigation_em, 0, mitigation_max)
+	mitigation_physical = clamp(mitigation_physical, 0, mitigation_max)
+	mitigation_heat = clamp(mitigation_heat, 0, mitigation_max)
 	..()
 
 
@@ -97,7 +97,7 @@
 
 // Generates the field objects. Deletes existing field, if applicable.
 /obj/machinery/power/shield_generator/proc/regenerate_field()
-	if(field_segments.len)
+	if(length(field_segments))
 		for(var/obj/effect/shield/S in field_segments)
 			qdel(S)
 
@@ -162,12 +162,12 @@
 			running = SHIELD_RUNNING
 			regenerate_field()
 
-	mitigation_em = between(0, mitigation_em - MITIGATION_LOSS_PASSIVE, mitigation_max)
-	mitigation_heat = between(0, mitigation_heat - MITIGATION_LOSS_PASSIVE, mitigation_max)
-	mitigation_physical = between(0, mitigation_physical - MITIGATION_LOSS_PASSIVE, mitigation_max)
+	mitigation_em = clamp(mitigation_em - MITIGATION_LOSS_PASSIVE, 0, mitigation_max)
+	mitigation_heat = clamp(mitigation_heat - MITIGATION_LOSS_PASSIVE, 0, mitigation_max)
+	mitigation_physical = clamp(mitigation_physical - MITIGATION_LOSS_PASSIVE, 0, mitigation_max)
 
 	if(running == SHIELD_RUNNING)
-		upkeep_power_usage = round((field_segments.len - damaged_segments.len) * ENERGY_UPKEEP_PER_TILE * upkeep_multiplier)
+		upkeep_power_usage = round((length(field_segments) - length(damaged_segments)) * ENERGY_UPKEEP_PER_TILE * upkeep_multiplier)
 	else if(running > SHIELD_RUNNING)
 		upkeep_power_usage = round(ENERGY_UPKEEP_IDLE * idle_multiplier * (field_radius * 8) * upkeep_multiplier) // Approximates number of turfs.
 
@@ -182,7 +182,7 @@
 		// Now try to recharge our internal energy.
 		var/energy_to_demand
 		if(input_cap)
-			energy_to_demand = between(0, max_energy - current_energy, input_cap - energy_buffer)
+			energy_to_demand = clamp(max_energy - current_energy, 0, input_cap - energy_buffer)
 		else
 			energy_to_demand = max(0, max_energy - current_energy)
 		energy_buffer = draw_power(energy_to_demand)
@@ -225,7 +225,7 @@
 		for(var/obj/effect/shield/S in field_segments)
 			S.fail(1)
 
-/obj/machinery/power/shield_generator/proc/set_idle(var/new_state)
+/obj/machinery/power/shield_generator/proc/set_idle(new_state)
 	if(new_state)
 		if(running == SHIELD_IDLE)
 			return
@@ -238,7 +238,7 @@
 		running = SHIELD_SPINNING_UP
 		spinup_counter = round(spinup_delay / idle_multiplier)
 
-/obj/machinery/power/shield_generator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/power/shield_generator/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 	var/data[0]
 
 	data["running"] = running
@@ -252,8 +252,8 @@
 	data["max_energy"] = round(max_energy / 1000000, 0.1)
 	data["current_energy"] = round(current_energy / 1000000, 0.1)
 	data["percentage_energy"] = max_energy ? round(data["current_energy"] / data["max_energy"] * 100) : 0
-	data["total_segments"] = field_segments ? field_segments.len : 0
-	data["functional_segments"] = damaged_segments ? data["total_segments"] - damaged_segments.len : data["total_segments"]
+	data["total_segments"] = field_segments ? length(field_segments) : 0
+	data["functional_segments"] = damaged_segments ? data["total_segments"] - length(damaged_segments) : data["total_segments"]
 	data["field_radius"] = field_radius
 	data["target_radius"] = target_radius
 	data["input_cap_kw"] = round(input_cap / 1000)
@@ -272,11 +272,13 @@
 		ui.set_auto_update(1)
 
 
-/obj/machinery/power/shield_generator/interface_interact(var/mob/user)
+/obj/machinery/power/shield_generator/interface_interact(mob/user)
 	ui_interact(user)
 	return TRUE
 
-/obj/machinery/power/shield_generator/CanUseTopic(var/mob/user)
+/obj/machinery/power/shield_generator/CanUseTopic(mob/user)
+	if (panel_open)
+		return STATUS_CLOSE
 	if(issilicon(user) && !Adjacent(user) && ai_control_disabled)
 		return STATUS_UPDATE
 	return ..()
@@ -334,7 +336,7 @@
 		var/new_range = input(user, "Enter new field range (1-[world.maxx]). Leave blank to cancel.", "Field Radius Control", field_radius) as num
 		if(!new_range)
 			return TOPIC_HANDLED
-		target_radius = between(1, new_range, world.maxx)
+		target_radius = clamp(new_range, 1, world.maxx)
 		return TOPIC_REFRESH
 
 	if(href_list["set_input_cap"])
@@ -368,7 +370,7 @@
 
 
 // Takes specific amount of damage
-/obj/machinery/power/shield_generator/proc/take_damage(var/damage, var/shield_damtype)
+/obj/machinery/power/shield_generator/proc/take_damage(damage, shield_damtype)
 	var/energy_to_use = damage * ENERGY_PER_HP
 	if(check_flag(MODEFLAG_MODULATE))
 		mitigation_em -= MITIGATION_HIT_LOSS
@@ -386,9 +388,9 @@
 				mitigation_heat += MITIGATION_HIT_LOSS + MITIGATION_HIT_GAIN
 				energy_to_use *= 1 - (mitigation_heat / 100)
 
-		mitigation_em = between(0, mitigation_em, mitigation_max)
-		mitigation_heat = between(0, mitigation_heat, mitigation_max)
-		mitigation_physical = between(0, mitigation_physical, mitigation_max)
+		mitigation_em = clamp(mitigation_em, 0, mitigation_max)
+		mitigation_heat = clamp(mitigation_heat, 0, mitigation_max)
+		mitigation_physical = clamp(mitigation_physical, 0, mitigation_max)
 
 	current_energy -= energy_to_use
 
@@ -408,11 +410,11 @@
 
 
 // Checks whether specific flags are enabled
-/obj/machinery/power/shield_generator/proc/check_flag(var/flag)
+/obj/machinery/power/shield_generator/proc/check_flag(flag)
 	return (shield_modes & flag)
 
 
-/obj/machinery/power/shield_generator/proc/toggle_flag(var/flag)
+/obj/machinery/power/shield_generator/proc/toggle_flag(flag)
 	shield_modes ^= flag
 	update_upkeep_multiplier()
 	for(var/obj/effect/shield/S in field_segments)

@@ -1,7 +1,7 @@
-var/const/OVERMAP_SPEED_CONSTANT = (1 SECOND)
+var/global/const/OVERMAP_SPEED_CONSTANT = (1 SECOND)
 #define SHIP_MOVE_RESOLUTION 0.00001
 #define MOVING(speed) abs(speed) >= min_speed
-#define SANITIZE_SPEED(speed) SIGN(speed) * Clamp(abs(speed), 0, max_speed)
+#define SANITIZE_SPEED(speed) SIGN(speed) * clamp(abs(speed), 0, max_speed)
 #define CHANGE_SPEED_BY(speed_var, v_diff) \
 	v_diff = SANITIZE_SPEED(v_diff);\
 	if(!MOVING(speed_var + v_diff)) \
@@ -21,7 +21,7 @@ var/const/OVERMAP_SPEED_CONSTANT = (1 SECOND)
 	var/vessel_size = SHIP_SIZE_LARGE	// arbitrary number, affects how likely are we to evade meteors
 	var/max_speed = 1/(1 SECOND)        // "speed of light" for the ship, in turfs/tick.
 	var/min_speed = 1/(2 MINUTES)       // Below this, we round speed to 0 to avoid math errors.
-	var/max_autopilot = 1 / (20 SECONDS) // The maximum speed any attached helm can try to autopilot at.
+	var/max_autopilot = 1 / (10 SECONDS) // The maximum speed any attached helm can try to autopilot at.
 
 	var/list/speed = list(0,0)          // speed in x,y direction
 	var/list/position = list(0,0)       // position within a tile.
@@ -166,7 +166,7 @@ var/const/OVERMAP_SPEED_CONSTANT = (1 SECOND)
 			if(MOVING(speed[i]))
 				position[i] += speed[i] * OVERMAP_SPEED_CONSTANT
 				if(position[i] < 0)
-					deltas[i] = ceil(position[i])
+					deltas[i] = Ceil(position[i])
 				else if(position[i] > 0)
 					deltas[i] = Floor(position[i])
 				if(deltas[i] != 0)
@@ -218,7 +218,7 @@ var/const/OVERMAP_SPEED_CONSTANT = (1 SECOND)
 	for(var/i = 1 to 2)
 		if(MOVING(speed[i]))
 			. = min(., ((speed[i] > 0 ? 1 : -1) - position[i]) / speed[i])
-	. = max(ceil(.),0)
+	. = max(Ceil(.),0)
 
 /obj/effect/overmap/visitable/ship/proc/handle_wraparound()
 	var/nx = x
@@ -249,7 +249,7 @@ var/const/OVERMAP_SPEED_CONSTANT = (1 SECOND)
 	if(!SSshuttle.overmap_halted)
 		halted = 0
 
-/obj/effect/overmap/visitable/ship/Bump(var/atom/A)
+/obj/effect/overmap/visitable/ship/Bump(atom/A)
 	if(istype(A,/turf/unsimulated/map/edge))
 		handle_wraparound()
 	..()

@@ -1,7 +1,7 @@
 /datum/computer_file/program/shields_monitor
 	filename = "shieldsmonitor"
 	filedesc = "Shield Generators Monitoring"
-	nanomodule_path = /datum/nano_module/shields_monitor/
+	nanomodule_path = /datum/nano_module/shields_monitor
 	program_icon_state = "shield"
 	program_key_state = "generic_key"
 	program_menu_icon = "radio-on"
@@ -32,7 +32,7 @@
 		deselect_shield()
 	return shields
 
-/datum/nano_module/shields_monitor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = GLOB.default_state)
+/datum/nano_module/shields_monitor/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, datum/topic_state/state = GLOB.default_state)
 	var/list/data = host.initial_data()
 
 	if (active)
@@ -51,8 +51,8 @@
 			data["percentage_energy"] = round(data["current_energy"] / data["max_energy"] * 100)
 		else
 			data["percentage_energy"] = "ERR"
-		data["total_segments"] = active.field_segments ? active.field_segments.len : 0
-		data["functional_segments"] = active.damaged_segments ? data["total_segments"] - active.damaged_segments.len : data["total_segments"]
+		data["total_segments"] = active.field_segments ? length(active.field_segments) : 0
+		data["functional_segments"] = active.damaged_segments ? data["total_segments"] - length(active.damaged_segments) : data["total_segments"]
 		data["field_radius"] = active.field_radius
 		data["input_cap_kw"] = round(active.input_cap / 1000)
 		data["upkeep_power_usage"] = round(active.upkeep_power_usage / 1000, 0.1)
@@ -102,7 +102,7 @@
 			active = S
 		return 1
 
-/datum/nano_module/shields_monitor/proc/deselect_shield(var/source)
+/datum/nano_module/shields_monitor/proc/deselect_shield(source)
 	if(!active)
 		return
 	GLOB.destroyed_event.unregister(active, src)

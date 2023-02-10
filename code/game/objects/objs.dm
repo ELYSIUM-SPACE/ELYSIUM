@@ -11,7 +11,7 @@
 	var/sharp = FALSE		// whether this object cuts
 	var/edge = FALSE		// whether this object is more likely to dismember
 	var/in_use = 0 // If we have a user using us, this will be set on. We will check if the user has stopped using us, and thus stop updating and LAGGING EVERYTHING!
-	var/damtype = "brute"
+	var/damtype = DAMAGE_BRUTE
 	var/armor_penetration = 0
 	var/anchor_fall = FALSE
 	var/holographic = 0 //if the obj is a holographic object spawned by the holodeck
@@ -80,7 +80,7 @@
 /mob/proc/unset_machine()
 	src.machine = null
 
-/mob/proc/set_machine(var/obj/O)
+/mob/proc/set_machine(obj/O)
 	if(src.machine)
 		unset_machine()
 	src.machine = O
@@ -92,11 +92,11 @@
 	if(istype(M) && M.client && M.machine == src)
 		src.attack_self(M)
 
-/obj/proc/hide(var/hide)
+/obj/proc/hide(hide)
 	set_invisibility(hide ? INVISIBILITY_MAXIMUM : initial(invisibility))
 
 /obj/proc/hides_under_flooring()
-	return level == 1
+	return level == ATOM_LEVEL_UNDER_TILE
 
 /obj/proc/hear_talk(mob/M as mob, text, verb, datum/language/speaking)
 	if(talking_atom)
@@ -104,12 +104,12 @@
 /*
 	var/mob/mo = locate(/mob) in src
 	if(mo)
-		var/rendered = "<span class='game say'><span class='name'>[M.name]: </span> <span class='message'>[text]</span></span>"
+		var/rendered = SPAN_CLASS("game say", "[SPAN_CLASS("name", "[M.name]: ")] [SPAN_CLASS("message", text))]"
 		mo.show_message(rendered, 2)
 		*/
 	return
 
-/obj/proc/see_emote(mob/M as mob, text, var/emote_type)
+/obj/proc/see_emote(mob/M as mob, text, emote_type)
 	return
 
 /obj/proc/show_message(msg, type, alt, alt_type)//Message, type of message (1 or 2), alternative message, alt message type (1 or 2)
@@ -118,11 +118,11 @@
 /obj/proc/damage_flags()
 	. = 0
 	if(has_edge(src))
-		. |= DAM_EDGE
+		. |= DAMAGE_FLAG_EDGE
 	if(is_sharp(src))
-		. |= DAM_SHARP
-		if(damtype == BURN)
-			. |= DAM_LASER
+		. |= DAMAGE_FLAG_SHARP
+		if (damtype == DAMAGE_BURN)
+			. |= DAMAGE_FLAG_LASER
 
 /obj/attackby(obj/item/O, mob/user)
 	if(obj_flags & OBJ_FLAG_ANCHORABLE)
@@ -138,9 +138,9 @@
 		user.visible_message("\The [user] begins unsecuring \the [src] from the floor.", "You start unsecuring \the [src] from the floor.")
 	else
 		user.visible_message("\The [user] begins securing \the [src] to the floor.", "You start securing \the [src] to the floor.")
-	if(do_after(user, delay, src))
+	if(do_after(user, delay, src, DO_REPAIR_CONSTRUCT))
 		if(!src) return
-		to_chat(user, "<span class='notice'>You [anchored? "un" : ""]secured \the [src]!</span>")
+		to_chat(user, SPAN_NOTICE("You [anchored? "un" : ""]secured \the [src]!"))
 		anchored = !anchored
 	return 1
 
@@ -149,7 +149,7 @@
 		add_fingerprint(user)
 	..()
 
-/obj/is_fluid_pushable(var/amt)
+/obj/is_fluid_pushable(amt)
 	return ..() && w_class <= round(amt/20)
 
 /obj/proc/can_embed()

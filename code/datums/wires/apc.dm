@@ -5,7 +5,7 @@
 
 /datum/wires/apc
 	holder_type = /obj/machinery/power/apc
-	wire_count = 4	
+	wire_count = 4
 	descriptions = list(
 		new /datum/wire_description(APC_WIRE_IDSCAN, "This wire is connected to the ID scanning panel.", SKILL_EXPERT),
 		new /datum/wire_description(APC_WIRE_MAIN_POWER1, "This wire seems to be carrying a heavy current."),
@@ -19,13 +19,13 @@
 	. += text("<br>\n[(A.locked ? "The APC is locked." : "The APC is unlocked.")]<br>\n[(A.shorted ? "The APCs power has been shorted." : "The APC is working properly!")]<br>\n[(A.aidisabled ? "The 'AI control allowed' light is off." : "The 'AI control allowed' light is on.")]")
 
 
-/datum/wires/apc/CanUse(var/mob/living/L)
+/datum/wires/apc/CanUse(mob/living/L)
 	var/obj/machinery/power/apc/A = holder
-	if(A.wiresexposed && !(A.stat & BROKEN))
+	if(A.wiresexposed && !MACHINE_IS_BROKEN(A))
 		return 1
 	return 0
 
-/datum/wires/apc/UpdatePulsed(var/index)
+/datum/wires/apc/UpdatePulsed(index)
 
 	var/obj/machinery/power/apc/A = holder
 
@@ -54,19 +54,21 @@
 					if(A && !IsIndexCut(APC_WIRE_AI_CONTROL))
 						A.aidisabled = 0
 
-/datum/wires/apc/UpdateCut(var/index, var/mended)
+/datum/wires/apc/UpdateCut(index, mended)
 	var/obj/machinery/power/apc/A = holder
 
 	switch(index)
 		if(APC_WIRE_MAIN_POWER1, APC_WIRE_MAIN_POWER2)
 
 			if(!mended)
-				A.shock(usr, 50)
+				if (usr)
+					A.shock(usr, 50)
 				A.shorted = 1
 
 			else if(!IsIndexCut(APC_WIRE_MAIN_POWER1) && !IsIndexCut(APC_WIRE_MAIN_POWER2))
 				A.shorted = 0
-				A.shock(usr, 50)
+				if (usr)
+					A.shock(usr, 50)
 
 		if(APC_WIRE_AI_CONTROL)
 

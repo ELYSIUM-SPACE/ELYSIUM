@@ -35,14 +35,14 @@
 	var/turf/loc = get_turf(usr)
 	var/area/A = loc.loc
 	if (!istype(loc, /turf/simulated/floor))
-		to_chat(usr, "<span class='danger'>\The [src] cannot be placed on this spot.</span>")
+		to_chat(usr, SPAN_DANGER("\The [src] cannot be placed on this spot."))
 		return
 	if ((A.requires_power == 0 || A.name == "Space") && !isLightFrame())
-		to_chat(usr, "<span class='danger'>\The [src] cannot be placed in this area.</span>")
+		to_chat(usr, SPAN_DANGER("\The [src] cannot be placed in this area."))
 		return
 
 	if(gotwallitem(loc, ndir))
-		to_chat(usr, "<span class='danger'>There's already an item on this wall!</span>")
+		to_chat(usr, SPAN_DANGER("There's already an item on this wall!"))
 		return
 
 	new build_machine_type(loc, ndir, src)
@@ -100,3 +100,10 @@
 	name = "large light fixture frame"
 	build_machine_type = /obj/machinery/light_construct/spot
 	refund_amt = 3
+
+/obj/item/frame/supermatter_alarm
+	name = "supermatter alarm frame"
+	icon = 'icons/obj/lighting.dmi'
+	icon_state = "bulb-construct-item"
+	refund_amt = 1
+	build_machine_type = /obj/machinery/rotating_alarm/supermatter

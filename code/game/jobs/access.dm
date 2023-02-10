@@ -31,7 +31,7 @@
 	if(!istype(L, /list))
 		return FALSE
 
-	if(maint_all_access)
+	if(GLOB.using_map?.maint_all_access)
 		L = L.Copy()
 		L |= access_maint_tunnels
 
@@ -87,7 +87,7 @@
 		if("Supreme Commander")
 			return get_all_centcom_access()
 
-/var/list/datum/access/priv_all_access_datums
+var/global/list/datum/access/priv_all_access_datums
 /proc/get_all_access_datums()
 	if(!priv_all_access_datums)
 		priv_all_access_datums = init_subtypes(/datum/access)
@@ -95,7 +95,7 @@
 
 	return priv_all_access_datums.Copy()
 
-/var/list/datum/access/priv_all_access_datums_id
+var/global/list/datum/access/priv_all_access_datums_id
 /proc/get_all_access_datums_by_id()
 	if(!priv_all_access_datums_id)
 		priv_all_access_datums_id = list()
@@ -104,7 +104,7 @@
 
 	return priv_all_access_datums_id.Copy()
 
-/var/list/datum/access/priv_all_access_datums_region
+var/global/list/datum/access/priv_all_access_datums_region
 /proc/get_all_access_datums_by_region()
 	if(!priv_all_access_datums_region)
 		priv_all_access_datums_region = list()
@@ -115,43 +115,43 @@
 
 	return priv_all_access_datums_region.Copy()
 
-/proc/get_access_ids(var/access_types = ACCESS_TYPE_ALL)
+/proc/get_access_ids(access_types = ACCESS_TYPE_ALL)
 	var/list/L = new()
 	for(var/datum/access/A in get_all_access_datums())
 		if(A.access_type & access_types)
 			L += A.id
 	return L
 
-/var/list/priv_all_access
+var/global/list/priv_all_access
 /proc/get_all_accesses()
 	if(!priv_all_access)
 		priv_all_access = get_access_ids()
 
 	return priv_all_access.Copy()
 
-/var/list/priv_station_access
+var/global/list/priv_station_access
 /proc/get_all_station_access()
 	if(!priv_station_access)
 		priv_station_access = get_access_ids(ACCESS_TYPE_STATION)
 
 	return priv_station_access.Copy()
 
-/var/list/priv_centcom_access
+var/global/list/priv_centcom_access
 /proc/get_all_centcom_access()
 	if(!priv_centcom_access)
 		priv_centcom_access = get_access_ids(ACCESS_TYPE_CENTCOM)
 
 	return priv_centcom_access.Copy()
 
-/var/list/priv_syndicate_access
+var/global/list/priv_syndicate_access
 /proc/get_all_syndicate_access()
 	if(!priv_syndicate_access)
 		priv_syndicate_access = get_access_ids(ACCESS_TYPE_SYNDICATE)
 
 	return priv_syndicate_access.Copy()
 
-/var/list/priv_region_access
-/proc/get_region_accesses(var/code)
+var/global/list/priv_region_access
+/proc/get_region_accesses(code)
 	if(code == ACCESS_REGION_ALL)
 		return get_all_station_access()
 
@@ -165,7 +165,7 @@
 	var/list/region = priv_region_access["[code]"]
 	return region.Copy()
 
-/proc/get_region_accesses_name(var/code)
+/proc/get_region_accesses_name(code)
 	switch(code)
 		if(ACCESS_REGION_ALL)
 			return "All"
@@ -233,9 +233,6 @@
 		var/obj/item/card/id = I ? I.GetIdCard() : null
 		if(id)
 			return id
-	var/obj/item/organ/internal/controller/controller = locate() in internal_organs
-	if(istype(controller))
-		return controller.GetIdCard()
 
 /mob/living/carbon/human/GetAccess()
 	. = list()
@@ -243,9 +240,6 @@
 		var/obj/item/I = item_slot
 		if(I)
 			. |= I.GetAccess()
-	var/obj/item/organ/internal/controller/controller = locate() in internal_organs
-	if(istype(controller))
-		. |= controller.GetAccess()
 #undef HUMAN_ID_CARDS
 
 /mob/living/silicon/GetIdCard()
@@ -253,7 +247,7 @@
 		return // Unconscious, dead or once possessed but now client-less silicons are not considered to have id access.
 	return idcard
 
-/proc/FindNameFromID(var/mob/M, var/missing_id_name = "Unknown")
+/proc/FindNameFromID(mob/M, missing_id_name = "Unknown")
 	var/obj/item/card/id/C = M.GetIdCard()
 	if(C)
 		return C.registered_name

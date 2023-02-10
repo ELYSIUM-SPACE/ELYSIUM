@@ -7,7 +7,7 @@ GLOBAL_DATUM_INIT(borers, /datum/antagonist/borer, new)
 	flags = ANTAG_OVERRIDE_MOB | ANTAG_RANDSPAWN | ANTAG_OVERRIDE_JOB
 
 	mob_path = /mob/living/simple_animal/borer
-	welcome_text = "Use your Infest power to crawl into the ear of a host and fuse with their brain. You can only take control temporarily, and at risk of hurting your host, so be clever and careful; your host is encouraged to help you however they can. Talk to your fellow borers with :x."
+	welcome_text = "Use your Infest power to crawl into the ear of a host and fuse with their brain. You can only take control temporarily, and at risk of hurting your host, so be clever and careful; your host is encouraged to help you however they can. On grab intent, you will use the infest ability. On disarm intent at a distance, you will expell psionic waves to paralyze potential hosts, or enemies. Talk to your fellow borers with ,z."
 	antag_indicator = "hudborer"
 	antaghud_indicator = "hudborer"
 
@@ -25,17 +25,17 @@ GLOBAL_DATUM_INIT(borers, /datum/antagonist/borer, new)
 	spawn_announcement_title = "Lifesign Alert"
 	spawn_announcement_delay = 5000
 
-/datum/antagonist/borer/get_extra_panel_options(var/datum/mind/player)
+/datum/antagonist/borer/get_extra_panel_options(datum/mind/player)
 	return "<a href='?src=\ref[src];move_to_spawn=\ref[player.current]'>\[put in host\]</a>"
 
-/datum/antagonist/borer/create_objectives(var/datum/mind/player)
+/datum/antagonist/borer/create_objectives(datum/mind/player)
 	if(!..())
 		return
 	player.objectives += new /datum/objective/borer_survive()
 	player.objectives += new /datum/objective/borer_reproduce()
 	player.objectives += new /datum/objective/escape()
 
-/datum/antagonist/borer/place_mob(var/mob/living/mob)
+/datum/antagonist/borer/place_mob(mob/living/mob)
 	var/mob/living/simple_animal/borer/borer = mob
 	if(istype(borer))
 		var/mob/living/carbon/human/host

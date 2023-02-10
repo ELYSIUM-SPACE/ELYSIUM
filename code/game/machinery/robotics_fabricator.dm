@@ -9,7 +9,7 @@
 	active_power_usage = 5000
 	req_access = list(access_robotics)
 	base_type = /obj/machinery/robotics_fabricator
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	uncreated_component_parts = null
 	stat_immune = 0
 
@@ -65,20 +65,20 @@
 /obj/machinery/robotics_fabricator/RefreshParts()
 	res_max_amount = 100000 * total_component_rating_of_type(/obj/item/stock_parts/matter_bin)
 
-	var/T = Clamp(total_component_rating_of_type(/obj/item/stock_parts/manipulator), 0, 4)
+	var/T = clamp(total_component_rating_of_type(/obj/item/stock_parts/manipulator), 0, 4)
 	mat_efficiency = 1 - (T - 1) / 4 // 1 -> 0.5
 
 	T += total_component_rating_of_type(/obj/item/stock_parts/micro_laser)// Not resetting T is intended; speed is affected by both
 	speed = T / 2 // 1 -> 3
 
-/obj/machinery/robotics_fabricator/interface_interact(var/mob/user)
+/obj/machinery/robotics_fabricator/interface_interact(mob/user)
 	ui_interact(user)
 	return TRUE
 
-/obj/machinery/robotics_fabricator/ui_interact(var/mob/user, var/ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/robotics_fabricator/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 	var/data[0]
 
-	var/datum/design/current = queue.len ? queue[1] : null
+	var/datum/design/current = length(queue) ? queue[1] : null
 	if(current)
 		data["current"] = current.name
 	data["queue"] = get_queue_names()
@@ -89,7 +89,7 @@
 		var/list/T = list()
 		for(var/A in all_robolimbs)
 			var/datum/robolimb/R = all_robolimbs[A]
-			if(R.unavailable_at_fab || R.applies_to_part.len)
+			if(R.unavailable_at_fab || length(R.applies_to_part))
 				continue
 			T += list(list("id" = A, "company" = R.company))
 		data["manufacturers"] = T
@@ -143,9 +143,9 @@
 		return SPAN_NOTICE("\The [src] is busy. Please wait for completion of previous operation.")
 	return ..()
 
-/obj/machinery/robotics_fabricator/attackby(var/obj/item/I, var/mob/user)
+/obj/machinery/robotics_fabricator/attackby(obj/item/I, mob/user)
 	if(busy)
-		to_chat(user, "<span class='notice'>\The [src] is busy. Please wait for completion of previous operation.</span>")
+		to_chat(user, SPAN_NOTICE("\The [src] is busy. Please wait for completion of previous operation."))
 		return 1
 	if(!istype(I, /obj/item/stack/material))
 		return ..()
@@ -160,7 +160,7 @@
 		return
 
 	if(!(material in materials))
-		to_chat(user, "<span class=warning>\The [src] does not accept [stack_plural]!</span>")
+		to_chat(user, SPAN_WARNING("\The [src] does not accept [stack_plural]!"))
 		return
 
 	if(materials[material] + amnt <= res_max_amount)
@@ -180,7 +180,7 @@
 		to_chat(user, "The fabricator cannot hold more [stack_plural].")// use the plural form even if the given sheet is singular
 
 
-/obj/machinery/robotics_fabricator/emag_act(var/remaining_charges, var/mob/user)
+/obj/machinery/robotics_fabricator/emag_act(remaining_charges, mob/user)
 	if (emagged)
 		to_chat(user, SPAN_WARNING("No records in user DB."))
 		return
@@ -190,7 +190,7 @@
 	return 1
 
 /obj/machinery/robotics_fabricator/proc/update_busy()
-	if(queue.len)
+	if(length(queue))
 		if(can_build(queue[1]))
 			busy = 1
 		else
@@ -198,26 +198,26 @@
 	else
 		busy = 0
 
-/obj/machinery/robotics_fabricator/proc/add_to_queue(var/index)
+/obj/machinery/robotics_fabricator/proc/add_to_queue(index)
 	var/datum/design/D = files.known_designs[index]
 	queue += D
 	update_busy()
 
-/obj/machinery/robotics_fabricator/proc/remove_from_queue(var/index)
+/obj/machinery/robotics_fabricator/proc/remove_from_queue(index)
 	if(index == 1)
 		progress = 0
 	if (length(queue) >= index)
 		queue.Cut(index, index + 1)
 	update_busy()
 
-/obj/machinery/robotics_fabricator/proc/can_build(var/datum/design/D)
+/obj/machinery/robotics_fabricator/proc/can_build(datum/design/D)
 	for(var/M in D.materials)
 		if(materials[M] <= D.materials[M] * mat_efficiency)
 			return 0
 	return 1
 
 /obj/machinery/robotics_fabricator/proc/check_build()
-	if(!queue.len)
+	if(!length(queue))
 		progress = 0
 		return
 	var/datum/design/D = queue[1]
@@ -232,32 +232,32 @@
 		var/obj/new_item = D.Fabricate(loc, src)
 		visible_message("\The [src] pings, indicating that \the [D] is complete.", "You hear a ping.")
 		if(mat_efficiency != 1)
-			if(new_item.matter && new_item.matter.len > 0)
+			if(new_item.matter && length(new_item.matter) > 0)
 				for(var/i in new_item.matter)
 					new_item.matter[i] = new_item.matter[i] * mat_efficiency
 	remove_from_queue(1)
 
 /obj/machinery/robotics_fabricator/proc/get_queue_names()
 	. = list()
-	for(var/i = 2 to queue.len)
+	for(var/i = 2 to length(queue))
 		var/datum/design/D = queue[i]
 		. += D.name
 
 /obj/machinery/robotics_fabricator/proc/get_build_options()
 	. = list()
-	for(var/i = 1 to files.known_designs.len)
+	for(var/i = 1 to length(files.known_designs))
 		var/datum/design/D = files.known_designs[i]
 		if(!D.build_path || !(D.build_type & MECHFAB))
 			continue
 		. += list(list("name" = D.name, "id" = i, "category" = D.category, "resourses" = get_design_resourses(D), "time" = get_design_time(D)))
 
-/obj/machinery/robotics_fabricator/proc/get_design_resourses(var/datum/design/D)
+/obj/machinery/robotics_fabricator/proc/get_design_resourses(datum/design/D)
 	var/list/F = list()
 	for(var/T in D.materials)
 		F += "[capitalize(T)]: [D.materials[T] * mat_efficiency]"
 	return english_list(F, and_text = ", ")
 
-/obj/machinery/robotics_fabricator/proc/get_design_time(var/datum/design/D)
+/obj/machinery/robotics_fabricator/proc/get_design_time(datum/design/D)
 	if (speed == 0)
 		return "INFINITE"
 
@@ -277,7 +277,7 @@
 	for(var/T in materials)
 		. += list(list("mat" = capitalize(T), "amt" = materials[T]))
 
-/obj/machinery/robotics_fabricator/proc/eject_materials(var/material, var/amount) // 0 amount = 0 means ejecting a full stack; -1 means eject everything
+/obj/machinery/robotics_fabricator/proc/eject_materials(material, amount) // 0 amount = 0 means ejecting a full stack; -1 means eject everything
 	var/recursive = amount == -1 ? 1 : 0
 	material = lowertext(material)
 	var/mattype

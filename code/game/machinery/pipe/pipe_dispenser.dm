@@ -4,9 +4,9 @@
 	icon_state = "pipe_d"
 	density = TRUE
 	anchored = FALSE
-	stat_immune = NOSCREEN//Doesn't need screen, just input for the parts wanted
+	stat_immune = MACHINE_STAT_NOSCREEN//Doesn't need screen, just input for the parts wanted
 
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	uncreated_component_parts = null
 
 	idle_power_usage = 500
@@ -23,21 +23,21 @@
 	if(anchored)
 		update_use_power(POWER_USE_IDLE)
 
-/obj/machinery/pipedispenser/proc/get_console_data(var/list/pipe_categories, var/color_options = FALSE)
+/obj/machinery/pipedispenser/proc/get_console_data(list/pipe_categories, color_options = FALSE)
 	. = list()
 	. += "<table>"
 	if(color_options)
-		. += "<tr><td>Color</td><td><a href='?src=\ref[src];color=\ref[src]'><font color = '[pipe_color]'>[pipe_color]</font></a></td></tr>"
+		. += "<tr><td>Color</td><td><a href='?src=\ref[src];color=\ref[src]'>[SPAN_COLOR(pipe_color, pipe_color)]</a></td></tr>"
 	for(var/category in pipe_categories)
 		var/datum/pipe/cat = category
-		. += "<tr><td><font color = '#517087'><strong>[initial(cat.category)]</strong></font></td></tr>"
+		. += "<tr><td>[SPAN_COLOR("#517087", "<strong>[initial(cat.category)]</strong>")]</td></tr>"
 		for(var/datum/pipe/pipe in pipe_categories[category])
 			var/line = "[pipe.name]</td>"
 			. += "<tr><td>[line]<td><a href='?src=\ref[src];build=\ref[pipe]'>Dispense</a></td><td><a href='?src=\ref[src];buildfive=\ref[pipe]'>5x</a></td><td><a href='?src=\ref[src];buildten=\ref[pipe]'>10x</a></td></tr>"
 	.+= "</table>"
 	. = JOINTEXT(.)
 
-/obj/machinery/pipedispenser/proc/build_quantity(var/datum/pipe/P, var/quantity)
+/obj/machinery/pipedispenser/proc/build_quantity(datum/pipe/P, quantity)
 	for(var/I = quantity;I > 0;I -= 1)
 		P.Build(P, loc, pipe_colors[pipe_color])
 		use_power_oneoff(500)
@@ -70,11 +70,11 @@
 	popup.set_content(get_console_data(GLOB.all_pipe_datums_by_category, TRUE))
 	popup.open()
 
-/obj/machinery/pipedispenser/attackby(var/obj/item/W as obj, var/mob/user as mob)
+/obj/machinery/pipedispenser/attackby(obj/item/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/pipe) || istype(W, /obj/item/machine_chassis))
 		if(!user.unEquip(W))
 			return
-		to_chat(user, "<span class='notice'>You put \the [W] back into \the [src].</span>")
+		to_chat(user, SPAN_NOTICE("You put \the [W] back into \the [src]."))
 		add_fingerprint(user)
 		qdel(W)
 		return
@@ -83,27 +83,27 @@
 			add_fingerprint(user)
 			if(anchored)
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-				to_chat(user, "<span class='notice'>You begin to unfasten \the [src] from the floor...</span>")
-				if (do_after(user, 40, src))
+				to_chat(user, SPAN_NOTICE("You begin to unfasten \the [src] from the floor..."))
+				if (do_after(user, 4 SECONDS, src, DO_REPAIR_CONSTRUCT))
 					user.visible_message( \
-						"<span class='notice'>\The [user] unfastens \the [src].</span>", \
-						"<span class='notice'>You have unfastened \the [src]. Now it can be pulled somewhere else.</span>", \
+						SPAN_NOTICE("\The [user] unfastens \the [src]."), \
+						SPAN_NOTICE("You have unfastened \the [src]. Now it can be pulled somewhere else."), \
 						"You hear ratchet.")
 					anchored = FALSE
-					stat |= MAINT
+					set_stat(MACHINE_STAT_MAINT, TRUE)
 					update_use_power(POWER_USE_OFF)
 					if(user.machine==src)
 						close_browser(user, "window=pipedispenser")
 			else
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-				to_chat(user, "<span class='notice'>You begin to fasten \the [src] to the floor...</span>")
-				if (do_after(user, 20, src))
+				to_chat(user, SPAN_NOTICE("You begin to fasten \the [src] to the floor..."))
+				if (do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT))
 					user.visible_message( \
-						"<span class='notice'>\The [user] fastens \the [src].</span>", \
-						"<span class='notice'>You have fastened \the [src]. Now it can dispense pipes.</span>", \
+						SPAN_NOTICE("\The [user] fastens \the [src]."), \
+						SPAN_NOTICE("You have fastened \the [src]. Now it can dispense pipes."), \
 						"You hear ratchet.")
 					anchored = TRUE
-					stat &= ~MAINT
+					set_stat(MACHINE_STAT_MAINT, FALSE)
 					update_use_power(POWER_USE_IDLE)
 			return
 	return ..()
@@ -116,7 +116,7 @@
 	machine_desc = "Similar to a normal pipe dispenser, but calibrated for the heavy, dense metal tubes used in disposals networks."
 
 //Allow you to drag-drop disposal pipes into it
-/obj/machinery/pipedispenser/disposal/MouseDrop_T(var/obj/structure/disposalconstruct/pipe as obj, mob/user as mob)
+/obj/machinery/pipedispenser/disposal/MouseDrop_T(obj/structure/disposalconstruct/pipe as obj, mob/user as mob)
 	if(!CanPhysicallyInteract(user))
 		return
 

@@ -38,13 +38,13 @@
 	return secured
 
 
-/obj/item/device/assembly/prox_sensor/HasProximity(atom/movable/AM as mob|obj)
-	if(!istype(AM))
-		log_debug("DEBUG: HasProximity called with [AM] on [src] ([usr]).")
+/obj/item/device/assembly/prox_sensor/HasProximity(atom/movable/movable)
+	if (ismob(movable) && !isliving(movable))
 		return
-	if (istype(AM, /obj/effect/beam))	return
-	if (AM.move_speed < 12)	sense()
-	return
+	if (istype(movable, /obj/effect/beam))
+		return
+	if (movable.move_speed < 12)
+		sense()
 
 
 /obj/item/device/assembly/prox_sensor/sense()
@@ -116,7 +116,7 @@
 
 /obj/item/device/assembly/prox_sensor/interact(mob/user as mob)//TODO: Change this to the wires thingy
 	if(!secured)
-		user.show_message("<span class='warning'>The [name] is unsecured!</span>")
+		user.show_message(SPAN_WARNING("The [name] is unsecured!"))
 		return 0
 	var/second = time % 60
 	var/minute = (time - second) / 60

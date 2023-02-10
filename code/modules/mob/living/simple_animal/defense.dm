@@ -1,13 +1,15 @@
-/mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
+/mob/living/simple_animal/bullet_act(obj/item/projectile/Proj)
 	if(!Proj || Proj.nodamage)
 		return
+	if (status_flags & GODMODE)
+		return PROJECTILE_FORCE_MISS
 
 	var/damage = Proj.damage
-	if(Proj.damtype == STUN)
+	if (Proj.damtype == DAMAGE_STUN)
 		damage = Proj.damage / 6
-	if(Proj.damtype == BRUTE)
+	if (Proj.damtype == DAMAGE_BRUTE)
 		damage = Proj.damage / 2
-	if(Proj.damtype == BURN)
+	if (Proj.damtype == DAMAGE_BURN)
 		damage = Proj.damage / 1.5
 	if(Proj.agony)
 		damage += Proj.agony / 6
@@ -18,7 +20,11 @@
 	bullet_impact_visuals(Proj)
 	adjustBruteLoss(damage)
 	Proj.on_hit(src)
-	return 0
+
+	if (ai_holder && Proj.firer)
+		ai_holder.react_to_attack(Proj.firer)
+
+	return FALSE
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)
 	..()
@@ -33,7 +39,6 @@
 		if(I_DISARM)
 			M.visible_message(SPAN_NOTICE("[M] [response_disarm] \the [src]."))
 			M.do_attack_animation(src)
-			//TODO: Push the mob away or something
 
 		if(I_HURT)
 			var/dealt_damage = harm_intent_damage
@@ -49,9 +54,12 @@
 			M.visible_message(SPAN_WARNING("[M] [harm_verb] \the [src]!"))
 			M.do_attack_animation(src)
 
+			if (ai_holder)
+				ai_holder.react_to_attack(M)
+
 	return
 
-/mob/living/simple_animal/attackby(var/obj/item/O, var/mob/user)
+/mob/living/simple_animal/attackby(obj/item/O, mob/user)
 	if(istype(O, /obj/item/stack/medical))
 		if(stat != DEAD)
 			var/obj/item/stack/medical/MED = O
@@ -80,7 +88,7 @@
 				return
 			var/time_to_butcher = (mob_size)
 			to_chat(user, SPAN_NOTICE("You begin harvesting \the [src]."))
-			if(do_after(user, time_to_butcher, src, do_flags = DO_DEFAULT & ~DO_BOTH_CAN_TURN))
+			if(do_after(user, time_to_butcher, src, DO_PUBLIC_UNIQUE))
 				if(prob(user.skill_fail_chance(SKILL_COOKING, 60, SKILL_ADEPT)))
 					to_chat(user, SPAN_NOTICE("You botch harvesting \the [src], and ruin some of the meat in the process."))
 					subtract_meat(user)
@@ -99,7 +107,10 @@
 		else
 			O.attack(src, user, user.zone_sel ? user.zone_sel.selecting : ran_zone())
 
-/mob/living/simple_animal/hit_with_weapon(obj/item/O, mob/living/user, var/effective_force, var/hit_zone)
+			if (ai_holder)
+				ai_holder.react_to_attack(user)
+
+/mob/living/simple_animal/hit_with_weapon(obj/item/O, mob/living/user, effective_force, hit_zone)
 
 	visible_message(SPAN_DANGER("\The [src] has been attacked with \the [O] by [user]!"))
 
@@ -108,9 +119,9 @@
 		return FALSE
 
 	var/damage = O.force
-	if (O.damtype == PAIN)
+	if (O.damtype == DAMAGE_PAIN)
 		damage = 0
-	if (O.damtype == STUN)
+	if (O.damtype == DAMAGE_STUN)
 		damage = (O.force / 8)
 	if(supernatural && istype(O,/obj/item/nullrod))
 		damage *= 2
@@ -119,9 +130,12 @@
 	if(O.edge || O.sharp)
 		adjustBleedTicks(damage)
 
+	if (ai_holder)
+		ai_holder.react_to_attack(user)
+
 	return TRUE
 
-/mob/living/simple_animal/proc/reflect_unarmed_damage(var/mob/living/carbon/human/attacker, var/damage_type, var/description)
+/mob/living/simple_animal/proc/reflect_unarmed_damage(mob/living/carbon/human/attacker, damage_type, description)
 	if(attacker.a_intent == I_HURT)
 		var/hand_hurtie
 		if(attacker.hand)

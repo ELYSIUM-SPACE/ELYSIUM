@@ -10,7 +10,7 @@
 /obj/item/locator
 	name = "locator"
 	desc = "Used to track those with locater implants."
-	icon = 'icons/obj/device.dmi'
+	icon = 'icons/obj/locator.dmi'
 	icon_state = "locator"
 	var/temp = null
 	var/frequency = 1451
@@ -51,7 +51,7 @@ Frequency:
 	if(!current_location||current_location.z==2)//If turf was not found or they're on z level 2.
 		to_chat(usr, "The [src] is malfunctioning.")
 		return
-	if ((list_find(usr.contents, src) || (in_range(src, usr) && istype(src.loc, /turf))))
+	if ((usr.contents.Find(src) || (in_range(src, usr) && istype(src.loc, /turf))))
 		usr.set_machine(src)
 		if (href_list["refresh"])
 			src.temp = "<B>Persistent Signal Locator</B><HR>"
@@ -103,7 +103,7 @@ Frequency:
 
 				src.temp += "<B>You are at \[[sr.x],[sr.y],[sr.z]\]</B> in orbital coordinates.<BR><BR><A href='byond://?src=\ref[src];refresh=1'>Refresh</A><BR>"
 			else
-				src.temp += "<B><FONT color='red'>Processing Error:</FONT></B> Unable to locate orbital position.<BR>"
+				src.temp += "<B>[SPAN_COLOR("red", "Processing Error:")]</B> Unable to locate orbital position.<BR>"
 		else
 			if (href_list["freq"])
 				src.frequency += text2num(href_list["freq"])

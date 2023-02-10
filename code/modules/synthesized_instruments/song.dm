@@ -79,7 +79,7 @@
 	else
 		use_env = 1
 
-	var/current_volume = Clamp(sound_copy.volume, 0, 100)
+	var/current_volume = clamp(sound_copy.volume, 0, 100)
 	sound_copy.volume = current_volume //Sanitize volume
 	var/datum/sound_token/token = new /datum/sound_token/instrument(src.player.actual_instrument, src.sound_id, sound_copy, src.player.range, FALSE, use_env, player)
 	var/delta_volume = player.volume / src.sustain_timer
@@ -118,7 +118,7 @@
 	return
 
 /datum/synthesized_song/proc/play_lines(mob/user, list/allowed_suff, list/note_off_delta, list/lines)
-	if (!lines.len)
+	if (!length(lines))
 		STOP_PLAY_LINES
 	var/list/cur_accidentals = list("n", "n", "n", "n", "n", "n", "n")
 	var/list/cur_octaves = list(3, 3, 3, 3, 3, 3, 3)
@@ -133,8 +133,8 @@
 		for (var/notes in splittext(lowertext(line), ","))
 			var/list/components = splittext(notes, "/")
 			var/duration = sanitize_tempo(src.tempo)
-			if (components.len)
-				var/delta = components.len==2 && text2num(components[2]) ? text2num(components[2]) : 1
+			if (length(components))
+				var/delta = length(components)==2 && text2num(components[2]) ? text2num(components[2]) : 1
 				var/note_str = splittext(components[1], "-")
 
 				duration = sanitize_tempo(src.tempo / delta)
@@ -188,7 +188,7 @@
 	var/list/allowed_suff = list("b", "n", "#", "s")
 	var/list/note_off_delta = list("a"=91, "b"=91, "c"=98, "d"=98, "e"=98, "f"=98, "g"=98)
 	var/list/lines_copy = src.lines.Copy()
-	addtimer(CALLBACK(src, .proc/play_lines, user, allowed_suff, note_off_delta, lines_copy), 0)
+	addtimer(new Callback(src, .proc/play_lines, user, allowed_suff, note_off_delta, lines_copy), 0)
 
 #undef CP
 #undef IS_DIGIT

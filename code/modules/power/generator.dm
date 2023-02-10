@@ -67,7 +67,7 @@
 		circ1.temperature_overlay = null
 	if (circ2)
 		circ2.temperature_overlay = null
-	if (stat & (NOPOWER|BROKEN))
+	if (inoperable())
 		return 1
 	else
 		if (lastgenlev != 0)
@@ -83,7 +83,7 @@
 		return 1
 
 /obj/machinery/power/generator/Process()
-	if(!circ1 || !circ2 || !anchored || stat & (BROKEN|NOPOWER))
+	if(!circ1 || !circ2 || !anchored || inoperable())
 		stored_energy = 0
 		return
 
@@ -181,7 +181,7 @@
 	ui_interact(user)
 	return TRUE
 
-/obj/machinery/power/generator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/power/generator/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 	// this is the data which will be sent to the ui
 	var/vertical = 0
 	if (dir == NORTH || dir == SOUTH)

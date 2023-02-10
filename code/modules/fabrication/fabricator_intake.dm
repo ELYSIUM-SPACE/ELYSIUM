@@ -3,7 +3,7 @@
 #define SUBSTANCE_TAKEN_FULL  1
 #define SUBSTANCE_TAKEN_ALL   2
 
-/obj/machinery/fabricator/proc/take_reagents(var/obj/item/thing, var/mob/user, var/destructive = FALSE)
+/obj/machinery/fabricator/proc/take_reagents(obj/item/thing, mob/user, destructive = FALSE)
 	if(!thing.reagents || (!destructive && !thing.is_open_container()))
 		return SUBSTANCE_TAKEN_NONE
 	for(var/datum/reagent/R in thing.reagents.reagent_list)
@@ -27,7 +27,7 @@
 			return SUBSTANCE_TAKEN_ALL
 	return SUBSTANCE_TAKEN_NONE
 
-/obj/machinery/fabricator/proc/take_materials(var/obj/item/thing, var/mob/user)
+/obj/machinery/fabricator/proc/take_materials(obj/item/thing, mob/user)
 	. = SUBSTANCE_TAKEN_NONE
 	var/stacks_used = 1
 	var/mat_colour = thing.color
@@ -41,7 +41,7 @@
 		if(!mat_colour)
 			mat_colour = material_def.icon_colour
 		stored_material[material_def.type] += taking_material
-		stacks_used = max(stacks_used, ceil(taking_material/material_def.units_per_sheet))
+		stacks_used = max(stacks_used, Ceil(taking_material/material_def.units_per_sheet))
 		if(storage_capacity[material_def.type] == stored_material[material_def.type])
 			. = SUBSTANCE_TAKEN_FULL
 		else if(. != SUBSTANCE_TAKEN_FULL)
@@ -52,7 +52,7 @@
 			adding_mat_overlay.color = mat_colour
 			material_overlays += adding_mat_overlay
 			update_icon()
-			addtimer(CALLBACK(src, /obj/machinery/fabricator/proc/remove_mat_overlay, adding_mat_overlay), 1 SECOND)
+			addtimer(new Callback(src, /obj/machinery/fabricator/proc/remove_mat_overlay, adding_mat_overlay), 1 SECOND)
 		if(istype(thing, /obj/item/stack))
 			var/obj/item/stack/S = thing
 			S.use(stacks_used)
@@ -61,7 +61,7 @@
 			else if(. != SUBSTANCE_TAKEN_FULL)
 				. = SUBSTANCE_TAKEN_SOME
 
-/obj/machinery/fabricator/proc/show_intake_message(var/mob/user, var/value, var/obj/item/thing)
+/obj/machinery/fabricator/proc/show_intake_message(mob/user, value, obj/item/thing)
 	if(value == SUBSTANCE_TAKEN_FULL)
 		to_chat(user, SPAN_NOTICE("You fill \the [src] to capacity with \the [thing]."))
 	else if(value == SUBSTANCE_TAKEN_SOME)
@@ -71,7 +71,7 @@
 	else
 		to_chat(user, SPAN_WARNING("\The [src] cannot process \the [thing]."))
 
-/obj/machinery/fabricator/attackby(var/obj/item/O, var/mob/user)
+/obj/machinery/fabricator/attackby(obj/item/O, mob/user)
 	if(component_attackby(O, user) || stat)
 		return TRUE
 	if(panel_open && (isMultitool(O) || isWirecutter(O)))

@@ -34,7 +34,7 @@
 		overlay.layer = ABOVE_LIGHTING_LAYER
 
 	overlays.Cut()
-	if(stat & (NOPOWER|BROKEN))
+	if(inoperable())
 		icon_state = "light-p"
 		set_light(0)
 	else
@@ -48,7 +48,7 @@
 	if(distance)
 		to_chat(user, "A light switch. It is [on? "on" : "off"].")
 
-/obj/machinery/light_switch/proc/set_state(var/newstate)
+/obj/machinery/light_switch/proc/set_state(newstate)
 	if(on != newstate)
 		on = newstate
 		connected_area.set_lightswitch(on)
@@ -82,7 +82,7 @@
 		sync_state()
 
 /obj/machinery/light_switch/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(inoperable())
 		..(severity)
 		return
 	power_change()

@@ -7,7 +7,7 @@
 
 	var/processing
 
-/datum/graph/New(var/list/nodes, var/list/edges, var/previous_owner = null)
+/datum/graph/New(list/nodes, list/edges, previous_owner = null)
 	if(!length(nodes))
 		CRASH("Invalid list of nodes: [log_info_line(nodes)]")
 	if(length(nodes) > 1 && !istype(edges))
@@ -33,7 +33,7 @@
 		return QDEL_HINT_LETMELIVE
 	. = ..()
 
-/datum/graph/proc/Connect(var/datum/node/node, var/list/neighbours, var/queue = TRUE)
+/datum/graph/proc/Connect(datum/node/node, list/neighbours, queue = TRUE)
 	if(!istype(neighbours))
 		neighbours = list(neighbours)
 	if(!length(neighbours))
@@ -47,10 +47,10 @@
 
 	LAZYSET(pending_connections, node, neighbours)
 	if(queue)
-		SSgraphs_update.Queue(src)
+		SSgraphs.Queue(src)
 	return TRUE
 
-/datum/graph/proc/Disconnect(var/datum/node/node, var/list/neighbours_to_disconnect, var/queue = TRUE)
+/datum/graph/proc/Disconnect(datum/node/node, list/neighbours_to_disconnect, queue = TRUE)
 	if(neighbours_to_disconnect && !istype(neighbours_to_disconnect))
 		neighbours_to_disconnect = list(neighbours_to_disconnect)
 	if(length(neighbours_to_disconnect) && length(nodes & neighbours_to_disconnect) != length(neighbours_to_disconnect))
@@ -64,10 +64,10 @@
 
 	LAZYSET(pending_disconnections, node, neighbours_to_disconnect)
 	if(queue)
-		SSgraphs_update.Queue(src)
+		SSgraphs.Queue(src)
 	return TRUE
 
-/datum/graph/proc/Merge(var/datum/graph/other)
+/datum/graph/proc/Merge(datum/graph/other)
 	if(!other)
 		return
 
@@ -92,11 +92,11 @@
 	qdel(other)
 
 // Subtypes that need to handle merging in specific ways should override this proc
-/datum/graph/proc/OnMerge(var/datum/graph/other)
+/datum/graph/proc/OnMerge(datum/graph/other)
 	return
 
 // Here subgraphs is a list of a list of nodes
-/datum/graph/proc/Split(var/list/subgraphs)
+/datum/graph/proc/Split(list/subgraphs)
 	var/list/new_subgraphs = list()
 	for(var/subgraph in subgraphs)
 		if(length(subgraph) == 1)
@@ -113,14 +113,14 @@
 // Here subgraphs is a list of a list graphs (with their own lists of nodes and edges)
 // Subtypes that need to handle splitting in specific ways should override this proc
 // The original graph still has the same nodes/edges as before the split but will be deleted after this proc returns
-/datum/graph/proc/OnSplit(var/list/datum/graph/subgraphs)
+/datum/graph/proc/OnSplit(list/datum/graph/subgraphs)
 	return
 
 /datum/graph/proc/ProcessPendingConnections()
 	while(LAZYLEN(pending_connections))
-		var/datum/node/N = pending_connections[pending_connections.len]
+		var/datum/node/N = pending_connections[length(pending_connections)]
 		var/list/new_neighbours = pending_connections[N]
-		pending_connections.len--
+		LIST_DEC(pending_connections)
 
 		if(N.graph != src)
 			Merge(N.graph)
@@ -156,17 +156,17 @@
 	var/list/subgraphs = list()
 	var/list/all_nodes = nodes.Copy()
 	while(length(all_nodes))
-		var/root_node = all_nodes[all_nodes.len]
-		all_nodes.len--
+		var/root_node = all_nodes[length(all_nodes)]
+		LIST_DEC(all_nodes)
 		var/checked_nodes = list()
 		var/list/nodes_to_traverse = list(root_node)
 		while(length(nodes_to_traverse))
-			var/node_to_check = nodes_to_traverse[nodes_to_traverse.len]
-			nodes_to_traverse.len--
+			var/node_to_check = nodes_to_traverse[length(nodes_to_traverse)]
+			LIST_DEC(nodes_to_traverse)
 			checked_nodes += node_to_check
 			nodes_to_traverse |= ((edges[node_to_check] || list()) - checked_nodes)
 		all_nodes -= checked_nodes
-		subgraphs[++subgraphs.len] = checked_nodes
+		subgraphs[LIST_PRE_INC(subgraphs)] = checked_nodes
 
 	if(length(subgraphs) == 1)
 		return

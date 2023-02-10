@@ -1,7 +1,7 @@
 
 // Clothing armour values.
 /obj/item/clothing
-	var/global/list/armour_to_descriptive_term = list(
+	var/static/list/armour_to_descriptive_term = list(
 		"melee" = "blunt force",
 		"bullet" = "ballistics",
 		"laser" = "lasers",
@@ -67,10 +67,10 @@
 		if(slot_flags & string_slot_flags[name])
 			slots += name
 
-	if(covers.len)
+	if(length(covers))
 		armor_strings += "It covers the [english_list(covers)]."
 
-	if(slots.len)
+	if(length(slots))
 		armor_strings += "It can be worn on your [english_list(slots)]."
 
 	return jointext(armor_strings, "<br>")

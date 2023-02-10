@@ -23,7 +23,7 @@
 
 	natural_weapon = /obj/item/natural_weapon/bite
 
-	ai_holder_type = /datum/ai_holder/simple_animal/melee/evasive
+	ai_holder = /datum/ai_holder/simple_animal/melee/evasive
 
 	// meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
 
@@ -31,12 +31,12 @@
 
 	var/scare_chance = 15
 
-/mob/living/simple_animal/hostile/scarybat/apply_melee_effects(var/atom/A)
+/mob/living/simple_animal/hostile/scarybat/apply_melee_effects(atom/A)
 	if(isliving(A))
 		var/mob/living/L = A
 		if(prob(scare_chance))
 			L.Stun(1)
-			L.visible_message("<span class='danger'>\the [src] scares \the [L]!</span>")
+			L.visible_message(SPAN_DANGER("\the [src] scares \the [L]!"))
 
 // Spookiest of bats
 /mob/living/simple_animal/hostile/scarybat/cult

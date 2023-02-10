@@ -7,19 +7,6 @@
 			A.SetName("alien creature")
 			A.real_name = "alien creature"
 			A.verbs |= /mob/living/simple_animal/proc/name_species
-	if (atmosphere)
-		//Set up gases for living things
-		if (!LAZYLEN(breathgas))
-			var/list/goodgases = gas_data.gases.Copy()
-			var/gasnum = min(rand(1,3), goodgases.len)
-			for (var/i = 1 to gasnum)
-				var/gas = pick(goodgases)
-				breathgas[gas] = round(0.4*goodgases[gas], 0.1)
-				goodgases -= gas
-		if (!badgas)
-			var/list/badgases = gas_data.gases.Copy()
-			badgases -= atmosphere.gas
-			badgas = pick(badgases)
 
 		A.minbodytemp = atmosphere.temperature - 20
 		A.maxbodytemp = atmosphere.temperature + 30
@@ -40,14 +27,14 @@
 	repopulate_types |= M.type
 
 /obj/effect/overmap/visitable/sector/exoplanet/proc/handle_repopulation()
-	for (var/i = 1 to round(max_animal_count - animals.len))
+	for (var/i = 1 to round(max_animal_count - length(animals)))
 		if (prob(10))
 			var/turf/simulated/T = pick_area_turf(planetary_area, list(/proc/not_turf_contains_dense_objects))
 			var/mob_type = pick(repopulate_types)
 			var/mob/S = new mob_type(T)
 			track_animal(S)
 			adapt_animal(S)
-	if (animals.len >= max_animal_count)
+	if (length(animals) >= max_animal_count)
 		repopulating = 0
 
 /obj/effect/overmap/visitable/sector/exoplanet/proc/track_animal(mob/A)
@@ -58,7 +45,7 @@
 /obj/effect/overmap/visitable/sector/exoplanet/proc/get_random_species_name()
 	return pick("nol","shan","can","fel","xor")+pick("a","e","o","t","ar")+pick("ian","oid","ac","ese","inian","rd")
 
-/obj/effect/overmap/visitable/sector/exoplanet/proc/rename_species(var/species_type, var/newname, var/force = FALSE)
+/obj/effect/overmap/visitable/sector/exoplanet/proc/rename_species(species_type, newname, force = FALSE)
 	if (species[species_type] && !force)
 		return FALSE
 

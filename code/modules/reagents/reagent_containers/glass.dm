@@ -18,7 +18,7 @@
 
 
 	var/list/can_be_placed_into = list(
-		/obj/machinery/chem_master/,
+		/obj/machinery/chem_master,
 		/obj/machinery/chem_master/condimaster,
 		/obj/machinery/chemical_dispenser,
 		/obj/machinery/reagentgrinder,
@@ -30,12 +30,11 @@
 		/obj/item/grenade/chem_grenade,
 		/mob/living/bot/medbot,
 		/obj/item/storage/secure/safe,
-		/obj/structure/iv_drip,
 		/obj/machinery/disposal,
-		/mob/living/simple_animal/friendly/cow,
+		/mob/living/simple_animal/passive/cow,
 		/mob/living/simple_animal/hostile/retaliate/goat,
 		/obj/machinery/sleeper,
-		/obj/machinery/smartfridge/,
+		/obj/machinery/smartfridge,
 		/obj/machinery/biogenerator,
 		/obj/machinery/constructable_frame,
 		/obj/machinery/radiocarbon_spectrometer
@@ -50,20 +49,20 @@
 	if(distance > 2)
 		return
 
-	if(reagents && reagents.reagent_list.len)
-		to_chat(user, "<span class='notice'>It contains [reagents.total_volume] units of liquid.</span>")
+	if(reagents && length(reagents.reagent_list))
+		to_chat(user, SPAN_NOTICE("It contains [reagents.total_volume] units of liquid."))
 	else
-		to_chat(user, "<span class='notice'>It is empty.</span>")
+		to_chat(user, SPAN_NOTICE("It is empty."))
 	if(!is_open_container())
-		to_chat(user, "<span class='notice'>The airtight lid seals it completely.</span>")
+		to_chat(user, SPAN_NOTICE("The airtight lid seals it completely."))
 
 /obj/item/reagent_containers/glass/attack_self()
 	..()
 	if(is_open_container())
-		to_chat(usr, "<span class = 'notice'>You put the lid on \the [src].</span>")
+		to_chat(usr, SPAN_NOTICE("You put the lid on \the [src]."))
 		atom_flags ^= ATOM_FLAG_OPEN_CONTAINER
 	else
-		to_chat(usr, "<span class = 'notice'>You take the lid off \the [src].</span>")
+		to_chat(usr, SPAN_NOTICE("You take the lid off \the [src]."))
 		atom_flags |= ATOM_FLAG_OPEN_CONTAINER
 	update_icon()
 
@@ -74,16 +73,16 @@
 		return
 	return 0
 
-/obj/item/reagent_containers/glass/standard_feed_mob(var/mob/user, var/mob/target)
+/obj/item/reagent_containers/glass/standard_feed_mob(mob/user, mob/target)
 	if(!is_open_container())
-		to_chat(user, "<span class='notice'>You need to open \the [src] first.</span>")
+		to_chat(user, SPAN_NOTICE("You need to open \the [src] first."))
 		return 1
 	if(user.a_intent == I_HURT)
 		return 1
 	return ..()
 
-/obj/item/reagent_containers/glass/self_feed_message(var/mob/user)
-	to_chat(user, "<span class='notice'>You swallow a gulp from \the [src].</span>")
+/obj/item/reagent_containers/glass/self_feed_message(mob/user)
+	to_chat(user, SPAN_NOTICE("You swallow a gulp from \the [src]."))
 	if(user.has_personal_goal(/datum/goal/achievement/specific_object/drink))
 		for(var/datum/reagent/R in reagents.reagent_list)
 			user.update_personal_goal(/datum/goal/achievement/specific_object/drink, R.type)
@@ -95,7 +94,7 @@
 		return
 
 	if (prob(80))
-		if (reagents.reagent_list.len > 0)
+		if (length(reagents.reagent_list) > 0)
 			visible_message(
 				SPAN_DANGER("\The [src] shatters from the impact and spills all its contents!"),
 				SPAN_DANGER("You hear the sound of glass shattering!")
@@ -110,7 +109,7 @@
 		new /obj/item/material/shard(src.loc)
 		qdel(src)
 	else
-		if (reagents.reagent_list.len > 0)
+		if (length(reagents.reagent_list) > 0)
 			visible_message(
 				SPAN_DANGER("\The [src] bounces and spills all its contents!"),
 				SPAN_WARNING("You hear the sound of glass hitting something.")
@@ -128,6 +127,7 @@
 		return TRUE
 	splashtarget(target, user)
 
+
 /obj/item/reagent_containers/glass/beaker
 	name = "beaker"
 	desc = "A beaker."
@@ -137,47 +137,56 @@
 	center_of_mass = "x=15;y=10"
 	matter = list(MATERIAL_GLASS = 500)
 
-	New()
-		..()
-		desc += " It can hold up to [volume] units."
 
-	on_reagent_change()
-		update_icon()
+/obj/item/reagent_containers/glass/beaker/New()
+	..()
+	desc += " It can hold up to [volume] units."
 
-	pickup(mob/user)
-		..()
-		update_icon()
 
-	dropped(mob/user)
-		..()
-		update_icon()
-
-	attack_hand()
-		..()
-		update_icon()
-
+/obj/item/reagent_containers/glass/beaker/on_reagent_change()
 	update_icon()
-		overlays.Cut()
 
-		if(reagents.total_volume)
-			var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]10")
 
-			var/percent = round((reagents.total_volume / volume) * 100)
-			switch(percent)
-				if(0 to 9)		filling.icon_state = "[icon_state]-10"
-				if(10 to 24) 	filling.icon_state = "[icon_state]10"
-				if(25 to 49)	filling.icon_state = "[icon_state]25"
-				if(50 to 74)	filling.icon_state = "[icon_state]50"
-				if(75 to 79)	filling.icon_state = "[icon_state]75"
-				if(80 to 90)	filling.icon_state = "[icon_state]80"
-				if(91 to INFINITY)	filling.icon_state = "[icon_state]100"
+/obj/item/reagent_containers/glass/beaker/pickup(mob/user)
+	..()
+	update_icon()
 
-			filling.color = reagents.get_color()
-			overlays += filling
+/obj/item/reagent_containers/glass/beaker/dropped(mob/user)
+	..()
+	update_icon()
 
-		if (!is_open_container())
-			var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
-			overlays += lid
+
+/obj/item/reagent_containers/glass/beaker/attack_hand()
+	..()
+	update_icon()
+
+
+/obj/item/reagent_containers/glass/beaker/on_update_icon()
+	overlays.Cut()
+	if (reagents.total_volume)
+		var/image/filling = image('icons/obj/reagentfillings.dmi', src, "[icon_state]10")
+		var/percent = round((reagents.total_volume / volume) * 100)
+		switch(percent)
+			if (0 to 9)
+				filling.icon_state = "[icon_state]-10"
+			if (10 to 24)
+				filling.icon_state = "[icon_state]10"
+			if (25 to 49)
+				filling.icon_state = "[icon_state]25"
+			if (50 to 74)
+				filling.icon_state = "[icon_state]50"
+			if (75 to 79)
+				filling.icon_state = "[icon_state]75"
+			if (80 to 90)
+				filling.icon_state = "[icon_state]80"
+			if (91 to INFINITY)
+				filling.icon_state = "[icon_state]100"
+		filling.color = reagents.get_color()
+		overlays += filling
+	if (!is_open_container())
+		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
+		overlays += lid
+
 
 /obj/item/reagent_containers/glass/beaker/large
 	name = "large beaker"
@@ -253,17 +262,18 @@
 	matter = list(MATERIAL_GLASS = 5000, MATERIAL_PLASTIC = 2500)
 	volume = 120
 
-/obj/item/reagent_containers/glass/beaker/cryoxadone
-	New()
-		..()
-		reagents.add_reagent(/datum/reagent/cryoxadone, 30)
-		update_icon()
 
-/obj/item/reagent_containers/glass/beaker/sulphuric
-	New()
-		..()
-		reagents.add_reagent(/datum/reagent/acid, 60)
-		update_icon()
+/obj/item/reagent_containers/glass/beaker/cryoxadone/New()
+	..()
+	reagents.add_reagent(/datum/reagent/cryoxadone, 30)
+	update_icon()
+
+
+/obj/item/reagent_containers/glass/beaker/sulphuric/New()
+	..()
+	reagents.add_reagent(/datum/reagent/acid, 60)
+	update_icon()
+
 
 /obj/item/reagent_containers/glass/bucket
 	name = "bucket"
@@ -288,13 +298,13 @@
 	matter = list(MATERIAL_WOOD = 280)
 	volume = 200
 
-/obj/item/reagent_containers/glass/bucket/attackby(var/obj/D, mob/user as mob)
+/obj/item/reagent_containers/glass/bucket/attackby(obj/D, mob/user as mob)
 	if(istype(D, /obj/item/mop))
 		if(reagents.total_volume < 1)
-			to_chat(user, "<span class='warning'>\The [src] is empty!</span>")
+			to_chat(user, SPAN_WARNING("\The [src] is empty!"))
 		else
 			reagents.trans_to_obj(D, 5)
-			to_chat(user, "<span class='notice'>You wet \the [D] in \the [src].</span>")
+			to_chat(user, SPAN_NOTICE("You wet \the [D] in \the [src]."))
 			playsound(loc, 'sound/effects/slosh.ogg', 25, 1)
 		return
 	else

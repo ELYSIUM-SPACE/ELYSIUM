@@ -1,4 +1,4 @@
-/mob/living/carbon/human/verb/give(var/mob/living/target in view(1)-usr)
+/mob/living/carbon/human/verb/give(mob/living/target in view(1)-usr)
 	set category = "IC"
 	set name = "Give"
 
@@ -31,12 +31,12 @@
 		to_chat(target, SPAN_WARNING("\The [usr] moved too far away."))
 		return
 
-	if(I.loc != usr || (usr.l_hand != I && usr.r_hand != I))
+	if (!usr.IsHolding(I))
 		to_chat(usr, SPAN_WARNING("You need to keep the item in your hands."))
 		to_chat(target, SPAN_WARNING("\The [usr] seems to have given up on passing \the [I] to you."))
 		return
 
-	if(target.r_hand != null && target.l_hand != null)
+	if (!target.HasFreeHand())
 		to_chat(target, SPAN_WARNING("Your hands are full."))
 		to_chat(usr, SPAN_WARNING("Their hands are full."))
 		return

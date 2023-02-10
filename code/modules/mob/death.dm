@@ -15,9 +15,9 @@
 	flick(anim, animation)
 	if(do_gibs) gibs(loc, dna)
 
-	addtimer(CALLBACK(src, .proc/check_delete, animation), 15)
+	addtimer(new Callback(src, .proc/check_delete, animation), 15)
 
-/mob/proc/check_delete(var/atom/movable/overlay/animation)
+/mob/proc/check_delete(atom/movable/overlay/animation)
 	if(animation)	qdel(animation)
 	if(src)			qdel(src)
 
@@ -44,7 +44,7 @@
 	new remains(loc)
 
 	remove_from_dead_mob_list()
-	addtimer(CALLBACK(src, .proc/check_delete, animation), 15)
+	addtimer(new Callback(src, .proc/check_delete, animation), 15)
 
 
 /mob/proc/death(gibbed,deathmessage="seizes up and falls limp...", show_dead_message = "You have died.")
@@ -72,7 +72,8 @@
 	drop_r_hand()
 	drop_l_hand()
 
-	SSstatistics.report_death(src)
+	if (mind?.assigned_job && mind.assigned_job.department_flag && !player_is_antag(mind))
+		GLOB.crew_death_count += 1
 
 	//TODO:  Change death state to health_dead for all these icon files.  This is a stop gap.
 	if(healths)
@@ -85,12 +86,12 @@
 
 	timeofdeath = world.time
 	if(mind)
-		mind.StoreMemory("Time of death: [stationtime2text()]", /decl/memory_options/system)
+		mind.StoreMemory("Time of death: [stationtime2text()]", /singleton/memory_options/system)
 	switch_from_living_to_dead_mob_list()
 
 	update_icon()
 
 	if(SSticker.mode)
 		SSticker.mode.check_win()
-	to_chat(src,"<span class='deadsay'>[show_dead_message]</span>")
+	to_chat(src,SPAN_CLASS("deadsay", "[show_dead_message]"))
 	return 1

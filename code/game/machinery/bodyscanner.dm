@@ -10,10 +10,10 @@
 	anchored = TRUE
 	idle_power_usage = 60
 	active_power_usage = 10000	//10 kW. It's a big all-body scanner.
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	uncreated_component_parts = null
 	stat_immune = 0
-	
+
 	machine_name = "body scanner"
 	machine_desc = "A full-body scanning suite that provides a complete health assessment of a patient placed inside. Requires an adjacent console to operate."
 
@@ -26,7 +26,7 @@
 	..()
 	go_out()
 	user.visible_message(
-		SPAN_NOTICE("\The [user] climbs out of \the [initial(name)]."), 
+		SPAN_NOTICE("\The [user] climbs out of \the [initial(name)]."),
 		SPAN_NOTICE("You climb out of \the [initial(name)].")
 	)
 
@@ -60,7 +60,7 @@
 		return
 	usr.visible_message(
 		SPAN_NOTICE("\The [usr] climbs into \the [src]."),
-		SPAN_NOTICE("You climb into \the [src]."), 
+		SPAN_NOTICE("You climb into \the [src]."),
 		SPAN_ITALIC("You hear footsteps on metal, cloth rustling, and then a pressurized hiss.")
 	)
 	move_target_inside(usr,usr)
@@ -85,7 +85,7 @@
 	update_icon()
 	SetName(initial(name))
 
-/obj/machinery/bodyscanner/state_transition(var/decl/machine_construction/default/new_state)
+/obj/machinery/bodyscanner/state_transition(singleton/machine_construction/default/new_state)
 	. = ..()
 	if(istype(new_state))
 		updateUsrDialog()
@@ -132,7 +132,7 @@
 /obj/machinery/bodyscanner/on_update_icon()
 	if(!occupant)
 		icon_state = "body_scanner_0"
-	else if(stat & (BROKEN|NOPOWER))
+	else if(inoperable())
 		icon_state = "body_scanner_1"
 	else
 		icon_state = "body_scanner_2"
@@ -155,24 +155,24 @@
 		SPAN_NOTICE("\The [user] begins placing \the [target] into \the [src]."),
 		SPAN_NOTICE("You start placing \the [target] into \the [src].")
 	)
-	if(!do_after(user, 30, src) || !user_can_move_target_inside(target, user))
+	if(!do_after(user, 3 SECONDS, src, DO_PUBLIC_UNIQUE) || !user_can_move_target_inside(target, user))
 		return
 	move_target_inside(target,user)
 
 /obj/machinery/bodyscanner/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(EX_ACT_DEVASTATING)
 			for(var/atom/movable/A as mob|obj in src)
 				A.dropInto(loc)
 				A.ex_act(severity)
 			qdel(src)
-		if(2.0)
+		if(EX_ACT_HEAVY)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
 					A.dropInto(loc)
 					A.ex_act(severity)
 				qdel(src)
-		if(3.0)
+		if(EX_ACT_LIGHT)
 			if (prob(25))
 				for(var/atom/movable/A as mob|obj in src)
 					A.dropInto(loc)

@@ -29,7 +29,7 @@
 	var/max_damage = 22
 	var/loose = FALSE //goose loose status
 
-	ai_holder_type = /datum/ai_holder/simple_animal/retaliate/goose
+	ai_holder = /datum/ai_holder/simple_animal/retaliate/goose
 	say_list_type = /datum/say_list/goose
 
 
@@ -44,7 +44,7 @@
 	gender = PLURAL
 	attack_verb = list("smacked around")
 	force = 0
-	damtype = BRUTE
+	damtype = DAMAGE_BRUTE
 	canremove = FALSE
 
 /mob/living/simple_animal/hostile/retaliate/goose/on_update_icon()
@@ -58,7 +58,7 @@
 	. = ..()
 	update_icon()
 
-/mob/living/simple_animal/hostile/retaliate/goose/proc/enrage(var/potency)
+/mob/living/simple_animal/hostile/retaliate/goose/proc/enrage(potency)
 	var/obj/item/W = get_natural_weapon()
 	if(W)
 		W.force = min((W.force + potency), max_damage)

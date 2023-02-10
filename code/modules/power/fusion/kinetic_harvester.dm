@@ -10,7 +10,7 @@
 	var/list/stored =     list()
 	var/list/harvesting = list()
 	var/obj/machinery/power/fusion_core/harvest_from
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	uncreated_component_parts = null
 	stat_immune = 0
 
@@ -27,7 +27,7 @@
 	ui_interact(user)
 	return TRUE
 
-/obj/machinery/kinetic_harvester/attackby(var/obj/item/thing, var/mob/user)
+/obj/machinery/kinetic_harvester/attackby(obj/item/thing, mob/user)
 	if(isMultitool(thing))
 		var/datum/extension/local_network_member/lanm = get_extension(src, /datum/extension/local_network_member)
 		if(lanm.get_new_tag(user))
@@ -40,13 +40,13 @@
 	var/datum/extension/local_network_member/lanm = get_extension(src, /datum/extension/local_network_member)
 	var/datum/local_network/lan = lanm.get_local_network()
 
-	if(lan)	
+	if(lan)
 		var/list/fusion_cores = lan.get_devices(/obj/machinery/power/fusion_core)
-		if(fusion_cores && fusion_cores.len)
+		if(fusion_cores && length(fusion_cores))
 			harvest_from = fusion_cores[1]
 	return harvest_from
 
-/obj/machinery/kinetic_harvester/ui_interact(var/mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/kinetic_harvester/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 
 	if(!harvest_from && !find_core())
 		to_chat(user, SPAN_WARNING("This machine cannot locate a fusion core. Please ensure the machine is correctly configured to share a fusion plant network."))
@@ -94,14 +94,14 @@
 			harvesting.Cut()
 
 /obj/machinery/kinetic_harvester/on_update_icon()
-	if(stat & (BROKEN|NOPOWER))
+	if(inoperable())
 		icon_state = "broken"
 	else if(use_power >= POWER_USE_ACTIVE)
 		icon_state = "on"
 	else
 		icon_state = "off"
 
-/obj/machinery/kinetic_harvester/OnTopic(var/mob/user, var/href_list, var/datum/topic_state/state)
+/obj/machinery/kinetic_harvester/OnTopic(mob/user, href_list, datum/topic_state/state)
 	if(href_list["remove_mat"])
 		var/mat = href_list["remove_mat"]
 		var/material/material = SSmaterials.get_material_by_name(mat)

@@ -1,9 +1,15 @@
-/obj/item/device/radio/headset/torchnanotrasen
+/obj/item/device/radio/headset/science
 	name = "research headset"
 	desc = "A headset for researchers."
 	icon_state = "sci_headset"
 	item_state = "headset"
-	ks1type = /obj/item/device/encryptionkey/headset_torchnt
+	ks1type = /obj/item/device/encryptionkey/science
+
+/obj/item/device/radio/headset/science/alt
+	name = "research headset"
+	desc = "A headset for researchers."
+	icon_state = "sci_headset_alt"
+	item_state = "sci_headset_alt"
 
 /obj/item/device/radio/headset/heads/torchexec
 	name = "executive headset"
@@ -81,6 +87,19 @@
 	name = "deck chief's bowman headset"
 	item_state = "cargo_headset_alt"
 	icon_state = "cargo_headset_alt"
+	max_keys = 3
+
+/obj/item/device/radio/headset/headset_chief_steward
+	name = "chief steward's radio headset"
+	desc = "The headset of the menu maker."
+	icon_state = "srv_headset"
+	item_state = "headset"
+	ks1type = /obj/item/device/encryptionkey/headset_chief_steward
+
+/obj/item/device/radio/headset/headset_chief_steward/alt
+	name = "chief steward's bowman headset"
+	icon_state = "srv_headset_alt"
+	item_state = "headset"
 	max_keys = 3
 
 /obj/item/device/radio/headset/sea

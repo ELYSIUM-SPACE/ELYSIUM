@@ -15,7 +15,7 @@
 	var/access = list()
 	access = access_crate_cash
 	var/worth = 0
-	var/global/denominations = list(1000,500,200,100,50,20,10,1)
+	var/static/denominations = list(1000,500,200,100,50,20,10,1)
 
 /obj/item/spacecash/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/spacecash))
@@ -35,7 +35,7 @@
 			var/mob/living/carbon/human/h_user = user
 			h_user.drop_from_inventory(bundle)
 			h_user.put_in_hands(bundle)
-		to_chat(user, "<span class='notice'>You add [src.worth] [GLOB.using_map.local_currency_name] worth of money to the bundles.<br>It holds [bundle.worth] [GLOB.using_map.local_currency_name] now.</span>")
+		to_chat(user, SPAN_NOTICE("You add [src.worth] [GLOB.using_map.local_currency_name] worth of money to the bundles.<br>It holds [bundle.worth] [GLOB.using_map.local_currency_name] now."))
 		qdel(src)
 
 	else if(istype(W, /obj/item/gun/launcher/money))
@@ -76,10 +76,11 @@
 
 	for(var/A in images)
 		var/image/banknote = image('icons/obj/items.dmi', A)
-		var/matrix/M = matrix()
-		M.Translate(rand(-6, 6), rand(-4, 8))
-		M.Turn(pick(-45, -27.5, 0, 0, 0, 0, 0, 0, 0, 27.5, 45))
-		banknote.transform = M
+		banknote.SetTransform(
+			rotation = pick(-45, -27.5, 0, 0, 0, 0, 0, 0, 0, 27.5, 45),
+			offset_x = rand(-6, 6),
+			offset_y = rand(-4, 8)
+		)
 		src.overlays += banknote
 
 	src.desc = "They are worth [worth] [GLOB.using_map.local_currency_name]."
@@ -88,7 +89,7 @@
 	else
 		src.SetName("pile of [worth] [GLOB.using_map.local_currency_name]")
 
-	if(overlays.len <= 2)
+	if(length(overlays) <= 2)
 		w_class = ITEM_SIZE_TINY
 	else
 		w_class = ITEM_SIZE_SMALL
@@ -96,7 +97,7 @@
 /obj/item/spacecash/bundle/attack_hand(mob/user as mob)
 	if (user.get_inactive_hand() == src)
 		var/amount = input(usr, "How many [GLOB.using_map.local_currency_name] do you want to take? (0 to [src.worth])", "Take Money", 20) as num
-		amount = round(Clamp(amount, 0, src.worth))
+		amount = round(clamp(amount, 0, src.worth))
 		if (amount==0) return 0
 
 		src.worth -= amount
@@ -163,10 +164,10 @@
 	desc = "It's worth 1000 Thalers."
 	worth = 1000
 
-proc/spawn_money(var/sum, spawnloc, mob/living/carbon/human/human_user as mob)
+/proc/spawn_money(sum, spawnloc, mob/living/carbon/human/human_user as mob)
 	if(sum in list(1000,500,200,100,50,20,10,1))
 		var/cash_type = text2path("/obj/item/spacecash/bundle/c[sum]")
-		var/obj/cash = new cash_type (usr.loc)
+		var/obj/cash = new cash_type (spawnloc)
 		if(ishuman(human_user) && !human_user.get_active_hand())
 			human_user.put_in_hands(cash)
 	else
@@ -186,4 +187,4 @@ proc/spawn_money(var/sum, spawnloc, mob/living/carbon/human/human_user as mob)
 /obj/item/spacecash/ewallet/examine(mob/user, distance)
 	. = ..(user)
 	if (distance > 2 && user != loc) return
-	to_chat(user, "<span class='notice'>Charge card's owner: [src.owner_name]. [GLOB.using_map.local_currency_name] remaining: [src.worth].</span>")
+	to_chat(user, SPAN_NOTICE("Charge card's owner: [src.owner_name]. [GLOB.using_map.local_currency_name] remaining: [src.worth]."))

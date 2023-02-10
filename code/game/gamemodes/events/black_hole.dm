@@ -8,7 +8,8 @@
 	density = FALSE
 	anchored = TRUE
 
-/obj/effect/bhole/New()
+/obj/effect/bhole/Initialize()
+	. = ..()
 	spawn(4)
 		controller()
 
@@ -31,23 +32,23 @@
 			ST.ChangeTurf(base_turf)
 
 		sleep(6)
-		grav(10, 4, 10, 0 )
+		grav(10, EX_ACT_LIGHT, 10, 0 )
 		sleep(6)
-		grav( 8, 4, 10, 0 )
+		grav( 8, EX_ACT_LIGHT, 10, 0 )
 		sleep(6)
-		grav( 9, 4, 10, 0 )
+		grav( 9, EX_ACT_LIGHT, 10, 0 )
 		sleep(6)
-		grav( 7, 3, 40, 1 )
+		grav( 7, EX_ACT_HEAVY, 40, 1 )
 		sleep(6)
-		grav( 5, 3, 40, 1 )
+		grav( 5, EX_ACT_HEAVY, 40, 1 )
 		sleep(6)
-		grav( 6, 3, 40, 1 )
+		grav( 6, EX_ACT_HEAVY, 40, 1 )
 		sleep(6)
-		grav( 4, 2, 50, 6 )
+		grav( 4, EX_ACT_DEVASTATING, 50, 6 )
 		sleep(6)
-		grav( 3, 2, 50, 6 )
+		grav( 3, EX_ACT_DEVASTATING, 50, 6 )
 		sleep(6)
-		grav( 2, 2, 75,25 )
+		grav( 2, EX_ACT_DEVASTATING, 75,25 )
 		sleep(6)
 
 
@@ -58,7 +59,7 @@
 			step(src,pick(GLOB.alldirs))
 			src.anchored = TRUE
 
-/obj/effect/bhole/proc/grav(var/r, var/ex_act_force, var/pull_chance, var/turf_removal_chance)
+/obj/effect/bhole/proc/grav(r, ex_act_force, pull_chance, turf_removal_chance)
 	if(!isturf(loc))	//blackhole cannot be contained inside anything. Weird stuff might happen
 		qdel(src)
 		return
@@ -69,7 +70,7 @@
 		affect_coord(x-r, y-t, ex_act_force, pull_chance, turf_removal_chance)
 	return
 
-/obj/effect/bhole/proc/affect_coord(var/x, var/y, var/ex_act_force, var/pull_chance, var/turf_removal_chance)
+/obj/effect/bhole/proc/affect_coord(x, y, ex_act_force, pull_chance, turf_removal_chance)
 	//Get turf at coordinate
 	var/turf/T = locate(x, y, z)
 	if(isnull(T))	return

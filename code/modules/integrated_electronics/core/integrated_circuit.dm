@@ -52,16 +52,16 @@ a creative player the means to solve many problems.  Circuits are held inside an
 /obj/item/integrated_circuit/proc/any_examine(mob/user)
 	return
 
-/obj/item/integrated_circuit/proc/attackby_react(var/atom/movable/A,mob/user)
+/obj/item/integrated_circuit/proc/attackby_react(atom/movable/A,mob/user)
 	return
 
-/obj/item/integrated_circuit/proc/sense(var/atom/movable/A,mob/user,prox)
+/obj/item/integrated_circuit/proc/sense(atom/movable/A,mob/user,prox)
 	return
 
 /obj/item/integrated_circuit/proc/OnICTopic(href_list, user)
 	return
 
-/obj/item/integrated_circuit/proc/get_topic_data(var/mob/user)
+/obj/item/integrated_circuit/proc/get_topic_data(mob/user)
 	return
 
 /obj/item/integrated_circuit/proc/check_interactivity(mob/user)
@@ -101,6 +101,7 @@ a creative player the means to solve many problems.  Circuits are held inside an
 	for(var/k in 1 to LAZYLEN(activators))
 		var/datum/integrated_io/activate/A = activators[k]
 		A.scramble()
+	..()
 
 
 /obj/item/integrated_circuit/verb/rename_component()
@@ -116,7 +117,7 @@ a creative player the means to solve many problems.  Circuits are held inside an
 	if(check_interactivity(M))
 		if(!input)
 			input = name
-		to_chat(M, "<span class='notice'>The circuit '[name]' is now labeled '[input]'.</span>")
+		to_chat(M, SPAN_NOTICE("The circuit '[name]' is now labeled '[input]'."))
 		displayed_name = input
 
 /obj/item/integrated_circuit/nano_host()
@@ -170,8 +171,8 @@ a creative player the means to solve many problems.  Circuits are held inside an
 					if(io)
 						words += "<b><a href='?src=\ref[src];act=wire;pin=\ref[io]'>[io.display_pin_type()] [io.name]</a> \
 						<a href='?src=\ref[src];act=data;pin=\ref[io]'>[io.display_data(io.data)]</a></b><br>"
-						if(io.linked.len)
-							for(var/k in 1 to io.linked.len)
+						if(length(io.linked))
+							for(var/k in 1 to length(io.linked))
 								var/datum/integrated_io/linked = io.linked[k]
 								words += "<a href='?src=\ref[src];act=unwire;pin=\ref[io];link=\ref[linked]'>[linked]</a> \
 								@ <a href='?src=\ref[linked.holder]'>[linked.holder.displayed_name]</a><br>"
@@ -189,8 +190,8 @@ a creative player the means to solve many problems.  Circuits are held inside an
 					if(io)
 						words += "<b><a href='?src=\ref[src];act=wire;pin=\ref[io]'>[io.display_pin_type()] [io.name]</a> \
 						<a href='?src=\ref[src];act=data;pin=\ref[io]'>[io.display_data(io.data)]</a></b><br>"
-						if(io.linked.len)
-							for(var/k in 1 to io.linked.len)
+						if(length(io.linked))
+							for(var/k in 1 to length(io.linked))
 								var/datum/integrated_io/linked = io.linked[k]
 								words += "<a href='?src=\ref[src];act=unwire;pin=\ref[io];link=\ref[linked]'>[linked]</a> \
 								@ <a href='?src=\ref[linked.holder]'>[linked.holder.displayed_name]</a><br>"
@@ -204,13 +205,13 @@ a creative player the means to solve many problems.  Circuits are held inside an
 		var/datum/integrated_io/io = activators[i]
 		var/words = list()
 
-		words += "<b><a href='?src=\ref[src];act=wire;pin=\ref[io]'><font color='FF0000'>[io]</font></a> "
-		words += "<a href='?src=\ref[src];act=data;pin=\ref[io]'><font color='FF0000'>[io.data?"\<PULSE OUT\>":"\<PULSE IN\>"]</font></a></b><br>"
-		if(io.linked.len)
-			for(var/k in 1 to io.linked.len)
+		words += "<b><a href='?src=\ref[src];act=wire;pin=\ref[io]'>[SPAN_COLOR("#ff0000", io)]</a> "
+		words += "<a href='?src=\ref[src];act=data;pin=\ref[io]'>[SPAN_COLOR("#ff0000", io.data ? "\<PULSE OUT\>" : "\<PULSE IN\>")]</a></b><br>"
+		if(length(io.linked))
+			for(var/k in 1 to length(io.linked))
 				var/datum/integrated_io/linked = io.linked[k]
-				words += "<a href='?src=\ref[src];act=unwire;pin=\ref[io];link=\ref[linked]'><font color='FF0000'>[linked]</font></a> \
-				@ <a href='?src=\ref[linked.holder]'><font color='FF0000'>[linked.holder.displayed_name]</font></a><br>"
+				words += "<a href='?src=\ref[src];act=unwire;pin=\ref[io];link=\ref[linked]'>[SPAN_COLOR("#ff0000", linked)]</a> \
+				@ <a href='?src=\ref[linked.holder]'>[SPAN_COLOR("#ff0000", linked.holder.displayed_name)]</a><br>"
 
 		HTML += "<tr>"
 		HTML += "<td colspan='3' align='center'>[jointext(words, null)]</td>"
@@ -219,15 +220,15 @@ a creative player the means to solve many problems.  Circuits are held inside an
 	HTML += "</table>"
 	HTML += "</div>"
 
-	HTML += "<br><font color='0000AA'>Complexity: [complexity]</font>"
-	HTML += "<br><font color='0000AA'>Cooldown per use: [cooldown_per_use/10] sec</font>"
+	HTML += "<br>[SPAN_COLOR("#0000aa", "Complexity: [complexity]")]"
+	HTML += "<br>[SPAN_COLOR("#0000aa", "Cooldown per use: [cooldown_per_use/10] sec")]"
 	if(ext_cooldown)
-		HTML += "<br><font color='0000AA'>External manipulation cooldown: [ext_cooldown/10] sec</font>"
+		HTML += "<br>[SPAN_COLOR("#0000aa", "External manipulation cooldown: [ext_cooldown/10] sec")]"
 	if(power_draw_idle)
-		HTML += "<br><font color='0000AA'>Power Draw: [power_draw_idle] W (Idle)</font>"
+		HTML += "<br>[SPAN_COLOR("#0000aa", "Power Draw: [power_draw_idle] W (Idle)")]"
 	if(power_draw_per_use)
-		HTML += "<br><font color='0000AA'>Power Draw: [power_draw_per_use] W (Active)</font>" // Borgcode says that powercells' checked_use() takes joules as input.
-	HTML += "<br><font color='0000AA'>[extended_desc]</font>"
+		HTML += "<br>[SPAN_COLOR("#0000aa", "Power Draw: [power_draw_per_use] W (Active)")]" // Borgcode says that powercells' checked_use() takes joules as input.
+	HTML += "<br>[SPAN_COLOR("#0000aa", extended_desc)]"
 
 	HTML += "</body></html>"
 	var/HTML_merged = jointext(HTML, null)
@@ -256,7 +257,7 @@ a creative player the means to solve many problems.  Circuits are held inside an
 				pin.handle_wire(linked, held_item, href_list["act"], usr)
 				. = IC_TOPIC_REFRESH
 			else
-				to_chat(usr, "<span class='warning'>You can't do a whole lot without the proper tools.</span>")
+				to_chat(usr, SPAN_WARNING("You can't do a whole lot without the proper tools."))
 				success = FALSE
 			if(success && assembly)
 				assembly.add_allowed_scanner(usr.ckey)
@@ -268,9 +269,9 @@ a creative player the means to solve many problems.  Circuits are held inside an
 				D.afterattack(src, usr, TRUE)
 				. = IC_TOPIC_REFRESH
 			else
-				to_chat(usr, "<span class='warning'>The debugger's 'ref scanner' needs to be on.</span>")
+				to_chat(usr, SPAN_WARNING("The debugger's 'ref scanner' needs to be on."))
 		else
-			to_chat(usr, "<span class='warning'>You need a debugger set to 'ref' mode to do that.</span>")
+			to_chat(usr, SPAN_WARNING("You need a debugger set to 'ref' mode to do that."))
 
 	else if(href_list["refresh"])
 		internal_examine(usr)
@@ -288,9 +289,9 @@ a creative player the means to solve many problems.  Circuits are held inside an
 			disconnect_all()
 			dropInto(loc)
 			playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
-			to_chat(usr, "<span class='notice'>You pop \the [src] out of the case, and slide it out.</span>")
+			to_chat(usr, SPAN_NOTICE("You pop \the [src] out of the case, and slide it out."))
 		else
-			to_chat(usr, "<span class='warning'>You need a screwdriver to remove components.</span>")
+			to_chat(usr, SPAN_WARNING("You need a screwdriver to remove components."))
 		interact_with_assembly(usr)
 		. = IC_TOPIC_REFRESH
 
@@ -300,7 +301,7 @@ a creative player the means to solve many problems.  Circuits are held inside an
 	if(. == IC_TOPIC_REFRESH)
 		interact_with_assembly(usr)
 
-/obj/item/integrated_circuit/proc/interact_with_assembly(var/mob/user)
+/obj/item/integrated_circuit/proc/interact_with_assembly(mob/user)
 	if(assembly)
 		assembly.interact(user)
 		if(assembly.opened)
@@ -332,7 +333,7 @@ a creative player the means to solve many problems.  Circuits are held inside an
 		return TRUE // Battery has enough.
 	return FALSE // Not enough power.
 
-/obj/item/integrated_circuit/proc/check_then_do_work(ord,var/ignore_power = FALSE)
+/obj/item/integrated_circuit/proc/check_then_do_work(ord,ignore_power = FALSE)
 	if(world.time < next_use) 	// All intergrated circuits have an internal cooldown, to protect from spam.
 		return FALSE
 	if(assembly && ext_cooldown && (world.time < assembly.ext_next_use)) 	// Some circuits have external cooldown, to protect from spam.
@@ -401,8 +402,8 @@ a creative player the means to solve many problems.  Circuits are held inside an
 
 	return FALSE
 
-/obj/item/integrated_circuit/proc/added_to_assembly(var/obj/item/device/electronic_assembly/assembly)
+/obj/item/integrated_circuit/proc/added_to_assembly(obj/item/device/electronic_assembly/assembly)
 	return
 
-/obj/item/integrated_circuit/proc/removed_from_assembly(var/obj/item/device/electronic_assembly/assembly)
+/obj/item/integrated_circuit/proc/removed_from_assembly(obj/item/device/electronic_assembly/assembly)
 	return

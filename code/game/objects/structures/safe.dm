@@ -38,9 +38,9 @@ FLOOR SAFES
 /obj/structure/safe/proc/check_unlocked(mob/user as mob, canhear)
 	if(user && canhear)
 		if(tumbler_1_pos == tumbler_1_open)
-			to_chat(user, "<span class='notice'>You hear a [pick("tonk", "krunk", "plunk")] from [src].</span>")
+			to_chat(user, SPAN_NOTICE("You hear a [pick("tonk", "krunk", "plunk")] from [src]."))
 		if(tumbler_2_pos == tumbler_2_open)
-			to_chat(user, "<span class='notice'>You hear a [pick("tink", "krink", "plink")] from [src].</span>")
+			to_chat(user, SPAN_NOTICE("You hear a [pick("tink", "krink", "plink")] from [src]."))
 	if(tumbler_1_pos == tumbler_1_open && tumbler_2_pos == tumbler_2_open)
 		if(user) visible_message("<b>[pick("Spring", "Sprang", "Sproing", "Clunk", "Krunk")]!</b>")
 		return 1
@@ -74,7 +74,7 @@ FLOOR SAFES
 	dat += "<a href='?src=\ref[src];open=1'>[open ? "Close" : "Open"] [src]</a> | <a href='?src=\ref[src];decrement=1'>-</a> [dial * 5] <a href='?src=\ref[src];increment=1'>+</a>"
 	if(open)
 		dat += "<table>"
-		for(var/i = contents.len, i>=1, i--)
+		for(var/i = length(contents), i>=1, i--)
 			var/obj/item/P = contents[i]
 			dat += "<tr><td><a href='?src=\ref[src];retrieve=\ref[P]'>[P.name]</a></td></tr>"
 		dat += "</table></center>"
@@ -86,18 +86,18 @@ FLOOR SAFES
 	var/mob/living/carbon/human/user = usr
 
 	var/canhear = 0
-	if(istype(user.l_hand, /obj/item/clothing/accessory/stethoscope) || istype(user.r_hand, /obj/item/clothing/accessory/stethoscope))
+	if (user.IsHolding(/obj/item/clothing/accessory/stethoscope))
 		canhear = 1
 
 	if(href_list["open"])
 		if(check_unlocked())
-			to_chat(user, "<span class='notice'>You [open ? "close" : "open"] [src].</span>")
+			to_chat(user, SPAN_NOTICE("You [open ? "close" : "open"] [src]."))
 			open = !open
 			update_icon()
 			updateUsrDialog()
 			return
 		else
-			to_chat(user, "<span class='notice'>You can't [open ? "close" : "open"] [src], the lock is engaged!</span>")
+			to_chat(user, SPAN_NOTICE("You can't [open ? "close" : "open"] [src], the lock is engaged!"))
 			return
 
 	if(href_list["decrement"])
@@ -105,11 +105,11 @@ FLOOR SAFES
 		if(dial == tumbler_1_pos + 1 || dial == tumbler_1_pos - 71)
 			tumbler_1_pos = decrement(tumbler_1_pos)
 			if(canhear)
-				to_chat(user, "<span class='notice'>You hear a [pick("clack", "scrape", "clank")] from [src].</span>")
+				to_chat(user, SPAN_NOTICE("You hear a [pick("clack", "scrape", "clank")] from [src]."))
 			if(tumbler_1_pos == tumbler_2_pos + 37 || tumbler_1_pos == tumbler_2_pos - 35)
 				tumbler_2_pos = decrement(tumbler_2_pos)
 				if(canhear)
-					to_chat(user, "<span class='notice'>You hear a [pick("click", "chink", "clink")] from [src].</span>")
+					to_chat(user, SPAN_NOTICE("You hear a [pick("click", "chink", "clink")] from [src]."))
 			check_unlocked(user, canhear)
 		updateUsrDialog()
 		return
@@ -119,11 +119,11 @@ FLOOR SAFES
 		if(dial == tumbler_1_pos - 1 || dial == tumbler_1_pos + 71)
 			tumbler_1_pos = increment(tumbler_1_pos)
 			if(canhear)
-				to_chat(user, "<span class='notice'>You hear a [pick("clack", "scrape", "clank")] from [src].</span>")
+				to_chat(user, SPAN_NOTICE("You hear a [pick("clack", "scrape", "clank")] from [src]."))
 			if(tumbler_1_pos == tumbler_2_pos - 37 || tumbler_1_pos == tumbler_2_pos + 35)
 				tumbler_2_pos = increment(tumbler_2_pos)
 				if(canhear)
-					to_chat(user, "<span class='notice'>You hear a [pick("click", "chink", "clink")] from [src].</span>")
+					to_chat(user, SPAN_NOTICE("You hear a [pick("click", "chink", "clink")] from [src]."))
 			check_unlocked(user, canhear)
 		updateUsrDialog()
 		return
@@ -144,11 +144,11 @@ FLOOR SAFES
 			if(!user.unEquip(I, src))
 				return
 			space += I.w_class
-			to_chat(user, "<span class='notice'>You put [I] in [src].</span>")
+			to_chat(user, SPAN_NOTICE("You put [I] in [src]."))
 			updateUsrDialog()
 			return
 		else
-			to_chat(user, "<span class='notice'>[I] won't fit in [src].</span>")
+			to_chat(user, SPAN_NOTICE("[I] won't fit in [src]."))
 			return
 	else
 		if(istype(I, /obj/item/clothing/accessory/stethoscope))
@@ -156,7 +156,7 @@ FLOOR SAFES
 			return
 
 
-obj/structure/safe/ex_act(severity)
+/obj/structure/safe/ex_act(severity)
 	return
 
 //FLOOR SAFES
@@ -164,7 +164,7 @@ obj/structure/safe/ex_act(severity)
 	name = "floor safe"
 	icon_state = "floorsafe"
 	density = FALSE
-	level = 1	//underfloor
+	level = ATOM_LEVEL_UNDER_TILE
 	layer = BELOW_OBJ_LAYER
 
 /obj/structure/safe/floor/Initialize()
@@ -174,7 +174,7 @@ obj/structure/safe/ex_act(severity)
 		hide(1)
 	update_icon()
 
-/obj/structure/safe/floor/hide(var/intact)
+/obj/structure/safe/floor/hide(intact)
 	set_invisibility(intact ? 101 : 0)
 
 /obj/structure/safe/floor/hides_under_flooring()

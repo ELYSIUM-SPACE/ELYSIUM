@@ -151,11 +151,11 @@
 	species_restricted = null
 	can_add_hidden_item = FALSE
 
-/obj/item/clothing/shoes/clown_shoes/New()
-	..()
+/obj/item/clothing/shoes/clown_shoes/Initialize()
+	. = ..()
 	slowdown_per_slot[slot_shoes]  = 1
 
-/obj/item/clothing/shoes/clown_shoes/handle_movement(var/turf/walking, var/running)
+/obj/item/clothing/shoes/clown_shoes/handle_movement(turf/walking, running)
 	if(running)
 		if(footstep >= 2)
 			footstep = 0
@@ -218,8 +218,8 @@
 	can_add_hidden_item = FALSE
 	can_add_cuffs = FALSE
 
-/obj/item/clothing/shoes/swimmingfins/New()
-	..()
+/obj/item/clothing/shoes/swimmingfins/Initialize()
+	. = ..()
 	slowdown_per_slot[slot_shoes] = 1
 
 /obj/item/clothing/shoes/athletic
@@ -244,7 +244,7 @@
 	desc = "A pair of black high heels."
 	color = COLOR_GRAY15
 
-obj/item/clothing/shoes/heels/red
+/obj/item/clothing/shoes/heels/red
 	name = "red high heels"
 	desc = "A pair of red high heels."
 	color = COLOR_RED
@@ -259,3 +259,10 @@ obj/item/clothing/shoes/heels/red
 /obj/item/clothing/shoes/foamclog/random/New()
 	..()
 	color = get_random_colour()
+
+/obj/item/clothing/shoes/flipflobster
+	name = "flip flobsters"
+	desc = "Made from durable foam resin that retains its spongy feel. These are shaped as lobsters."
+	icon_state = "flipflobster"
+	can_add_hidden_item = FALSE
+	can_add_cuffs = FALSE

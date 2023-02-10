@@ -12,7 +12,7 @@
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	attack_verb = list("attacked", "slashed", "stabbed", "sliced", "torn", "ripped", "diced", "cut")
 
-/obj/item/melee/cultblade/attack(mob/living/M, mob/living/user, var/target_zone)
+/obj/item/melee/cultblade/attack(mob/living/M, mob/living/user, target_zone)
 	if(iscultist(user))
 		return ..()
 
@@ -24,12 +24,12 @@
 		affecting = H.get_organ(zone)
 
 	if(affecting)
-		to_chat(user, "<span class='danger'>An unexplicable force rips through your [affecting.name], tearing the sword from your grasp!</span>")
+		to_chat(user, SPAN_DANGER("An unexplicable force rips through your [affecting.name], tearing the sword from your grasp!"))
 	else
-		to_chat(user, "<span class='danger'>An unexplicable force rips through you, tearing the sword from your grasp!</span>")
+		to_chat(user, SPAN_DANGER("An unexplicable force rips through you, tearing the sword from your grasp!"))
 
 	//random amount of damage between half of the blade's force and the full force of the blade.
-	user.apply_damage(rand(force/2, force), BRUTE, zone, (DAM_SHARP|DAM_EDGE), armor_pen = 100)
+	user.apply_damage(rand(force/2, force), DAMAGE_BRUTE, zone, (DAMAGE_FLAG_SHARP | DAMAGE_FLAG_EDGE), armor_pen = 100)
 	user.Weaken(5)
 
 	if(user.unEquip(src))
@@ -42,7 +42,7 @@
 
 /obj/item/melee/cultblade/pickup(mob/living/user as mob)
 	if(!iscultist(user))
-		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to be rid of this blade quickly.</span>")
+		to_chat(user, SPAN_WARNING("An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to be rid of this blade quickly."))
 		user.make_dizzy(120)
 
 
@@ -109,10 +109,6 @@
 		bomb = ARMOR_BOMB_PADDED
 	)
 
-/obj/item/clothing/suit/cultrobes/magusred/New()
-	..()
-	slowdown_per_slot[slot_wear_suit] = 1
-
 /obj/item/clothing/head/helmet/space/cult
 	name = "cult helmet"
 	desc = "A space worthy helmet used by the followers of Nar-Sie."
@@ -144,7 +140,3 @@
 	)
 	siemens_coefficient = 0.2
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|ARMS|HANDS
-
-/obj/item/clothing/suit/space/cult/New()
-	..()
-	slowdown_per_slot[slot_wear_suit] = 1

@@ -57,8 +57,8 @@
 		activate_pin(3)
 		return
 	var/turf/T = get_turf(assembly)
-	var/target_x = Clamp(get_pin_data(IC_INPUT, 1), 0, world.maxx)
-	var/target_y = Clamp(get_pin_data(IC_INPUT, 2), 0, world.maxy)
+	var/target_x = clamp(get_pin_data(IC_INPUT, 1), 0, world.maxx)
+	var/target_y = clamp(get_pin_data(IC_INPUT, 2), 0, world.maxy)
 	var/turf/A = locate(target_x, target_y, T.z)
 	set_pin_data(IC_OUTPUT, 1, null)
 	if(!A||A==T)
@@ -105,7 +105,7 @@
 
 	var/list/signature_and_data = splittext(Ps, ":")
 
-	if(signature_and_data.len < 2)
+	if(length(signature_and_data) < 2)
 		return
 
 	var/signature = signature_and_data[1]
@@ -125,10 +125,10 @@
 		activate_pin(3)
 		return
 	else
-		var/list/Xn =  new/list(P.len)
-		var/list/Yn =  new/list(P.len)
+		var/list/Xn =  new/list(length(P))
+		var/list/Yn =  new/list(length(P))
 		var/turf/T
-		for(var/i =1 to P.len)
+		for(var/i =1 to length(P))
 			T=P[i]
 			Xn[i] = T.x
 			Yn[i] = T.y

@@ -12,7 +12,7 @@
 
 /obj/machinery/cell_charger/on_update_icon()
 	icon_state = "ccharger[charging ? 1 : 0]"
-	if(charging && !(stat & (BROKEN|NOPOWER)) )
+	if(charging && operable())
 		var/newlevel = 	round(charging.percent() * 4.0 / 99)
 		if(chargelevel != newlevel)
 			overlays.Cut()
@@ -21,7 +21,7 @@
 	else
 		overlays.Cut()
 
-/obj/machinery/cell_charger/examine(var/mob/user, var/distance)
+/obj/machinery/cell_charger/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 5)
 		to_chat(user, "There's [charging ? "a" : "no"] cell in the charger.")
@@ -29,17 +29,17 @@
 			to_chat(user, "Current charge: [charging.charge]")
 
 /obj/machinery/cell_charger/attackby(obj/item/W, mob/user)
-	if(stat & BROKEN)
+	if(MACHINE_IS_BROKEN(src))
 		return
 
 	if(istype(W, /obj/item/cell) && anchored)
 		if(charging)
-			to_chat(user, "<span class='warning'>There is already a cell in the charger.</span>")
+			to_chat(user, SPAN_WARNING("There is already a cell in the charger."))
 			return
 		else
 			var/area/a = get_area(loc)
 			if(a.power_equip == 0) // There's no APC in this area, don't try to cheat power!
-				to_chat(user, "<span class='warning'>The [name] blinks red as you try to insert the cell!</span>")
+				to_chat(user, SPAN_WARNING("The [name] blinks red as you try to insert the cell!"))
 				return
 			if(!user.unEquip(W, src))
 				return
@@ -51,7 +51,7 @@
 		queue_icon_update()
 	else if(isWrench(W))
 		if(charging)
-			to_chat(user, "<span class='warning'>Remove the cell first!</span>")
+			to_chat(user, SPAN_WARNING("Remove the cell first!"))
 			return
 
 		anchored = !anchored
@@ -73,7 +73,7 @@
 		return TRUE
 
 /obj/machinery/cell_charger/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(inoperable())
 		return
 	if(charging)
 		charging.emp_act(severity)
@@ -81,7 +81,7 @@
 
 /obj/machinery/cell_charger/proc/set_power()
 	queue_icon_update()
-	if((stat & (BROKEN|NOPOWER)) || !anchored)
+	if(inoperable() || !anchored)
 		update_use_power(POWER_USE_OFF)
 		return
 	if (charging && !charging.fully_charged())

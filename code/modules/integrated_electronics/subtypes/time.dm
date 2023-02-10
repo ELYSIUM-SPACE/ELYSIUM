@@ -17,7 +17,7 @@
 	power_draw_per_use = 2
 
 /obj/item/integrated_circuit/time/delay/do_work()
-	addtimer(CALLBACK(src, .proc/activate_pin, 2), delay)
+	addtimer(new Callback(src, .proc/activate_pin, 2), delay)
 
 /obj/item/integrated_circuit/time/delay/five_sec
 	name = "five-sec delay circuit"
@@ -64,7 +64,7 @@
 /obj/item/integrated_circuit/time/delay/custom/do_work()
 	var/delay_input = get_pin_data(IC_INPUT, 1)
 	if(delay_input && isnum(delay_input) )
-		var/new_delay = Clamp(delay_input ,1 ,36000) //An hour.
+		var/new_delay = clamp(delay_input ,1 ,36000) //An hour.
 		delay = new_delay
 
 	..()
@@ -98,7 +98,7 @@
 
 /obj/item/integrated_circuit/time/ticker/proc/tick()
 	if(is_running)
-		addtimer(CALLBACK(src, .proc/tick), delay)
+		addtimer(new Callback(src, .proc/tick), delay)
 		if(world.time > next_fire)
 			next_fire = world.time + delay
 			activate_pin(1)
@@ -119,7 +119,7 @@
 /obj/item/integrated_circuit/time/ticker/custom/on_data_written()
 	var/delay_input = get_pin_data(IC_INPUT, 2)
 	if(delay_input && isnum(delay_input) )
-		var/new_delay = Clamp(delay_input ,1 ,1 HOURS)
+		var/new_delay = clamp(delay_input ,1 ,1 HOURS)
 		delay = new_delay
 	..()
 

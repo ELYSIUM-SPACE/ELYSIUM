@@ -1,6 +1,6 @@
 #define WHITELISTFILE "data/whitelist.txt"
 
-var/list/whitelist = list()
+var/global/list/whitelist = list()
 
 /hook/startup/proc/loadWhitelist()
 	if(config.usewhitelist)
@@ -9,14 +9,14 @@ var/list/whitelist = list()
 
 /proc/load_whitelist()
 	whitelist = file2list(WHITELISTFILE)
-	if(!whitelist.len)	whitelist = null
+	if(!length(whitelist))	whitelist = null
 
-/proc/check_whitelist(mob/M /*, var/rank*/)
+/proc/check_whitelist(mob/M /*, rank*/)
 	if(!whitelist)
 		return 0
 	return ("[M.ckey]" in whitelist)
 
-/var/list/alien_whitelist = list()
+var/global/list/alien_whitelist = list()
 
 /hook/startup/proc/loadAlienWhitelist()
 	if(config.usealienwhitelist)
@@ -49,14 +49,16 @@ var/list/whitelist = list()
 				alien_whitelist[row["ckey"]] = list(row["race"])
 	return 1
 
-/proc/is_species_whitelisted(mob/M, var/species_name)
+/proc/is_species_whitelisted(mob/M, species_name)
 	var/datum/species/S = all_species[species_name]
 	return is_alien_whitelisted(M, S)
 
 //todo: admin aliens
-/proc/is_alien_whitelisted(mob/M, var/species)
+/proc/is_alien_whitelisted(mob/M, species)
 	if(!M || !species)
 		return 0
+	if (GLOB.skip_allow_lists)
+		return TRUE
 	if(!config.usealienwhitelist)
 		return 1
 	if(check_rights(R_ADMIN, 0, M))
@@ -76,7 +78,7 @@ var/list/whitelist = list()
 
 	return 0
 
-/proc/whitelist_lookup(var/item, var/ckey)
+/proc/whitelist_lookup(item, ckey)
 	if(!alien_whitelist)
 		return 0
 

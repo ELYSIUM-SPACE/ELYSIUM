@@ -23,12 +23,12 @@
 	playsound(loc, 'sound/effects/bonerattle.ogg', 40)
 
 /obj/structure/skele_stand/attack_hand(mob/user)
-	if(swag.len)
+	if(length(swag))
 		var/obj/item/clothing/C = input("What piece of clothing do you want to remove?", "Skeleton undressing") as null|anything in list_values(swag)
 		if(C)
 			swag -= get_key_by_value(swag, C)
 			user.put_in_hands(C)
-			to_chat(user,"<span class='notice'>You take \the [C] off \the [src]</span>")
+			to_chat(user,SPAN_NOTICE("You take \the [C] off \the [src]"))
 			update_icon()
 	else
 		rattle_bones(user, null)
@@ -38,7 +38,7 @@
 
 /obj/structure/skele_stand/examine(mob/user)
 	. = ..()
-	if(swag.len)
+	if(length(swag))
 		var/list/swagnames = list()
 		for(var/slot in swag)
 			var/obj/item/clothing/C = swag[slot]
@@ -66,7 +66,7 @@
 			slot = slot_wear_mask_str
 		if(slot)
 			if(swag[slot])
-				to_chat(user,"<span class='notice'>There is already that kind of clothing on \the [src].</span>")
+				to_chat(user,SPAN_NOTICE("There is already that kind of clothing on \the [src]."))
 			else if(user.unEquip(W, src))
 				swag[slot] = W
 				update_icon()

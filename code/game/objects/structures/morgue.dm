@@ -30,7 +30,7 @@
 	if (src.connected)
 		src.icon_state = "morgue0"
 	else
-		if (src.contents.len)
+		if (length(src.contents))
 			src.icon_state = "morgue2"
 		else
 			src.icon_state = "morgue1"
@@ -38,20 +38,20 @@
 
 /obj/structure/morgue/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(EX_ACT_DEVASTATING)
 			for(var/atom/movable/A as mob|obj in src)
 				A.forceMove(src.loc)
 				ex_act(severity)
 			qdel(src)
 			return
-		if(2.0)
+		if(EX_ACT_HEAVY)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return
-		if(3.0)
+		if(EX_ACT_LIGHT)
 			if (prob(5))
 				for(var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
@@ -73,7 +73,7 @@
 		src.connected = new /obj/structure/m_tray( src.loc )
 		step(src.connected, src.dir)
 		var/turf/T = get_step(src, src.dir)
-		if (list_find(T.contents, src.connected))
+		if (T.contents.Find(src.connected))
 			src.connected.connected = src
 			src.icon_state = "morgue0"
 			for(var/atom/movable/A as mob|obj in src)
@@ -87,7 +87,7 @@
 	update()
 	return
 
-/obj/structure/morgue/attack_robot(var/mob/user)
+/obj/structure/morgue/attack_robot(mob/user)
 	if(Adjacent(user))
 		return attack_hand(user)
 	else return ..()
@@ -113,7 +113,7 @@
 	src.connected = new /obj/structure/m_tray( src.loc )
 	step(src.connected, EAST)
 	var/turf/T = get_step(src, EAST)
-	if (list_find(T.contents, src.connected))
+	if (T.contents.Find(src.connected))
 		src.connected.connected = src
 		src.icon_state = "morgue0"
 		for(var/atom/movable/A as mob|obj in src)
@@ -159,7 +159,7 @@
 	return
 
 /obj/structure/m_tray/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if ((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || list_find(user.contents, src) || list_find(user.contents, O)))
+	if ((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src) || user.contents.Find(O)))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
@@ -169,7 +169,7 @@
 	if (user != O)
 		for(var/mob/B in viewers(user, 3))
 			if ((B.client && !( B.blinded )))
-				to_chat(B, "<span class='warning'>\The [user] stuffs [O] into [src]!</span>")
+				to_chat(B, SPAN_WARNING("\The [user] stuffs [O] into [src]!"))
 	return
 
 
@@ -200,7 +200,7 @@
 		icon_state = "crema_active"
 	else if (src.connected)
 		src.icon_state = "crema0"
-	else if (src.contents.len)
+	else if (length(src.contents))
 		src.icon_state = "crema2"
 	else
 		src.icon_state = "crema1"
@@ -208,20 +208,20 @@
 
 /obj/structure/crematorium/ex_act(severity)
 	switch(severity)
-		if(1)
+		if(EX_ACT_DEVASTATING)
 			for(var/atom/movable/A as mob|obj in src)
 				A.forceMove(src.loc)
 				ex_act(severity)
 			qdel(src)
 			return
-		if(2)
+		if(EX_ACT_HEAVY)
 			if (prob(50))
 				for(var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					ex_act(severity)
 				qdel(src)
 				return
-		if(3)
+		if(EX_ACT_LIGHT)
 			if (prob(5))
 				for(var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
@@ -232,7 +232,7 @@
 
 /obj/structure/crematorium/attack_hand(mob/user)
 	if(cremating)
-		to_chat(usr, "<span class='warning'>It's locked.</span>")
+		to_chat(usr, SPAN_WARNING("It's locked."))
 		return
 	if(src.connected && (src.locked == FALSE))
 		for(var/atom/movable/A as mob|obj in src.connected.loc)
@@ -246,7 +246,7 @@
 		src.connected = new /obj/structure/c_tray(src.loc)
 		step(src.connected, dir)
 		var/turf/T = get_step(src, dir)
-		if (list_find(T.contents, src.connected))
+		if (T.contents.Find(src.connected))
 			src.connected.connected = src
 			src.icon_state = "crema0"
 			for(var/atom/movable/A as mob|obj in src)
@@ -279,7 +279,7 @@
 	src.connected = new /obj/structure/c_tray( src.loc )
 	step(src.connected, SOUTH)
 	var/turf/T = get_step(src, SOUTH)
-	if (list_find(T.contents, src.connected))
+	if (T.contents.Find(src.connected))
 		src.connected.connected = src
 		src.icon_state = "crema0"
 		for(var/atom/movable/A as mob|obj in src)
@@ -293,15 +293,15 @@
 	if(cremating)
 		return //don't let you cremate something twice or w/e
 
-	if(contents.len <= 0)
-		src.audible_message("<span class='warning'>You hear a hollow crackle.</span>", 1)
+	if(length(contents) <= 0)
+		src.audible_message(SPAN_WARNING("You hear a hollow crackle."), 1)
 		return
 
 	else
 		if(length(search_contents_for(/obj/item/disk/nuclear)))
 			to_chat(loc, "The button's status indicator flashes yellow, indicating that something important is inside the crematorium, and must be removed.")
 			return
-		src.audible_message("<span class='warning'>You hear a roar as the [src] activates.</span>", 1)
+		src.audible_message(SPAN_WARNING("You hear a roar as the [src] activates."), 1)
 
 		cremating = 1
 		locked = 1
@@ -359,7 +359,7 @@
 					else
 						playsound(src, 'sound/effects/ghost2.ogg', 10, 5)
 
-				admin_attack_log(M, A, "Cremated their victim.", "Was cremated.", "cremated alive")
+				admin_attack_log(A, M, "Cremated their victim.", "Was cremated.", "cremated alive")
 				M.audible_message("[M]'s screams cease, as does any movement within the [src]. All that remains is a dull, empty silence.")
 				M.dust()
 
@@ -408,7 +408,7 @@
 	return
 
 /obj/structure/c_tray/MouseDrop_T(atom/movable/O as mob|obj, mob/user as mob)
-	if ((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || list_find(user.contents, src) || list_find(user.contents, O)))
+	if ((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src) || user.contents.Find(O)))
 		return
 	if (!ismob(O) && !istype(O, /obj/structure/closet/body_bag))
 		return
@@ -416,9 +416,7 @@
 		return
 	O.forceMove(src.loc)
 	if (user != O)
-		for(var/mob/B in viewers(user, 3))
-			if ((B.client && !( B.blinded )))
-				to_chat(B, text("<span class='warning'>[] stuffs [] into []!</span>", user, O, src))
+		user.visible_message(SPAN_WARNING("\The [user] stuffs \the [O] into \the [src]!"))
 
 /obj/machinery/button/crematorium
 	name = "crematorium igniter"

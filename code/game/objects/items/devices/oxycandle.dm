@@ -1,7 +1,7 @@
 /obj/item/device/oxycandle
 	name = "oxygen candle"
 	desc = "A steel tube with the words 'OXYGEN - PULL CORD TO IGNITE' stamped on the side.\nA small label reads <span class='warning'>'WARNING: NOT FOR LIGHTING USE. WILL IGNITE FLAMMABLE GASSES'</span>"
-	icon = 'icons/obj/device.dmi'
+	icon = 'icons/obj/oxygen_candle.dmi'
 	icon_state = "oxycandle"
 	item_state = "oxycandle"
 	w_class = ITEM_SIZE_SMALL // Should fit into internal's box or maybe pocket
@@ -20,14 +20,14 @@
 	..()
 	update_icon()
 
-/obj/item/device/oxycandle/afterattack(var/obj/O, var/mob/user, var/proximity)
+/obj/item/device/oxycandle/afterattack(obj/O, mob/user, proximity)
 	if(proximity && istype(O) && on)
 		O.HandleObjectHeating(src, user, 500)
 	..()
 
 /obj/item/device/oxycandle/attack_self(mob/user)
 	if(!on)
-		to_chat(user, "<span class='notice'>You pull the cord and [src] ignites.</span>")
+		to_chat(user, SPAN_NOTICE("You pull the cord and [src] ignites."))
 		on = 1
 		update_icon()
 		playsound(src.loc, activation_sound, 75, 1)

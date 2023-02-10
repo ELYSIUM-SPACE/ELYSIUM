@@ -12,7 +12,7 @@
 	blacklisted_objects = null
 	..()
 
-/datum/goal/achievement/specific_object/update_progress(var/progress)
+/datum/goal/achievement/specific_object/update_progress(progress)
 	if(!success)
 		if(ispath(progress))
 			if(ispath(progress, object_path) || ispath(object_path, progress))
@@ -58,8 +58,8 @@
 
 /datum/goal/achievement/specific_object/pet
 	possible_objects = list(
-		/mob/living/simple_animal/friendly/corgi,
-		/mob/living/simple_animal/friendly/cat
+		/mob/living/simple_animal/passive/corgi,
+		/mob/living/simple_animal/passive/cat
 	)
 
 /datum/goal/achievement/specific_object/pet/update_strings()

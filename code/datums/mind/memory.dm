@@ -1,16 +1,16 @@
 /datum/mind
 	var/list/memories
 
-/mob/proc/StoreMemory(var/memory, var/options)
+/mob/proc/StoreMemory(memory, options)
 	if(!mind)
 		return "There is no mind to store a memory in."
 	. = mind.StoreMemory(memory, options)
 
-/datum/mind/proc/StoreMemory(var/memory, var/options)
-	var/decl/memory_options/MO = decls_repository.get_decl(options || /decl/memory_options/default)
+/datum/mind/proc/StoreMemory(memory, options)
+	var/singleton/memory_options/MO = GET_SINGLETON(options || /singleton/memory_options/default)
 	return MO.Create(src, memory)
 
-/datum/mind/proc/RemoveMemory(var/datum/memory/memory, var/mob/remover)
+/datum/mind/proc/RemoveMemory(datum/memory/memory, mob/remover)
 	if(!memory)
 		return
 
@@ -19,7 +19,7 @@
 	to_chat(remover, SPAN_NOTICE("You have removed a memory."))
 	ShowMemory(remover)
 
-/datum/mind/proc/ClearMemories(var/list/tags)
+/datum/mind/proc/ClearMemories(list/tags)
 	for(var/mem in memories)
 		var/datum/memory/M = mem
 		// If no tags were supplied OR if there is any union between the given tags and memory tags
@@ -27,7 +27,7 @@
 		if(!length(tags) || length(tags & M.tags))
 			LAZYREMOVE(memories, M)
 
-/datum/mind/proc/CopyMemories(var/datum/mind/target)
+/datum/mind/proc/CopyMemories(datum/mind/target)
 	if(!istype(target))
 		return
 
@@ -43,7 +43,7 @@
 		if(antag.is_antagonist(src))
 			. += antag_type
 
-/datum/mind/proc/ShowMemory(var/mob/recipient)
+/datum/mind/proc/ShowMemory(mob/recipient)
 	if(!istype(recipient))
 		return
 
@@ -58,7 +58,7 @@
 			last_owner_name = owner_name
 		output += "[M.memory] <a href='?src=\ref[src];remove_memory=\ref[M]'>\[Remove\]</a>"
 
-	if(objectives.len > 0)
+	if(length(objectives) > 0)
 		output += "<HR><B>Objectives:</B>"
 
 		var/obj_count = 1
@@ -76,14 +76,14 @@
 * Memories *
 ***********/
 /datum/memory
-	var/decl/memory_options/creation_source
+	var/singleton/memory_options/creation_source
 	var/memory        // Sanitized strings expected. Remember to unsanitize if adding editing
 	var/list/tags
 	var/weakref/owner
 	var/_owner_name
 	var/_owner_ckey   // The ckey of the original creator. Shouldn't be overriden once set
 
-/datum/memory/New(var/decl/memory_options/creation_source, var/weakref/owner, var/memory, var/tags)
+/datum/memory/New(singleton/memory_options/creation_source, weakref/owner, memory, tags)
 	..()
 	src.creation_source = creation_source
 	src.owner = owner
@@ -105,7 +105,7 @@
 			owner = null
 	return _owner_name
 
-/datum/memory/proc/Copy(var/datum/mind/target)
+/datum/memory/proc/Copy(datum/mind/target)
 	var/new_tags = creation_source.MemoryTags(target)
 	var/datum/memory/new_memory = new/datum/memory(creation_source, owner, memory, new_tags)
 	new_memory._owner_name = new_memory._owner_name || _owner_name
@@ -122,20 +122,20 @@
 *****************/
 
 // General memory handling
-/decl/memory_options
+/singleton/memory_options
 	var/memory_type = /datum/memory
 
-/decl/memory_options/proc/Validate(var/datum/mind/target)
+/singleton/memory_options/proc/Validate(datum/mind/target)
 	if(!target.current)
 		return "Mind is detached from mob."
 
-/decl/memory_options/proc/MemoryTags(var/datum/mind/target)
+/singleton/memory_options/proc/MemoryTags(datum/mind/target)
 	return
 
-/decl/memory_options/proc/Log(var/message)
+/singleton/memory_options/proc/Log(message)
 	log_and_message_admins(message)
 
-/decl/memory_options/proc/Create(var/datum/mind/target, var/memory)
+/singleton/memory_options/proc/Create(datum/mind/target, memory)
 	var/error = Validate(target)
 	if(error)
 		return error
@@ -147,14 +147,14 @@
 	Log("created a memory")
 
 // Default memory handling
-/decl/memory_options/default
+/singleton/memory_options/default
 	memory_type = /datum/memory/user
 	var/const/memory_limit = 32
 
-/decl/memory_options/default/MemoryTags(var/datum/mind/target)
+/singleton/memory_options/default/MemoryTags(datum/mind/target)
 	return target.MemoryTags()
 
-/decl/memory_options/default/Validate(var/datum/mind/target)
+/singleton/memory_options/default/Validate(datum/mind/target)
 	if((. = ..()))
 		return
 
@@ -168,10 +168,10 @@
 		return "Memory limit reached. A maximum of [memory_limit] user added memories allowed."
 
 // System memory handling
-/decl/memory_options/system
+/singleton/memory_options/system
 	memory_type = /datum/memory/system
 
-/decl/memory_options/system/Log(var/message)
+/singleton/memory_options/system/Log(message)
 	return
 
 /********
@@ -186,7 +186,7 @@
 	else
 		to_chat(src, SPAN_WARNING("There is no mind to retrieve stored memories from."))
 
-/mob/verb/AddMemory(var/msg as message)
+/mob/verb/AddMemory(msg as message)
 	set name = "Add Note"
 	set category = "IC"
 

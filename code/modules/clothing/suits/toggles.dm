@@ -44,13 +44,13 @@
 		if(ishuman(loc))
 			var/mob/living/carbon/human/H = src.loc
 			if(H.wear_suit != src)
-				to_chat(H, "<span class='warning'>You must be wearing \the [src] to put up the hood!</span>")
+				to_chat(H, SPAN_WARNING("You must be wearing \the [src] to put up the hood!"))
 				return
 			if(H.head)
-				to_chat(H, "<span class='warning'>You're already wearing something on your head!</span>")
+				to_chat(H, SPAN_WARNING("You're already wearing something on your head!"))
 				return
 			else
-				H.equip_to_slot_if_possible(hood,slot_head,0,0,1)
+				H.equip_to_slot_if_possible(hood, slot_head)
 				suittoggled = 1
 				update_icon()
 				H.update_inv_wear_suit()
@@ -77,7 +77,7 @@
 		)
 	action_button_name = "Toggle Winter Hood"
 	hoodtype = /obj/item/clothing/head/winterhood
-	allowed = list (/obj/item/pen, /obj/item/paper, /obj/item/device/flashlight,/obj/item/storage/fancy/cigarettes, /obj/item/storage/box/matches, /obj/item/reagent_containers/food/drinks/flask)
+	allowed = list (/obj/item/pen, /obj/item/paper, /obj/item/device/flashlight,/obj/item/storage/fancy/smokable, /obj/item/storage/box/matches, /obj/item/reagent_containers/food/drinks/flask)
 	siemens_coefficient = 0.6
 
 /obj/item/clothing/head/winterhood

@@ -1,4 +1,4 @@
-var/list/spells = typesof(/spell) //needed for the badmin verb for now
+var/global/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell
 	var/name = "Spell"
@@ -74,7 +74,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /spell/New()
 	..()
 
-	//still_recharging_msg = "<span class='notice'>[name] is still recharging.</span>"
+	//still_recharging_msg = SPAN_NOTICE("[name] is still recharging.")
 	charge_counter = charge_max
 
 /spell/proc/process()
@@ -131,18 +131,18 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			after_cast(targets) //generates the sparks, smoke, target messages etc.
 		else
 			break
-	while(time != number_of_channels && do_after(user, time_between_channels, do_flags = DO_DEFAULT & ~DO_USER_CAN_TURN, incapacitation_flags = INCAPACITATION_KNOCKOUT | INCAPACITATION_FORCELYING | INCAPACITATION_STUNNED))
+	while(time != number_of_channels && do_after(user, time_between_channels, do_flags = (DO_DEFAULT | DO_USER_UNIQUE_ACT) & ~DO_USER_CAN_TURN, incapacitation_flags = INCAPACITATION_KNOCKOUT | INCAPACITATION_FORCELYING | INCAPACITATION_STUNNED))
 	after_spell(targets, user, time) //When we are done with the spell completely.
 
 
 
-/spell/proc/cast(list/targets, mob/user, var/channel_duration) //the actual meat of the spell
+/spell/proc/cast(list/targets, mob/user, channel_duration) //the actual meat of the spell
 	return
 
 /spell/proc/critfail(list/targets, mob/user) //the wizman has fucked up somehow
 	return
 
-/spell/proc/after_spell(var/list/targets, var/mob/user, var/channel_duration) //After everything else is done.
+/spell/proc/after_spell(list/targets, mob/user, channel_duration) //After everything else is done.
 	return
 
 /spell/proc/adjust_var(mob/living/target = usr, type, amount) //handles the adjustment of the var when the spell is used. has some hardcoded types
@@ -213,14 +213,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 /////////////////////
 /*Checkers, cost takers, message makers, etc*/
 
-/spell/proc/cast_check(skipcharge = 0,mob/user = usr, var/list/targets) //checks if the spell can be cast based on its settings; skipcharge is used when an additional cast_check is called inside the spell
+/spell/proc/cast_check(skipcharge = 0,mob/user = usr, list/targets) //checks if the spell can be cast based on its settings; skipcharge is used when an additional cast_check is called inside the spell
 
 	if(silenced > 0)
 		return 0
 
 	if(!(src in user.mind.learned_spells) && holder == user && !(isanimal(user)))
 		error("[user] utilized the spell '[src]' without having it.")
-		to_chat(user, "<span class='warning'>You shouldn't have this spell! Something's wrong.</span>")
+		to_chat(user, SPAN_WARNING("You shouldn't have this spell! Something's wrong."))
 		return 0
 
 	var/spell_leech = user.disrupts_psionics()
@@ -230,7 +230,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/turf/user_turf = get_turf(user)
 	if(!user_turf)
-		to_chat(user, "<span class='warning'>You cannot cast spells in null space!</span>")
+		to_chat(user, SPAN_WARNING("You cannot cast spells in null space!"))
 
 	if((spell_flags & Z2NOCAST) && (user_turf.z in GLOB.using_map.admin_levels)) //Certain spells are not allowed on the centcomm zlevel
 		return 0
@@ -247,14 +247,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(istype(user, /mob/living/simple_animal))
 			var/mob/living/simple_animal/SA = user
 			if(SA.purge)
-				to_chat(SA, "<span class='warning'>The null sceptre's power interferes with your own!</span>")
+				to_chat(SA, SPAN_WARNING("The null sceptre's power interferes with your own!"))
 				return 0
 
 		if(!(spell_flags & GHOSTCAST))
 			if(!(spell_flags & NO_SOMATIC))
 				var/mob/living/L = user
 				if(L.incapacitated(INCAPACITATION_STUNNED|INCAPACITATION_RESTRAINED|INCAPACITATION_BUCKLED_FULLY|INCAPACITATION_FORCELYING|INCAPACITATION_KNOCKOUT))
-					to_chat(user, "<span class='warning'>You can't cast spells while incapacitated!</span>")
+					to_chat(user, SPAN_WARNING("You can't cast spells while incapacitated!"))
 					return 0
 
 			if(ishuman(user) && !(invocation_type in list(SpI_EMOTE, SpI_NONE)))
@@ -269,7 +269,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	return 1
 
-/spell/proc/check_charge(var/skipcharge, mob/user)
+/spell/proc/check_charge(skipcharge, mob/user)
 	if(!skipcharge)
 		switch(charge_type)
 			if(Sp_RECHARGE)
@@ -278,11 +278,11 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 					return 0
 			if(Sp_CHARGES)
 				if(!charge_counter)
-					to_chat(user, "<span class='notice'>[name] has no charges left.</span>")
+					to_chat(user, SPAN_NOTICE("[name] has no charges left."))
 					return 0
 	return 1
 
-/spell/proc/take_charge(mob/user = user, var/skipcharge)
+/spell/proc/take_charge(mob/user = user, skipcharge)
 	if(!skipcharge)
 		switch(charge_type)
 			if(Sp_RECHARGE)
@@ -298,12 +298,12 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return 0
 	return 1
 
-/spell/proc/check_valid_targets(var/list/targets)
+/spell/proc/check_valid_targets(list/targets)
 	if(!targets)
 		return 0
 	if(!islist(targets))
 		targets = list(targets)
-	else if(!targets.len)
+	else if(!length(targets))
 		return 0
 
 	var/list/valid_targets = view_or_range(range, holder, selection_type)
@@ -312,7 +312,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			return 0
 	return 1
 
-/spell/proc/invocation(mob/user = usr, var/list/targets) //spelling the spell out and setting it on recharge/reducing charges amount
+/spell/proc/invocation(mob/user = usr, list/targets) //spelling the spell out and setting it on recharge/reducing charges amount
 
 	switch(invocation_type)
 		if(SpI_SHOUT)
@@ -332,7 +332,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 ///UPGRADING PROCS///
 /////////////////////
 
-/spell/proc/can_improve(var/upgrade_type)
+/spell/proc/can_improve(upgrade_type)
 	if(level_max[Sp_TOTAL] <= ( spell_levels[Sp_SPEED] + spell_levels[Sp_POWER] )) //too many levels, can't do it
 		return 0
 
@@ -387,7 +387,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	return temp
 
-/spell/proc/spell_do_after(var/mob/user as mob, delay as num, var/numticks = 5)
+/spell/proc/spell_do_after(mob/user as mob, delay as num, numticks = 5)
 	if(!user || isnull(user))
 		return 0
 
@@ -395,4 +395,4 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	if(!(spell_flags & (GHOSTCAST)))
 		incap_flags |= INCAPACITATION_KNOCKOUT
 
-	return do_after(user, delay, incapacitation_flags = incap_flags)
+	return do_after(user, delay, do_flags = DO_DEFAULT | DO_USER_UNIQUE_ACT, incapacitation_flags = incap_flags)

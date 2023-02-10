@@ -20,7 +20,7 @@
 /datum/robot_component/New(mob/living/silicon/robot/R)
 	src.owner = R
 
-/datum/robot_component/proc/accepts_component(var/obj/item/thing)
+/datum/robot_component/proc/accepts_component(obj/item/thing)
 	. = istype(thing, external_type)
 
 /datum/robot_component/proc/install()
@@ -88,7 +88,7 @@
 	external_type = /obj/item/robot_parts/robot_component/armour/light
 	max_damage = 75
 
-/datum/robot_component/armour/accepts_component(var/obj/item/thing)
+/datum/robot_component/armour/accepts_component(obj/item/thing)
 	. = (!istype(thing, /obj/item/robot_parts/robot_component/armour/exosuit) && ..())
 
 // ACTUATOR
@@ -145,38 +145,6 @@
 	active_usage = 25
 	max_damage = 30
 
-
-// CAMERA
-// Enables cyborg vision. Can also be remotely accessed via consoles.
-// Uses 10J constantly
-/datum/robot_component/camera
-	name = "camera"
-	external_type = /obj/item/robot_parts/robot_component/camera
-	idle_usage = 10
-	max_damage = 40
-	var/obj/machinery/camera/camera
-
-/datum/robot_component/camera/New(mob/living/silicon/robot/R)
-	..()
-	camera = R.camera
-
-/datum/robot_component/camera/update_power_state()
-	..()
-	if (camera)
-		camera.status = powered
-
-/datum/robot_component/camera/install()
-	if (camera)
-		camera.status = 1
-
-/datum/robot_component/camera/uninstall()
-	if (camera)
-		camera.status = 0
-
-/datum/robot_component/camera/destroy()
-	if (camera)
-		camera.status = 0
-
 // SELF DIAGNOSIS MODULE
 // Analyses cyborg's modules, providing damage readouts and basic information
 // Uses 1kJ burst when analysis is done
@@ -199,7 +167,6 @@
 	components["radio"] = new/datum/robot_component/radio(src)
 	components["power cell"] = new/datum/robot_component/cell(src)
 	components["diagnosis unit"] = new/datum/robot_component/diagnosis_unit(src)
-	components["camera"] = new/datum/robot_component/camera(src)
 	components["comms"] = new/datum/robot_component/binary_communication(src)
 	components["armour"] = new/datum/robot_component/armour(src)
 
@@ -209,7 +176,7 @@
 	return C && C.installed == 1 && C.toggled && C.is_powered()
 
 // Returns component by it's string name
-/mob/living/silicon/robot/proc/get_component(var/component_name)
+/mob/living/silicon/robot/proc/get_component(component_name)
 	var/datum/robot_component/C = components[component_name]
 	return C
 
@@ -224,13 +191,14 @@
 /obj/item/robot_parts/robot_component
 	icon = 'icons/obj/robot_component.dmi'
 	icon_state = "working"
+	matter = list(MATERIAL_STEEL = 5000)
 	var/brute = 0
 	var/burn = 0
 	var/icon_state_broken = "broken"
 	var/total_dam = 0
 	var/max_dam = 30
 
-/obj/item/robot_parts/robot_component/proc/take_damage(var/brute_amt, var/burn_amt)
+/obj/item/robot_parts/robot_component/proc/take_damage(brute_amt, burn_amt)
 	brute += brute_amt
 	burn += burn_amt
 	total_dam = brute+burn

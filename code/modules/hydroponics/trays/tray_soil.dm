@@ -4,11 +4,11 @@
 	icon_state = "soil"
 	density = FALSE
 	use_power = POWER_USE_OFF
-	stat_immune = NOINPUT | NOSCREEN | NOPOWER
+	stat_immune = MACHINE_STAT_NOINPUT | MACHINE_STAT_NOSCREEN | MACHINE_STAT_NOPOWER
 	mechanical = 0
 	tray_light = 0
 
-/obj/machinery/portable_atmospherics/hydroponics/soil/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/portable_atmospherics/hydroponics/soil/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O,/obj/item/tank))
 		return
 	else
@@ -37,7 +37,7 @@
 /obj/machinery/portable_atmospherics/hydroponics/soil/is_burnable()
 	return ..() && seed.get_trait(TRAIT_HEAT_TOLERANCE) < 1000
 
-/obj/machinery/portable_atmospherics/hydroponics/soil/invisible/New(var/newloc,var/datum/seed/newseed, var/start_mature)
+/obj/machinery/portable_atmospherics/hydroponics/soil/invisible/New(newloc,datum/seed/newseed, start_mature)
 	..()
 	seed = newseed
 	dead = 0

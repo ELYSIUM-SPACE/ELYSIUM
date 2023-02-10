@@ -1,20 +1,20 @@
-/datum/codex_entry/cbm
-	associated_paths = list(/obj/item/device/compact_bionic_module)
-	display_name = "Compact Bionic Module/CBM"
-	antag_text = "<p>Compact bionic modules are one-use installers pre-loaded with medical software and an augment. Activating it in-hand can be used to install an augment in the configured location by first tearing open an incision, then installing the augment, and finally sealing the wound.</p>\
+/datum/codex_entry/augment_implanter
+	associated_paths = list(/obj/item/device/augment_implanter)
+	display_name = "Augment Autodoc"
+	antag_text = "<p>Augment Autodocs are one-use medical devices pre-loaded with medical software and an augment. Activating it in-hand can be used to install an augment in the configured location by first tearing open an incision, then installing the augment, and finally sealing the wound.</p>\
 \
 	<p>To use:</p>\
 	<ol>\
-	<li>Optional: Use a screwdriver on the CBM to configure the augment's installation location, if applicable.\
+	<li>Optional: Use a screwdriver on the Autodoc to configure the augment's installation location, if applicable.\
 	<li>Firmly buckle yourself to a solid object such as a bed or chair.\
-	<li>Ensure that you are firmly secured, then activate the CBM in your hand.\
-	<li>The CBM will perform a rapid surgical procedure on you. Be as still as possible during this time - it will deactivate if it is interrupted.\
-	<li>When the operation is complete, collect the spent CBM for disposal.\
+	<li>Ensure that you are firmly secured, then activate the Autodoc in your hand.\
+	<li>The Autodoc will perform a rapid surgical procedure on you. Be as still as possible during this time - it will deactivate if it is interrupted.\
+	<li>When the operation is complete, collect the spent Autodoc for disposal.\
 	</ol>\
 \
-	<p>CBMs don't come with their own painkillers, and like any surgery operation, it will be extremely painful without them. It will do its best to seal the wounds it creates, but in the event of an interruption, you will likely be left with an open surgical incision.</p>\
+	<p>Autodocs don't come with their own painkillers, and like any surgery operation, it will be extremely painful without them. It will do its best to seal the wounds it creates, but in the event of an interruption, you will likely be left with an open surgical incision.</p>\
 \
-	<p>You can use a crowbar to lever the augment out of the CBM, but doing so will render the CBM itself permanently useless. This might be useful if you have a collaborator that can safely install the augment in a more desirable way.</p>"
+	<p>You can use a crowbar to lever the augment out of the Autodoc, but doing so will render the Autodoc itself permanently useless. This might be useful if you have a collaborator that can safely install the augment in a more desirable way.</p>"
 
 /datum/codex_entry/leukocyte_breeder
 	associated_paths = list(/obj/item/organ/internal/augment/active/leukocyte_breeder)
@@ -38,3 +38,14 @@
 	lore_text = "<p>Selective control of synaptic signals combined with adjustments in brain chemistry can be used to effectively mitigate pain under strenuous conditions. Its use is characterized by a tingling sensation across the entire body, which is unpleasant but much more manageable than whatever pain it might be canceling out.</p>\
 \
 	<p>The body isn't made to go without these feelings for long without a chemical aid, and so after it finishes a cycle, it is followed by a wave of tiredness and fatigue. Using it too often may lead to minor brain damage, or even blacking out. Because of its haphazard methodology and unsafe mode of operation, it doesn't see much use in SolGov space.</p>"
+
+/datum/codex_entry/powerfist_tank
+	associated_paths = list(/obj/item/organ/internal/augment/active/item/powerfist)
+	display_name = "Pneumatic Powerfist"
+	lore_text = "<p>The AG-23 Pneumatic Powerfist was first devised as a portable door-cracking/obstacle clearing tool to be used by emergency rescue teams. Eventually, it found its way into more public hands through one way or another, and is now mostly used by private security teams, special police breacher squads, wealthy mob enforcers, and is sometimes even seen in the hands of SolGov Defense Forces.</p>\
+	\
+	<p>While it is recommended to use the power-fist at it's lower settings for doors and airlocks, a higher setting is provided in some models for tougher obstacles.</p>"
+	mechanics_text = "<p>The powerfist deals a base 5 points of damage without a tank, or when the tank has an air pressure of below 210 kPa. Activate the powerfist in hand to change the pressure setting; which changes the amount of damage the powerfist does.</p> \
+	<p>At 30% and 50%; the powerfist will be able to tear open welded/unwelded airlocks, barring the secure command airlocks. At 50%, the powerfist is also able to throw people a few tiles away.</p>\
+	\
+	<p>The powerfist only accepts the small emergency air tanks.</p>"

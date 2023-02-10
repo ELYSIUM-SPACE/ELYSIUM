@@ -25,13 +25,13 @@
 	var/creator // circuit creator if any
 	var/static/next_assembly_id = 0
 	var/interact_page = 0
-	var/components_per_page = 5
+	var/components_per_page = 10
 	/// Spark system used for creating sparks while the assembly is damaged and destroyed.
-	var/datum/effect/effect/system/spark_spread/spark_system	
+	var/datum/effect/effect/system/spark_spread/spark_system
 	var/adrone = FALSE
-	health = 30
 	pass_flags = 0
 	anchored = FALSE
+	health_max = 30
 	var/detail_color = COLOR_ASSEMBLY_BLACK
 	var/list/color_whitelist = list( //This is just for checking that hacked colors aren't in the save data.
 		COLOR_ASSEMBLY_BLACK,
@@ -59,50 +59,37 @@
 	else
 		to_chat(user, SPAN_NOTICE("The maintenance panel [opened ? "can be" : "is"] <b>screwed</b> in place."))
 
-	switch (health / initial(health))
-		if(0.99 to INFINITY)
-			to_chat(user, SPAN_NOTICE("\The [src] is in good condition."))
-		if(0.75 to 0.99)
-			to_chat(user, SPAN_NOTICE("\The [src] has a few scuffs and scratches."))
-		if(0.5 to 0.75)
-			to_chat(user, SPAN_DANGER("\The [src] is covered in dents and punctured in several places."))
-		if(0.25 to 0.5)
-			to_chat(user, SPAN_DANGER("\The [src] looks seriously damaged!"))
-		else	
-			to_chat(user, SPAN_WARNING("\The [src] is barely holding together!"))
-
 	if((isobserver(user) && ckeys_allowed_to_scan[user.ckey]) || check_rights(R_ADMIN, 0, user))
 		to_chat(user, "You can <a href='?src=\ref[src];ghostscan=1'>scan</a> this circuit.");
 
+/obj/item/device/electronic_assembly/on_death()
+	visible_message(SPAN_WARNING("\The [src] falls to pieces!"))
+	if(w_class == ITEM_SIZE_HUGE)
+		if(adrone)
+			new /obj/effect/decal/cleanable/blood/gibs/robot(loc)
+		new /obj/item/stack/material/steel(loc, rand(7, 10))
+	else if(w_class == ITEM_SIZE_LARGE)
+		if(adrone)
+			new /obj/effect/decal/cleanable/blood/gibs/robot(loc)
+		new /obj/item/stack/material/steel(loc, rand(3, 6))
+	else if(w_class == ITEM_SIZE_NORMAL)
+		new /obj/item/stack/material/steel(loc, rand(1, 3))
+	else
+		new /obj/item/stack/material/steel(loc)
+	if(battery && battery.charge > 0)
+		spark_system.start()
+	playsound(loc, 'sound/items/electronic_assembly_empty.ogg', 100, 1)
+	icon = 0
+	addtimer(new Callback(src, .proc/fall_apart), 5.1)
 
-/obj/item/device/electronic_assembly/proc/take_damage(var/amnt)
-	health = health - amnt
-
-	if(health <= 0)
-		visible_message(SPAN_WARNING("\The [src] falls to pieces!"))
-		if(w_class == ITEM_SIZE_HUGE)
-			if(adrone)
-				new /obj/effect/decal/cleanable/blood/gibs/robot(loc)
-			new /obj/item/stack/material/steel(loc, rand(7, 10))
-		else if(w_class == ITEM_SIZE_LARGE)
-			if(adrone)
-				new /obj/effect/decal/cleanable/blood/gibs/robot(loc)
-			new /obj/item/stack/material/steel(loc, rand(3, 6))
-		else if(w_class == ITEM_SIZE_NORMAL)
-			new /obj/item/stack/material/steel(loc, rand(1, 3))
-		else
-			new /obj/item/stack/material/steel(loc)
-		if(battery && battery.charge > 0)
-			spark_system.start()
-		playsound(loc, 'sound/items/electronic_assembly_empty.ogg', 100, 1)
-		icon = 0
-		addtimer(CALLBACK(src, .proc/fall_apart), 5.1)
-	else if(health <= initial(health)*0.25)
+/obj/item/device/electronic_assembly/post_health_change(health_mod, prior_health, damage_type)
+	..()
+	if (get_damage_percentage() >= 75)
 		if(battery && battery.charge > 0)
 			visible_message(SPAN_WARNING("\The [src] sputters and sparks!"))
 			spark_system.start()
 		opened = TRUE
-		on_update_icon()
+		queue_icon_update()
 
 /obj/item/device/electronic_assembly/proc/check_interactivity(mob/user)
 	return (!user.incapacitated() && CanUseTopic(user))
@@ -146,7 +133,7 @@
 		P.make_energy()
 
 	var/power_failure = FALSE
-	if(health <= initial(health)*0.25 && prob(1))
+	if(get_damage_percentage() >= 75 && prob(1))
 		if(battery && battery.charge > 0)
 			visible_message(SPAN_WARNING("\The [src] sparks violently!"))
 			spark_system.start()
@@ -184,7 +171,7 @@
 		if(topic_data)
 			listed_components = TRUE
 			HTML += "<b>[circuit.displayed_name]: </b>"
-			if(topic_data.len != 1)
+			if(length(topic_data) != 1)
 				HTML += "<br>"
 			for(var/entry in topic_data)
 				var/href = topic_data[entry]
@@ -213,7 +200,7 @@
 	if(battery)
 		HTML += "[round(battery.charge, 0.1)]/[battery.maxcharge] ([round(battery.percent(), 0.1)]%) cell charge. <a href='?src=\ref[src];remove_cell=1'>\[Remove\]</a>"
 	else
-		HTML += "<span class='danger'>No power cell detected!</span>"
+		HTML += SPAN_DANGER("No power cell detected!")
 
 	if(length(assembly_components))
 		HTML += "<br><br>"
@@ -233,7 +220,7 @@
 
 		if(length(assembly_components) > components_per_page)
 			HTML += "<br>\["
-			for(var/i = 1 to ceil(length(assembly_components)/components_per_page))
+			for(var/i = 1 to Ceil(length(assembly_components)/components_per_page))
 				if((i-1) == interact_page)
 					HTML += " [i]"
 				else
@@ -246,7 +233,7 @@
 /obj/item/device/electronic_assembly/Topic(href, href_list)
 	if(href_list["ghostscan"])
 		if((isobserver(usr) && ckeys_allowed_to_scan[usr.ckey]) || check_rights(R_ADMIN,0,usr))
-			if(assembly_components.len)
+			if(length(assembly_components))
 				var/saved = "On circuit printers with cloning enabled, you may use the code below to clone the circuit:<br><br><code>[SScircuit.save_electronic_assembly(src)]</code>"
 				show_browser(usr, saved, "window=circuit_scan;size=500x600;border=1;can_resize=1;can_close=1;can_minimize=1")
 			else
@@ -283,7 +270,7 @@
 
 			add_allowed_scanner(usr.ckey)
 
-			var/current_pos = list_find(assembly_components, component)
+			var/current_pos = assembly_components.Find(component)
 
 			if(href_list["remove"])
 				try_remove_component(component, usr)
@@ -423,7 +410,7 @@
 	add_allowed_scanner(user.ckey)
 
 	// Make sure we're not on an invalid page
-	interact_page = Clamp(interact_page, 0, ceil(length(assembly_components)/components_per_page)-1)
+	interact_page = clamp(interact_page, 0, Ceil(length(assembly_components)/components_per_page)-1)
 
 	return TRUE
 
@@ -446,14 +433,19 @@
 
 
 /obj/item/device/electronic_assembly/attackby(obj/item/I, mob/living/user)
-	user.setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
+	if (user.a_intent == I_HURT)
+		..()
+		return
+
 	if(istype(I, /obj/item/wrench))
 		if(istype(loc, /turf) && (IC_FLAG_ANCHORABLE & circuit_flags))
 			user.visible_message(SPAN_NOTICE("\The [user] wrenches \the [src]'s anchoring bolts [anchored ? "back" : "into position"]."))
 			playsound(get_turf(user), 'sound/items/Ratchet.ogg',50)
-			if(user.do_skilled(5 SECONDS, SKILL_CONSTRUCTION, src))
+			if(user.do_skilled(5 SECONDS, SKILL_CONSTRUCTION, src, do_flags = DO_REPAIR_CONSTRUCT))
 				anchored = !anchored
-	else if(istype(I, /obj/item/integrated_circuit))
+		return
+
+	if(istype(I, /obj/item/integrated_circuit))
 		if(!user.canUnEquip(I))
 			return FALSE
 		if(try_add_component(I, user))
@@ -462,7 +454,8 @@
 			for(var/obj/item/integrated_circuit/input/S in assembly_components)
 				S.attackby_react(I,user,user.a_intent)
 			return ..()
-	else if(istype(I, /obj/item/device/multitool) || istype(I, /obj/item/device/integrated_electronics/wirer) || istype(I, /obj/item/device/integrated_electronics/debugger))
+
+	if(istype(I, /obj/item/device/multitool) || istype(I, /obj/item/device/integrated_electronics/wirer) || istype(I, /obj/item/device/integrated_electronics/debugger))
 		if(opened)
 			interact(user)
 			return TRUE
@@ -471,7 +464,8 @@
 			for(var/obj/item/integrated_circuit/input/S in assembly_components)
 				S.attackby_react(I,user,user.a_intent)
 			return ..()
-	else if(istype(I, /obj/item/cell))
+
+	if(istype(I, /obj/item/cell))
 		if(!opened)
 			to_chat(user, SPAN_DANGER("\The [src]'s hatch is closed, so you can't access \the [src]'s power supply."))
 			for(var/obj/item/integrated_circuit/input/S in assembly_components)
@@ -491,11 +485,14 @@
 			to_chat(user, SPAN_NOTICE("You slot \the [cell] inside \the [src]."))
 			return TRUE
 		return FALSE
-	else if(istype(I, /obj/item/device/integrated_electronics/detailer))
+
+	if(istype(I, /obj/item/device/integrated_electronics/detailer))
 		var/obj/item/device/integrated_electronics/detailer/D = I
 		detail_color = D.detail_color
 		update_icon()
-	else if(istype(I, /obj/item/screwdriver))
+		return
+
+	if(istype(I, /obj/item/screwdriver))
 		var/hatch_locked = FALSE
 		for(var/obj/item/integrated_circuit/manipulation/hatchlock/H in assembly_components)
 			// If there's more than one hatch lock, only one needs to be enabled for the assembly to be locked
@@ -511,41 +508,34 @@
 		opened = !opened
 		to_chat(user, SPAN_NOTICE("You [opened ? "open" : "close"] the maintenance hatch of \the [src]."))
 		update_icon()
-	else if(isCoil(I))
+		return
+
+	if(isCoil(I))
 		var/obj/item/stack/cable_coil/C = I
-		if(health != initial(health) && do_after(user, 10, src) && C.use(1))
+		if(health_damaged() && do_after(user, 1 SECOND, src, DO_PUBLIC_UNIQUE) && C.use(1))
 			user.visible_message(SPAN_NOTICE("\The [user] patches up \the [src]."))
-			health = min(initial(health), health + 5)
-	else
-		if(user.a_intent == I_HURT && (!(user.l_hand == src || user.r_hand == src))) // Kill it
-			user.do_attack_animation(src)
-			playsound(loc, 'sound/weapons/genhit1.ogg', 100, 1)
-			to_chat(user, SPAN_WARNING("\The [user] hits \the [src] with \the [I]!"))
-			take_damage(I.force)
-		else
-			for(var/obj/item/integrated_circuit/input/S in assembly_components)
-				S.attackby_react(I,user,user.a_intent)
+			restore_health(5)
+		return
+
+	for(var/obj/item/integrated_circuit/input/S in assembly_components)
+		S.attackby_react(I,user,user.a_intent)
+	..()
 
 /obj/item/device/electronic_assembly/attack_self(mob/user)
 	interact(user)
 
-/obj/item/device/electronic_assembly/bullet_act(var/obj/item/projectile/P)
-	take_damage(P.damage)
+/obj/item/device/electronic_assembly/bullet_act(obj/item/projectile/P)
 	if(istype(P,/obj/item/projectile/beam))
 		playsound(loc, SOUNDS_LASER_METAL, 100, 1)
 	else if(istype(P,/obj/item/projectile/bullet))
 		playsound(loc, SOUNDS_BULLET_METAL, 100, 1)
-
-/obj/item/device/electronic_assembly/attack_generic(mob/user, damage)
-	take_damage(damage)
-	user.visible_message(SPAN_WARNING("\The [user] smashes \the [src]!"), SPAN_WARNING("You smash \the [src]!"))
-	attack_animation(user)
+	..()
 
 /obj/item/device/electronic_assembly/emp_act(severity)
-	. = ..()
 	for(var/I in src)
 		var/atom/movable/AM = I
 		AM.emp_act(severity)
+	. = ..()
 
 // Returns true if power was successfully drawn.
 /obj/item/device/electronic_assembly/proc/draw_power(amount)
@@ -614,7 +604,7 @@
 	w_class = ITEM_SIZE_NORMAL
 	max_components = IC_MAX_SIZE_BASE * 2
 	max_complexity = IC_COMPLEXITY_BASE * 2
-	health = 45
+	health_max = 45
 
 /obj/item/device/electronic_assembly/medium/default
 	name = "type-a electronic mechanism"
@@ -657,8 +647,8 @@
 	w_class = ITEM_SIZE_LARGE
 	max_components = IC_MAX_SIZE_BASE * 4
 	max_complexity = IC_COMPLEXITY_BASE * 4
-	health = 50
 	randpixel = 0
+	health_max = 50
 
 /obj/item/device/electronic_assembly/large/default
 	name = "type-a electronic machine"
@@ -697,9 +687,9 @@
 	max_complexity = IC_COMPLEXITY_BASE * 3
 	allowed_circuit_action_flags = IC_ACTION_MOVEMENT | IC_ACTION_COMBAT | IC_ACTION_LONG_RANGE
 	circuit_flags = 0
-	health = 60
 	randpixel = 0
 	adrone = TRUE
+	health_max = 60
 
 /obj/item/device/electronic_assembly/drone/can_move()
 	return TRUE
@@ -711,19 +701,19 @@
 	name = "type-b electronic drone"
 	icon_state = "setup_drone_arms"
 	desc = "It's a case used for assembling mobile electronics. This one is armed and dangerous."
-	health = 70
+	health_max = 70
 
 /obj/item/device/electronic_assembly/drone/secbot
 	name = "type-c electronic drone"
 	icon_state = "setup_drone_secbot"
 	desc = "It's a case used for assembling mobile electronics. This one resembles a Securitron."
-	health = 70
+	health_max = 70
 
 /obj/item/device/electronic_assembly/drone/medbot
 	name = "type-d electronic drone"
 	icon_state = "setup_drone_medbot"
 	desc = "It's a case used for assembling mobile electronics. This one resembles a Medibot."
-	health = 50
+	health_max = 50
 
 /obj/item/device/electronic_assembly/drone/genbot
 	name = "type-e electronic drone"
@@ -737,7 +727,7 @@
 	w_class = ITEM_SIZE_HUGE
 	max_components = IC_MAX_SIZE_BASE * 5
 	max_complexity = IC_COMPLEXITY_BASE * 5
-	health = 100
+	health_max = 100
 
 /obj/item/device/electronic_assembly/wallmount
 	name = "wall-mounted electronic assembly"
@@ -746,9 +736,9 @@
 	w_class = ITEM_SIZE_NORMAL
 	max_components = IC_MAX_SIZE_BASE * 2
 	max_complexity = IC_COMPLEXITY_BASE * 2
-	health = 40
+	health_max = 40
 
-/obj/item/device/electronic_assembly/wallmount/afterattack(var/atom/a, var/mob/user, var/proximity)
+/obj/item/device/electronic_assembly/wallmount/afterattack(atom/a, mob/user, proximity)
 	if(proximity && istype(a ,/turf) && a.density)
 		mount_assembly(a,user)
 
@@ -759,7 +749,7 @@
 	w_class = ITEM_SIZE_LARGE
 	max_components = IC_MAX_SIZE_BASE * 4
 	max_complexity = IC_COMPLEXITY_BASE * 4
-	health = 80
+	health_max = 80
 
 /obj/item/device/electronic_assembly/wallmount/light
 	name = "light wall-mounted electronic assembly"
@@ -770,7 +760,7 @@
 	max_complexity = IC_COMPLEXITY_BASE
 
 /obj/item/device/electronic_assembly/pickup()
-	transform = matrix() //Reset the matrix.
+	ClearTransform()
 
 /obj/item/device/electronic_assembly/wallmount/proc/mount_assembly(turf/on_wall, mob/user) //Yeah, this is admittedly just an abridged and kitbashed version of the wallframe attach procs.
 	var/ndir = get_dir(on_wall, user)
@@ -785,27 +775,27 @@
 		return
 	playsound(loc, 'sound/machines/click.ogg', 75, 1)
 	user.visible_message("[user.name] attaches [src] to the wall.",
-		"<span class='notice'>You attach [src] to the wall.</span>",
-		"<span class='italics'>You hear clicking.</span>")
+		SPAN_NOTICE("You attach [src] to the wall."),
+		SPAN_CLASS("italics", "You hear clicking."))
 	if(user.unEquip(src,T))
-		var/matrix/M = matrix()
+		var/rotation = 0
 		switch(ndir)
 			if(NORTH)
+				rotation = 180
 				pixel_y = -32
 				pixel_x = 0
-				M.Turn(180)
 			if(SOUTH)
 				pixel_y = 21
 				pixel_x = 0
 			if(EAST)
+				rotation = 90
 				pixel_x = -27
 				pixel_y = 0
-				M.Turn(270)
 			if(WEST)
+				rotation = 270
 				pixel_x = 27
 				pixel_y = 0
-				M.Turn(90)
-		transform = M
+		SetTransform(rotation = rotation)
 
 #undef IC_MAX_SIZE_BASE
 #undef IC_COMPLEXITY_BASE

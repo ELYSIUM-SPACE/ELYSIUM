@@ -1,3 +1,5 @@
+#include "../../../torch/items/weapons.dm"
+
 /datum/map_template/ruin/exoplanet/icarus
 	name = "SEV Icarus"
 	id = "icarus"
@@ -5,7 +7,7 @@
 	suffixes = list("icarus/icarus.dmm")
 	spawn_cost = 1
 	ruin_tags = RUIN_HUMAN|RUIN_WRECK
-	template_flags = TEMPLATE_FLAG_CLEAR_CONTENTS | TEMPLATE_FLAG_NO_RUINS
+	template_flags = TEMPLATE_FLAG_CLEAR_CONTENTS | TEMPLATE_FLAG_NO_RUINS | TEMPLATE_FLAG_RUIN_STARTS_DISALLOWED
 	apc_test_exempt_areas = list(
 		/area/map_template/icarus = NO_SCRUBBER|NO_VENT|NO_APC
 	)
@@ -83,7 +85,7 @@
 
 /obj/item/icarus_disk
 	name = "disk"
-	desc = "A dusty disk. Its label says: \"Deliver to SCG Expeditionary Corps Command!\". Its content is encrypted with quantum crypthography methods."
+	desc = "A dusty disk. Its label says: \"Deliver to SCG Expeditionary Corps Command!\". Its content is encrypted with quantum cryptography methods."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "nucleardisk"
 	item_state = "card-id"
@@ -95,9 +97,9 @@
 	icon = 'maps/random_ruins/exoplanet_ruins/icarus/icarus.dmi'
 	icon_state = "model"
 
-/obj/item/gun/projectile/pistol/military/icarus
+/obj/item/gun/projectile/pistol/m22f/icarus
 	name = "rusty military pistol"
-	desc = "The Hephaestus Industries P20 - a mass produced kinetic sidearm in widespread service with the SCGDF. This one has seen better days, and has the name \"Alex\" engraved into it."
+	desc = "A Hephaestus Industries M22F. A large pistol issued as an SCGDF service weapon. This one has seen better days, and has the name \"Alex\" engraved into it."
 
 //SCG deco
 

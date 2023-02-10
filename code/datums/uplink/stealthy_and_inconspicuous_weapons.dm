@@ -49,7 +49,7 @@
 	name = "Dehydrated Space Carp"
 	desc = "An innocuous-looking space carp plushie. Add water and step back for a nasty surprise!"
 	item_cost = 10
-	path = /obj/item/dehydrated_carp
+	path = /obj/item/reagent_containers/food/snacks/dehydrated_carp
 
 /datum/uplink_item/item/stealthy_weapons/plush_bomb
 	name = "Plushie Bomb"
@@ -61,3 +61,9 @@
 	var/plushtype = pick(typesof(path))
 	var/obj/item/I = new plushtype(loc)
 	return I
+
+/datum/uplink_item/item/stealthy_weapons/guncane
+	name = "Concealed Cane Gun"
+	desc = "A cane used by true gentlemen, especially ones with a penchant for loud weaponry!"
+	item_cost = 25
+	path = /obj/item/gun/projectile/shotgun/cane

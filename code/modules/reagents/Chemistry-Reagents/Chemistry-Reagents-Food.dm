@@ -10,9 +10,9 @@
 	color = "#664330"
 	value = 0.1
 
-/datum/reagent/nutriment/mix_data(var/list/newdata, var/newamount)
+/datum/reagent/nutriment/mix_data(list/newdata, newamount)
 
-	if(!islist(newdata) || !newdata.len)
+	if(!islist(newdata) || !length(newdata))
 		return
 
 	//add the new taste data
@@ -33,25 +33,24 @@
 		if(data[taste]/totalFlavor < 0.1)
 			data -= taste
 
-/datum/reagent/nutriment/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
+/datum/reagent/nutriment/affect_blood(mob/living/carbon/M, removed)
 	if(!injectable)
 		M.adjustToxLoss(0.2 * removed)
 		return
-	affect_ingest(M, alien, removed)
+	affect_ingest(M, removed)
 
-/datum/reagent/nutriment/affect_ingest(var/mob/living/carbon/M, var/alien, var/removed)
-	if (alien == IS_SKRELL && protein_amount > 0)
-		var/datum/species/skrell/S = M.species
-		S.handle_protein(M, src)
+/datum/reagent/nutriment/affect_ingest(mob/living/carbon/M, removed)
+	if (protein_amount)
+		handle_protein(M, src)
 	M.heal_organ_damage(0.5 * removed, 0) //what
 
-	adjust_nutrition(M, alien, removed)
+	adjust_nutrition(M, removed)
 	M.add_chemical_effect(CE_BLOODRESTORE, 4 * removed)
 
-/datum/reagent/nutriment/proc/adjust_nutrition(var/mob/living/carbon/M, var/alien, var/removed)
+/datum/reagent/nutriment/proc/adjust_nutrition(mob/living/carbon/M, removed)
 	var/nut_removed = removed
 	var/hyd_removed = removed
-	if(alien == IS_UNATHI)
+	if (HAS_TRAIT(M, /singleton/trait/boon/cast_iron_stomach))
 		removed *= 0.1 // Unathi get most of their nutrition from meat.
 	if(nutriment_factor)
 		M.adjust_nutrition(nutriment_factor * nut_removed) // For hunger and fatness
@@ -71,10 +70,11 @@
 	color = "#440000"
 	protein_amount = 1
 
-/datum/reagent/nutriment/protein/adjust_nutrition(var/mob/living/carbon/M, var/alien, var/removed)
-	switch(alien)
-		if(IS_UNATHI) removed *= 2.25
-		if(IS_SKRELL) return
+/datum/reagent/nutriment/protein/adjust_nutrition(mob/living/carbon/M, removed)
+	if (HAS_TRAIT(M, /singleton/trait/malus/animal_protein))
+		return
+	if (HAS_TRAIT(M, /singleton/trait/boon/cast_iron_stomach))
+		removed *= 2.25
 	M.adjust_nutrition(nutriment_factor * removed)
 
 /datum/reagent/nutriment/protein/egg // Also bad for skrell.
@@ -96,13 +96,7 @@
 	taste_description = "sweetness"
 	nutriment_factor = 10
 	color = "#ffff00"
-
-/datum/reagent/nutriment/honey/affect_ingest(var/mob/living/carbon/human/M, var/alien, var/removed)
-	..()
-
-	if(alien == IS_UNATHI)
-		var/datum/species/unathi/S = M.species
-		S.handle_sugar(M,src)
+	sugar_amount = 1
 
 /datum/reagent/nutriment/flour
 	name = "flour"
@@ -112,7 +106,7 @@
 	nutriment_factor = 1
 	color = "#ffffff"
 
-/datum/reagent/nutriment/flour/touch_turf(var/turf/simulated/T)
+/datum/reagent/nutriment/flour/touch_turf(turf/simulated/T)
 	if(istype(T))
 		new /obj/effect/decal/cleanable/flour(T)
 		if(T.wet > 1)
@@ -129,7 +123,7 @@
 	color = "#ffd592"
 	protein_amount = 0.4
 
-/datum/reagent/nutriment/batter/touch_turf(var/turf/simulated/T)
+/datum/reagent/nutriment/batter/touch_turf(turf/simulated/T)
 	if(!istype(T, /turf/space))
 		new /obj/effect/decal/cleanable/pie_smudge(T)
 		if(T.wet > 1)
@@ -275,11 +269,11 @@
 	nutriment_factor = 20
 	color = "#302000"
 
-/datum/reagent/nutriment/cornoil/touch_turf(var/turf/simulated/T)
+/datum/reagent/nutriment/cornoil/touch_turf(turf/simulated/T)
 	if(!istype(T))
 		return
 
-	var/hotspot = (locate(/obj/fire) in T)
+	var/hotspot = (locate(/obj/hotspot) in T)
 	if(hotspot && !istype(T, /turf/space))
 		var/datum/gas_mixture/lowertemp = T.remove_air(T:air:total_moles)
 		lowertemp.temperature = max(min(lowertemp.temperature-2000, lowertemp.temperature / 2), 0)
@@ -313,7 +307,7 @@
 	overdose = REAGENTS_OVERDOSE
 	value = 0.11
 
-/datum/reagent/lipozine/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
+/datum/reagent/lipozine/affect_blood(mob/living/carbon/M, removed)
 	M.adjust_nutrition(-10)
 
 /* Non-food stuff like condiments */
@@ -354,8 +348,8 @@
 	color = "#07aab2"
 	value = 0.2
 
-/datum/reagent/frostoil/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
-	if(alien == IS_DIONA)
+/datum/reagent/frostoil/affect_blood(mob/living/carbon/M, removed)
+	if (IS_METABOLICALLY_INERT(M))
 		return
 	M.bodytemperature = max(M.bodytemperature - 10 * TEMPERATURE_DAMAGE_COEFFICIENT, 0)
 	if(prob(1))
@@ -377,13 +371,13 @@
 	var/slime_temp_adj = 10
 	value = 0.2
 
-/datum/reagent/capsaicin/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
-	if(alien == IS_DIONA)
+/datum/reagent/capsaicin/affect_blood(mob/living/carbon/M, removed)
+	if (IS_METABOLICALLY_INERT(M))
 		return
 	M.adjustToxLoss(0.5 * removed)
 
-/datum/reagent/capsaicin/affect_ingest(var/mob/living/carbon/M, var/alien, var/removed)
-	if(alien == IS_DIONA || alien == IS_UNATHI)
+/datum/reagent/capsaicin/affect_ingest(mob/living/carbon/M, removed)
+	if(IS_METABOLICALLY_INERT(M) || M.HasTrait(/singleton/trait/boon/cast_iron_stomach))
 		return
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
@@ -393,10 +387,10 @@
 		if(prob(5) || M.chem_doses[type] == metabolism) //dose == metabolism is a very hacky way of forcing the message the first time this procs
 			to_chat(M, discomfort_message)
 	else
-		M.apply_effect(agony_amount, PAIN, 0)
+		M.apply_effect(agony_amount, EFFECT_PAIN, 0)
 		if(prob(5))
 			M.custom_emote(2, "[pick("dry heaves!","coughs!","splutters!")]")
-			to_chat(M, "<span class='danger'>You feel like your insides are burning!</span>")
+			to_chat(M, SPAN_DANGER("You feel like your insides are burning!"))
 	if(istype(M, /mob/living/carbon/slime))
 		M.bodytemperature += rand(0, 15) + slime_temp_adj
 	holder.remove_reagent(/datum/reagent/frostoil, 5)
@@ -414,7 +408,7 @@
 	discomfort_message = "<span class='danger'>You feel like your insides are burning!</span>"
 	slime_temp_adj = 15
 
-/datum/reagent/capsaicin/condensed/affect_touch(var/mob/living/carbon/M, var/alien, var/removed)
+/datum/reagent/capsaicin/condensed/affect_touch(mob/living/carbon/M, removed)
 	var/eyes_covered = 0
 	var/mouth_covered = 0
 	var/partial_mouth_covered = 0
@@ -424,10 +418,8 @@
 	var/obj/item/face_protection = null
 	var/obj/item/partial_face_protection = null
 
-	var/effective_strength = 5
-
-	if(alien == IS_SKRELL)	//Larger eyes means bigger targets.
-		effective_strength = 8
+	var/permeability = GET_TRAIT_LEVEL(M, /singleton/trait/general/permeable_skin)
+	var/effective_strength = 5 + (3 * permeability)
 
 	var/list/protection
 	if(istype(M, /mob/living/carbon/human))
@@ -452,9 +444,9 @@
 
 	if(eyes_covered)
 		if(!mouth_covered)
-			to_chat(M, "<span class='warning'>Your [eye_protection] protects your eyes from the pepperspray!</span>")
+			to_chat(M, SPAN_WARNING("Your [eye_protection] protects your eyes from the pepperspray!"))
 	else
-		to_chat(M, "<span class='warning'>The pepperspray gets in your eyes!</span>")
+		to_chat(M, SPAN_WARNING("The pepperspray gets in your eyes!"))
 		M.confused += 2
 		if(mouth_covered)
 			M.eye_blurry = max(M.eye_blurry, effective_strength * 3)
@@ -464,29 +456,29 @@
 			M.eye_blind = max(M.eye_blind, effective_strength * 2)
 
 	if(mouth_covered)
-		to_chat(M, "<span class='warning'>Your [face_protection] protects you from the pepperspray!</span>")
+		to_chat(M, SPAN_WARNING("Your [face_protection] protects you from the pepperspray!"))
 	else if(!no_pain)
 		if(partial_mouth_covered)
-			to_chat(M, "<span class='warning'>Your [partial_face_protection] partially protects you from the pepperspray!</span>")
+			to_chat(M, SPAN_WARNING("Your [partial_face_protection] partially protects you from the pepperspray!"))
 			stun_probability *= 0.5
-		to_chat(M, "<span class='danger'>Your face and throat burn!</span>")
+		to_chat(M, SPAN_DANGER("Your face and throat burn!"))
 		if(M.stunned > 0  && !M.lying)
 			M.Weaken(4)
 		if(prob(stun_probability))
 			M.custom_emote(2, "[pick("coughs!","coughs hysterically!","splutters!")]")
 			M.Stun(3)
 
-/datum/reagent/capsaicin/condensed/affect_ingest(var/mob/living/carbon/M, var/alien, var/removed)
+/datum/reagent/capsaicin/condensed/affect_ingest(mob/living/carbon/M, removed)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!H.can_feel_pain())
 			return
 	if(M.chem_doses[type] == metabolism)
-		to_chat(M, "<span class='danger'>You feel like your insides are burning!</span>")
+		to_chat(M, SPAN_DANGER("You feel like your insides are burning!"))
 	else
-		M.apply_effect(6, PAIN, 0)
+		M.apply_effect(6, EFFECT_PAIN, 0)
 		if(prob(5))
-			to_chat(M, "<span class='danger'>You feel like your insides are burning!</span>")
+			to_chat(M, SPAN_DANGER("You feel like your insides are burning!"))
 			M.custom_emote(2, "[pick("coughs.","gags.","retches.")]")
 			M.Stun(2)
 	if(istype(M, /mob/living/carbon/slime))

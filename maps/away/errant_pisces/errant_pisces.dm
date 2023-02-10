@@ -16,74 +16,6 @@
 	spawn_cost = 1
 	area_usage_test_exempted_root_areas = list(/area/errant_pisces)
 
-/mob/living/simple_animal/hostile/carp/shark // generally stronger version of a carp that doesn't die from a mean look. Fance new sprites included, credits to F-Tang Steve
-	name = "cosmoshark"
-	desc = "Enormous creature that resembles a shark with magenta glowing lines along its body and set of long deep-purple teeth."
-	icon = 'maps/away/errant_pisces/errant_pisces_sprites.dmi'
-	icon_state = "shark"
-	icon_living = "shark"
-	icon_dead = "shark_dead"
-	icon_gib = "shark_dead"
-	turns_per_move = 5
-	meat_type = /obj/item/reagent_containers/food/snacks/sharkmeat
-	speed = 2
-	maxHealth = 100
-	health = 100
-	harm_intent_damage = 5
-	natural_weapon = /obj/item/natural_weapon/bite/strong
-	break_stuff_probability = 35
-	faction = "shark"
-
-	ai_holder_type = /datum/ai_holder/simple_animal/melee/carp/shark
-
-/datum/ai_holder/simple_animal/melee/carp/shark/engage_target()
-	set waitfor = 0//to deal with sleep() possibly stalling other procs
-	. = ..()
-	var/mob/living/simple_animal/hostile/carp/shark/S = holder
-	var/mob/living/L = .
-	if(istype(L))
-		if(prob(25))//if one is unlucky enough, they get tackled few tiles away
-			L.visible_message("<span class='danger'>\The [src] tackles [L]!</span>")
-			var/tackle_length = rand(3,5)
-			for (var/i = 1 to tackle_length)
-				var/turf/T = get_step(L.loc, S.dir)//on a first step of tackling standing mob would block movement so let's check if there's something behind it. Works for consequent moves too
-				if (T.density || LinkBlocked(L.loc, T) || TurfBlockedNonWindow(T) || DirBlocked(T, GLOB.flip_dir[S.dir]))
-					break
-				sleep(2)
-				S.forceMove(T)//maybe there's better manner then just forceMove() them
-				L.forceMove(T)
-			S.visible_message("<span class='danger'>\The [S] releases [L].</span>")
-
-
-/mob/living/simple_animal/hostile/carp/shark/carp_randomify()
-	return
-
-/mob/living/simple_animal/hostile/carp/shark/on_update_icon()
-	return
-
-/mob/living/simple_animal/hostile/carp/shark/death()
-	..()
-	var/datum/gas_mixture/environment = loc.return_air()
-	if (environment)
-		var/datum/gas_mixture/sharkmaw_phoron = new
-		sharkmaw_phoron.adjust_gas(GAS_PHORON,  10)
-		environment.merge(sharkmaw_phoron)
-		visible_message("<span class='warning'>\The [src]'s body releases some gas from the gills with a quiet fizz!</span>")
-
-/obj/item/reagent_containers/food/snacks/sharkmeat
-	name = "cosmoshark fillet"
-	desc = "A fillet of cosmoshark meat."
-	icon_state = "fishfillet"
-	filling_color = "#cecece"
-	center_of_mass = "x=17;y=13"
-
-/obj/item/reagent_containers/food/snacks/sharkmeat/New()
-	..()
-	reagents.add_reagent(/datum/reagent/nutriment/protein, 5)
-	reagents.add_reagent(/datum/reagent/space_drugs, 1)
-	reagents.add_reagent(/datum/reagent/toxin/phoron, 1)
-	src.bitesize = 8
-
 
 /obj/structure/net//if you want to have fun, make them to be draggable as a whole unless at least one piece is attached to a non-space turf or anchored object
 	name = "industrial net"
@@ -92,9 +24,10 @@
 	icon_state = "net_f"
 	anchored = TRUE
 	layer = CATWALK_LAYER//probably? Should cover cables, pipes and the rest of objects that are secured on the floor
-	var/health = 100
+	health_max = 100
+	health_min_damage = 10
 
-obj/structure/net/Initialize(var/mapload)
+/obj/structure/net/Initialize(mapload)
 	. = ..()
 	update_connections()
 	if (!mapload)//if it's not mapped object but rather created during round, we should update visuals of adjacent net objects
@@ -105,40 +38,31 @@ obj/structure/net/Initialize(var/mapload)
 					continue
 				N.update_connections()
 
-/obj/structure/net/examine(mob/user)
-	. = ..()
-	if (health < 20)
-		to_chat(user, "\The [src] is barely hanging on a few last threads.")
-	else if (health < 50)
-		to_chat(user, "Many ribbons of \the [src] are cut away.")
-	else if (health < 90)
-		to_chat(user, "Few ribbons of \the [src] are cut away.")
-
 /obj/structure/net/attackby(obj/item/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/material)) //sharp objects can cut thorugh
+	if (user.a_intent == I_HURT && istype(W, /obj/item/material)) //sharp objects can cut thorugh
 		var/obj/item/material/SH = W
 		if (!(SH.sharp) || (SH.sharp && SH.force < 10))//is not sharp enough or at all
-			to_chat(user,"<span class='warning'>You can't cut throught \the [src] with \the [W], it's too dull.</span>")
-			return
-		visible_message("<span class='warning'>[user] starts to cut through \the [src] with \the [W]!</span>")
-		while (health > 0)
-			if (!do_after(user, 20, src))
-				visible_message("<span class='warning'>[user] stops cutting through \the [src] with \the [W]!</span>")
-				return
-			health -= 20 * (1 + (SH.force-10)/10)//the sharper the faster, every point of force above 10 adds 10 % to damage
-		visible_message("<span class='warning'>[user] cuts through \the [src]!</span>")
+			to_chat(user,SPAN_WARNING("You can't cut throught \the [src] with \the [W], it's too dull."))
+			return TRUE
+		visible_message(SPAN_WARNING("[user] starts to cut through \the [src] with \the [W]!"))
+		while (!health_dead)
+			if (!do_after(user, 2 SECONDS, src, DO_PUBLIC_UNIQUE))
+				visible_message(SPAN_WARNING("[user] stops cutting through \the [src] with \the [W]!"))
+				return TRUE
+			damage_health(20 * (1 + (SH.force-10) / 10), W.damtype, DAMAGE_FLAG_SHARP)
+		visible_message(SPAN_WARNING("[user] cuts through \the [src]!"))
 		new /obj/item/stack/net(src.loc)
 		qdel(src)
+		return TRUE
+
+	return ..()
 
 /obj/structure/net/bullet_act(obj/item/projectile/P)
 	. = PROJECTILE_CONTINUE //few cloth ribbons won't stop bullet or energy ray
-	if(P.damage_type != BURN)//beams, lasers, fire. Bullets won't make a lot of damage to the few hanging belts.
+	if (P.damage_type != DAMAGE_BURN)//beams, lasers, fire. Bullets won't make a lot of damage to the few hanging belts.
 		return
-	visible_message("<span class='warning'>\The [P] hits \the [src] and tears it!</span>")
-	health -= P.damage
-	if (health < 0)
-		visible_message("<span class='warning'>\The [src] is torn apart!</span>")
-		qdel(src)
+	visible_message(SPAN_WARNING("\The [P] hits \the [src] and tears it!"))
+	damage_health(P.damage, P.damage_type)
 
 /obj/structure/net/update_connections()//maybe this should also be called when any of the walls nearby is removed but no idea how I can make it happen
 	overlays.Cut()
@@ -153,7 +77,7 @@ obj/structure/net/Initialize(var/mapload)
 	density = TRUE
 	layer = ABOVE_HUMAN_LAYER
 
-/obj/structure/net/net_wall/Initialize(var/mapload)
+/obj/structure/net/net_wall/Initialize(mapload)
 	. = ..()
 	if (mapload)//if it's pre-mapped, it should put floor-net below itself
 		var/turf/T = get_turf(src)
@@ -184,7 +108,6 @@ obj/structure/net/Initialize(var/mapload)
 	throw_range = 10
 	matter = list("cloth" = 1875, "plasteel" = 350)
 	max_amount = 30
-	center_of_mass = null
 	attack_verb = list("hit", "bludgeoned", "whacked")
 	lock_picking_level = 3
 
@@ -214,11 +137,11 @@ obj/structure/net/Initialize(var/mapload)
 /obj/item/stack/net/attack_self(mob/user)//press while holding to lay one. If there's net already, place wall
 	var/turf/T = get_turf(user)
 	if (locate(/obj/structure/net/net_wall) in T)
-		to_chat(user, "<span class='warning'>Net wall is already placed here!</span>")
+		to_chat(user, SPAN_WARNING("Net wall is already placed here!"))
 		return
 	if (locate(/obj/structure/net) in T)//if there's already layed "floor" net
 		if (!attach_wall_check())
-			to_chat(user, "<span class='warning'>You try to place net wall but it falls on the floor. Try to attach it to something vertical and stable.</span>")
+			to_chat(user, SPAN_WARNING("You try to place net wall but it falls on the floor. Try to attach it to something vertical and stable."))
 			return
 		new /obj/structure/net/net_wall(T)
 		//update_adjacent_nets(1)//since net-wall was added we also update adjacent wall-nets
@@ -230,7 +153,7 @@ obj/structure/net/Initialize(var/mapload)
 	if (amount < 1)
 		qdel(src)
 
-/obj/item/clothing/under/carp//as far as I know sprites are taken from /tg/
+/obj/item/clothing/under/carp
 	name = "space carp suit"
 	desc = "A suit in a shape of a space carp. Usually worn by corporate interns who are sent to entertain children during HQ excursions."
 	icon_state = "carp_suit"
@@ -239,10 +162,10 @@ obj/structure/net/Initialize(var/mapload)
 
 /obj/effect/landmark/corpse/carp_fisher
 	name = "carp fisher"
-	corpse_outfits = list(/decl/hierarchy/outfit/corpse/carp_fisher)
+	corpse_outfits = list(/singleton/hierarchy/outfit/corpse/carp_fisher)
 	species = list(SPECIES_HUMAN = 70, SPECIES_IPC = 20, SPECIES_UNATHI = 10)
 
-/decl/hierarchy/outfit/corpse/carp_fisher
+/singleton/hierarchy/outfit/corpse/carp_fisher
 	name = "Dead carp fisher"
 	uniform = /obj/item/clothing/under/color/green
 	suit = /obj/item/clothing/suit/apron/overalls

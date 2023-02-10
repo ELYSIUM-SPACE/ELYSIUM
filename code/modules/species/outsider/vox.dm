@@ -40,10 +40,10 @@
 	cold_level_1 = 80
 	cold_level_2 = 50
 	cold_level_3 = -1
-	
+
 	min_age = 1
 	max_age = 100
-	
+
 	gluttonous = GLUT_TINY|GLUT_ITEM_NORMAL
 	stomach_capacity = 12
 
@@ -52,14 +52,13 @@
 	siemens_coefficient = 0.2
 
 	species_flags = SPECIES_FLAG_NO_SCAN
-	spawn_flags = SPECIES_CAN_JOIN | SPECIES_IS_WHITELISTED | SPECIES_NO_FBP_CONSTRUCTION
-	appearance_flags = HAS_EYE_COLOR | HAS_HAIR_COLOR
+	spawn_flags = SPECIES_CAN_JOIN | SPECIES_IS_WHITELISTED | SPECIES_NO_FBP_CONSTRUCTION | SPECIES_NO_FBP_CHARGEN
+	appearance_flags = SPECIES_APPEARANCE_HAS_EYE_COLOR | SPECIES_APPEARANCE_HAS_HAIR_COLOR
 
 	blood_color = "#2299fc"
 	flesh_color = "#808d11"
 
-	reagent_tag = IS_VOX
-	maneuvers = list(/decl/maneuver/leap/grab)
+	maneuvers = list(/singleton/maneuver/leap/grab)
 	standing_jump_range = 5
 
 	override_limb_types = list(
@@ -112,16 +111,20 @@
 	exertion_reagent_scale = 5
 	exertion_reagent_path = /datum/reagent/lactate
 	exertion_emotes_biological = list(
-		/decl/emote/exertion/biological,
-		/decl/emote/exertion/biological/breath,
-		/decl/emote/exertion/biological/pant
+		/singleton/emote/exertion/biological,
+		/singleton/emote/exertion/biological/breath,
+		/singleton/emote/exertion/biological/pant
 	)
 	exertion_emotes_synthetic = list(
-		/decl/emote/exertion/synthetic,
-		/decl/emote/exertion/synthetic/creak
+		/singleton/emote/exertion/synthetic,
+		/singleton/emote/exertion/synthetic/creak
 	)
 
-/datum/species/vox/equip_survival_gear(var/mob/living/carbon/human/H)
+	ingest_amount = 20
+
+	traits = list(/singleton/trait/general/nonpermeable_skin = TRAIT_LEVEL_EXISTS)
+
+/datum/species/vox/equip_survival_gear(mob/living/carbon/human/H)
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/vox(H), slot_wear_mask)
 
 	if(istype(H.get_equipped_item(slot_back), /obj/item/storage/backpack))
@@ -133,48 +136,12 @@
 		H.equip_to_slot_or_del(new /obj/item/storage/box/vox(H), slot_r_hand)
 		H.set_internals(H.back)
 
-/datum/species/vox/disfigure_msg(var/mob/living/carbon/human/H)
+/datum/species/vox/disfigure_msg(mob/living/carbon/human/H)
 	var/datum/gender/T = gender_datums[H.get_gender()]
-	return "<span class='danger'>[T.His] beak-segments are cracked and chipped! [T.He] [T.is] not even recognizable.</span>\n"
-	
+	return "[SPAN_DANGER("[T.His] beak-segments are cracked and chipped! [T.He] [T.is] not even recognizable.")]\n"
+
 /datum/species/vox/skills_from_age(age)
 	. = 8
-
-/datum/species/vox/armalis
-	name = SPECIES_VOX_ARMALIS
-	name_plural = SPECIES_VOX_ARMALIS
-	icon_template =   'icons/mob/human_races/species/template_tall.dmi'
-	icobase =         'icons/mob/human_races/species/vox/armalis_body.dmi'
-	deform =          'icons/mob/human_races/species/vox/armalis_body.dmi'
-	husk_icon =       'icons/mob/human_races/species/vox/armalis_husk.dmi'
-	damage_overlays = 'icons/mob/human_races/species/vox/damage_overlay_armalis.dmi'
-	damage_mask =     'icons/mob/human_races/species/vox/damage_mask_armalis.dmi'
-	blood_mask =      'icons/mob/human_races/species/vox/blood_mask_armalis.dmi'
-
-	slowdown = 1
-	hidden_from_codex = TRUE
-	spawn_flags = SPECIES_IS_WHITELISTED | SPECIES_NO_FBP_CONSTRUCTION
-	brute_mod = 0.8
-	burn_mod = 0.8
-	strength = STR_HIGH
-
-	override_organ_types = list(BP_EYES = /obj/item/organ/internal/eyes/vox/armalis)
-
-	descriptors = list(
-		/datum/mob_descriptor/height = 2,
-		/datum/mob_descriptor/build = 2,
-		/datum/mob_descriptor/vox_markings = 0
-	)
-
-/datum/species/vox/armalis/New()
-	..()
-	equip_adjust = list(
-		slot_l_hand_str = list("[NORTH]" = list("x" = 0, "y" = 4), "[EAST]" = list("x" = -3, "y" = 4), "[SOUTH]" = list("x" = 0, "y" = 4), "[WEST]" = list("x" =  3, "y" = 4)),
-		slot_r_hand_str = list("[NORTH]" = list("x" = 0, "y" = 4), "[EAST]" = list("x" =  3, "y" = 4), "[SOUTH]" = list("x" = 0, "y" = 4), "[WEST]" = list("x" = -3, "y" = 4)),
-		slot_back_str =   list("[NORTH]" = list("x" = 0, "y" = 8), "[EAST]" = list("x" = -3, "y" = 8), "[SOUTH]" = list("x" = 0, "y" = 8), "[WEST]" = list("x" =  3, "y" = 8)),
-		slot_belt_str =   list("[NORTH]" = list("x" = 0, "y" = 8), "[EAST]" = list("x" = -4, "y" = 8), "[SOUTH]" = list("x" = 0, "y" = 8), "[WEST]" = list("x" =  4, "y" = 8))
-	)
-
 
 /obj/item/vox_changer
 	name = "mouldy mirror"
@@ -191,7 +158,7 @@
 		return
 	if (allowed_role && user.mind?.special_role != allowed_role)
 		return
-	if (user.species.name == SPECIES_VOX || !is_alien_whitelisted(user, SPECIES_VOX))
+	if (user.species.name == SPECIES_VOX || !is_alien_whitelisted(user, all_species[SPECIES_VOX]))
 		return
 	var/data = input(user, "Become Vox?", "Become Vox") as null | anything in list("No", "Yes")
 	if (isnull(data) || data == "No")
@@ -201,7 +168,7 @@
 	OnCreated(vox, user)
 	data = sanitizeSafe(input(vox, "Enter Name:", "Enter Name", "") as text, MAX_NAME_LEN)
 	if (!length(data))
-		var/decl/cultural_info/culture = SSculture.get_culture(CULTURE_VOX_RAIDER)
+		var/singleton/cultural_info/culture = SSculture.get_culture(CULTURE_VOX_RAIDER)
 		data = culture.get_random_name()
 	vox.real_name = data
 	vox.SetName(data)

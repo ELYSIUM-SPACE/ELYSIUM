@@ -1,4 +1,4 @@
-/obj/effect/vine/HasProximity(var/atom/movable/AM)
+/obj/effect/vine/HasProximity(atom/movable/AM)
 	if(!is_mature() || seed.get_trait(TRAIT_SPREAD) != 2)
 		return
 
@@ -13,17 +13,20 @@
 			if(prob(seed.get_trait(((TRAIT_POTENCY)/2)*3)))
 				entangle(M)
 
-/obj/effect/vine/attack_hand(var/mob/user)
+/obj/effect/vine/attack_hand(mob/user)
 	manual_unbuckle(user)
 
-/obj/effect/vine/attack_generic(var/mob/user)
-	manual_unbuckle(user)
+/obj/effect/vine/attack_generic(mob/user)
+	if (buckled_mob == user)
+		manual_unbuckle(user)
+		return
+	..()
 
 /obj/effect/vine/Crossed(atom/movable/O)
 	if(isliving(O))
 		trodden_on(O)
 
-/obj/effect/vine/proc/trodden_on(var/mob/living/victim)
+/obj/effect/vine/proc/trodden_on(mob/living/victim)
 	wake_neighbors()
 	if(!is_mature())
 		return
@@ -57,7 +60,7 @@
 			SPAN_NOTICE("You attempt to get free from [src].")
 		)
 
-		if(do_after(user, breakouttime, incapacitation_flags = INCAPACITATION_DEFAULT & ~INCAPACITATION_RESTRAINED))
+		if (do_after(user, breakouttime, src, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS, INCAPACITATION_DEFAULT & ~INCAPACITATION_RESTRAINED))
 			if(unbuckle_mob())
 				user.visible_message(
 					"\The [user] manages to escape [src]!",
@@ -91,7 +94,7 @@
 				SPAN_WARNING("Tendrils lash to drag you but \the [src] can't pull you across the ground!")
 			)
 			return
-	
+
 	victim.visible_message(
 		SPAN_DANGER("Tendrils lash out from \the [src] and drag \the [victim] in!"),
 		SPAN_DANGER("Tendrils lash out from \the [src] and drag you in!"))

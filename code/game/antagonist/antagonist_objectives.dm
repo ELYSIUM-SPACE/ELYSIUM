@@ -1,14 +1,14 @@
-/datum/antagonist/proc/create_global_objectives(var/override=0)
+/datum/antagonist/proc/create_global_objectives(override=0)
 	if(config.objectives_disabled != CONFIG_OBJECTIVE_ALL && !override)
 		return 0
-	if(global_objectives && global_objectives.len)
+	if(global_objectives && length(global_objectives))
 		return 0
 	return 1
 
-/datum/antagonist/proc/create_objectives(var/datum/mind/player, var/override=0)
+/datum/antagonist/proc/create_objectives(datum/mind/player, override=0)
 	if(config.objectives_disabled != CONFIG_OBJECTIVE_ALL && !override)
 		return 0
-	if(create_global_objectives(override) || global_objectives.len)
+	if(create_global_objectives(override) || length(global_objectives))
 		player.objectives |= global_objectives
 	return 1
 
@@ -31,7 +31,7 @@
 		if(antagonist && antagonist.is_antagonist(src.mind))
 			antagonist.create_objectives(src.mind,1)
 
-	to_chat(src, "<b><font size=3>These objectives are completely voluntary. You are not required to complete them.</font></b>")
+	to_chat(src, "<b>[FONT_LARGE("These objectives are completely voluntary. You are not required to complete them.")]</b>")
 	show_objectives(src.mind)
 
 /mob/living/proc/set_ambition()
@@ -42,8 +42,8 @@
 	if(!mind)
 		return
 	if(!is_special_character(mind))
-		to_chat(src, "<span class='warning'>While you may perhaps have goals, this verb's meant to only be visible \
-		to antagonists.  Please make a bug report!</span>")
+		to_chat(src, SPAN_WARNING("While you may perhaps have goals, this verb's meant to only be visible \
+		to antagonists.  Please make a bug report!"))
 		return
 
 	var/datum/goal/ambition/goal = SSgoals.ambitions[mind]
@@ -54,9 +54,9 @@
 		if(!goal)
 			goal = new /datum/goal/ambition(mind)
 		goal.description = new_goal
-		to_chat(src, "<span class='notice'>You've set your goal to be <b>'[goal.description]'</b>. You can check your goals with the <b>Show Goals</b> verb.</span>")
+		to_chat(src, SPAN_NOTICE("You've set your goal to be <b>'[goal.description]'</b>. You can check your goals with the <b>Show Goals</b> verb."))
 	else
-		to_chat(src, "<span class='notice'>You leave your ambitions behind.</span>")
+		to_chat(src, SPAN_NOTICE("You leave your ambitions behind."))
 		if(goal)
 			qdel(goal)
 	log_and_message_admins("has set their ambitions to now be: [new_goal].")
@@ -64,6 +64,6 @@
 //some antagonist datums are not actually antagonists, so we might want to avoid
 //sending them the antagonist meet'n'greet messages.
 //E.G. ERT
-/datum/antagonist/proc/show_objectives_at_creation(var/datum/mind/player)
+/datum/antagonist/proc/show_objectives_at_creation(datum/mind/player)
 	if(src.show_objectives_on_creation)
 		show_objectives(player)

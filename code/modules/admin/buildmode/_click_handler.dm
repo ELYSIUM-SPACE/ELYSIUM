@@ -8,7 +8,7 @@
 
 	var/datum/build_mode/current_build_mode
 
-/datum/click_handler/build_mode/New(var/mob/user)
+/datum/click_handler/build_mode/New(mob/user)
 	..()
 
 	build_modes = list()
@@ -36,7 +36,7 @@
 	. = ..()
 
 /datum/click_handler/build_mode/proc/StartTimer()
-	timer_handle = addtimer(CALLBACK(src, .proc/TimerEvent), 1 SECOND, TIMER_UNIQUE | TIMER_STOPPABLE | TIMER_LOOP)
+	timer_handle = addtimer(new Callback(src, .proc/TimerEvent), 1 SECOND, TIMER_UNIQUE | TIMER_STOPPABLE | TIMER_LOOP)
 
 /datum/click_handler/build_mode/proc/StopTimer()
 	deltimer(timer_handle)
@@ -57,10 +57,10 @@
 	for(var/build_button in build_buttons)
 		user.my_client.screen -= build_button
 
-/datum/click_handler/build_mode/OnDblClick(var/atom/A, var/params)
+/datum/click_handler/build_mode/OnDblClick(atom/A, params)
 	OnClick(A, params) // We treat double-clicks as normal clicks
 
-/datum/click_handler/build_mode/OnClick(var/atom/A, var/params)
+/datum/click_handler/build_mode/OnClick(atom/A, params)
 	params = params2list(params)
 	if(A in build_buttons)
 		var/obj/effect/bmode/build_button = A

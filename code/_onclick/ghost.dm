@@ -6,11 +6,11 @@
 	if(!client) return
 	client.inquisitive_ghost = !client.inquisitive_ghost
 	if(client.inquisitive_ghost)
-		to_chat(src, "<span class='notice'>You will now examine everything you click on.</span>")
+		to_chat(src, SPAN_NOTICE("You will now examine everything you click on."))
 	else
-		to_chat(src, "<span class='notice'>You will no longer examine things you click on.</span>")
+		to_chat(src, SPAN_NOTICE("You will no longer examine things you click on."))
 
-/mob/observer/ghost/DblClickOn(var/atom/A, var/params)
+/mob/observer/ghost/DblClickOn(atom/A, params)
 	if(can_reenter_corpse && mind && mind.current)
 		if(A == mind.current || (mind.current in A)) // double click your corpse or whatever holds it
 			reenter_corpse()						// (cloning scanner, body bag, closet, exosuit, etc)
@@ -24,7 +24,7 @@
 		stop_following()
 		forceMove(get_turf(A))
 
-/mob/observer/ghost/ClickOn(var/atom/A, var/params)
+/mob/observer/ghost/ClickOn(atom/A, params)
 	if(!canClick()) return
 	setClickCooldown(DEFAULT_QUICK_COOLDOWN)
 
@@ -44,7 +44,13 @@
 		return
 	A.attack_ghost(src)
 
-// Oh by the way this didn't work with old click code which is why clicking shit didn't spam you
+
+/**
+ * Called when a ghost mob clicks on an atom.
+ *
+ * **Parameters**:
+ * - `user` - The mob clicking on the atom.
+ */
 /atom/proc/attack_ghost(mob/observer/ghost/user as mob)
 	if(!istype(user))
 		return
@@ -52,35 +58,7 @@
 		user.examinate(src)
 	return
 
-// ---------------------------------------
-// And here are some good things for free:
-// Now you can click through portals, wormholes, gateways, and teleporters while observing. -Sayu
 
 /obj/effect/portal/attack_ghost(mob/user as mob)
 	if(target)
 		user.forceMove(get_turf(target))
-
-/obj/machinery/gateway/centerstation/attack_ghost(mob/user as mob)
-	if(awaygate)
-		user.forceMove(awaygate.loc)
-	else
-		to_chat(user, "[src] has no destination.")
-
-/obj/machinery/gateway/centeraway/attack_ghost(mob/user as mob)
-	if(stationgate)
-		user.forceMove(stationgate.loc)
-	else
-		to_chat(user, "[src] has no destination.")
-
-// -------------------------------------------
-// This was supposed to be used by adminghosts
-// I think it is a *terrible* idea
-// but I'm leaving it here anyway
-// commented out, of course.
-/*
-/atom/proc/attack_admin(mob/user as mob)
-	if(!user || !user.client || !user.client.holder)
-		return
-	attack_hand(user)
-
-*/

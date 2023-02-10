@@ -21,7 +21,7 @@ a, a:link, a:visited, a:active, .linkOn, .linkOff, input
 	background: #40628a;
 	border: 1px solid #161616;
 	padding: 1px 4px 1px 4px;
-	margin: 0 2px 0 0;
+	margin: 0 1px 0 1px;
 	cursor:default;
 	white-space:nowrap;
 }
@@ -83,6 +83,10 @@ ul
 	padding: 4px 0 0 10px;
 	margin: 0;
 	list-style-type: none;
+}
+
+dl dt {
+    font-weight: bold;
 }
 
 li

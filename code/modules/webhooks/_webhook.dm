@@ -1,16 +1,16 @@
-/decl/webhook
+/singleton/webhook
 	var/id
 	var/list/urls
 	var/mentions
 
-/decl/webhook/proc/get_message(var/list/data)
+/singleton/webhook/proc/get_message(list/data)
 	. = list()
 
-/decl/webhook/proc/http_post(var/target_url, var/payload)
+/singleton/webhook/proc/http_post(target_url, payload)
 	if (!target_url)
 		return -1
 
-	var/result = call(HTTP_POST_DLL_LOCATION, "send_post_request")(target_url, payload, json_encode(list("Content-Type" = "application/json")))
+	var/result = call_ext(HTTP_POST_DLL_LOCATION, "send_post_request")(target_url, payload, json_encode(list("Content-Type" = "application/json")))
 
 	result = json_decode(result)
 	if (result["error_code"])
@@ -22,7 +22,7 @@
 		"body" = result["body"]
 	)
 
-/decl/webhook/proc/send(var/list/data)
+/singleton/webhook/proc/send(list/data)
 	var/message = get_message(data)
 	if(message)
 		if(mentions)

@@ -32,8 +32,8 @@
 	sheet_singular_name = "ingot"
 	sheet_plural_name = "ingots"
 	chem_products = list(
-				/datum/reagent/gold = 20
-				)
+		/datum/reagent/gold = 20
+	)
 	construction_difficulty = MATERIAL_HARD_DIY
 	ore_smelts_to = MATERIAL_GOLD
 	ore_result_amount = 5
@@ -50,11 +50,15 @@
 	sale_price = 3
 	value = 40
 
-/material/gold/bronze //placeholder for ashtrays
+/material/gold/bronze
 	name = MATERIAL_BRONZE
-	lore_text = "An alloy of copper and tin."
+	lore_text = "An alloy of copper, now typically used for decoration."
 	icon_colour = "#edd12f"
 	construction_difficulty = MATERIAL_HARD_DIY
+	chem_products = list(
+		/datum/reagent/copper = 18,
+		/datum/reagent/aluminium = 2
+	)
 	ore_smelts_to = null
 	ore_compresses_to = null
 	sale_price = null
@@ -175,7 +179,7 @@
 	icon_base = "solid"
 	icon_reinf = "reinf_over"
 	icon_colour = "#a8a9b2"
-	explosion_resistance = 25
+	explosion_resistance = 7.5
 	brute_armor = 8
 	burn_armor = 10
 	hardness = MATERIAL_VERY_HARD
@@ -375,7 +379,7 @@
 	melting_point = rand(400,10000)
 	..()
 
-/material/aliumium/place_dismantled_girder(var/turf/target, var/material/reinf_material)
+/material/aliumium/place_dismantled_girder(turf/target, material/reinf_material)
 	return
 
 /material/hematite
@@ -403,3 +407,37 @@
 	ore_name = "rutile"
 	ore_icon_overlay = "lump"
 	sale_price = 2
+
+
+/material/electrum
+	name = MATERIAL_ELECTRUM
+	lore_text = "A soft natural alloy of gold and silver with a green-gold color, typically used for coinage and decoration."
+	wall_name = "bulkhead"
+	stack_type = /obj/item/stack/material/electrum
+	sheet_singular_name = "ingot"
+	sheet_plural_name = "ingots"
+	icon_colour = "#e7c697"
+	weight = 22
+	integrity = 100
+	hardness = MATERIAL_FLEXIBLE + 10
+	stack_origin_tech = list(TECH_MATERIAL = 4)
+	chem_products = list(
+		/datum/reagent/silver = 8,
+		/datum/reagent/gold = 8,
+		/datum/reagent/copper = 2
+	)
+	xarch_ages = list(
+		"thousand" = 999,
+		"million" = 999,
+		"billion" = 4,
+		"billion_lower" = 3
+	)
+	construction_difficulty = MATERIAL_HARD_DIY
+	ore_smelts_to = MATERIAL_ELECTRUM
+	ore_result_amount = 3
+	ore_spread_chance = 10
+	ore_name = "electrum"
+	ore_scan_icon = "mineral_uncommon"
+	ore_icon_overlay = "shiny"
+	sale_price = 3
+	value = 37

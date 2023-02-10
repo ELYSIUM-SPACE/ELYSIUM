@@ -106,7 +106,7 @@
 	else
 		ui_interact(user)
 
-/obj/item/device/radio/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, datum/nanoui/master_ui = null, datum/topic_state/state = GLOB.default_state)
+/obj/item/device/radio/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, datum/nanoui/master_ui = null, datum/topic_state/state = GLOB.default_state)
 	var/data[0]
 
 	data["power"] = on
@@ -123,9 +123,9 @@
 	data["spk_cut"] = (wires.IsIndexCut(WIRE_RECEIVE) || wires.IsIndexCut(WIRE_SIGNAL))
 
 	var/list/chanlist = list_channels(user)
-	if(islist(chanlist) && chanlist.len)
+	if(islist(chanlist) && length(chanlist))
 		data["chan_list"] = chanlist
-		data["chan_list_len"] = chanlist.len
+		data["chan_list_len"] = length(chanlist)
 
 	if(syndie)
 		data["useSyndMode"] = 1
@@ -136,10 +136,10 @@
 		ui.set_initial_data(data)
 		ui.open()
 
-/obj/item/device/radio/proc/list_channels(var/mob/user)
+/obj/item/device/radio/proc/list_channels(mob/user)
 	return list_internal_channels(user)
 
-/obj/item/device/radio/proc/list_secure_channels(var/mob/user)
+/obj/item/device/radio/proc/list_secure_channels(mob/user)
 	var/dat[0]
 
 	for(var/ch_name in channels)
@@ -150,7 +150,7 @@
 
 	return dat
 
-/obj/item/device/radio/proc/list_internal_channels(var/mob/user)
+/obj/item/device/radio/proc/list_internal_channels(mob/user)
 	var/dat[0]
 	for(var/internal_chan in internal_channels)
 		if(has_channel_access(user, internal_chan))
@@ -158,7 +158,7 @@
 
 	return dat
 
-/obj/item/device/radio/proc/has_channel_access(var/mob/user, var/freq)
+/obj/item/device/radio/proc/has_channel_access(mob/user, freq)
 	if(!user)
 		return 0
 
@@ -167,20 +167,20 @@
 
 	return user.has_internal_radio_channel_access(internal_channels[freq])
 
-/mob/proc/has_internal_radio_channel_access(var/list/req_one_accesses)
+/mob/proc/has_internal_radio_channel_access(list/req_one_accesses)
 	var/obj/item/card/id/I = GetIdCard()
 	if (!length(req_one_accesses))
 		return TRUE // No access flags means all access
 	else
 		return has_access(list(req_one_accesses), I ? I.GetAccess() : list()) // Double list does an OR check instead of the usual AND.
 
-/mob/observer/ghost/has_internal_radio_channel_access(var/list/req_one_accesses)
+/mob/observer/ghost/has_internal_radio_channel_access(list/req_one_accesses)
 	return can_admin_interact()
 
 /obj/item/device/radio/get_cell()
 	return cell
 
-/obj/item/device/radio/proc/text_sec_channel(var/chan_name, var/chan_stat)
+/obj/item/device/radio/proc/text_sec_channel(chan_name, chan_stat)
 	var/list = !!(chan_stat&FREQ_LISTENING)!=0
 	return {"
 			<B>[chan_name]</B><br>
@@ -273,16 +273,16 @@
 		if(cell && b_stat)
 			var/mob/user = usr
 			user.put_in_hands(cell)
-			to_chat(user, "<span class='notice'>You remove [cell] from \the [src].</span>")
+			to_chat(user, SPAN_NOTICE("You remove [cell] from \the [src]."))
 			cell = null
 		return TRUE
 
 	if(.)
 		SSnano.update_uis(src)
 
-/obj/item/device/radio/proc/autosay(var/message, var/from, var/channel) //BS12 EDIT
+/obj/item/device/radio/proc/autosay(message, from, channel) //BS12 EDIT
 	var/datum/radio_frequency/connection = null
-	if(channel && channels && channels.len > 0)
+	if(channel && channels && length(channels) > 0)
 		if (channel == "department")
 			channel = channels[1]
 		connection = secure_radio_connections[channel]
@@ -303,7 +303,7 @@
 		return radio_connection
 
 	// Otherwise, if a channel is specified, look for it.
-	if(channels && channels.len > 0)
+	if(channels && length(channels) > 0)
 		if (message_mode == "department") // Department radio shortcut
 			message_mode = channels[1]
 
@@ -313,7 +313,7 @@
 	// If we were to send to a channel we don't have, drop it.
 	return null
 
-/obj/item/device/radio/talk_into(mob/living/M, message, channel, var/verb = "says", var/datum/language/speaking = null)
+/obj/item/device/radio/talk_into(mob/living/M, message, channel, verb = "says", datum/language/speaking = null)
 	if(!on) return 0 // the device has to be on
 	//  Fix for permacell radios, but kinda eh about actually fixing them.
 	if(!M || !message) return 0
@@ -538,7 +538,7 @@
 					  "[connection.frequency]", channel_color_presets["Menacing Maroon"])
 
 
-/obj/item/device/radio/hear_talk(mob/M as mob, msg, var/verb = "says", var/datum/language/speaking = null)
+/obj/item/device/radio/hear_talk(mob/M as mob, msg, verb = "says", datum/language/speaking = null)
 
 	if (broadcasting)
 		if(get_dist(src, M) <= canhear_range)
@@ -590,11 +590,11 @@
 	. = ..()
 	if (distance <= 1 || loc == user)
 		if (b_stat)
-			to_chat(user, "<span class='notice'>\The [src] can be attached and modified!</span>")
+			to_chat(user, SPAN_NOTICE("\The [src] can be attached and modified!"))
 		else
-			to_chat(user, "<span class='notice'>\The [src] can not be modified or attached!</span>")
+			to_chat(user, SPAN_NOTICE("\The [src] can not be modified or attached!"))
 		if (power_usage && cell)
-			to_chat(user, "<span class='notice'>\The [src] charge meter reads [round(cell.percent(), 0.1)]%.</span>")
+			to_chat(user, SPAN_NOTICE("\The [src] charge meter reads [round(cell.percent(), 0.1)]%."))
 
 /obj/item/device/radio/attackby(obj/item/W as obj, mob/user as mob)
 	..()
@@ -602,21 +602,21 @@
 	if(isScrewdriver(W))
 		b_stat = !b_stat
 		if (b_stat)
-			user.show_message("<span class='notice'>\The [src] can now be attached and modified!</span>")
+			user.show_message(SPAN_NOTICE("\The [src] can now be attached and modified!"))
 		else
-			user.show_message("<span class='notice'>\The [src] can no longer be modified or attached!</span>")
+			user.show_message(SPAN_NOTICE("\The [src] can no longer be modified or attached!"))
 		updateDialog()
 		return
 	if(!cell && power_usage && istype(W, /obj/item/cell/device) && user.unEquip(W, target = src))
-		to_chat(user, "<span class='notice'>You put [W] in \the [src].</span>")
+		to_chat(user, SPAN_NOTICE("You put [W] in \the [src]."))
 		cell = W
 		return
 
 /obj/item/device/radio/emp_act(severity)
-	broadcasting = 0
-	listening = 0
+	broadcasting = prob(50)
+	listening = prob(50)
 	for (var/ch_name in channels)
-		channels[ch_name] = 0
+		channels[ch_name] = prob(50)
 	if(cell)
 		cell.emp_act(severity)
 	..()
@@ -646,7 +646,7 @@
 /obj/item/device/radio/borg/syndicate
 	keyslot = /obj/item/device/encryptionkey/syndicate
 
-/obj/item/device/radio/borg/New(var/mob/living/silicon/robot/loc)
+/obj/item/device/radio/borg/New(mob/living/silicon/robot/loc)
 	if(!istype(loc))
 		CRASH("Invalid spawn location: [log_info_line(loc)]")
 	..()
@@ -667,7 +667,7 @@
 	myborg = null
 	return ..()
 
-/obj/item/device/radio/borg/list_channels(var/mob/user)
+/obj/item/device/radio/borg/list_channels(mob/user)
 	return list_secure_channels(user)
 
 /obj/item/device/radio/borg/talk_into()
@@ -698,7 +698,7 @@
 		else
 			to_chat(user, "This radio doesn't have any encryption keys!")
 
-	if(istype(W, /obj/item/device/encryptionkey/))
+	if(istype(W, /obj/item/device/encryptionkey))
 		if(keyslot)
 			to_chat(user, "The radio can't hold another key!")
 			return
@@ -746,9 +746,9 @@
 		if(enable_subspace_transmission != subspace_transmission)
 			subspace_transmission = !subspace_transmission
 			if(subspace_transmission)
-				to_chat(usr, "<span class='notice'>Subspace Transmission is enabled</span>")
+				to_chat(usr, SPAN_NOTICE("Subspace Transmission is enabled"))
 			else
-				to_chat(usr, "<span class='notice'>Subspace Transmission is disabled</span>")
+				to_chat(usr, SPAN_NOTICE("Subspace Transmission is disabled"))
 
 			if(subspace_transmission == 0)//Simple as fuck, clears the channel list to prevent talking/listening over them if subspace transmission is disabled
 				channels = list()
@@ -761,10 +761,10 @@
 			shut_up = !shut_up
 			if(shut_up)
 				canhear_range = 0
-				to_chat(usr, "<span class='notice'>Loadspeaker disabled.</span>")
+				to_chat(usr, SPAN_NOTICE("Loadspeaker disabled."))
 			else
 				canhear_range = 3
-				to_chat(usr, "<span class='notice'>Loadspeaker enabled.</span>")
+				to_chat(usr, SPAN_NOTICE("Loadspeaker enabled."))
 		. = 1
 
 	if(.)
@@ -776,7 +776,7 @@
 
 	. = ..()
 
-/obj/item/device/radio/borg/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/item/device/radio/borg/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 	var/data[0]
 
 	data["mic_status"] = broadcasting
@@ -785,9 +785,9 @@
 	data["rawfreq"] = num2text(frequency)
 
 	var/list/chanlist = list_channels(user)
-	if(islist(chanlist) && chanlist.len)
+	if(islist(chanlist) && length(chanlist))
 		data["chan_list"] = chanlist
-		data["chan_list_len"] = chanlist.len
+		data["chan_list_len"] = length(chanlist)
 
 	if(syndie)
 		data["useSyndMode"] = 1
@@ -861,7 +861,7 @@
 
 /obj/item/device/radio/announcer/Initialize()
 	. = ..()
-	forceMove(locate(1,1,GLOB.using_map.contact_levels.len ? GLOB.using_map.contact_levels[1] : 1))
+	forceMove(locate(1,1,length(GLOB.using_map.contact_levels) ? GLOB.using_map.contact_levels[1] : 1))
 
 /obj/item/device/radio/announcer/subspace
 	subspace_transmission = 1
@@ -881,7 +881,7 @@
 	..()
 	internal_channels = GLOB.default_medbay_channels.Copy()
 
-/obj/item/device/radio/CouldUseTopic(var/mob/user)
+/obj/item/device/radio/CouldUseTopic(mob/user)
 	..()
 	if(istype(user, /mob/living/carbon))
 		playsound(src, "button", 10)
@@ -914,7 +914,7 @@
 		return E
 	return null
 
-/obj/item/device/radio/exosuit/attack_self(var/mob/user)
+/obj/item/device/radio/exosuit/attack_self(mob/user)
 	var/mob/living/exosuit/exosuit = loc
 	if(istype(exosuit) && exosuit.head && exosuit.head.radio && exosuit.head.radio.is_functional())
 		user.set_machine(src)
@@ -929,5 +929,5 @@
 		if(istype(exosuit) && exosuit.head && exosuit.head.radio && exosuit.head.radio.is_functional())
 			return ..()
 
-/obj/item/device/radio/exosuit/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, datum/nanoui/master_ui = null, var/datum/topic_state/state = GLOB.mech_state)
+/obj/item/device/radio/exosuit/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, datum/nanoui/master_ui = null, datum/topic_state/state = GLOB.mech_state)
 	. = ..()

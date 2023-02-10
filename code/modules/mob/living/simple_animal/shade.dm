@@ -33,13 +33,13 @@
 	skin_material = null
 	skin_amount =   0
 
-	ai_holder_type = /datum/ai_holder/simple_animal/retaliate/shade
+	ai_holder = /datum/ai_holder/simple_animal/retaliate/shade
 	say_list_type = /datum/say_list/shade
 
 /obj/item/natural_weapon/shade
 	name = "foul touch"
 	attack_verb = list("drained")
-	damtype = BURN
+	damtype = DAMAGE_BURN
 	force = 10
 
 /mob/living/simple_animal/shade/cultify()
@@ -54,7 +54,7 @@
 		new /obj/item/ectoplasm (src.loc)
 		for(var/mob/M in viewers(src, null))
 			if((M.client && !( M.blinded )))
-				M.show_message("<span class='warning'>[src] lets out a contented sigh as their form unwinds.</span>")
+				M.show_message(SPAN_WARNING("[src] lets out a contented sigh as their form unwinds."))
 				ghostize()
 		qdel(src)
 		return

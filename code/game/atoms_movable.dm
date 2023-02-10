@@ -1,8 +1,9 @@
 /atom/movable
 	layer = OBJ_LAYER
 
-	appearance_flags = DEFAULT_APPEARANCE_FLAGS | TILE_BOUND
-	glide_size = 8
+	glide_size = 6
+
+	animate_movement = SLIDE_STEPS
 
 	var/waterproof = TRUE
 	var/movable_flags
@@ -21,6 +22,12 @@
 	var/item_state = null // Used to specify the item state for the on-mob overlays.
 	var/does_spin = TRUE // Does the atom spin when thrown (of course it does :P)
 
+	/// The icon width this movable expects to have by default.
+	var/icon_width = 32
+
+	/// The icon height this movable expects to have by default.
+	var/icon_height = 32
+
 
 /atom/movable/Initialize()
 	if (!isnull(config.glide_size))
@@ -29,36 +36,31 @@
 
 /atom/movable/Destroy()
 	if(!(atom_flags & ATOM_FLAG_INITIALIZED))
-		crash_with("Was deleted before initalization")
-
+		crash_with("\A [src] was deleted before initalization")
+	walk(src, 0)
 	for(var/A in src)
 		qdel(A)
-
 	forceMove(null)
 	if (pulledby)
 		if (pulledby.pulling == src)
 			pulledby.pulling = null
 		pulledby = null
-
 	if(LAZYLEN(movement_handlers) && !ispath(movement_handlers[1]))
 		QDEL_NULL_LIST(movement_handlers)
-
 	if (bound_overlay)
 		QDEL_NULL(bound_overlay)
-
 	if(virtual_mob && !ispath(virtual_mob))
 		qdel(virtual_mob)
 		virtual_mob = null
+	return ..()
 
-	. = ..()
-
-/atom/movable/Bump(var/atom/A, yes)
+/atom/movable/Bump(atom/A, yes)
 	if(!QDELETED(throwing))
 		throwing.hit_atom(A)
 
 	if (A && yes)
 		A.last_bumped = world.time
-		INVOKE_ASYNC(A, /atom/proc/Bumped, src) // Avoids bad actors sleeping or unexpected side effects, as the legacy behavior was to spawn here
+		invoke_async(A, /atom/proc/Bumped, src) // Avoids bad actors sleeping or unexpected side effects, as the legacy behavior was to spawn here
 	..()
 
 /atom/movable/proc/forceMove(atom/destination)
@@ -128,7 +130,7 @@
 				L.source_atom.update_light()
 
 //called when src is thrown into hit_atom
-/atom/movable/proc/throw_impact(atom/hit_atom, var/datum/thrownthing/TT)
+/atom/movable/proc/throw_impact(atom/hit_atom, datum/thrownthing/TT)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom
 		M.hitby(src,TT)
@@ -159,8 +161,6 @@
 		SpinAnimation(4,1)
 
 	SSthrowing.processing[src] = TT
-	if (SSthrowing.state == SS_PAUSED && length(SSthrowing.currentrun))
-		SSthrowing.currentrun[src] = TT
 
 //Overlays
 /atom/movable/overlay
@@ -196,6 +196,23 @@
 	GLOB.dir_set_event.unregister(master, src)
 	master = null
 	. = ..()
+
+/atom/movable/overlay/use_grab(obj/item/grab/grab, list/click_params)
+	if (master)
+		return master.use_grab(grab, click_params)
+	return FALSE
+
+/atom/movable/overlay/use_weapon(obj/item/weapon, mob/user, list/click_params)
+	SHOULD_CALL_PARENT(FALSE)
+	if (master)
+		return master.use_weapon(weapon, user, click_params)
+	return FALSE
+
+/atom/movable/overlay/use_tool(obj/item/tool, mob/user, list/click_params)
+	SHOULD_CALL_PARENT(FALSE)
+	if (master)
+		return master.use_tool(tool, user, click_params)
+	return FALSE
 
 /atom/movable/overlay/attackby(obj/item/I, mob/user)
 	if (master)
@@ -245,3 +262,7 @@
 
 /atom/movable/proc/get_bullet_impact_effect_type()
 	return BULLET_IMPACT_NONE
+
+
+/atom/movable/proc/CheckDexterity(mob/living/user)
+	return TRUE

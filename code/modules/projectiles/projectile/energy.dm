@@ -3,7 +3,7 @@
 	icon_state = "spark"
 	temperature = T0C + 300
 	damage = 0
-	damage_type = BURN
+	damage_type = DAMAGE_BURN
 	damage_flags = 0
 	distance_falloff = 2.5
 
@@ -20,7 +20,7 @@
 	var/brightness = 7
 	var/light_colour = "#ffffff"
 
-/obj/item/projectile/energy/flash/on_impact(var/atom/A)
+/obj/item/projectile/energy/flash/on_impact(atom/A)
 	var/turf/T = flash_range? src.loc : get_turf(A)
 	if(!istype(T)) return
 
@@ -33,7 +33,7 @@
 
 	//snap pop
 	playsound(src, 'sound/effects/snap.ogg', 50, 1)
-	src.visible_message("<span class='warning'>\The [src] explodes in a bright flash!</span>")
+	src.visible_message(SPAN_WARNING("\The [src] explodes in a bright flash!"))
 
 	var/datum/effect/effect/system/spark_spread/sparks = new /datum/effect/effect/system/spark_spread()
 	sparks.set_up(2, 1, T)
@@ -58,33 +58,38 @@
 			M.fire_stacks = max(2, M.fire_stacks)
 			M.IgniteMob()
 
-/obj/item/projectile/energy/flash/flare/on_impact(var/atom/A)
+/obj/item/projectile/energy/flash/flare/on_impact(atom/A)
 	light_colour = pick("#e58775", "#ffffff", "#faa159", "#e34e0e")
-	set_light(1, 1, 4, 2, light_colour)
+	set_light(1, 2, 6, 1, light_colour)
 	..() //initial flash
 
 	//residual illumination
-	new /obj/effect/effect/smoke/illumination(src.loc, rand(190,240), range=8, power=1, color=light_colour) //same lighting power as flare
+	new /obj/effect/effect/smoke/illumination/flare(src.loc, rand(30 SECONDS,60 SECONDS), range=8, power=1, color=light_colour) //same lighting power as flare
 
 	var/turf/TO = get_turf(src)
 	var/area/AO = TO.loc
 	if(AO && (AO.area_flags & AREA_FLAG_EXTERNAL))
 		//Everyone saw that!
-		for(var/mob/living/mob in GLOB.living_mob_list_)
+		for(var/mob/living/mob in GLOB.alive_mobs)
 			var/turf/T = get_turf(mob)
 			if(T && (T != TO) && (TO.z == T.z) && !mob.blinded)
-				to_chat(mob, SPAN_NOTICE("You see a bright light to \the [dir2text(get_dir(T,TO))]"))
+				to_chat(mob, SPAN_DANGER("You see a bright light to \the [dir2text(get_dir(T,TO))]!"))
 			CHECK_TICK
-				
-/obj/item/projectile/energy/electrode	//has more pain than a beam because it's harder to hit 
+
+/obj/item/projectile/energy/electrode	//has more pain than a beam because it's harder to hit
 	name = "electrode"
 	icon_state = "spark"
 	fire_sound = 'sound/weapons/Taser.ogg'
 	agony = 50
 	damage = 2
-	damage_type = BURN
+	damage_type = DAMAGE_BURN
 	eyeblur = 1//Some feedback that you've been hit
 	step_delay = 0.7
+	damage_falloff_list = list(
+		list(5, 0.97),
+		list(7, 0.94),
+		list(9, 0.88),
+	)
 
 /obj/item/projectile/energy/electrode/green
 	icon_state = "spark_green"
@@ -98,21 +103,21 @@
 	icon_state = "declone"
 	fire_sound = 'sound/weapons/pulse3.ogg'
 	damage = 30
-	damage_type = CLONE
+	damage_type = DAMAGE_GENETIC
 	irradiate = 40
 
 /obj/item/projectile/energy/dart
 	name = "dart"
 	icon_state = "toxin"
 	damage = 5
-	damage_type = TOX
+	damage_type = DAMAGE_TOXIN
 	weaken = 5
 
 /obj/item/projectile/energy/bolt
 	name = "bolt"
 	icon_state = "cbbolt"
 	damage = 10
-	damage_type = TOX
+	damage_type = DAMAGE_TOXIN
 	agony = 40
 	stutter = 10
 
@@ -125,7 +130,7 @@
 	name = "neuro"
 	icon_state = "neurotoxin"
 	damage = 5
-	damage_type = TOX
+	damage_type = DAMAGE_TOXIN
 	weaken = 5
 
 /obj/item/projectile/energy/phoron
@@ -133,7 +138,7 @@
 	icon_state = "energy"
 	fire_sound = 'sound/effects/stealthoff.ogg'
 	damage = 20
-	damage_type = TOX
+	damage_type = DAMAGE_TOXIN
 	irradiate = 20
 
 /obj/item/projectile/energy/plasmastun
@@ -144,13 +149,13 @@
 	life_span = 4
 	damage = 5
 	agony = 70
-	damage_type = BURN
+	damage_type = DAMAGE_BURN
 	vacuum_traversal = 0
 	var/min_dizziness_amt = 60
 	var/med_dizziness_amt = 120
 	var/max_dizziness_amt = 300
 
-/obj/item/projectile/energy/plasmastun/proc/bang(var/mob/living/carbon/M)
+/obj/item/projectile/energy/plasmastun/proc/bang(mob/living/carbon/M)
 
 	if(!istype(M))
 		return
@@ -185,7 +190,7 @@
 		if(M.ear_damage >= 5)
 			to_chat(M, SPAN_DANGER("Your ears start to ring!"))
 
-/obj/item/projectile/energy/plasmastun/on_hit(var/atom/target)
+/obj/item/projectile/energy/plasmastun/on_hit(atom/target)
 	bang(target)
 	. = ..()
 
@@ -195,7 +200,7 @@
 	fire_sound = 'sound/effects/basscannon.ogg'
 	damage = 5
 	armor_penetration = 40
-	damage_type = BRUTE
+	damage_type = DAMAGE_BRUTE
 	vacuum_traversal = 0
 	penetration_modifier = 0.2
 	penetrating = 1
@@ -203,7 +208,7 @@
 	med_dizziness_amt = 60
 	max_dizziness_amt = 120
 
-/obj/item/projectile/energy/plasmastun/sonic/bang(var/mob/living/carbon/M)
+/obj/item/projectile/energy/plasmastun/sonic/bang(mob/living/carbon/M)
 	..()
 	if(istype(M, /atom/movable) && M.simulated && !M.anchored)
 		M.throw_at(get_edge_target_turf(M, get_dir(src, M)), rand(1,5), 6)
@@ -221,4 +226,4 @@
 	fire_sound = 'sound/weapons/eLuger.ogg'
 	damage = 10
 	armor_penetration = 35
-	damage_type = BRUTE
+	damage_type = DAMAGE_BRUTE

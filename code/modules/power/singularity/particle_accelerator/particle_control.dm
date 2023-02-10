@@ -77,7 +77,7 @@
 /obj/machinery/particle_accelerator/control_box/Topic(href, href_list)
 	..()
 	//Ignore input if we are broken, !silicon guy can't touch us, or nonai controlling from super far away
-	if(stat & (BROKEN|NOPOWER) || (get_dist(src, usr) > 1 && !istype(usr, /mob/living/silicon)) || (get_dist(src, usr) > 8 && !istype(usr, /mob/living/silicon/ai)))
+	if(inoperable() || (get_dist(src, usr) > 1 && !istype(usr, /mob/living/silicon)) || (get_dist(src, usr) > 8 && !istype(usr, /mob/living/silicon/ai)))
 		usr.unset_machine()
 		close_browser(usr, "window=pacontrol")
 		return
@@ -110,7 +110,7 @@
 		part.strength = strength
 		part.update_icon()
 
-/obj/machinery/particle_accelerator/control_box/proc/add_strength(var/s)
+/obj/machinery/particle_accelerator/control_box/proc/add_strength(s)
 	if(assembled)
 		strength++
 		if(strength > strength_upper_limit)
@@ -118,10 +118,10 @@
 		else
 			message_admins("PA Control Computer increased to [strength] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 			log_game("PA Control Computer increased to [strength] by [usr.ckey]([usr]) in ([x],[y],[z])")
-			investigate_log("increased to <font color='red'>[strength]</font> by [usr.key]","singulo")
+			investigate_log("increased to [SPAN_COLOR("red", "[strength]")] by [usr.key]","singulo")
 		strength_change()
 
-/obj/machinery/particle_accelerator/control_box/proc/remove_strength(var/s)
+/obj/machinery/particle_accelerator/control_box/proc/remove_strength(s)
 	if(assembled)
 		strength--
 		if(strength < 0)
@@ -129,12 +129,12 @@
 		else
 			message_admins("PA Control Computer decreased to [strength] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 			log_game("PA Control Computer decreased to [strength] by [usr.ckey]([usr]) in ([x],[y],[z])")
-			investigate_log("decreased to <font color='green'>[strength]</font> by [usr.key]","singulo")
+			investigate_log("decreased to [SPAN_COLOR("green", "[strength]")] by [usr.key]","singulo")
 		strength_change()
 
 /obj/machinery/particle_accelerator/control_box/power_change()
 	. = ..()
-	if(stat & NOPOWER)
+	if(!is_powered())
 		active = 0
 		update_use_power(POWER_USE_OFF)
 	else if(!stat && construction_state == 3)
@@ -144,7 +144,7 @@
 	if(src.active)
 		//a part is missing!
 		if( length(connected_parts) < 6 )
-			investigate_log("lost a connected part; It <font color='red'>powered down</font>.","singulo")
+			investigate_log("lost a connected part; It [SPAN_COLOR("red", "powered down")].","singulo")
 			src.toggle_power()
 			return
 		//emit some particles
@@ -191,7 +191,7 @@
 		return 0
 
 
-/obj/machinery/particle_accelerator/control_box/proc/check_part(var/turf/T, var/type)
+/obj/machinery/particle_accelerator/control_box/proc/check_part(turf/T, type)
 	if(!(T)||!(type))
 		return 0
 	var/obj/structure/particle_accelerator/PA = locate(/obj/structure/particle_accelerator) in T
@@ -205,7 +205,7 @@
 
 /obj/machinery/particle_accelerator/control_box/toggle_power()
 	src.active = !src.active
-	investigate_log("turned [active?"<font color='red'>ON</font>":"<font color='green'>OFF</font>"] by [usr ? usr.key : "outside forces"]","singulo")
+	investigate_log("turned [active ? SPAN_COLOR("red", "ON") : SPAN_COLOR("green", "OFF")] by [usr ? usr.key : "outside forces"]","singulo")
 	message_admins("PA Control Computer turned [active ?"ON":"OFF"] by [key_name(usr, usr.client)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 	log_game("PA Control Computer turned [active ?"ON":"OFF"] by [usr.ckey]([usr]) in ([x],[y],[z])")
 	if(src.active)
@@ -224,7 +224,7 @@
 
 
 /obj/machinery/particle_accelerator/control_box/interact(mob/user)
-	if((get_dist(src, user) > 1) || (stat & (BROKEN|NOPOWER)))
+	if((get_dist(src, user) > 1) || (inoperable()))
 		if(!istype(user, /mob/living/silicon))
 			user.unset_machine()
 			close_browser(user, "window=pacontrol")

@@ -88,7 +88,7 @@ GLOBAL_LIST_INIT(filter_mode_to_gas_id, list( \
 /obj/machinery/atmospherics/omni/filter/error_check()
 	if(!input || !output || !gas_filters)
 		return 1
-	if(gas_filters.len < 1) //requires at least 1 filter ~otherwise why are you using a filter?
+	if(length(gas_filters) < 1) //requires at least 1 filter ~otherwise why are you using a filter?
 		return 1
 
 	return 0
@@ -100,14 +100,14 @@ GLOBAL_LIST_INIT(filter_mode_to_gas_id, list( \
 	var/datum/gas_mixture/output_air = output.air	//BYOND doesn't like referencing "output.air.return_pressure()" so we need to make a direct reference
 	var/datum/gas_mixture/input_air = input.air		// it's completely happy with them if they're in a loop though i.e. "P.air.return_pressure()"... *shrug*
 
-	var/delta = between(0, (output_air ? (max_output_pressure - output_air.return_pressure()) : 0), max_output_pressure)
+	var/delta = clamp((output_air ? (max_output_pressure - output_air.return_pressure()) : 0), 0, max_output_pressure)
 	var/transfer_moles_max = calculate_transfer_moles(input_air, output_air, delta, (output && output.network && output.network.volume) ? output.network.volume : 0)
 	for(var/datum/omni_port/filter_output in gas_filters)
-		delta = between(0, (filter_output.air ? (max_output_pressure - filter_output.air.return_pressure()) : 0), max_output_pressure)
+		delta = clamp((filter_output.air ? (max_output_pressure - filter_output.air.return_pressure()) : 0), 0, max_output_pressure)
 		transfer_moles_max = min(transfer_moles_max, (calculate_transfer_moles(input_air, filter_output.air, delta, (filter_output && filter_output.network && filter_output.network.volume) ? filter_output.network.volume : 0)))
 
 	//Figure out the amount of moles to transfer
-	var/transfer_moles = between(0, ((set_flow_rate/input_air.volume)*input_air.total_moles), transfer_moles_max)
+	var/transfer_moles = clamp(((set_flow_rate/input_air.volume)*input_air.total_moles), 0, transfer_moles_max)
 
 	var/power_draw = -1
 	if (transfer_moles > MINIMUM_MOLES_TO_FILTER)
@@ -127,7 +127,7 @@ GLOBAL_LIST_INIT(filter_mode_to_gas_id, list( \
 
 	return 1
 
-/obj/machinery/atmospherics/omni/filter/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/atmospherics/omni/filter/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 	if(!user)
 		if (ui)
 			ui.close()
@@ -172,13 +172,13 @@ GLOBAL_LIST_INIT(filter_mode_to_gas_id, list( \
 			if(ATM_GAS_MIN to ATM_GAS_MAX)
 				f_type = mode_send_switch(P.mode)
 
-		portData[++portData.len] = list("dir" = dir_name(P.dir, capitalize = 1), \
+		portData[LIST_PRE_INC(portData)] = list("dir" = dir_name(P.dir, capitalize = 1), \
 										"input" = input, \
 										"output" = output, \
 										"filter" = is_filter, \
 										"f_type" = f_type)
 
-	if(portData.len)
+	if(length(portData))
 		data["ports"] = portData
 	if(output)
 		data["set_flow_rate"] = round(set_flow_rate*10)		//because nanoui can't handle rounded decimals.
@@ -186,7 +186,7 @@ GLOBAL_LIST_INIT(filter_mode_to_gas_id, list( \
 
 	return data
 
-/obj/machinery/atmospherics/omni/filter/proc/mode_send_switch(var/mode = ATM_NONE)
+/obj/machinery/atmospherics/omni/filter/proc/mode_send_switch(mode = ATM_NONE)
 	return GLOB.filter_mode_to_gas["[mode]"]
 
 /obj/machinery/atmospherics/omni/filter/Topic(href, href_list)
@@ -207,7 +207,7 @@ GLOBAL_LIST_INIT(filter_mode_to_gas_id, list( \
 		switch(href_list["command"])
 			if("set_flow_rate")
 				var/new_flow_rate = input(usr,"Enter new flow rate limit (0-[max_flow_rate]L/s)","Flow Rate Control",set_flow_rate) as num
-				set_flow_rate = between(0, new_flow_rate, max_flow_rate)
+				set_flow_rate = clamp(new_flow_rate, 0, max_flow_rate)
 			if("switch_mode")
 				switch_mode(dir_flag(href_list["dir"]), mode_return_switch(href_list["mode"]))
 			if("switch_filter")
@@ -218,7 +218,7 @@ GLOBAL_LIST_INIT(filter_mode_to_gas_id, list( \
 	SSnano.update_uis(src)
 	return
 
-/obj/machinery/atmospherics/omni/filter/proc/mode_return_switch(var/mode)
+/obj/machinery/atmospherics/omni/filter/proc/mode_return_switch(mode)
 	. = GLOB.filter_gas_to_mode[mode]
 	if(!.)
 		switch(mode)
@@ -227,7 +227,7 @@ GLOBAL_LIST_INIT(filter_mode_to_gas_id, list( \
 			if("out")
 				return ATM_OUTPUT
 
-/obj/machinery/atmospherics/omni/filter/proc/switch_filter(var/dir, var/mode)
+/obj/machinery/atmospherics/omni/filter/proc/switch_filter(dir, mode)
 	//check they aren't trying to disable the input or output ~this can only happen if they hack the cached tmpl file
 	for(var/datum/omni_port/P in ports)
 		if(P.dir == dir)
@@ -236,7 +236,7 @@ GLOBAL_LIST_INIT(filter_mode_to_gas_id, list( \
 
 	switch_mode(dir, mode)
 
-/obj/machinery/atmospherics/omni/filter/proc/switch_mode(var/port, var/mode)
+/obj/machinery/atmospherics/omni/filter/proc/switch_mode(port, mode)
 	if(mode == null || !port)
 		return
 	var/datum/omni_port/target_port = null
@@ -276,7 +276,7 @@ GLOBAL_LIST_INIT(filter_mode_to_gas_id, list( \
 		if(gasid)
 			filtering_outputs[gasid] = P.air
 
-/obj/machinery/atmospherics/omni/filter/proc/handle_port_change(var/datum/omni_port/P)
+/obj/machinery/atmospherics/omni/filter/proc/handle_port_change(datum/omni_port/P)
 	switch(P.mode)
 		if(ATM_NONE)
 			initialize_directions &= ~P.dir

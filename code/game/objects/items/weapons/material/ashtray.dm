@@ -13,24 +13,29 @@
 	. = ..()
 	if(material)
 		to_chat(user, "It's made of [material.display_name].")
-	if(contents.len >= max_butts)
+	if(length(contents) >= max_butts)
 		to_chat(user, "It's full.")
-	else if(contents.len)
-		to_chat(user, "It has [contents.len] cig butts in it.")
+	else if(length(contents))
+		to_chat(user, "It has [length(contents)] cig butts in it.")
 
 /obj/item/material/ashtray/on_update_icon()
 	..()
 	overlays.Cut()
-	if (contents.len == max_butts)
+	if (length(contents) == max_butts)
 		overlays |= image('icons/obj/objects.dmi',"ashtray_full")
-	else if (contents.len >= max_butts/2)
+	else if (length(contents) >= max_butts/2)
 		overlays |= image('icons/obj/objects.dmi',"ashtray_half")
 
 /obj/item/material/ashtray/attackby(obj/item/W as obj, mob/user as mob)
-	if (health <= 0)
+	if (health_dead)
 		return
+
+	if (user.a_intent == I_HURT)
+		..()
+		return
+
 	if (istype(W,/obj/item/trash/cigbutt) || istype(W,/obj/item/clothing/mask/smokable/cigarette) || istype(W, /obj/item/flame/match))
-		if (contents.len >= max_butts)
+		if (length(contents) >= max_butts)
 			to_chat(user, "\The [src] is full.")
 			return
 
@@ -46,31 +51,26 @@
 			visible_message("[user] places [W] in [src].")
 			set_extension(src, /datum/extension/scent/ashtray)
 			update_icon()
-	else
-		..()
-		health = max(0,health - W.force)
-		if (health < 1)
-			shatter()
+		return
+
+	..()
 
 /obj/item/material/ashtray/throw_impact(atom/hit_atom)
-	if (health > 0)
-		health = max(0,health - 3)
-		if (contents.len)
-			visible_message("<span class='danger'>\The [src] slams into [hit_atom], spilling its contents!</span>")
+	if (get_max_health())
+		if (length(contents))
+			visible_message(SPAN_DANGER("\The [src] slams into [hit_atom], spilling its contents!"))
 			for (var/obj/O in contents)
 				O.dropInto(loc)
 			remove_extension(src, /datum/extension/scent)
-		if (health < 1)
-			shatter()
-			return
+		damage_health(3)
 		update_icon()
 	return ..()
 
-/obj/item/material/ashtray/plastic/New(var/newloc)
+/obj/item/material/ashtray/plastic/New(newloc)
 	..(newloc, MATERIAL_PLASTIC)
 
-/obj/item/material/ashtray/bronze/New(var/newloc)
+/obj/item/material/ashtray/bronze/New(newloc)
 	..(newloc, MATERIAL_BRONZE)
 
-/obj/item/material/ashtray/glass/New(var/newloc)
+/obj/item/material/ashtray/glass/New(newloc)
 	..(newloc, MATERIAL_GLASS)

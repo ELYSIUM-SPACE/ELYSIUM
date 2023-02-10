@@ -10,15 +10,12 @@
 	obj_flags =  OBJ_FLAG_CONDUCTIBLE
 	slot_flags = SLOT_BACK
 	one_hand_penalty = 4
-	charge_cost = 30
-	max_shots = 8
-	fire_delay = 30
+	charge_cost = 60
+	max_shots = 5
+	fire_delay = 60
 	projectile_type = /obj/item/projectile/ion
 	wielded_item_state = "ionrifle-wielded"
 	combustion = 0
-
-/obj/item/gun/energy/ionrifle/emp_act(severity)
-	..(max(severity, 2)) //so it doesn't EMP itself, I guess
 
 /obj/item/gun/energy/ionrifle/small
 	name = "ion pistol"
@@ -31,8 +28,8 @@
 	force = 5
 	slot_flags = SLOT_BELT|SLOT_HOLSTER
 	one_hand_penalty = 0
-	charge_cost = 20
-	max_shots = 4
+	charge_cost = 40
+	max_shots = 3
 	projectile_type = /obj/item/projectile/ion/small
 
 /obj/item/gun/energy/decloner
@@ -58,7 +55,7 @@
 	origin_tech = list(TECH_MATERIAL = 2, TECH_BIO = 3, TECH_POWER = 3)
 	modifystate = "floramut"
 	self_recharge = 1
-	var/decl/plantgene/gene = null
+	var/singleton/plantgene/gene = null
 	combustion = 0
 
 	firemodes = list(
@@ -75,7 +72,7 @@
 /obj/item/gun/energy/floragun/afterattack(obj/target, mob/user, adjacent_flag)
 	//allow shooting into adjacent hydrotrays regardless of intent
 	if(adjacent_flag && istype(target,/obj/machinery/portable_atmospherics/hydroponics))
-		user.visible_message("<span class='danger'>\The [user] fires \the [src] into \the [target]!</span>")
+		user.visible_message(SPAN_DANGER("\The [user] fires \the [src] into \the [target]!"))
 		Fire(target,user)
 		return
 	..()
@@ -92,7 +89,7 @@
 
 	gene = SSplants.plant_gene_datums[genemask]
 
-	to_chat(usr, "<span class='info'>You set the [src]'s targeted genetic area to [genemask].</span>")
+	to_chat(usr, SPAN_INFO("You set the [src]'s targeted genetic area to [genemask]."))
 
 	return
 
@@ -145,7 +142,7 @@
 
 /obj/item/gun/energy/plasmacutter
 	name = "plasma cutter"
-	desc = "A mining tool capable of expelling concentrated plasma bursts. You could use it to cut limbs off of xenos! Or, you know, mine stuff."
+	desc = "An industrial tool that expels focused plasma bursts for deconstruction and mining."
 	charge_meter = 0
 	icon = 'icons/obj/guns/plasmacutter.dmi'
 	icon_state = "plasmacutter"
@@ -160,6 +157,10 @@
 	max_shots = 10
 	self_recharge = 1
 	var/datum/effect/effect/system/spark_spread/spark_system
+
+	// As an industrial tool the plasma cutter's safety training falls under construction.
+	gun_skill = SKILL_CONSTRUCTION
+	safety_skill = SKILL_ADEPT
 
 /obj/item/gun/energy/plasmacutter/mounted
 	name = "mounted plasma cutter"
@@ -177,11 +178,11 @@
 	QDEL_NULL(spark_system)
 	return ..()
 
-/obj/item/gun/energy/plasmacutter/proc/slice(var/mob/M = null)
+/obj/item/gun/energy/plasmacutter/proc/slice(mob/M = null)
 	if(!safety())
 		if(M)
 			M.welding_eyecheck()//Welding tool eye check
-			if(check_accidents(M, "[M] loses grip on [src] from its sudden recoil!",SKILL_CONSTRUCTION, 60, SKILL_ADEPT))
+			if(check_accidents(M, "[M] loses grip on \the [src] from its sudden recoil!",gun_skill, 60, safety_skill))
 				return 0
 		spark_system.start()
 		return 1
@@ -194,7 +195,6 @@
 	icon = 'icons/obj/guns/incendiary_laser.dmi'
 	icon_state = "incen"
 	item_state = "incen"
-	safety_icon = "safety"
 	origin_tech = list(TECH_COMBAT = 7, TECH_MAGNET = 4, TECH_ESOTERIC = 4)
 	matter = list(MATERIAL_ALUMINIUM = 1000, MATERIAL_PLASTIC = 500, MATERIAL_DIAMOND = 500)
 	projectile_type = /obj/item/projectile/beam/incendiary_laser

@@ -1,9 +1,6 @@
 /atom/movable/proc/get_mob()
 	return
 
-/obj/vehicle/train/get_mob()
-	return buckled_mob
-
 /mob/get_mob()
 	return src
 
@@ -15,7 +12,7 @@
 //helper for inverting armor blocked values into a multiplier
 #define blocked_mult(blocked) max(1 - (blocked/100), 0)
 
-/proc/mobs_in_view(var/range, var/source)
+/proc/mobs_in_view(range, source)
 	var/list/mobs = list()
 	for(var/atom/movable/AM in view(range, source))
 		var/M = AM.get_mob()
@@ -24,34 +21,34 @@
 
 	return mobs
 
-proc/random_hair_style(gender, species = SPECIES_HUMAN)
+/proc/random_hair_style(gender, species = SPECIES_HUMAN)
 	var/h_style = "Bald"
 
 	var/datum/species/mob_species = all_species[species]
 	var/list/valid_hairstyles = mob_species.get_hair_styles()
-	if(valid_hairstyles.len)
+	if(length(valid_hairstyles))
 		h_style = pick(valid_hairstyles)
 
 	return h_style
 
-proc/random_facial_hair_style(gender, var/species = SPECIES_HUMAN)
+/proc/random_facial_hair_style(gender, species = SPECIES_HUMAN)
 	var/f_style = "Shaved"
 	var/datum/species/mob_species = all_species[species]
 	var/list/valid_facialhairstyles = mob_species.get_facial_hair_styles(gender)
-	if(valid_facialhairstyles.len)
+	if(length(valid_facialhairstyles))
 		f_style = pick(valid_facialhairstyles)
 		return f_style
 
-proc/random_name(gender, species = SPECIES_HUMAN)
+/proc/random_name(gender, species = SPECIES_HUMAN)
 	if(species)
 		var/datum/species/current_species = all_species[species]
 		if(current_species)
-			var/decl/cultural_info/current_culture = SSculture.get_culture(current_species.default_cultural_info[TAG_CULTURE])
+			var/singleton/cultural_info/current_culture = SSculture.get_culture(current_species.default_cultural_info[TAG_CULTURE])
 			if(current_culture)
 				return current_culture.get_random_name(gender)
 	return capitalize(pick(gender == FEMALE ? GLOB.first_names_female : GLOB.first_names_male)) + " " + capitalize(pick(GLOB.last_names))
 
-proc/random_skin_tone(var/datum/species/current_species)
+/proc/random_skin_tone(datum/species/current_species)
 	var/species_tone = current_species ? 35 - current_species.max_skin_tone() : -185
 	switch(pick(60;"caucasian", 15;"afroamerican", 10;"african", 10;"latino", 5;"albino"))
 		if("caucasian")		. = -10
@@ -63,7 +60,7 @@ proc/random_skin_tone(var/datum/species/current_species)
 
 	return min(max(. + rand(-25, 25), species_tone), 34)
 
-proc/skintone2racedescription(tone)
+/proc/skintone2racedescription(tone)
 	switch (tone)
 		if(30 to INFINITY)		return "albino"
 		if(20 to 30)			return "pale"
@@ -75,7 +72,7 @@ proc/skintone2racedescription(tone)
 		if(-INFINITY to -65)	return "black"
 		else					return "unknown"
 
-proc/age2agedescription(age)
+/proc/age2agedescription(age)
 	switch(age)
 		if(0 to 1)			return "infant"
 		if(1 to 3)			return "toddler"
@@ -93,10 +90,10 @@ proc/age2agedescription(age)
 	for(var/icon_state in icon_states)
 		if(health >= text2num(icon_state))
 			return icon_state
-	return icon_states[icon_states.len] // If we had no match, return the last element
+	return icon_states[length(icon_states)] // If we had no match, return the last element
 
 //checks whether this item is a module of the robot it is located in.
-/proc/is_robot_module(var/obj/item/thing)
+/proc/is_robot_module(obj/item/thing)
 	if(!thing)
 		return FALSE
 	if(istype(thing.loc, /mob/living/exosuit))
@@ -106,11 +103,13 @@ proc/age2agedescription(age)
 	var/mob/living/silicon/robot/R = thing.loc
 	return (thing in R.module.equipment)
 
-/proc/get_exposed_defense_zone(var/atom/movable/target)
+/proc/get_exposed_defense_zone(atom/movable/target)
 	return pick(BP_HEAD, BP_L_HAND, BP_R_HAND, BP_L_FOOT, BP_R_FOOT, BP_L_ARM, BP_R_ARM, BP_L_LEG, BP_R_LEG, BP_CHEST, BP_GROIN)
 
 
+/// Integer. Unique sequential ID from the `do_after` proc used to validate `DO_USER_UNIQUE_ACT` flag checks.
 /mob/var/do_unique_user_handle = 0
+/// The mob currently interacting with the atom during a `do_after` timer. Used to validate `DO_TARGET_UNIQUE_ACT` flag checks.
 /atom/var/do_unique_target_user
 
 /proc/do_after(mob/user, delay, atom/target, do_flags = DO_DEFAULT, incapacitation_flags = INCAPACITATION_DEFAULT)
@@ -157,9 +156,9 @@ proc/age2agedescription(age)
 	var/datum/progressbar/bar
 	if (do_flags & DO_SHOW_PROGRESS)
 		if (do_flags & DO_PUBLIC_PROGRESS)
-			bar = new /datum/progressbar/public(user, delay, target)
+			bar = new /datum/progressbar/public(user, delay, target, !!(do_flags & DO_BAR_OVER_USER))
 		else
-			bar = new /datum/progressbar/private(user, delay, target)
+			bar = new /datum/progressbar/private(user, delay, target, !!(do_flags & DO_BAR_OVER_USER))
 
 	var/start_time = world.time
 	var/end_time = start_time + delay
@@ -173,7 +172,7 @@ proc/age2agedescription(age)
 		if (QDELETED(user))
 			. = DO_MISSING_USER
 			break
-		if (target_type && QDELETED(target))
+		if (target_type && (QDELETED(target) || target_type != target.type))
 			. = DO_MISSING_TARGET
 			break
 		if (user.incapacitated(incapacitation_flags))
@@ -191,7 +190,7 @@ proc/age2agedescription(age)
 		if (target_dir && target_dir != target.dir)
 			. = DO_TARGET_CAN_TURN
 			break
-		if (!isnull(user_hand) && user_hand != user.hand)
+		if ((do_flags & DO_USER_SAME_HAND) && user_hand != user.hand)
 			. = DO_USER_SAME_HAND
 			break
 		if (initial_handle && initial_handle != user.do_unique_user_handle)
@@ -218,7 +217,7 @@ proc/age2agedescription(age)
 			if (DO_USER_SAME_HAND)
 				to_chat(user, SPAN_WARNING("You must remain on the same active hand to perform that action!"))
 			if (DO_USER_UNIQUE_ACT)
-				to_chat(user, SPAN_WARNING("You stop what you're doing with \the [user.do_unique_user_handle]."))
+				to_chat(user, SPAN_WARNING("You stop what you're doing with \the [target]."))
 			if (DO_USER_SAME_ZONE)
 				to_chat(user, SPAN_WARNING("You must remain targeting the same zone to perform that action!"))
 
@@ -229,7 +228,7 @@ proc/age2agedescription(age)
 	if ((do_flags & DO_TARGET_UNIQUE_ACT) && target)
 		target.do_unique_target_user = null
 
-/proc/able_mobs_in_oview(var/origin)
+/proc/able_mobs_in_oview(origin)
 	var/list/mobs = list()
 	for(var/mob/living/M in oview(origin)) // Only living mobs are considered able.
 		if(!M.is_physically_disabled())
@@ -250,30 +249,30 @@ proc/age2agedescription(age)
 /mob/proc/add_to_living_mob_list()
 	return FALSE
 /mob/living/add_to_living_mob_list()
-	if((src in GLOB.living_mob_list_) || (src in GLOB.dead_mob_list_))
+	if((src in GLOB.alive_mobs) || (src in GLOB.dead_mobs))
 		return FALSE
-	GLOB.living_mob_list_ += src
+	GLOB.alive_mobs += src
 	return TRUE
 
 // Returns true if the mob was removed from the living list
 /mob/proc/remove_from_living_mob_list()
-	return GLOB.living_mob_list_.Remove(src)
+	return GLOB.alive_mobs.Remove(src)
 
 // Returns true if the mob was in neither the dead or living list
 /mob/proc/add_to_dead_mob_list()
 	return FALSE
 /mob/living/add_to_dead_mob_list()
-	if((src in GLOB.living_mob_list_) || (src in GLOB.dead_mob_list_))
+	if((src in GLOB.alive_mobs) || (src in GLOB.dead_mobs))
 		return FALSE
-	GLOB.dead_mob_list_ += src
+	GLOB.dead_mobs += src
 	return TRUE
 
 // Returns true if the mob was removed form the dead list
 /mob/proc/remove_from_dead_mob_list()
-	return GLOB.dead_mob_list_.Remove(src)
+	return GLOB.dead_mobs.Remove(src)
 
 //Find a dead mob with a brain and client.
-/proc/find_dead_player(var/find_key, var/include_observers = 0)
+/proc/find_dead_player(find_key, include_observers = 0)
 	if(isnull(find_key))
 		return
 
@@ -303,18 +302,18 @@ proc/age2agedescription(age)
 
 /proc/damflags_to_strings(damflags)
 	var/list/res = list()
-	if(damflags & DAM_SHARP)
+	if(damflags & DAMAGE_FLAG_SHARP)
 		res += "sharp"
-	if(damflags & DAM_EDGE)
+	if(damflags & DAMAGE_FLAG_EDGE)
 		res += "edge"
-	if(damflags & DAM_LASER)
+	if(damflags & DAMAGE_FLAG_LASER)
 		res += "laser"
-	if(damflags & DAM_BULLET)
+	if(damflags & DAMAGE_FLAG_BULLET)
 		res += "bullet"
-	if(damflags & DAM_EXPLODE)
+	if(damflags & DAMAGE_FLAG_EXPLODE)
 		res += "explode"
-	if(damflags & DAM_DISPERSED)
+	if(damflags & DAMAGE_FLAG_DISPERSED)
 		res += "dispersed"
-	if(damflags & DAM_BIO)
+	if(damflags & DAMAGE_FLAG_BIO)
 		res += "bio"
 	return english_list(res)

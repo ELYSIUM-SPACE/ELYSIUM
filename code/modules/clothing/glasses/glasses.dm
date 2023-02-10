@@ -3,7 +3,6 @@
 	icon = 'icons/obj/clothing/obj_eyes.dmi'
 	sprite_sheets = list(
 		SPECIES_VOX = 'icons/mob/species/vox/onmob_eyes_vox.dmi',
-		SPECIES_VOX_ARMALIS = 'icons/mob/species/vox/onmob_eyes_vox_armalis.dmi',
 		SPECIES_UNATHI = 'icons/mob/species/unathi/generated/onmob_eyes_unathi.dmi'
 		)
 	var/hud_type
@@ -92,6 +91,7 @@
 						M.disabilities &= ~NEARSIGHTED
 			if(toggleable)
 				deactivate(M, FALSE)
+	..()
 
 /obj/item/clothing/glasses/attack_self(mob/user)
 	if(toggleable && !user.incapacitated())
@@ -260,8 +260,8 @@
 	icon_state = "welding-g"
 	item_state = "welding-g"
 	use_alt_layer = TRUE
-	flash_protection = FLASH_PROTECTION_MAJOR
-	tint = TINT_HEAVY
+	flash_protection = FLASH_PROTECTION_MODERATE
+	darkness_view = -1
 
 /obj/item/clothing/glasses/augment_binoculars
 	name = "adaptive binoculars"

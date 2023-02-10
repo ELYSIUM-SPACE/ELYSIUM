@@ -20,7 +20,7 @@
 	skillset = null
 	. = ..()
 
-/datum/nano_module/skill_ui/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = GLOB.self_state)
+/datum/nano_module/skill_ui/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, datum/topic_state/state = GLOB.self_state)
 	if(!skillset)
 		return
 	var/list/data = skillset.get_nano_data(hide_unskilled)
@@ -45,31 +45,31 @@
 /datum/nano_module/skill_ui/proc/get_data()
 	return list()
 
-/datum/skillset/proc/get_nano_data(var/hide_unskilled)
+/datum/skillset/proc/get_nano_data(hide_unskilled)
 	. = list()
 	.["name"] = owner.real_name
 	.["job"] = owner.mind && owner.mind.assigned_role
 	.["hide_unskilled"] = hide_unskilled
 
 	var/list/skill_data = list()
-	var/decl/hierarchy/skill/skill = decls_repository.get_decl(/decl/hierarchy/skill)
-	for(var/decl/hierarchy/skill/V in skill.children)
+	var/singleton/hierarchy/skill/skill = GET_SINGLETON(/singleton/hierarchy/skill)
+	for(var/singleton/hierarchy/skill/V in skill.children)
 		var/list/skill_cat = list()
 		skill_cat["name"] = V.name
 		var/list/skills_in_cat = list()
-		for(var/decl/hierarchy/skill/S in V.children)
+		for(var/singleton/hierarchy/skill/S in V.children)
 			var/offset = S.prerequisites ? S.prerequisites[S.parent.type] - 1 : 0
 			if(hide_unskilled && (get_value(S.type) + offset == SKILL_MIN))
 				continue
 			skills_in_cat += list(get_nano_row(S))
-			for(var/decl/hierarchy/skill/perk in S.children)
+			for(var/singleton/hierarchy/skill/perk in S.children)
 				skills_in_cat += list(get_nano_row(perk))
 		if(length(skills_in_cat))
 			skill_cat["skills"] = skills_in_cat
 			skill_data += list(skill_cat)
 	.["skills_by_cat"] = skill_data
 
-/datum/skillset/proc/get_nano_row(var/decl/hierarchy/skill/S)
+/datum/skillset/proc/get_nano_row(singleton/hierarchy/skill/S)
 	var/list/skill_item = list()
 	skill_item["name"] = S.name
 	var/value = get_value(S.type)
@@ -93,7 +93,7 @@
 	return skill_item
 
 /datum/skillset/proc/check_prerequisites(skill_type)
-	var/decl/hierarchy/skill/S = decls_repository.get_decl(skill_type)
+	var/singleton/hierarchy/skill/S = GET_SINGLETON(skill_type)
 	if(!S.prerequisites)
 		return TRUE
 	for(var/prereq_type in S.prerequisites)
@@ -114,7 +114,7 @@ The generic antag version.
 	. = ..()
 	.["can_choose"] = can_choose()
 	var/list/selection_data = list()
-	var/decl/hierarchy/skill/skill = decls_repository.get_decl(/decl/hierarchy/skill)
+	var/singleton/hierarchy/skill/skill = GET_SINGLETON(/singleton/hierarchy/skill)
 	for(var/i in 1 to length(max_choices))
 		var/choices = max_choices[i]
 		if(!choices)
@@ -125,7 +125,7 @@ The generic antag version.
 		var/selected = LAZYACCESS(currently_selected, i)
 		level_data["selected"] = list()
 		for(var/skill_type in selected)
-			var/decl/hierarchy/skill/S = skill_type // False type.
+			var/singleton/hierarchy/skill/S = skill_type // False type.
 			level_data["selected"] += list(list("name" = initial(S.name), "ref" = "\ref[skill_type]"))
 		level_data["remaining"] = choices - length(selected)
 		selection_data += list(level_data)
@@ -142,7 +142,7 @@ The generic antag version.
 			return 1
 		var/level = text2num(href_list["add_skill"])
 		var/list/choices = list()
-		for(var/decl/hierarchy/skill/S in GLOB.skills)
+		for(var/singleton/hierarchy/skill/S in GLOB.skills)
 			if(can_select(S.type, level))
 				choices[S.name] = S.type
 		var/choice = input(usr, "Which skill would you like to add?", "Add Skill") as null|anything in choices
@@ -187,7 +187,7 @@ The generic antag version.
 		return
 	if(skillset.get_value(skill_type) >= level)
 		return
-	var/decl/hierarchy/skill/S = decls_repository.get_decl(skill_type)
+	var/singleton/hierarchy/skill/S = GET_SINGLETON(skill_type)
 	if(length(S.levels) < level)
 		return
 	if(S.prerequisites)
@@ -199,8 +199,8 @@ The generic antag version.
 		return
 	deselect(skill_type)
 	LAZYINITLIST(currently_selected)
-	if(currently_selected.len < level)
-		currently_selected.len = level
+	if(length(currently_selected) < level)
+		LIST_RESIZE(currently_selected, level)
 	var/selection = currently_selected[level]
 	LAZYADD(selection, skill_type)
 	currently_selected[level] = selection
@@ -228,7 +228,7 @@ The generic antag version.
 Similar, but for station antags that have jobs.
 */
 /datum/nano_module/skill_ui/antag/station
-	max_choices = list(0, 0, 3, 1, 0)
+	max_choices = list(0, 0, 2, 1, 1)
 /*
 Similar, but for off-station jobs (Bearcat, Verne, survivor etc.).
 */
@@ -240,7 +240,7 @@ Admin version, with debugging options.
 /datum/nano_module/skill_ui/admin
 	template = "skill_ui_admin.tmpl"
 
-/datum/nano_module/skill_ui/admin/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = GLOB.admin_state)
+/datum/nano_module/skill_ui/admin/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, datum/topic_state/state = GLOB.admin_state)
 	..() //Uses different default state.
 
 /datum/nano_module/skill_ui/admin/get_data()

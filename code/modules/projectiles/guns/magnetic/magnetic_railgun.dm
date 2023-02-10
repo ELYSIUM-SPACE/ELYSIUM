@@ -19,8 +19,8 @@
 	cell = /obj/item/cell/hyper
 	capacitor = /obj/item/stock_parts/capacitor/adv
 	gun_unreliable = 0
-	var/slowdown_held = 3
-	var/slowdown_worn = 2
+	var/slowdown_held = 2
+	var/slowdown_worn = 1
 
 /obj/item/gun/magnetic/railgun/Initialize()
 	slowdown_per_slot[slot_l_hand] =  slowdown_held
@@ -33,12 +33,12 @@
 
 // Not going to check type repeatedly, if you code or varedit
 // load_type and get runtime errors, don't come crying to me.
-/obj/item/gun/magnetic/railgun/show_ammo(var/mob/user)
+/obj/item/gun/magnetic/railgun/show_ammo(mob/user)
 	var/obj/item/rcd_ammo/ammo = loaded
 	if (ammo)
-		to_chat(user, "<span class='notice'>There are [ammo.remaining] shot\s remaining in \the [loaded].</span>")
+		to_chat(user, SPAN_NOTICE("There are [ammo.remaining] shot\s remaining in \the [loaded]."))
 	else
-		to_chat(user, "<span class='notice'>There is nothing loaded.</span>")
+		to_chat(user, SPAN_NOTICE("There is nothing loaded."))
 
 /obj/item/gun/magnetic/railgun/check_ammo()
 	var/obj/item/rcd_ammo/ammo = loaded
@@ -55,7 +55,7 @@
 /obj/item/gun/magnetic/railgun/proc/out_of_ammo()
 	qdel(loaded)
 	loaded = null
-	visible_message("<span class='warning'>\The [src] beeps and ejects its empty cartridge.</span>")
+	visible_message(SPAN_WARNING("\The [src] beeps and ejects its empty cartridge."))
 
 /obj/item/gun/magnetic/railgun/mmi
 	desc = "The Mars Military Industries MI-72 Comet. A man-portable mass driver for squad support, anti-armour and destruction of fortifications and emplacements."
@@ -80,10 +80,10 @@
 	origin_tech = list(TECH_COMBAT = 6, TECH_MATERIAL = 3, TECH_MAGNET = 5)
 	slowdown_worn = 3 // Little slower when worn
 
-/obj/item/gun/magnetic/railgun/tcc/show_ammo(var/mob/user)
+/obj/item/gun/magnetic/railgun/tcc/show_ammo(mob/user)
 	var/obj/item/stack/material/rods/ammo = loaded
 	if(istype(ammo))
-		to_chat(user, "<span class='notice'>It has [ammo.amount] shots loaded.</span>")
+		to_chat(user, SPAN_NOTICE("It has [ammo.amount] shots loaded."))
 
 /obj/item/gun/magnetic/railgun/tcc/check_ammo()
 	var/obj/item/stack/material/rods/ammo = loaded
@@ -94,7 +94,7 @@
 	loaded = null
 	spawn(3)
 		playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 1)
-	visible_message("<span class='warning'>\The [src] beeps, before clanging as the ammunition bank resets.</span>")
+	visible_message(SPAN_WARNING("\The [src] beeps, before clanging as the ammunition bank resets."))
 
 /obj/item/gun/magnetic/railgun/tcc/use_ammo()
 	var/obj/item/stack/material/rods/ammo = loaded
@@ -113,9 +113,6 @@
 	capacitor = /obj/item/stock_parts/capacitor/super
 
 	fire_delay =  8
-	slowdown_held = 4
-
-	slowdown_worn = 3
 
 	slot_flags = SLOT_BACK
 	w_class = ITEM_SIZE_NO_CONTAINER
@@ -129,7 +126,7 @@
 /obj/item/gun/magnetic/railgun/automatic/examine(mob/user, distance)
 	. = ..()
 	if(distance <= 1)
-		to_chat(user, "<span class='notice'>Someone has scratched <i>Ultima Ratio Regum</i> onto the side of the barrel.</span>")
+		to_chat(user, SPAN_NOTICE("Someone has scratched <i>Ultima Ratio Regum</i> onto the side of the barrel."))
 
 /obj/item/gun/magnetic/railgun/automatic/mmi
 	name = "\improper RHR accelerator"
@@ -161,7 +158,7 @@
 		)
 
 /obj/item/gun/magnetic/railgun/flechette/out_of_ammo()
-	visible_message("<span class='warning'>\The [src] beeps to indicate the magazine is empty.</span>")
+	visible_message(SPAN_WARNING("\The [src] beeps to indicate the magazine is empty."))
 
 
 /obj/item/gun/magnetic/railgun/flechette/skrell
@@ -173,7 +170,6 @@
 	one_hand_penalty = 3
 	fire_delay = 10
 	slowdown_held = 1
-	slowdown_worn = 1
 	removable_components = FALSE
 	cell = /obj/item/cell/hyper
 	capacitor = /obj/item/stock_parts/capacitor/adv

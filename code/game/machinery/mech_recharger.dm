@@ -9,10 +9,10 @@
 	idle_power_usage = 200	// Some electronics, passive drain.
 	active_power_usage = 60 KILOWATTS // When charging
 	base_type = /obj/machinery/mech_recharger
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	uncreated_component_parts = null
 	stat_immune = 0
-	
+
 	machine_name = "exosuit dock"
 	machine_desc = "An industrial recharger built into the floor. Exosuits standing on top of the dock will have their power cell recharged."
 
@@ -21,12 +21,12 @@
 	var/repair_power_usage = 10 KILOWATTS		// Per 1 HP of health.
 	var/repair = 0
 
-/obj/machinery/mech_recharger/Crossed(var/mob/living/exosuit/M)
+/obj/machinery/mech_recharger/Crossed(mob/living/exosuit/M)
 	. = ..()
 	if(istype(M) && charging != M)
 		start_charging(M)
 
-/obj/machinery/mech_recharger/Uncrossed(var/mob/living/exosuit/M)
+/obj/machinery/mech_recharger/Uncrossed(mob/living/exosuit/M)
 	. = ..()
 	if(M == charging)
 		stop_charging()
@@ -57,9 +57,9 @@
 		stop_charging()
 		return
 
-	if(stat & (BROKEN|NOPOWER))
-		stop_charging()
+	if(inoperable())
 		charging.show_message(SPAN_WARNING("Internal system Error - Charging aborted."))
+		stop_charging()
 		return
 
 	// Cell could have been removed.
@@ -94,8 +94,8 @@
 /obj/machinery/mech_recharger/proc/fully_repaired()
 	return charging && (charging.health == charging.maxHealth)
 
-/obj/machinery/mech_recharger/proc/start_charging(var/mob/living/exosuit/M)
-	if(stat & (NOPOWER | BROKEN))
+/obj/machinery/mech_recharger/proc/start_charging(mob/living/exosuit/M)
+	if(inoperable())
 		M.show_message(SPAN_WARNING("Power port not responding. Terminating."))
 		return
 	if(M.get_cell(TRUE))

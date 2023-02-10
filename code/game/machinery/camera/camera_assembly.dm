@@ -60,10 +60,10 @@
 			if(isCoil(W))
 				var/obj/item/stack/cable_coil/C = W
 				if(C.use(2))
-					to_chat(user, "<span class='notice'>You add wires to the assembly.</span>")
+					to_chat(user, SPAN_NOTICE("You add wires to the assembly."))
 					state = 3
 				else
-					to_chat(user, "<span class='warning'>You need 2 coils of wire to wire the assembly.</span>")
+					to_chat(user, SPAN_WARNING("You need 2 coils of wire to wire the assembly."))
 				return
 
 			else if(isWelder(W))
@@ -86,7 +86,7 @@
 					return
 
 				var/list/tempnetwork = splittext(input, ",")
-				if(tempnetwork.len < 1)
+				if(length(tempnetwork) < 1)
 					to_chat(usr, "No network found please hang up and try your call again.")
 					return
 
@@ -131,7 +131,7 @@
 		return
 
 	// Taking out upgrades
-	else if(isCrowbar(W) && upgrades.len)
+	else if(isCrowbar(W) && length(upgrades))
 		var/obj/U = locate(/obj) in upgrades
 		if(U)
 			to_chat(user, "You unattach an upgrade from the assembly.")
@@ -152,16 +152,16 @@
 	if(!anchored)
 		..()
 
-/obj/item/camera_assembly/proc/weld(var/obj/item/weldingtool/WT, var/mob/user)
+/obj/item/camera_assembly/proc/weld(obj/item/weldingtool/WT, mob/user)
 
 	if(busy)
 		return 0
 
 	if(WT.remove_fuel(0, user))
-		to_chat(user, "<span class='notice'>You start to weld \the [src]..</span>")
+		to_chat(user, SPAN_NOTICE("You start to weld \the [src].."))
 		playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
 		busy = 1
-		if(do_after(user, 20, src) && WT.isOn())
+		if(do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT) && WT.isOn())
 			playsound(src.loc, 'sound/items/Welder.ogg', 50, 1)
 			busy = 0
 			return 1

@@ -1,7 +1,7 @@
-/decl/hierarchy/supply_pack/nonessent
+/singleton/hierarchy/supply_pack/nonessent
 	name = "Non-essentials"
 
-/decl/hierarchy/supply_pack/nonessent/painters
+/singleton/hierarchy/supply_pack/nonessent/painters
 	name = "Art - Painting Supplies"
 	contains = list(/obj/item/device/paint_sprayer = 2,
 					/obj/item/device/cable_painter = 2)
@@ -9,7 +9,7 @@
 	containername = "painting supplies crate"
 	containertype = /obj/structure/closet/crate
 
-/decl/hierarchy/supply_pack/nonessent/artscrafts
+/singleton/hierarchy/supply_pack/nonessent/artscrafts
 	name = "Art - Arts and Crafts supplies"
 	contains = list(/obj/item/storage/fancy/crayons,
 	/obj/item/device/camera,
@@ -29,7 +29,7 @@
 	containername = "arts and Crafts crate"
 
 
-/decl/hierarchy/supply_pack/nonessent/card_packs
+/singleton/hierarchy/supply_pack/nonessent/card_packs
 	num_contained = 5
 	contains = list(/obj/item/pack/cardemon,
 					/obj/item/pack/spaceball,
@@ -37,9 +37,9 @@
 	name = "Rec - Trading Cards"
 	cost = 20
 	containername = "trading cards crate"
-	supply_method = /decl/supply_method/randomized
+	supply_method = /singleton/supply_method/randomized
 
-/decl/hierarchy/supply_pack/nonessent/lasertag
+/singleton/hierarchy/supply_pack/nonessent/lasertag
 	name = "Rec - Lasertag equipment"
 	contains = list(/obj/item/gun/energy/lasertag/red = 3,
 					/obj/item/clothing/suit/redtag = 3,
@@ -49,7 +49,7 @@
 	containertype = /obj/structure/closet
 	containername = "lasertag Closet"
 
-/decl/hierarchy/supply_pack/nonessent/instruments
+/singleton/hierarchy/supply_pack/nonessent/instruments
 	name = "Rec - Musical Instruments"
 	contains = list(/obj/item/device/synthesized_instrument/synthesizer,
 					/obj/item/device/synthesized_instrument/guitar/multi,
@@ -59,7 +59,7 @@
 	containername = "musical instrument crate"
 
 
-/decl/hierarchy/supply_pack/nonessent/llamps
+/singleton/hierarchy/supply_pack/nonessent/llamps
 	num_contained = 3
 	contains = list(/obj/item/device/flashlight/lamp/lava,
 					/obj/item/device/flashlight/lamp/lava/red,
@@ -73,10 +73,10 @@
 	name = "Deco - Lava lamps"
 	cost = 10
 	containername = "lava lamp crate"
-	supply_method = /decl/supply_method/randomized
+	supply_method = /singleton/supply_method/randomized
 
 
-/decl/hierarchy/supply_pack/nonessent/wizard
+/singleton/hierarchy/supply_pack/nonessent/wizard
 	name = "Costume - Wizard"
 	contains = list(/obj/item/staff,
 					/obj/item/clothing/suit/wizrobe/fake,
@@ -85,11 +85,11 @@
 	cost = 20
 	containername = "wizard costume crate"
 
-/decl/hierarchy/supply_pack/nonessent/costume
+/singleton/hierarchy/supply_pack/nonessent/costume
 	num_contained = 2
 	contains = list(/obj/item/clothing/suit/pirate,
 					/obj/item/clothing/suit/judgerobe,
-					/obj/item/clothing/accessory/wcoat/black,
+					/obj/item/clothing/accessory/waistcoat/black,
 					/obj/item/clothing/suit/hastur,
 					/obj/item/clothing/suit/holidaypriest,
 					/obj/item/clothing/suit/nun,
@@ -120,9 +120,9 @@
 	name = "Costume - Random"
 	cost = 10
 	containername = "actor costumes crate"
-	supply_method = /decl/supply_method/randomized
+	supply_method = /singleton/supply_method/randomized
 
-/decl/hierarchy/supply_pack/nonessent/formal_wear
+/singleton/hierarchy/supply_pack/nonessent/formal_wear
 	contains = list(/obj/item/clothing/head/bowler,
 					/obj/item/clothing/head/that,
 					/obj/item/clothing/suit/storage/toggle/suit/blue,
@@ -136,14 +136,14 @@
 					/obj/item/clothing/shoes/black,
 					/obj/item/clothing/shoes/black,
 					/obj/item/clothing/shoes/leather,
-					/obj/item/clothing/accessory/wcoat/black)
+					/obj/item/clothing/accessory/waistcoat/black)
 	name = "Costume - Formalwear"
 	cost = 30
 	containertype = /obj/structure/closet
 	containername = "formalwear for the best occasions."
 
 
-/decl/hierarchy/supply_pack/nonessent/hats
+/singleton/hierarchy/supply_pack/nonessent/hats
 	num_contained = 4
 	contains = list(/obj/item/clothing/head/collectable/chef,
 					/obj/item/clothing/head/collectable/paper,
@@ -168,9 +168,9 @@
 	name = "Costume - Collectible hats!"
 	cost = 200
 	containername = "\improper Collectable hats crate! Brought to you by Bass.inc!"
-	supply_method = /decl/supply_method/randomized
+	supply_method = /singleton/supply_method/randomized
 
-/decl/hierarchy/supply_pack/nonessent/witch
+/singleton/hierarchy/supply_pack/nonessent/witch
 	name = "Costume - Witch"
 	contains = list(/obj/item/clothing/suit/wizrobe/marisa/fake,
 					/obj/item/clothing/shoes/sandal,
@@ -180,7 +180,7 @@
 	containername = "witch costume crate"
 	containertype = /obj/structure/closet
 
-/decl/hierarchy/supply_pack/nonessent/costume_hats
+/singleton/hierarchy/supply_pack/nonessent/costume_hats
 	name = "Costume - Regular hats"
 	contains = list(/obj/item/clothing/head/redcoat,
 					/obj/item/clothing/head/mailman,
@@ -201,9 +201,9 @@
 	containername = "actor hats crate"
 	containertype = /obj/structure/closet
 	num_contained = 2
-	supply_method = /decl/supply_method/randomized
+	supply_method = /singleton/supply_method/randomized
 
-/decl/hierarchy/supply_pack/nonessent/dresses
+/singleton/hierarchy/supply_pack/nonessent/dresses
 	name = "Costume - Womens formal dress locker"
 	contains = list(/obj/item/clothing/under/wedding/bride_orange,
 					/obj/item/clothing/under/wedding/bride_purple,
@@ -220,11 +220,11 @@
 	containername = "pretty dress locker"
 	containertype = /obj/structure/closet
 	num_contained = 1
-	supply_method = /decl/supply_method/randomized
+	supply_method = /singleton/supply_method/randomized
 
 
 
-/decl/hierarchy/supply_pack/nonessent/officetoys
+/singleton/hierarchy/supply_pack/nonessent/officetoys
 	name = "Deco - Office toys"
 	contains = list(/obj/item/toy/desk/newtoncradle,
 					/obj/item/toy/desk/fan,
@@ -233,7 +233,7 @@
 	cost = 15
 	containername = "office toys crate"
 
-/decl/hierarchy/supply_pack/nonessent/chaplaingear
+/singleton/hierarchy/supply_pack/nonessent/chaplaingear
 	name = "Costume - Chaplain"
 	contains = list(/obj/item/clothing/under/rank/chaplain,
 					/obj/item/clothing/shoes/black,
@@ -248,26 +248,26 @@
 	cost = 10
 	containername = "chaplain equipment crate"
 
-/decl/hierarchy/supply_pack/nonessent/exosuit_mod
+/singleton/hierarchy/supply_pack/nonessent/exosuit_mod
 	num_contained = 1
 	name = "Mod - \"Firestarter\" exosuit modkit"
 	contains = list(/obj/item/device/kit/paint/flames_red)
 	cost = 50
 	containername = "heavy exosuit modkit crate"
 
-/decl/hierarchy/supply_pack/nonessent/exosuit_mod/chrome
+/singleton/hierarchy/supply_pack/nonessent/exosuit_mod/chrome
 	name = "Mod - \"Burning Chrome\" exosuit modkit"
 	contains = list(/obj/item/device/kit/paint/flames_blue)
 
-/decl/hierarchy/supply_pack/nonessent/exosuit_mod/military
+/singleton/hierarchy/supply_pack/nonessent/exosuit_mod/military
 	name = "Mod - \"Guerilla\" exosuit modkit"
 	contains = list(/obj/item/device/kit/paint/camouflage)
 
-/decl/hierarchy/supply_pack/nonessent/exosuit_mod/alpine
+/singleton/hierarchy/supply_pack/nonessent/exosuit_mod/alpine
 	name = "Mod - \"Alpine\" exosuit modkit"
 	contains = list(/obj/item/device/kit/paint/camouflage/forest)
 
-/decl/hierarchy/supply_pack/nonessent/aromatherapy
+/singleton/hierarchy/supply_pack/nonessent/aromatherapy
 	name = "Rec - Aromatherapy"
 	contains = list(
 		/obj/item/paper/aromatherapy_disclaimer,
@@ -277,31 +277,33 @@
 	cost = 15
 	containername = "aromatherapy crate"
 
-/decl/hierarchy/supply_pack/nonessent/pins
+/singleton/hierarchy/supply_pack/nonessent/pins
 	name = "Costume - Pride Pin Crate"
 	contains = list(
-		/obj/item/clothing/accessory/pridepins = 2,
-		/obj/item/clothing/accessory/pridepins/lesbianpin = 2,
-		/obj/item/clothing/accessory/pridepins/bisexualpin = 2,
-		/obj/item/clothing/accessory/pridepins/gaypin = 2,
-		/obj/item/clothing/accessory/pridepins/pansexualpin = 2,
-		/obj/item/clothing/accessory/pridepins/nonbinarypin = 2,
-		/obj/item/clothing/accessory/pridepins/asexualpin = 2,
-		/obj/item/clothing/accessory/pridepins/intersexpin = 2
+		/obj/item/clothing/accessory/pride_pin/transgender = 2,
+		/obj/item/clothing/accessory/pride_pin/lesbian = 2,
+		/obj/item/clothing/accessory/pride_pin/bisexual = 2,
+		/obj/item/clothing/accessory/pride_pin/gay = 2,
+		/obj/item/clothing/accessory/pride_pin/pansexual = 2,
+		/obj/item/clothing/accessory/pride_pin/nonbinary = 2,
+		/obj/item/clothing/accessory/pride_pin/asexual = 2,
+		/obj/item/clothing/accessory/pride_pin/intersex = 2,
+		/obj/item/clothing/accessory/pride_pin/aromantic = 2
 	)
 	cost = 20
 	containername = "pin crate"
 
-/decl/hierarchy/supply_pack/nonessent/pronounbadges
+/singleton/hierarchy/supply_pack/nonessent/pronounbadges
 	name = "Costume - Pronoun Badge Crate"
 	contains = list(
-		/obj/item/clothing/accessory/pronouns = 2,
-		/obj/item/clothing/accessory/pronouns/hehimbadge = 2,
-		/obj/item/clothing/accessory/pronouns/sheherbadge = 2,
-		/obj/item/clothing/accessory/pronouns/hetheybadge = 2,
-		/obj/item/clothing/accessory/pronouns/shetheybadge = 2,
-		/obj/item/clothing/accessory/pronouns/zehirbadge = 2,
-		/obj/item/clothing/accessory/pronouns/pleaseaskbadge = 2
+		/obj/item/clothing/accessory/pronouns/they = 2,
+		/obj/item/clothing/accessory/pronouns/hehim = 2,
+		/obj/item/clothing/accessory/pronouns/sheher = 2,
+		/obj/item/clothing/accessory/pronouns/hethey = 2,
+		/obj/item/clothing/accessory/pronouns/shethey = 2,
+		/obj/item/clothing/accessory/pronouns/heshe = 2,
+		/obj/item/clothing/accessory/pronouns/zehir = 2,
+		/obj/item/clothing/accessory/pronouns/ask = 2
 	)
 	cost = 20
 	containername = "pronoun badge crate"

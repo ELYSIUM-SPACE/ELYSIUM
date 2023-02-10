@@ -33,7 +33,7 @@
 
 /obj/item/storage/belt/get_mob_overlay(mob/user_mob, slot)
 	var/image/ret = ..()
-	if(slot == slot_belt_str && contents.len)
+	if(slot == slot_belt_str && length(contents))
 		var/list/ret_overlays = list()
 		for(var/obj/item/I in contents)
 			var/use_state = (I.item_state ? I.item_state : I.icon_state)
@@ -118,7 +118,7 @@
 		/obj/item/device/t_scanner,
 		/obj/item/device/scanner/gas,
 		/obj/item/taperoll/engineering,
-		/obj/item/inducer/,
+		/obj/item/inducer,
 		/obj/item/device/robotanalyzer,
 		/obj/item/material/minihoe,
 		/obj/item/material/hatchet,
@@ -131,7 +131,7 @@
 		/obj/item/clothing/gloves,
 		/obj/item/tape_roll,
 		/obj/item/clothing/head/beret,
-		/obj/item/material/knife/folding/
+		/obj/item/material/knife/folding
 		)
 
 
@@ -171,7 +171,7 @@
 		/obj/item/reagent_containers/pill,
 		/obj/item/reagent_containers/syringe,
 		/obj/item/flame/lighter/zippo,
-		/obj/item/storage/fancy/cigarettes,
+		/obj/item/storage/fancy/smokable,
 		/obj/item/storage/pill_bottle,
 		/obj/item/stack/medical,
 		/obj/item/device/flashlight/pen,
@@ -188,7 +188,7 @@
 		/obj/item/bodybag,
 		/obj/item/clothing/gloves,
 		/obj/item/clothing/head/beret,
-		/obj/item/material/knife/folding/
+		/obj/item/material/knife/folding
 		)
 
 /obj/item/storage/belt/medical/emt
@@ -213,7 +213,7 @@
 		/obj/item/clothing/glasses,
 		/obj/item/ammo_casing/shotgun,
 		/obj/item/ammo_magazine,
-		/obj/item/reagent_containers/food/snacks/donut/,
+		/obj/item/reagent_containers/food/snacks/donut,
 		/obj/item/melee/baton,
 		/obj/item/melee/telebaton,
 		/obj/item/flame/lighter,
@@ -229,8 +229,16 @@
 		/obj/item/device/binoculars,
 		/obj/item/clothing/gloves,
 		/obj/item/clothing/head/beret,
-		/obj/item/material/knife/folding/
+		/obj/item/material/knife/folding
 		)
+
+/obj/item/storage/belt/holster/security/full/Initialize()
+	. = ..()
+	new /obj/item/device/flash (src)
+	new /obj/item/reagent_containers/spray/pepper (src)
+	new /obj/item/melee/baton/loaded (src)
+	new /obj/item/device/holowarrant (src)
+	queue_icon_update()
 
 /obj/item/storage/belt/security
 	name = "security belt"
@@ -247,7 +255,7 @@
 		/obj/item/clothing/glasses,
 		/obj/item/ammo_casing/shotgun,
 		/obj/item/ammo_magazine,
-		/obj/item/reagent_containers/food/snacks/donut/,
+		/obj/item/reagent_containers/food/snacks/donut,
 		/obj/item/melee/baton,
 		/obj/item/melee/telebaton,
 		/obj/item/flame/lighter,
@@ -263,7 +271,7 @@
 		/obj/item/device/binoculars,
 		/obj/item/clothing/gloves,
 		/obj/item/clothing/head/beret,
-		/obj/item/material/knife/folding/
+		/obj/item/material/knife/folding
 		)
 
 /obj/item/storage/belt/general
@@ -301,11 +309,12 @@
 		/obj/item/hand_labeler,
 		/obj/item/clothing/gloves,
 		/obj/item/crowbar/prybar,
-		/obj/item/tank/emergency,
+		/obj/item/tank/oxygen_emergency,
+		/obj/item/tank/nitrogen_emergency,
 		/obj/item/clothing/mask/breath,
 		/obj/item/toy/bosunwhistle,
 		/obj/item/clothing/head/beret,
-		/obj/item/material/knife/folding/,
+		/obj/item/material/knife/folding,
 		/obj/item/device/tape
 		)
 
@@ -320,13 +329,14 @@
 		/obj/item/device/flashlight,
 		/obj/item/reagent_containers/spray/cleaner,
 		/obj/item/soap,
+		/obj/item/reagent_containers/glass/rag,
 		/obj/item/holosign_creator,
 		/obj/item/clothing/gloves,
 		/obj/item/device/assembly/mousetrap,
 		/obj/item/crowbar/prybar,
 		/obj/item/clothing/mask/plunger,
 		/obj/item/clothing/head/beret,
-		/obj/item/material/knife/folding/
+		/obj/item/material/knife/folding
 		)
 
 /obj/item/storage/belt/holster/general
@@ -365,11 +375,12 @@
 		/obj/item/hand_labeler,
 		/obj/item/clothing/gloves,
 		/obj/item/crowbar/prybar,
-		/obj/item/tank/emergency,
+		/obj/item/tank/oxygen_emergency,
+		/obj/item/tank/nitrogen_emergency,
 		/obj/item/clothing/mask/breath,
 		/obj/item/toy/bosunwhistle,
 		/obj/item/clothing/head/beret,
-		/obj/item/material/knife/folding/,
+		/obj/item/material/knife/folding,
 		/obj/item/device/tape
 		)
 
@@ -389,10 +400,11 @@
 		/obj/item/sample/fibers,
 		/obj/item/device/taperecorder,
 		/obj/item/device/tape,
-		/obj/item/clothing/gloves/latex,
-		/obj/item/clothing/gloves/forensic,
+		/obj/item/clothing/gloves,
 		/obj/item/folder,
 		/obj/item/paper,
+		/obj/item/photo,
+		/obj/item/paper_bundle,
 		/obj/item/forensics/sample_kit,
 		/obj/item/device/camera,
 		/obj/item/device/taperecorder,
@@ -400,7 +412,8 @@
 		/obj/item/storage/csi_markers,
 		/obj/item/device/scanner,
 		/obj/item/clothing/head/beret,
-		/obj/item/material/knife/folding/
+		/obj/item/material/knife/folding,
+		/obj/item/modular_computer/tablet
 		)
 
 /obj/item/storage/belt/forensic
@@ -418,10 +431,11 @@
 		/obj/item/sample/fibers,
 		/obj/item/device/taperecorder,
 		/obj/item/device/tape,
-		/obj/item/clothing/gloves/latex,
-		/obj/item/clothing/gloves/forensic,
+		/obj/item/clothing/gloves,
 		/obj/item/folder,
 		/obj/item/paper,
+		/obj/item/photo,
+		/obj/item/paper_bundle,
 		/obj/item/forensics/sample_kit,
 		/obj/item/device/camera,
 		/obj/item/device/taperecorder,
@@ -429,7 +443,8 @@
 		/obj/item/storage/csi_markers,
 		/obj/item/device/scanner,
 		/obj/item/clothing/head/beret,
-		/obj/item/material/knife/folding/
+		/obj/item/material/knife/folding,
+		/obj/item/modular_computer/tablet
 		)
 
 /obj/item/storage/belt/holster/machete
@@ -461,7 +476,7 @@
 		/obj/item/clothing/gloves,
 		/obj/item/tape_roll,
 		/obj/item/clothing/head/beret,
-		/obj/item/material/knife/folding/,
+		/obj/item/material/knife/folding,
 		/obj/item/storage/firstaid/light,
 		/obj/item/device/flash
 		)
@@ -507,9 +522,6 @@
 	item_state = "swatbelt"
 	storage_slots = 10
 
-/obj/item/storage/belt/holster/security/tactical/Initialize()
-	.=..()
-	slowdown_per_slot[slot_belt] = 1
 
 /obj/item/storage/belt/waistpack
 	name = "waist pack"
@@ -530,9 +542,6 @@
 	max_w_class = ITEM_SIZE_NORMAL
 	max_storage_space = ITEM_SIZE_NORMAL * 4
 
-/obj/item/storage/belt/waistpack/big/Initialize()
-	.=..()
-	slowdown_per_slot[slot_belt] = 1
 
 /obj/item/storage/belt/fire_belt
 	name = "firefighting equipment belt"

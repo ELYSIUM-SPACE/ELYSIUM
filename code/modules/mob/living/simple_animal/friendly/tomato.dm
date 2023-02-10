@@ -1,4 +1,4 @@
-/mob/living/simple_animal/friendly/tomato
+/mob/living/simple_animal/passive/tomato
 	name = "tomato"
 	desc = "It's a horrifyingly enormous beef tomato, and it's packing extra beef!"
 	icon_state = "tomato"
@@ -21,7 +21,7 @@
 	skin_material = null
 	skin_amount =   null
 
-	ai_holder_type = /datum/ai_holder/simple_animal/passive/tomato
+	ai_holder = /datum/ai_holder/simple_animal/passive/tomato
 
 /datum/ai_holder/simple_animal/passive/tomato
 	speak_chance = 0

@@ -14,16 +14,16 @@
 				if(V.locked)
 					V.unlock()
 
-/datum/map/make_maint_all_access(var/radstorm = 0)
-	maint_all_access = 1
+/datum/map/make_maint_all_access(radstorm = 0)
+	maint_all_access = TRUE
 	if(radstorm)
 		priority_announcement.Announce("The maintenance access requirement has been revoked on all maintenance airlocks, and saferooms have been unbolted.", "Attention!")
 		GLOB.using_map.unbolt_saferooms()
 	else
 		priority_announcement.Announce("The maintenance access requirement has been revoked on all maintenance airlocks.", "Attention!")
 
-/datum/map/revoke_maint_all_access(var/radstorm = 0)
-	maint_all_access = 0
+/datum/map/revoke_maint_all_access(radstorm = 0)
+	maint_all_access = FALSE
 	if(radstorm)
 		priority_announcement.Announce("The maintenance access requirement has been readded on all maintenance airlocks, and saferooms have been bolted.", "Attention!")
 		GLOB.using_map.bolt_saferooms()
@@ -37,24 +37,24 @@
 				var/turf/playerTurf = get_turf(Player)
 				if(evacuation_controller.round_over() && evacuation_controller.emergency_evacuation)
 					if(isStationLevel(playerTurf.z))
-						to_chat(Player, "<span class='info'><b>You managed to survive, but were marooned on [station_name()] as [Player.real_name]...</b></span>")
+						to_chat(Player, SPAN_INFO("<b>You managed to survive, but were marooned on [station_name()] as [Player.real_name]...</b>"))
 					else if (isEscapeLevel(playerTurf.z))
-						to_chat(Player, "<font color='green'><b>You managed to survive the events on [station_name()] as [Player.real_name].</b></font>")
+						to_chat(Player, SPAN_COLOR("green", "<b>You managed to survive the events on [station_name()] as [Player.real_name].</b>"))
 					else
-						to_chat(Player, "<span class='info'><b>You managed to survive, but were marooned in the sector as [Player.real_name]...</b></span>")
+						to_chat(Player, SPAN_INFO("<b>You managed to survive, but were marooned in the sector as [Player.real_name]...</b>"))
 				else if(issilicon(Player))
-					to_chat(Player, "<font color='green'><b>You remain operational after the events on [station_name()] as [Player.real_name].</b></font>")
+					to_chat(Player, SPAN_COLOR("green", "<b>You remain operational after the events on [station_name()] as [Player.real_name].</b>"))
 				else if (isNotStationLevel(playerTurf.z))
-					to_chat(Player, "<span class='info'><b>You managed to survive, but were marooned in the sector as [Player.real_name]...</b></span>")
+					to_chat(Player, SPAN_INFO("<b>You managed to survive, but were marooned in the sector as [Player.real_name]...</b>"))
 				else
-					to_chat(Player, "<span class='info'><b>You got through just another workday on [station_name()] as [Player.real_name].</b></span>")
+					to_chat(Player, SPAN_INFO("<b>You got through just another workday on [station_name()] as [Player.real_name].</b>"))
 			else
 				if(isghost(Player))
 					var/mob/observer/ghost/O = Player
 					if(!O.started_as_observer)
-						to_chat(Player, "<font color='red'><b>You did not survive the events on [station_name()]...</b></font>")
+						to_chat(Player, SPAN_COLOR("red", "<b>You did not survive the events on [station_name()]...</b>"))
 				else
-					to_chat(Player, "<font color='red'><b>You did not survive the events on [station_name()]...</b></font>")
+					to_chat(Player, SPAN_COLOR("red", "<b>You did not survive the events on [station_name()]...</b>"))
 
 /datum/map/torch/roundend_summary(list/data)
 	var/desc

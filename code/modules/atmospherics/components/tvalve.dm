@@ -5,7 +5,7 @@
 	name = "manual switching valve"
 	desc = "A pipe valve."
 
-	level = 1
+	level = ATOM_LEVEL_UNDER_TILE
 	dir = SOUTH
 	initialize_directions = SOUTH|NORTH|WEST
 
@@ -47,7 +47,7 @@
 
 		add_underlay(T, node3, dir)
 
-/obj/machinery/atmospherics/tvalve/hide(var/i)
+/obj/machinery/atmospherics/tvalve/hide(i)
 	update_underlays()
 
 /obj/machinery/atmospherics/tvalve/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
@@ -66,7 +66,7 @@
 		if(!state)
 			network_node1 = new_network
 
-	if(list_find(new_network.normal_members, src))
+	if(new_network.normal_members.Find(src))
 		return 0
 
 	new_network.normal_members += src
@@ -183,7 +183,7 @@
 
 	init_nodes(node1_dir, node2_dir, node3_dir)
 
-/obj/machinery/atmospherics/tvalve/proc/init_nodes(var/node1_dir, var/node2_dir, var/node3_dir)
+/obj/machinery/atmospherics/tvalve/proc/init_nodes(node1_dir, node2_dir, node3_dir)
 	for(var/obj/machinery/atmospherics/target in get_step(src,node1_dir))
 		if(target.initialize_directions & get_dir(target,src))
 			if (check_connect_types(target,src))
@@ -264,63 +264,63 @@
 
 	return null
 
-/obj/machinery/atmospherics/tvalve/attackby(var/obj/item/W as obj, var/mob/user as mob)
+/obj/machinery/atmospherics/tvalve/attackby(obj/item/W as obj, mob/user as mob)
 	if(!isWrench(W))
 		return ..()
 	var/datum/gas_mixture/int_air = return_air()
 	var/datum/gas_mixture/env_air = loc.return_air()
 	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-		to_chat(user, "<span class='warnng'>You cannot unwrench \the [src], it too exerted due to internal pressure.</span>")
+		to_chat(user, SPAN_CLASS("warnng", "You cannot unwrench \the [src], it too exerted due to internal pressure."))
 		add_fingerprint(user)
 		return 1
 	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-	to_chat(user, "<span class='notice'>You begin to unfasten \the [src]...</span>")
-	if (do_after(user, 40, src))
+	to_chat(user, SPAN_NOTICE("You begin to unfasten \the [src]..."))
+	if (do_after(user, 4 SECONDS, src, DO_REPAIR_CONSTRUCT))
 		user.visible_message( \
-			"<span class='notice'>\The [user] unfastens \the [src].</span>", \
-			"<span class='notice'>You have unfastened \the [src].</span>", \
+			SPAN_NOTICE("\The [user] unfastens \the [src]."), \
+			SPAN_NOTICE("You have unfastened \the [src]."), \
 			"You hear a ratchet.")
 		new /obj/item/pipe(loc, src)
 		qdel(src)
 
-/decl/public_access/public_variable/tvalve_state
+/singleton/public_access/public_variable/tvalve_state
 	expected_type = /obj/machinery/atmospherics/tvalve
 	name = "valve state"
 	desc = "If true, the output is diverted to the side; if false, the output goes straight."
 	can_write = FALSE
 	has_updates = FALSE
 
-/decl/public_access/public_variable/tvalve_state/access_var(obj/machinery/atmospherics/tvalve/tvalve)
+/singleton/public_access/public_variable/tvalve_state/access_var(obj/machinery/atmospherics/tvalve/tvalve)
 	return tvalve.state
 
-/decl/public_access/public_method/tvalve_go_straight
+/singleton/public_access/public_method/tvalve_go_straight
 	name = "valve go straight"
 	desc = "Sets the valve to send output straight."
 	call_proc = /obj/machinery/atmospherics/tvalve/proc/go_straight
 
-/decl/public_access/public_method/tvalve_go_side
+/singleton/public_access/public_method/tvalve_go_side
 	name = "valve go side"
 	desc = "Redirects output to the side."
 	call_proc = /obj/machinery/atmospherics/tvalve/proc/go_to_side
 
-/decl/public_access/public_method/tvalve_toggle
+/singleton/public_access/public_method/tvalve_toggle
 	name = "valve toggle"
 	desc = "Toggles the output direction."
 	call_proc = /obj/machinery/atmospherics/tvalve/proc/toggle
 
-/decl/stock_part_preset/radio/receiver/tvalve
+/singleton/stock_part_preset/radio/receiver/tvalve
 	frequency = FUEL_FREQ
 	filter = RADIO_ATMOSIA
 	receive_and_call = list(
-		"valve_open" = /decl/public_access/public_method/tvalve_go_side,
-		"valve_close" = /decl/public_access/public_method/tvalve_go_straight,
-		"valve_toggle" = /decl/public_access/public_method/tvalve_toggle
+		"valve_open" = /singleton/public_access/public_method/tvalve_go_side,
+		"valve_close" = /singleton/public_access/public_method/tvalve_go_straight,
+		"valve_toggle" = /singleton/public_access/public_method/tvalve_toggle
 	)
 
-//Mirrored editions		
+//Mirrored editions
 /obj/machinery/atmospherics/tvalve/mirrored
 	icon_state = "map_tvalvem0"
-	
+
 	connect_dir_type = SOUTH | EAST | NORTH
 	build_icon_state = "map_tvalvem0"
 
@@ -349,7 +349,7 @@
 	desc = "A digitally controlled valve."
 	icon = 'icons/atmos/digital_tvalve.dmi'
 	icon_state = "map_tvalve0"
-	
+
 	build_icon = 'icons/atmos/digital_tvalve.dmi'
 	build_icon_state = "map_tvalve0"
 
@@ -357,13 +357,13 @@
 		/obj/item/stock_parts/radio/receiver,
 		/obj/item/stock_parts/power/apc
 	)
-	public_variables = list(/decl/public_access/public_variable/tvalve_state)
+	public_variables = list(/singleton/public_access/public_variable/tvalve_state)
 	public_methods = list(
-		/decl/public_access/public_method/tvalve_go_side,
-		/decl/public_access/public_method/tvalve_go_straight,
-		/decl/public_access/public_method/tvalve_toggle
+		/singleton/public_access/public_method/tvalve_go_side,
+		/singleton/public_access/public_method/tvalve_go_straight,
+		/singleton/public_access/public_method/tvalve_toggle
 	)
-	stock_part_presets = list(/decl/stock_part_preset/radio/receiver/tvalve = 1)
+	stock_part_presets = list(/singleton/stock_part_preset/radio/receiver/tvalve = 1)
 
 /obj/machinery/atmospherics/tvalve/digital/on_update_icon()
 	..()
@@ -392,13 +392,13 @@
 		/obj/item/stock_parts/radio/receiver,
 		/obj/item/stock_parts/power/apc
 	)
-	public_variables = list(/decl/public_access/public_variable/tvalve_state)
+	public_variables = list(/singleton/public_access/public_variable/tvalve_state)
 	public_methods = list(
-		/decl/public_access/public_method/tvalve_go_side,
-		/decl/public_access/public_method/tvalve_go_straight,
-		/decl/public_access/public_method/tvalve_toggle
+		/singleton/public_access/public_method/tvalve_go_side,
+		/singleton/public_access/public_method/tvalve_go_straight,
+		/singleton/public_access/public_method/tvalve_toggle
 	)
-	stock_part_presets = list(/decl/stock_part_preset/radio/receiver/tvalve = 1)
+	stock_part_presets = list(/singleton/stock_part_preset/radio/receiver/tvalve = 1)
 
 /obj/machinery/atmospherics/tvalve/mirrored/digital/on_update_icon()
 	..()

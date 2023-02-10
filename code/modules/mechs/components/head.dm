@@ -6,7 +6,7 @@
 	var/vision_flags = 0
 	var/see_invisible = 0
 	var/obj/item/robot_parts/robot_component/radio/radio
-	var/obj/item/robot_parts/robot_component/camera
+	var/obj/item/robot_parts/robot_component/camera/camera
 	var/obj/item/mech_component/control_module/software
 	has_hardpoints = list(HARDPOINT_HEAD)
 	var/active_sensors = 0
@@ -19,7 +19,7 @@
 	QDEL_NULL(software)
 	. = ..()
 
-/obj/item/mech_component/sensors/show_missing_parts(var/mob/user)
+/obj/item/mech_component/sensors/show_missing_parts(mob/user)
 	if(!radio)
 		to_chat(user, SPAN_WARNING("It is missing a radio."))
 	if(!camera)
@@ -56,7 +56,7 @@
 /obj/item/mech_component/sensors/ready_to_install()
 	return (radio && camera)
 
-/obj/item/mech_component/sensors/attackby(var/obj/item/thing, var/mob/user)
+/obj/item/mech_component/sensors/attackby(obj/item/thing, mob/user)
 	if(istype(thing, /obj/item/mech_component/control_module))
 		if(software)
 			to_chat(user, SPAN_WARNING("\The [src] already has a control modules installed."))
@@ -107,7 +107,7 @@
 	. = ..()
 	to_chat(user, SPAN_NOTICE("It has [max_installed_software - LAZYLEN(installed_software)] empty slot\s remaining out of [max_installed_software]."))
 
-/obj/item/mech_component/control_module/attackby(var/obj/item/thing, var/mob/user)
+/obj/item/mech_component/control_module/attackby(obj/item/thing, mob/user)
 
 	if(istype(thing, /obj/item/circuitboard/exosystem))
 		install_software(thing, user)
@@ -120,8 +120,8 @@
 	else
 		return ..()
 
-/obj/item/mech_component/control_module/proc/install_software(var/obj/item/circuitboard/exosystem/software, var/mob/user)
-	if(installed_software.len >= max_installed_software)
+/obj/item/mech_component/control_module/proc/install_software(obj/item/circuitboard/exosystem/software, mob/user)
+	if(length(installed_software) >= max_installed_software)
 		if(user)
 			to_chat(user, SPAN_WARNING("\The [src] can only hold [max_installed_software] software modules."))
 		return
@@ -130,7 +130,7 @@
 
 	if(user)
 		to_chat(user, SPAN_NOTICE("You load \the [software] into \the [src]'s memory."))
-		
+
 	software.forceMove(src)
 	update_software()
 
@@ -138,3 +138,60 @@
 	installed_software = list()
 	for(var/obj/item/circuitboard/exosystem/program in contents)
 		installed_software |= program.contains_software
+
+
+/obj/item/mech_component/sensors/powerloader
+	name = "exosuit sensors"
+	gender = PLURAL
+	exosuit_desc_string = "simple collision detection sensors"
+	desc = "A primitive set of sensors designed to work in tandem with most MKI Eyeball platforms."
+	max_damage = 100
+	power_use = 0
+
+/obj/item/mech_component/sensors/powerloader/prebuild()
+	..()
+	software = new(src)
+	software.installed_software = list(MECH_SOFTWARE_UTILITY, MECH_SOFTWARE_ENGINEERING)
+
+/obj/item/mech_component/sensors/light
+	name = "light sensors"
+	gender = PLURAL
+	exosuit_desc_string = "advanced sensor array"
+	icon_state = "light_head"
+	max_damage = 30
+	vision_flags = SEE_TURFS
+	see_invisible = SEE_INVISIBLE_NOLIGHTING
+	power_use = 50
+	desc = "A series of high resolution optical sensors. They can overlay several images to give the pilot a sense of location even in total darkness. "
+
+/obj/item/mech_component/sensors/light/prebuild()
+	..()
+	software = new(src)
+	software.installed_software = list(MECH_SOFTWARE_UTILITY, MECH_SOFTWARE_MEDICAL)
+
+/obj/item/mech_component/sensors/heavy
+	name = "heavy sensors"
+	exosuit_desc_string = "a reinforced monoeye"
+	desc = "A solitary sensor moves inside a recessed slit in the armour plates."
+	icon_state = "heavy_head"
+	max_damage = 120
+	power_use = 0
+
+/obj/item/mech_component/sensors/heavy/prebuild()
+	..()
+	software = new(src)
+	software.installed_software = list(MECH_SOFTWARE_WEAPONS)
+
+/obj/item/mech_component/sensors/combat
+	name = "combat sensors"
+	gender = PLURAL
+	exosuit_desc_string = "high-resolution thermal sensors"
+	icon_state = "combat_head"
+	vision_flags = SEE_MOBS
+	see_invisible = SEE_INVISIBLE_NOLIGHTING
+	power_use = 200
+
+/obj/item/mech_component/sensors/combat/prebuild()
+	..()
+	software = new(src)
+	software.installed_software = list(MECH_SOFTWARE_WEAPONS)

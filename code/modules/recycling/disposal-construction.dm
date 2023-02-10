@@ -9,7 +9,6 @@
 	anchored = FALSE
 	density = FALSE
 	matter = list(MATERIAL_STEEL = 1850)
-	level = 2
 	obj_flags = OBJ_FLAG_ROTATABLE
 	var/sort_type = ""
 	var/dpdir = 0	// directions as disposalpipe
@@ -17,7 +16,7 @@
 	var/constructed_path = /obj/structure/disposalpipe
 	var/built_icon_state
 
-/obj/structure/disposalconstruct/New(loc, var/P = null)
+/obj/structure/disposalconstruct/New(loc, P = null)
 	. = ..()
 	if(P)
 		if(istype(P, /obj/structure/disposalpipe))//Unfortunately a necessary evil since some things are machines and other things are structures
@@ -66,8 +65,8 @@
 
 // hide called by levelupdate if turf intact status changes
 // change visibility status and force update of icon
-/obj/structure/disposalconstruct/hide(var/intact)
-	set_invisibility((intact && level==1) ? 101: 0)	// hide if floor is intact
+/obj/structure/disposalconstruct/hide(intact)
+	set_invisibility((intact && level==ATOM_LEVEL_UNDER_TILE) ? 101: 0)	// hide if floor is intact
 	update()
 
 /obj/structure/disposalconstruct/proc/flip()
@@ -99,7 +98,7 @@
 	else
 		icon_state = built_icon_state
 
-/obj/structure/disposalconstruct/proc/flip_dirs(var/flipvalue)
+/obj/structure/disposalconstruct/proc/flip_dirs(flipvalue)
 	. = dir
 	if(flipvalue & DISPOSAL_FLIP_FLIP)
 		. |= turn(dir,180)
@@ -121,7 +120,7 @@
 // attackby item
 // wrench: (un)anchor
 // weldingtool: convert to real pipe
-/obj/structure/disposalconstruct/attackby(var/obj/item/I, var/mob/user)
+/obj/structure/disposalconstruct/attackby(obj/item/I, mob/user)
 	var/turf/T = loc
 	if(!istype(T))
 		return
@@ -151,7 +150,7 @@
 			if(W.remove_fuel(0,user))
 				playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
 				to_chat(user, "Welding \the [src] in place.")
-				if(do_after(user, 20, src))
+				if(do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT))
 					if(!src || !W.isOn()) return
 					to_chat(user, "\The [src] has been welded in place!")
 					build(CP)
@@ -181,11 +180,11 @@
 /obj/structure/disposalconstruct/proc/wrench_down(anchor)
 	if(anchor)
 		anchored = TRUE
-		level = 1 // We don't want disposal bins to disappear under the floors
+		level = ATOM_LEVEL_UNDER_TILE // We don't want disposal bins to disappear under the floors
 		set_density(0)
 	else
 		anchored = FALSE
-		level = 2
+		level = ATOM_LEVEL_OVER_TILE
 		set_density(1)
 
 /obj/structure/disposalconstruct/machine/check_buildability(obj/structure/disposalpipe/CP, mob/user)

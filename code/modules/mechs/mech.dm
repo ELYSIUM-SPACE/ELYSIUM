@@ -12,6 +12,8 @@
 	status_flags = PASSEMOTES
 	a_intent =     I_HURT
 	mob_size =     MOB_LARGE
+	mob_push_flags = ALLMOBS
+	mob_flags = MOB_FLAG_UNPINNABLE
 
 	meat_type = null
 	meat_amount = 0
@@ -27,8 +29,6 @@
 	var/obj/item/device/radio/exosuit/radio
 
 	var/wreckage_path = /obj/structure/mech_wreckage
-	var/mech_turn_sound = 'sound/mecha/mechturn.ogg'
-	var/mech_step_sound = 'sound/mecha/mechstep.ogg'
 
 	// Access updating/container.
 	var/obj/item/card/id/access_card
@@ -71,10 +71,14 @@
 	var/obj/screen/exosuit/health/hud_health
 	var/obj/screen/exosuit/toggle/hatch_open/hud_open
 	var/obj/screen/exosuit/power/hud_power
+	var/obj/screen/exosuit/heat/hud_heat
 	var/obj/screen/exosuit/toggle/power_control/hud_power_control
 	var/obj/screen/exosuit/toggle/camera/hud_camera
+
 	//POWER
 	var/power = MECH_POWER_OFF
+
+	// Sounds for mech_movement.dm and mech_interaction.dm are stored on legs.dm and arms.dm, respectively
 
 /mob/living/exosuit/MayZoom()
 	if(head?.vision_flags)
@@ -84,7 +88,7 @@
 /mob/living/exosuit/is_flooded(lying_mob, absolute)
 	. = (body && body.pilot_coverage >= 100 && hatch_closed) ? FALSE : ..()
 
-/mob/living/exosuit/Initialize(mapload, var/obj/structure/heavy_vehicle_frame/source_frame)
+/mob/living/exosuit/Initialize(mapload, obj/structure/heavy_vehicle_frame/source_frame)
 	. = ..()
 
 	if(!access_card) access_card = new (src)
@@ -139,13 +143,8 @@
 
 	selected_system = null
 
-	for(var/thing in pilots)
-		var/mob/pilot = thing
-		if(pilot && pilot.client)
-			pilot.client.screen -= hud_elements
-			pilot.client.images -= hud_elements
-		pilot.forceMove(get_turf(src))
-	pilots = null
+	for (var/mob/pilot as anything in pilots)
+		remove_pilot(pilot)
 
 	hud_health = null
 	hud_open = null
@@ -153,13 +152,12 @@
 	hud_power_control = null
 	hud_camera = null
 
-	for(var/thing in hud_elements)
-		qdel(thing)
-	hud_elements.Cut()
+	QDEL_NULL_LIST(hud_elements)
 
-	for(var/hardpoint in hardpoints)
+	for (var/hardpoint in hardpoints)
 		qdel(hardpoints[hardpoint])
 	hardpoints.Cut()
+	hardpoints = null
 
 	QDEL_NULL(access_card)
 	QDEL_NULL(arms)
@@ -173,6 +171,7 @@
 		H.holding = null
 		qdel(H)
 	hardpoint_hud_elements.Cut()
+	hardpoint_hud_elements = null
 
 	. = ..()
 
@@ -184,8 +183,8 @@
 	if(LAZYLEN(pilots) && (!hatch_closed || body.pilot_coverage < 100 || body.transparent_cabin))
 		to_chat(user, "It is being piloted by [english_list(pilots, nothing_text = "nobody")].")
 	if(body && LAZYLEN(body.pilot_positions))
-		to_chat(user, "It can seat [body.pilot_positions.len] pilot\s total.")
-	if(hardpoints.len)
+		to_chat(user, "It can seat [length(body.pilot_positions)] pilot\s total.")
+	if(length(hardpoints))
 		to_chat(user, "It has the following hardpoints:")
 		for(var/hardpoint in hardpoints)
 			var/obj/item/I = hardpoints[hardpoint]
@@ -213,7 +212,7 @@
 	if(.)
 		update_pilots()
 
-/mob/living/exosuit/proc/toggle_power(var/mob/user)
+/mob/living/exosuit/proc/toggle_power(mob/user)
 	if(power == MECH_POWER_TRANSITION)
 		to_chat(user, SPAN_NOTICE("Power transition in progress. Please wait."))
 	else if(power == MECH_POWER_ON) //Turning it off is instant
@@ -223,7 +222,7 @@
 		//Start power up sequence
 		power = MECH_POWER_TRANSITION
 		playsound(src, 'sound/mecha/powerup.ogg', 50, 0)
-		if(user.do_skilled(1.5 SECONDS, SKILL_MECH, src, 0.5) && power == MECH_POWER_TRANSITION)
+		if(user.do_skilled(1.5 SECONDS, SKILL_MECH, src, 0.5, DO_DEFAULT | DO_USER_UNIQUE_ACT) && power == MECH_POWER_TRANSITION)
 			playsound(src, 'sound/mecha/nominal.ogg', 50, 0)
 			power = MECH_POWER_ON
 		else

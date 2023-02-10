@@ -9,7 +9,7 @@
 	base_type = /obj/machinery/recharge_station
 	uncreated_component_parts = null
 	stat_immune = 0
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 
 	machine_name = "cyborg recharging station"
 	machine_desc = "A station for recharging robots, cyborgs, and silicon-based humanoids such as IPCs and full-body prosthetics."
@@ -31,7 +31,7 @@
 	update_icon()
 
 /obj/machinery/recharge_station/Process()
-	if(stat & (BROKEN | NOPOWER))
+	if(inoperable())
 		return
 
 	//First, recharge/repair/etc the occupant
@@ -63,7 +63,7 @@
 			R.module.respawn_consumable(R, charging_power * CELLRATE / 250) //consumables are magical, apparently
 		// If we are capable of repairing damage, reboot destroyed components and allow them to be repaired for very large power spike.
 		var/list/damaged = R.get_damaged_components(1,1,1)
-		if(damaged.len && wire_rate && weld_rate)
+		if(length(damaged) && wire_rate && weld_rate)
 			for(var/datum/robot_component/C in damaged)
 				if((C.installed == -1) && use_power_oneoff(100 KILOWATTS, LOCAL) <= 0)
 					C.repair()
@@ -119,8 +119,8 @@
 
 /obj/machinery/recharge_station/RefreshParts()
 	..()
-	var/man_rating = Clamp(total_component_rating_of_type(/obj/item/stock_parts/manipulator), 0, 10)
-	var/cap_rating = Clamp(total_component_rating_of_type(/obj/item/stock_parts/capacitor), 0, 10)
+	var/man_rating = clamp(total_component_rating_of_type(/obj/item/stock_parts/manipulator), 0, 10)
+	var/cap_rating = clamp(total_component_rating_of_type(/obj/item/stock_parts/capacitor), 0, 10)
 
 	charging_power = 40000 + 40000 * cap_rating
 	weld_rate = max(0, man_rating - 3)
@@ -151,12 +151,12 @@
 
 /obj/machinery/recharge_station/on_update_icon()
 	..()
-	if(stat & BROKEN)
+	if(MACHINE_IS_BROKEN(src))
 		icon_state = "borgcharger0"
 		return
 
 	if(occupant)
-		if(stat & NOPOWER)
+		if(!is_powered())
 			icon_state = "borgcharger2"
 		else
 			icon_state = "borgcharger1"
@@ -166,10 +166,10 @@
 	last_overlay_state = overlay_state()
 	overlays = list(image(overlay_icon, overlay_state()))
 
-/obj/machinery/recharge_station/Bumped(var/mob/living/silicon/robot/R)
+/obj/machinery/recharge_station/Bumped(mob/living/silicon/robot/R)
 	go_in(R)
 
-/obj/machinery/recharge_station/proc/go_in(var/mob/M)
+/obj/machinery/recharge_station/proc/go_in(mob/M)
 
 
 	if(occupant)
@@ -185,7 +185,7 @@
 	update_icon()
 	return 1
 
-/obj/machinery/recharge_station/proc/hascell(var/mob/M)
+/obj/machinery/recharge_station/proc/hascell(mob/M)
 	if(isrobot(M))
 		var/mob/living/silicon/robot/R = M
 		return (R.cell)

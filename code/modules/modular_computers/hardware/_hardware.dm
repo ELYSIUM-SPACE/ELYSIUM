@@ -1,52 +1,61 @@
-/obj/item/stock_parts/computer/
+/obj/item/stock_parts/computer
 	name = "Hardware"
 	desc = "Unknown Hardware."
 	icon = 'icons/obj/modular_components.dmi'
 	part_flags = PART_FLAG_HAND_REMOVE
-	var/power_usage = 0 			// If the hardware uses extra power, change this.
-	var/enabled = 1					// If the hardware is turned off set this to 0.
-	var/critical = 1				// Prevent disabling for important component, like the HDD.
-	var/hardware_size = 1			// Limits which devices can contain this component. 1: Tablets/Laptops/Consoles, 2: Laptops/Consoles, 3: Consoles only
-	var/damage = 0					// Current damage level
-	var/max_damage = 100			// Maximal damage level.
-	var/damage_malfunction = 20		// "Malfunction" threshold. When damage exceeds this value the hardware piece will semi-randomly fail and do !!FUN!! things
-	var/damage_failure = 50			// "Failure" threshold. When damage exceeds this value the hardware piece will not work at all.
-	var/malfunction_probability = 10// Chance of malfunction when the component is damaged
-	var/usage_flags = PROGRAM_ALL
-	var/external_slot				// Whether attackby will be passed on it even with a closed panel
 
-/obj/item/stock_parts/computer/attackby(var/obj/item/W as obj, var/mob/living/user as mob)
+	health_max = 100
+
+	/// If the hardware uses extra power, change this.
+	var/power_usage = 0
+	/// If the hardware is turned off set this to FALSE.
+	var/enabled = TRUE
+	/// Prevent disabling for important component, like the HDD.
+	var/critical = 1
+	/// Limits which devices can contain this component. 1: All, 2: Laptops/Consoles, 3: Consoles only
+	var/hardware_size = 1
+	/// "Malfunction" threshold. When damage exceeds this value the hardware piece will semi-randomly fail and do !!FUN!! things
+	var/damage_malfunction = 20
+	/// "Failure" threshold. When damage exceeds this value the hardware piece will not work at all.
+	var/damage_failure = 50
+	/// Chance of malfunction when the component is damaged
+	var/malfunction_probability = 10
+	var/usage_flags = PROGRAM_ALL
+	/// Whether attackby will be passed on it even with a closed panel
+	var/external_slot
+
+/obj/item/stock_parts/computer/attackby(obj/item/W as obj, mob/living/user as mob)
 	// Multitool. Runs diagnostics
 	if(isMultitool(W))
 		to_chat(user, "***** DIAGNOSTICS REPORT *****")
 		to_chat(user, jointext(diagnostics(), "\n"))
 		to_chat(user, "******************************")
-		return 1
+		return TRUE
 	// Nanopaste. Repair all damage if present for a single unit.
 	var/obj/item/stack/S = W
 	if(istype(S, /obj/item/stack/nanopaste))
-		if(!damage)
+		if(!health_damaged())
 			to_chat(user, "\The [src] doesn't seem to require repairs.")
-			return 1
+			return TRUE
 		if(S.use(1))
 			to_chat(user, "You apply a bit of \the [W] to \the [src]. It immediately repairs all damage.")
-			damage = 0
-		return 1
+			revive_health()
+		return TRUE
 	// Cable coil. Works as repair method, but will probably require multiple applications and more cable.
 	if(isCoil(S))
-		if(!damage)
+		if(!health_damaged())
 			to_chat(user, "\The [src] doesn't seem to require repairs.")
-			return 1
+			return TRUE
 		if(S.use(1))
 			to_chat(user, "You patch up \the [src] with a bit of \the [W].")
-			take_damage(-10)
-		return 1
+			restore_health(10)
+		return TRUE
 	return ..()
 
 
-// Called on multitool click, prints diagnostic information to the user.
+/// Returns a list of lines containing diagnostic information for display.
 /obj/item/stock_parts/computer/proc/diagnostics()
-	return list("Hardware Integrity Test... (Corruption: [damage]/[max_damage]) [damage > damage_failure ? "FAIL" : damage > damage_malfunction ? "WARN" : "PASS"]")
+	return list("Hardware Integrity Test... (Corruption: [get_damage_percentage()]%) [is_failing() ? "FAIL" : is_malfunctioning() ? "WARN" : "PASS"]")
 
 /obj/item/stock_parts/computer/Initialize()
 	. = ..()
@@ -58,38 +67,65 @@
 		C.uninstall_component(null, src)
 	return ..()
 
-// Handles damage checks
+/// Handles damage checks
 /obj/item/stock_parts/computer/proc/check_functionality()
 	// Turned off
 	if(!enabled)
-		return 0
+		return FALSE
 	// Too damaged to work at all.
-	if(damage >= damage_failure)
-		return 0
+	if(is_failing())
+		return FALSE
 	// Still working. Well, sometimes...
-	if(damage >= damage_malfunction)
-		if(prob(malfunction_probability))
-			return 0
+	if(malfunction_check())
+		return FALSE
 	// Good to go.
-	return 1
+	return TRUE
 
-/obj/item/stock_parts/computer/examine(mob/user)
-	. = ..()
-	if(damage > damage_failure)
-		to_chat(user, "<span class='danger'>It seems to be severely damaged!</span>")
-	else if(damage > damage_malfunction)
-		to_chat(user, "<span class='notice'>It seems to be damaged!</span>")
-	else if(damage)
-		to_chat(user, "It seems to be slightly damaged.")
 
-// Damages the component. Contains necessary checks. Negative damage "heals" the component.
-/obj/item/stock_parts/computer/proc/take_damage(var/amount)
-	damage += round(amount) 					// We want nice rounded numbers here.
-	damage = between(0, damage, max_damage)		// Clamp the value.
+/**
+ * Sets the part's health to the failure threshhold, if not already at or below it.
+ */
+/obj/item/stock_parts/computer/proc/set_damage_failure()
+	if (get_damage_value() >= damage_failure)
+		return
+	set_health(get_max_health() - damage_failure)
 
-// Called when component is disabled/enabled by the OS
+
+/**
+ * Whether or not the stock part's damage has reached the failure threshhold.
+ */
+/obj/item/stock_parts/computer/proc/is_failing()
+	return get_damage_value() >= damage_failure
+
+
+/**
+ * Sets the part's health to the malfunction threshhold, if not already at or below it.
+ */
+/obj/item/stock_parts/computer/proc/set_damage_malfunction()
+	if (get_damage_value() >= damage_malfunction)
+		return
+	set_health(get_max_health() - damage_malfunction)
+
+
+/**
+ * Is the component should malfunction this time. Checks before the damage value, and then the probability of malfunction.
+ */
+/obj/item/stock_parts/computer/proc/malfunction_check()
+	if (get_damage_value() < damage_malfunction)
+		return FALSE
+	return prob(malfunction_probability)
+
+
+/**
+ * Whether or not the stock part's damage has reached the malfunction threshhold.
+ */
+/obj/item/stock_parts/computer/proc/is_malfunctioning()
+	return get_damage_value() >= damage_malfunction
+
+
+/// Called when component is disabled/enabled by the OS
 /obj/item/stock_parts/computer/proc/on_disable()
-/obj/item/stock_parts/computer/proc/on_enable(var/datum/extension/interactive/ntos/os)
+/obj/item/stock_parts/computer/proc/on_enable(datum/extension/interactive/ntos/os)
 
 /obj/item/stock_parts/computer/proc/update_power_usage()
 	var/datum/extension/interactive/ntos/os = get_extension(loc, /datum/extension/interactive/ntos)

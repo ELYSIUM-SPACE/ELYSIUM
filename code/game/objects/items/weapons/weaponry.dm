@@ -25,21 +25,21 @@
 	//if(user != M)
 	if(M.mind && LAZYLEN(M.mind.learned_spells))
 		M.silence_spells(300) //30 seconds
-		to_chat(M, "<span class='danger'>You've been silenced!</span>")
+		to_chat(M, SPAN_DANGER("You've been silenced!"))
 		return
 
 	if (!user.IsAdvancedToolUser())
-		to_chat(user, "<span class='danger'>You don't have the dexterity to do this!</span>")
+		to_chat(user, SPAN_DANGER("You don't have the dexterity to do this!"))
 		return
 
 	if ((MUTATION_CLUMSY in user.mutations) && prob(50))
-		to_chat(user, "<span class='danger'>The rod slips out of your hand and hits your head.</span>")
+		to_chat(user, SPAN_DANGER("The rod slips out of your hand and hits your head."))
 		user.take_organ_damage(10, 0)
 		user.Paralyse(20)
 		return
 
 	if(GLOB.cult && iscultist(M))
-		M.visible_message("<span class='notice'>\The [user] waves \the [src] over \the [M]'s head.</span>")
+		M.visible_message(SPAN_NOTICE("\The [user] waves \the [src] over \the [M]'s head."))
 		GLOB.cult.offer_uncult(M)
 		return
 
@@ -95,9 +95,8 @@
 	opacity = 0
 	mouse_opacity = 1
 	anchored = TRUE
-	can_buckle = 0 //no manual buckling or unbuckling
+	health_max = 25
 
-	var/health = 25
 	var/countdown = 15
 	var/temporary = 1
 	var/mob/living/carbon/captured = null
@@ -109,7 +108,7 @@
 	desc = "An energized net meant to subdue animals."
 
 	anchored = FALSE
-	health = 5
+	health_max = 5
 	temporary = 0
 	min_free_time = 5
 	max_free_time = 10
@@ -134,13 +133,13 @@
 /obj/effect/energy_net/Process()
 	if(temporary)
 		countdown--
-	if(captured.buckled != src)
-		health = 0
+	if(!captured || captured.buckled != src)
+		kill_health()
 	if(get_turf(src) != get_turf(captured))  //just in case they somehow teleport around or
 		countdown = 0
 	if(countdown <= 0)
-		health = 0
-	healthcheck()
+		visible_message(SPAN_WARNING("\The [src] fades away!"))
+		qdel(src)
 
 /obj/effect/energy_net/Move()
 	..()
@@ -167,64 +166,45 @@
 		layer = ABOVE_HUMAN_LAYER
 		visible_message("\The [M] was caught in [src]!")
 	else
-		to_chat(M,"<span class='warning'>You are free of the net!</span>")
+		to_chat(M,SPAN_WARNING("You are free of the net!"))
 		reset_plane_and_layer()
 
-/obj/effect/energy_net/proc/healthcheck()
-	if(health <=0)
-		set_density(0)
-		if(countdown <= 0)
-			visible_message("<span class='warning'>\The [src] fades away!</span>")
-		else
-			visible_message("<span class='danger'>\The [src] is torn apart!</span>")
-		qdel(src)
+/obj/effect/energy_net/on_death()
+	visible_message(SPAN_DANGER("\The [src] is torn apart!"))
+	qdel(src)
 
-/obj/effect/energy_net/bullet_act(var/obj/item/projectile/Proj)
-	health -= Proj.get_structure_damage()
-	healthcheck()
-	return 0
+/obj/effect/energy_net/attack_hand(mob/user)
+	if (user.a_intent != I_HURT)
+		return
 
-/obj/effect/energy_net/ex_act()
-	health = 0
-	healthcheck()
-
-/obj/effect/energy_net/attack_hand(var/mob/user)
-
+	user.visible_message(
+		SPAN_WARNING("\The [user] claws at \the [src]!"),
+		SPAN_WARNING("You claw at \the [src]!")
+	)
 	var/mob/living/carbon/human/H = user
 	if(istype(H))
 		if(H.species.can_shred(H))
 			playsound(src.loc, 'sound/weapons/slash.ogg', 80, 1)
-			health -= rand(10, 20)
+			damage_health(rand(10, 20))
 		else
-			health -= rand(1,3)
+			damage_health(rand(1, 3))
 
 	else if (MUTATION_HULK in user.mutations)
-		health = 0
+		kill_health()
 	else
-		health -= rand(5,8)
+		damage_health(rand(5, 8))
 
-	to_chat(H,"<span class='danger'>You claw at the energy net.</span>")
-
-	healthcheck()
-	return
-
-/obj/effect/energy_net/attackby(obj/item/W as obj, mob/user as mob)
-	health -= W.force
-	healthcheck()
-	..()
-
-obj/effect/energy_net/user_unbuckle_mob(mob/user)
+/obj/effect/energy_net/user_unbuckle_mob(mob/user)
 	return escape_net(user)
 
 
 /obj/effect/energy_net/proc/escape_net(mob/user as mob)
 	visible_message(
-		"<span class='warning'>\The [user] attempts to free themselves from \the [src]!</span>",
-		"<span class='warning'>You attempt to free yourself from \the [src]!</span>"
-		)
-	if(do_after(user, rand(min_free_time, max_free_time), src, incapacitation_flags = INCAPACITATION_DISABLED))
-		health = 0
-		healthcheck()
-		return 1
+		SPAN_WARNING("\The [user] attempts to free themselves from \the [src]!"),
+		SPAN_WARNING("You attempt to free yourself from \the [src]!")
+	)
+	if (do_after(user, rand(min_free_time, max_free_time), src, DO_PUBLIC_UNIQUE, INCAPACITATION_DISABLED))
+		kill_health()
+		return TRUE
 	else
-		return 0
+		return FALSE

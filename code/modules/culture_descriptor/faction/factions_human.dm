@@ -1,4 +1,4 @@
-/decl/cultural_info/faction/scg
+/singleton/cultural_info/faction/scg
 	name = FACTION_SOL_CENTRAL
 	description = "The Sol Central Government, commonly referred to as SolGov or the SCG, is a federal republic \
 	composed of numerous human member states spanning many systems.\
@@ -12,7 +12,8 @@
 	its massive bureaucracy and the distance between worlds. Through its member states, the SCG governs as one of the \
 	most advanced and powerful civilisations in the known galaxy."
 
-/decl/cultural_info/faction/scg/fleet
+
+/singleton/cultural_info/faction/scg/fleet
 	name = FACTION_FLEET
 	description = "The Fleet is the primary component of the SCG Defence Forces. It mostly protects SCG space from pirates, smugglers, \
 	and occasional vox raiders, with its last serious military engagement being the Gaia war over 10 years ago. \
@@ -24,7 +25,8 @@
 	Bachelor degree and go through a lengthy training process before being assigned to a warship. \
 	Recently Sol-made IPCs were also permitted to enlist, provided they agree to install a law shackle."
 
-/decl/cultural_info/faction/torchco
+
+/singleton/cultural_info/faction/torchco
 	name = FACTION_CORPORATE
 	description = "The Expeditionary Corps Organisation is a government-owned, publically traded limited liability company assembled from the corporate \
 	backers who asssisted in funding the Torch project when it opened five years ago. Major players include NanoTrasen, Xynergy and \
@@ -35,9 +37,9 @@
 	protocols, and xenoartifacts being 'lost' in transit, but nothing has been conclusively proven as of yet, and SCG doubtless is \
 	reluctant to harpoon their own project."
 	economic_power = 1.2
-	subversive_potential = 35
 
-/decl/cultural_info/faction/gcc
+
+/singleton/cultural_info/faction/gcc
 	name = FACTION_INDIE_CONFED
 	description = "The Independent Colonial Confederation of Gilgamesh, commonly referred to as the Gilgamesh Colonial Confederation (GCC), is a regional power in human space,\
 	bordered by the Sol Central Government towards the galactic centre. The capital of the Confederation is the city of Ameranth on the planet of Terra \
@@ -48,9 +50,9 @@
 	heavily mistrusted and in some instances, met with downright hostility. Today the GCC continues to be an economic powerhouse following \
 	a period of steady economic recovery, with most of its exports being manufactured goods, primarily armaments."
 	economic_power = 0.9
-	subversive_potential = 50
 
-/decl/cultural_info/faction/remote
+
+/singleton/cultural_info/faction/remote
 	name = FACTION_EXPEDITIONARY
 	description = "The Expeditionary Corps is an SCG agency tasked with exploration of uncharted space and worlds, \
 	mineralogy surveys and xenoarchaeological studies and, more recently, the discovery of new alien life. \
@@ -61,7 +63,8 @@
 	Any SCG citizen of age (18 and older) with no outstanding SCG-wide warrants can sign up for a 2-year contract. \
 	Officer candidates are required to have at least a bachelor's degree in a relevant field (astrogation, engineering, xenoarcheology, etc)."
 
-/decl/cultural_info/faction/police
+
+/singleton/cultural_info/faction/police
 	name = FACTION_SPACECOPS
 	description = "The Sol Federal (SFP) is a government law enforcement agency tasked with enforcing Sol Central Government law, \
 	investigating breaches of law, fugitive recovery and transport, and securing ports of entry. \
@@ -70,7 +73,8 @@
 	Special Investigations (sensitive and urgent cases) and Fugitive Recovery Division (for when local authorities are unable or unwilling to arrest someone). \
 	The contractor SFP Trackers are also used find and arrest low-profile fugitives from justice."
 
-/decl/cultural_info/faction/remote/nanotrasen
+
+/singleton/cultural_info/faction/remote/nanotrasen
 	name = FACTION_NANOTRASEN
 	description = "The NanoTrasen Corporation, commonly referred to as NT, is one of the great megacorporations of the modern day.\
 	Currently headquartered in New Amsterdam on Luna and headed by CEO Jackson Trasen It deals in research of the most advanced sciences, \
@@ -80,18 +84,18 @@
 	NanoTrasen is characterized by its aggression and questionable ethics, which, combined with the high emphasis they put on new, untested and dangerous \
 	technology, means their installations are often considered unsafe and hazardous."
 	economic_power = 1.2
-	subversive_potential = 15
 
-/decl/cultural_info/faction/remote/xynergy
+
+/singleton/cultural_info/faction/remote/xynergy
 	name = FACTION_XYNERGY
 	description = "Xynergy is a privately held company known for their work with xenobiological organisms. They develop and \
 	produce products such as the netgun and dociler used for capturing or taming xenofauna. In addition, they are the largest \
 	fisher of space faring animals such as space carp and pike. They recently gained media presence by discovering and \
 	training the giant armoured serpentids."
 	economic_power = 1.1
-	subversive_potential = 15
 
-/decl/cultural_info/faction/remote/hephaestus
+
+/singleton/cultural_info/faction/remote/hephaestus
 	name = FACTION_HEPHAESTUS
 	description = "Hephaestus Industries, known simply as Hephaestus, is one of the largest corporations in existence today. \
 	The leading manufacturer of military grade personal weapons, assault vehicles, defence systems and security measures, \
@@ -100,9 +104,9 @@
 	reliability of its equipment as well as its general affordability. Internally, Hephaestus is a desirable employer as a result of its \
 	many employee benefits and focus on employee development, though many dread being transferred to one of the 'remote' branches."
 	economic_power = 1.2
-	subversive_potential = 15
 
-/decl/cultural_info/faction/free
+
+/singleton/cultural_info/faction/free
 	name = FACTION_FREETRADE
 	description = "The Free Trade Union, commonly referred to as the FTU, is is an employee-owned conglomerate of tens of thousands of \
 	various traders and merchants from all over SCG space and beyond. Colloquially known as the 'fifth megacorp', they control a sizeable fleet \
@@ -111,27 +115,27 @@
 	Gateway installations and planets. Somewhat unscrupulous, FTU stations and merchants are known for \
 	selling a great many restricted items and supplying all manner of goods indiscriminately."
 	economic_power = 1.3
-	subversive_potential = 15
 
-/decl/cultural_info/faction/pcrc
+
+/singleton/cultural_info/faction/pcrc
 	name = FACTION_PCRC
 	description = "Proxima Centauri Risk Control, often known as PCRC, is one of the largest suppliers of private security in Sol Space. \
 	PCRC handles numerous government, private and corporate contracts and provides a variety of services ranging from private law enforcement, \
 	security, close protection, asset protection, search and rescue and peacekeeping and escort duties. A relatively quiet and new company, \
 	it has quickly established itself as a reliable and effective provider of security solutions. This has often put it at odds with its main \
 	competitor, SAARE."
-	subversive_potential = 15
 
-/decl/cultural_info/faction/saare
+
+/singleton/cultural_info/faction/saare
 	name = FACTION_SAARE
 	description = "SAARE (Strategic Assault and Asset Retention Enterprises) is a quickly growing Private Military Corporation catering to large \
 	firms requiring discrete military and private security services. The company has taken to hiring skilled veterans from both private and public \
 	military services but have begun instituting training programs to breed their own operatives for the future. Typical assignments for SAARE \
 	contractors include private law enforcement, ship escort, location security, VIP escort, and VIP or asset recovery. In the last decade, the \
 	company has recently signed onto a number of contracts with NanoTrasen to complement their own Asset Protection forces."
-	subversive_potential = 15
 
-/decl/cultural_info/faction/dais
+
+/singleton/cultural_info/faction/dais
 	name = FACTION_DAIS
 	description = "Deimos Advanced Information Systems (DAIS) is a large corporation specializing in information technology such as computer hardware \
 	and software, telecommunications equipment, and networking equipment based on Mars. It is the number one supplier of computer technology in The Sol Central \
@@ -140,9 +144,8 @@
 	Currently DAIS is invested in bluespace computing research and artificial intelligence research. Despite recent intrusions by NanoTrasen into their sector with NTNet \
 	and related products, they still remain the market leader in computer technologies."
 	economic_power = 1.1
-	subversive_potential = 15
 
-/decl/cultural_info/faction/other
+
+/singleton/cultural_info/faction/other
 	name = FACTION_OTHER
 	description = "You belong to one of the many other factions that operate in the galaxy. Numerous, too numerous to list, these factions represent a variety of interests, purposes, intents and goals."
-	subversive_potential = 25

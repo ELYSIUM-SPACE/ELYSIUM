@@ -109,7 +109,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	// return 1 if found, 0 if not found
 	if(!signal)
 		return 0
-	if((signal.frequency in freq_listening) || (!freq_listening.len))
+	if((signal.frequency in freq_listening) || (!length(freq_listening)))
 		return 1
 	else
 		return 0
@@ -130,7 +130,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		var/turf/position = get_turf(src)
 		listening_levels = GetConnectedZlevels(position.z)
 
-	if(autolinkers.len)
+	if(length(autolinkers))
 		// Links nearby machines
 		if(!long_range_link)
 			for(var/obj/machinery/telecomms/T in orange(20, src))
@@ -149,12 +149,12 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	..()
 
 // Used in auto linking
-/obj/machinery/telecomms/proc/add_link(var/obj/machinery/telecomms/T)
+/obj/machinery/telecomms/proc/add_link(obj/machinery/telecomms/T)
 	var/turf/position = get_turf(src)
 	var/turf/T_position = get_turf(T)
 	if((position.z == T_position.z) || (src.long_range_link && T.long_range_link))
 		for(var/x in autolinkers)
-			if(list_find(T.autolinkers, x))
+			if(T.autolinkers.Find(x))
 				if(src != T)
 					links |= T
 
@@ -169,14 +169,14 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	listening_levels = GetConnectedZlevels(z)
 	update_power()
 
-/obj/machinery/telecomms/forceMove(var/newloc)
+/obj/machinery/telecomms/forceMove(newloc)
 	. = ..(newloc)
 	listening_levels = GetConnectedZlevels(z)
 	update_power()
 
 /obj/machinery/telecomms/proc/update_power()
 	if(toggled)
-		if(stat & (BROKEN|NOPOWER|EMPED) || integrity <= 0) // if powered, on. if not powered, off. if too damaged, off
+		if(inoperable() || GET_FLAGS(stat, MACHINE_STAT_EMPED) || integrity <= 0) // if powered, on. if not powered, off. if too damaged, off
 			on = 0
 		else
 			on = 1
@@ -218,7 +218,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		if((T0C + 200) to INFINITY)					// More than 200C, INFERNO. Takes damage every tick.
 			damage_chance = 100
 	if (damage_chance && prob(damage_chance))
-		integrity = between(0, integrity - 1, 100)
+		integrity = clamp(integrity - 1, 0, 100)
 
 
 	if(delay > 0)
@@ -236,7 +236,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	if (!use_power)
 		return
 
-	if(!(stat & (NOPOWER|BROKEN)))
+	if(operable())
 		var/turf/simulated/L = loc
 		if(istype(L))
 			var/datum/gas_mixture/env = L.return_air()
@@ -564,7 +564,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 				logs--
 				break
 
-/obj/machinery/telecomms/server/proc/add_entry(var/content, var/input)
+/obj/machinery/telecomms/server/proc/add_entry(content, input)
 	var/datum/comm_log_entry/log = new
 	var/identifier = num2text( rand(-1000,1000) + world.time )
 	log.name = "[input] ([md5(identifier)])"
@@ -573,7 +573,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	log_entries.Add(log)
 	update_logs()
 
-/obj/machinery/telecomms/server/proc/get_channel_info(var/freq)
+/obj/machinery/telecomms/server/proc/get_channel_info(freq)
 	for(var/list/rule in channel_tags)
 		if(rule[1] == freq)
 			return list(rule[2], rule[3])

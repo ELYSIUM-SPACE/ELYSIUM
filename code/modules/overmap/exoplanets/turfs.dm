@@ -3,7 +3,7 @@
 	icon = 'icons/turf/desert.dmi'
 	icon_state = "desert"
 	has_resources = 1
-	footstep_type = /decl/footsteps/asteroid
+	footstep_type = /singleton/footsteps/asteroid
 	var/diggable = 1
 	var/dirt_color = "#7c5e42"
 
@@ -28,13 +28,13 @@
 
 /turf/simulated/floor/exoplanet/attackby(obj/item/C, mob/user)
 	if(diggable && istype(C,/obj/item/shovel))
-		visible_message("<span class='notice'>\The [user] starts digging \the [src]</span>")
-		if(do_after(user, 50))
-			to_chat(user,"<span class='notice'>You dig a deep pit.</span>")
+		visible_message(SPAN_NOTICE("\The [user] starts digging \the [src]"))
+		if(do_after(user, 5 SECONDS, src, DO_PUBLIC_UNIQUE))
+			to_chat(user,SPAN_NOTICE("You dig a deep pit."))
 			new /obj/structure/pit(src)
 			diggable = 0
 		else
-			to_chat(user,"<span class='notice'>You stop shoveling.</span>")
+			to_chat(user,SPAN_NOTICE("You stop shoveling."))
 	else if(istype(C, /obj/item/stack/tile))
 		var/obj/item/stack/tile/T = C
 		if(T.use(1))
@@ -47,9 +47,9 @@
 
 /turf/simulated/floor/exoplanet/ex_act(severity)
 	switch(severity)
-		if(1)
+		if(EX_ACT_DEVASTATING)
 			ChangeTurf(get_base_turf_by_area(src))
-		if(2)
+		if(EX_ACT_HEAVY)
 			if(prob(40))
 				ChangeTurf(get_base_turf_by_area(src))
 
@@ -57,7 +57,7 @@
 	. = ..()
 	update_icon(1)
 
-/turf/simulated/floor/exoplanet/on_update_icon(var/update_neighbors)
+/turf/simulated/floor/exoplanet/on_update_icon(update_neighbors)
 	overlays.Cut()
 	if(LAZYLEN(decals))
 		overlays += decals
@@ -91,14 +91,14 @@
 	icon = 'icons/misc/beach.dmi'
 	icon_state = "seashallow"
 	movement_delay = 2
-	footstep_type = /decl/footsteps/water
+	footstep_type = /singleton/footsteps/water
 	var/reagent_type = /datum/reagent/water
 
-/turf/simulated/floor/exoplanet/water/shallow/attackby(obj/item/O, var/mob/living/user)
+/turf/simulated/floor/exoplanet/water/shallow/attackby(obj/item/O, mob/living/user)
 	var/obj/item/reagent_containers/RG = O
 	if (reagent_type && istype(RG) && RG.is_open_container() && RG.reagents)
 		RG.reagents.add_reagent(reagent_type, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
-		user.visible_message("<span class='notice'>[user] fills \the [RG] from \the [src].</span>","<span class='notice'>You fill \the [RG] from \the [src].</span>")
+		user.visible_message(SPAN_NOTICE("[user] fills \the [RG] from \the [src]."),SPAN_NOTICE("You fill \the [RG] from \the [src]."))
 	else
 		return ..()
 
@@ -120,7 +120,7 @@
 	icon = 'icons/turf/snow.dmi'
 	icon_state = "snow"
 	dirt_color = "#e3e7e8"
-	footstep_type = /decl/footsteps/snow
+	footstep_type = /singleton/footsteps/snow
 
 /turf/simulated/floor/exoplanet/snow/Initialize()
 	. = ..()
@@ -132,7 +132,7 @@
 /turf/simulated/floor/exoplanet/snow/melt()
 	SetName("permafrost")
 	icon_state = "permafrost"
-	footstep_type = /decl/footsteps/asteroid
+	footstep_type = /singleton/footsteps/asteroid
 
 //Grass
 /turf/simulated/floor/exoplanet/grass
@@ -140,7 +140,7 @@
 	icon = 'icons/turf/jungle.dmi'
 	icon_state = "greygrass"
 	color = "#799c4b"
-	footstep_type = /decl/footsteps/grass
+	footstep_type = /singleton/footsteps/grass
 
 /turf/simulated/floor/exoplanet/grass/Initialize()
 	. = ..()
@@ -164,7 +164,7 @@
 /turf/simulated/floor/exoplanet/grass/melt()
 	SetName("scorched ground")
 	icon_state = "scorched"
-	footstep_type = /decl/footsteps/asteroid
+	footstep_type = /singleton/footsteps/asteroid
 	color = null
 
 //Sand
@@ -172,7 +172,7 @@
 	name = "sand"
 	desc = "It's coarse and gets everywhere."
 	dirt_color = "#ae9e66"
-	footstep_type = /decl/footsteps/sand
+	footstep_type = /singleton/footsteps/sand
 
 /turf/simulated/floor/exoplanet/desert/Initialize()
 	. = ..()

@@ -54,14 +54,14 @@
 
 	update_icon()
 
-/obj/structure/noticeboard/proc/add_paper(var/atom/movable/paper, var/skip_icon_update)
+/obj/structure/noticeboard/proc/add_paper(atom/movable/paper, skip_icon_update)
 	if(istype(paper))
 		LAZYDISTINCTADD(notices, paper)
 		paper.forceMove(src)
 		if(!skip_icon_update)
 			update_icon()
 
-/obj/structure/noticeboard/proc/remove_paper(var/atom/movable/paper, var/skip_icon_update)
+/obj/structure/noticeboard/proc/remove_paper(atom/movable/paper, skip_icon_update)
 	if(istype(paper) && paper.loc == src)
 		paper.dropInto(loc)
 		LAZYREMOVE(notices, paper)
@@ -79,13 +79,13 @@
 	QDEL_NULL_LIST(notices)
 	. = ..()
 
-/obj/structure/noticeboard/ex_act(var/severity)
+/obj/structure/noticeboard/ex_act(severity)
 	dismantle()
 
 /obj/structure/noticeboard/on_update_icon()
 	icon_state = "[base_icon_state][LAZYLEN(notices)]"
 
-/obj/structure/noticeboard/attackby(var/obj/item/thing, var/mob/user)
+/obj/structure/noticeboard/attackby(obj/item/thing, mob/user)
 	if(isScrewdriver(thing))
 		var/choice = input("Which direction do you wish to place the noticeboard?", "Noticeboard Offset") as null|anything in list("North", "South", "East", "West")
 		if(choice && Adjacent(user) && thing.loc == user && !user.incapacitated())
@@ -107,7 +107,7 @@
 	else if(isWrench(thing))
 		visible_message(SPAN_WARNING("\The [user] begins dismantling \the [src]."))
 		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
-		if(do_after(user, 50, src))
+		if(do_after(user, 5 SECONDS, src, DO_REPAIR_CONSTRUCT))
 			visible_message(SPAN_DANGER("\The [user] has dismantled \the [src]!"))
 			dismantle()
 		return
@@ -125,10 +125,10 @@
 		return
 	..()
 
-/obj/structure/noticeboard/attack_ai(var/mob/user)
+/obj/structure/noticeboard/attack_ai(mob/user)
 	examine(user)
 
-/obj/structure/noticeboard/attack_hand(var/mob/user)
+/obj/structure/noticeboard/attack_hand(mob/user)
 	examine(user)
 
 /obj/structure/noticeboard/examine(mob/user)
@@ -145,7 +145,7 @@
 	popup.set_content(jointext(dat, null))
 	popup.open()
 
-/obj/structure/noticeboard/OnTopic(var/mob/user, var/list/href_list)
+/obj/structure/noticeboard/OnTopic(mob/user, list/href_list)
 
 	if(href_list["read"])
 		var/obj/item/paper/P = locate(href_list["read"])
@@ -168,9 +168,7 @@
 		var/obj/item/P = locate(href_list["write"])
 		if(!P)
 			return
-		var/obj/item/pen/pen = user.r_hand
-		if(!istype(pen))
-			pen = user.l_hand
+		var/obj/item/pen/pen = user.IsHolding(/obj/item/pen)
 		if(istype(pen))
 			add_fingerprint(user)
 			P.attackby(pen, user)

@@ -2,7 +2,7 @@
 	var/list/all_underwear
 	var/list/all_underwear_metadata
 
-	var/decl/backpack_outfit/backpack
+	var/singleton/backpack_outfit/backpack
 	var/list/backpack_metadata
 
 	var/sensor_setting
@@ -18,9 +18,9 @@
 	..()
 	if(!backpacks_by_name)
 		backpacks_by_name = list()
-		var/bos = decls_repository.get_decls_of_subtype(/decl/backpack_outfit)
+		var/bos = GET_SINGLETON_SUBTYPE_MAP(/singleton/backpack_outfit)
 		for(var/bo in bos)
-			var/decl/backpack_outfit/backpack_outfit = bos[bo]
+			var/singleton/backpack_outfit/backpack_outfit = bos[bo]
 			backpacks_by_name[backpack_outfit.name] = backpack_outfit
 
 /datum/category_item/player_setup_item/physical/equipment/load_character(datum/pref_record_reader/R)
@@ -54,7 +54,7 @@
 					break
 
 	var/datum/species/mob_species = all_species[pref.species]
-	if(!(mob_species && mob_species.appearance_flags & HAS_UNDERWEAR))
+	if(!(mob_species && mob_species.appearance_flags & SPECIES_APPEARANCE_HAS_UNDERWEAR))
 		pref.all_underwear.Cut()
 
 	if(!istype(pref.all_underwear_metadata))
@@ -84,7 +84,7 @@
 			pref.backpack_metadata -= backpack_metadata_name
 
 	for(var/backpack_name in backpacks_by_name)
-		var/decl/backpack_outfit/backpack = backpacks_by_name[backpack_name]
+		var/singleton/backpack_outfit/backpack = backpacks_by_name[backpack_name]
 		var/list/tweak_metadata = pref.backpack_metadata["[backpack]"]
 		if(tweak_metadata)
 			for(var/tw in backpack.tweaks)
@@ -116,7 +116,7 @@
 	. += "Suit Sensors Locked: <a href='?src=\ref[src];toggle_sensors_locked=1'>[pref.sensors_locked ? "Locked" : "Unlocked"]</a><br />"
 	return jointext(.,null)
 
-/datum/category_item/player_setup_item/physical/equipment/proc/get_underwear_metadata(var/underwear_category, var/datum/gear_tweak/gt)
+/datum/category_item/player_setup_item/physical/equipment/proc/get_underwear_metadata(underwear_category, datum/gear_tweak/gt)
 	var/metadata = pref.all_underwear_metadata[underwear_category]
 	if(!metadata)
 		metadata = list()
@@ -128,7 +128,7 @@
 		metadata["[gt]"] = tweak_data
 	return tweak_data
 
-/datum/category_item/player_setup_item/physical/equipment/proc/get_backpack_metadata(var/decl/backpack_outfit/backpack_outfit, var/datum/backpack_tweak/bt)
+/datum/category_item/player_setup_item/physical/equipment/proc/get_backpack_metadata(singleton/backpack_outfit/backpack_outfit, datum/backpack_tweak/bt)
 	var/metadata = pref.backpack_metadata[backpack_outfit.name]
 	if(!metadata)
 		metadata = list()
@@ -140,15 +140,15 @@
 		metadata["[bt]"] = tweak_data
 	return tweak_data
 
-/datum/category_item/player_setup_item/physical/equipment/proc/set_underwear_metadata(var/underwear_category, var/datum/gear_tweak/gt, var/new_metadata)
+/datum/category_item/player_setup_item/physical/equipment/proc/set_underwear_metadata(underwear_category, datum/gear_tweak/gt, new_metadata)
 	var/list/metadata = pref.all_underwear_metadata[underwear_category]
 	metadata["[gt]"] = new_metadata
 
-/datum/category_item/player_setup_item/physical/equipment/proc/set_backpack_metadata(var/decl/backpack_outfit/backpack_outfit, var/datum/backpack_tweak/bt, var/new_metadata)
+/datum/category_item/player_setup_item/physical/equipment/proc/set_backpack_metadata(singleton/backpack_outfit/backpack_outfit, datum/backpack_tweak/bt, new_metadata)
 	var/metadata = pref.backpack_metadata[backpack_outfit.name]
 	metadata["[bt]"] = new_metadata
 
-/datum/category_item/player_setup_item/physical/equipment/OnTopic(var/href,var/list/href_list, var/mob/user)
+/datum/category_item/player_setup_item/physical/equipment/OnTopic(href,list/href_list, mob/user)
 	if(href_list["change_underwear"])
 		var/datum/category_group/underwear/UWC = GLOB.underwear.categories_by_name[href_list["change_underwear"]]
 		if(!UWC)
@@ -177,7 +177,7 @@
 		var/backpack_name = href_list["backpack"]
 		if(!(backpack_name in backpacks_by_name))
 			return TOPIC_NOACTION
-		var/decl/backpack_outfit/bo = backpacks_by_name[backpack_name]
+		var/singleton/backpack_outfit/bo = backpacks_by_name[backpack_name]
 		var/datum/backpack_tweak/bt = locate(href_list["tweak"]) in bo.tweaks
 		if(!bt)
 			return TOPIC_NOACTION

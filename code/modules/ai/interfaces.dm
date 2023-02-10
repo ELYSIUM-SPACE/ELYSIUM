@@ -72,22 +72,20 @@
 
 // Respects move cooldowns as if it had a client.
 // Also tries to avoid being superdumb with moving into certain tiles (unless that's desired).
-/mob/living/proc/IMove(dir, safety = TRUE)
+/mob/living/proc/IMove(turf/newloc, safety = TRUE)
 
-	var/turf/newloc
-	if (istype(dir, /turf))
-		newloc = dir
-		dir = get_dir(src, dir)
-	else
-		newloc = get_step(src, dir)
+	if (!newloc)
+		return MOVEMENT_FAILED
 
-	if (!checkMoveCooldown())
-		return MOVEMENT_ON_COOLDOWN
+	var/dir = get_dir(src, newloc)
 
 	// Check to make sure moving to newloc won't actually kill us. e.g. we're a slime and trying to walk onto water.
 	if (istype(newloc))
 		if (safety && !newloc.is_safe_to_enter(src))
 			return MOVEMENT_FAILED
+
+	if (!check_solid_ground() && !Allow_Spacemove())
+		return MOVEMENT_FAILED
 
 	// Move()ing to another tile successfully returns 32 because BYOND. Would rather deal with TRUE/FALSE-esque terms.
 	// Note that moving to the same tile will be 'successful'.
@@ -98,10 +96,7 @@
 	if (!old_T.Adjacent(newloc))
 		return MOVEMENT_FAILED
 
-	. = Move(newloc, dir) ? MOVEMENT_SUCCESSFUL : MOVEMENT_FAILED
+	. = SelfMove(dir) ? MOVEMENT_SUCCESSFUL : MOVEMENT_FAILED
 	if (. == MOVEMENT_SUCCESSFUL)
 		set_dir(get_dir(old_T, newloc))
-		// Apply movement delay.
-		// Player movement has more factors but its all in the client and fixing that would be its own project.
-		SetMoveCooldown(movement_delay())
 	return

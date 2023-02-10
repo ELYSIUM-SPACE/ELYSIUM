@@ -1,4 +1,4 @@
-/proc/get_archeological_find_by_findtype(var/find_type)
+/proc/get_archeological_find_by_findtype(find_type)
 	for(var/T in typesof(/obj/item/archaeological_find))
 		var/obj/item/archaeological_find/F = T
 		if(find_type == initial(F.find_type))
@@ -44,11 +44,11 @@
 			descriptors.Add("is encircled with bands of [pick("quadrinium","cordite","ferritic-alloy","plasteel","duranium")]")
 		if(prob(30))
 			descriptors.Add("menaces with spikes of [pick("solid phoron","uranium","white pearl","black steel")]")
-		if(descriptors.len > 0)
+		if(length(descriptors) > 0)
 			decorations = "It "
-			for(var/index=1, index <= descriptors.len, index++)
+			for(var/index=1, index <= length(descriptors), index++)
 				if(index > 1)
-					if(index == descriptors.len)
+					if(index == length(descriptors))
 						decorations += " and "
 					else
 						decorations += ", "
@@ -160,7 +160,7 @@
 	if(prob(25))
 		new_item = new /obj/item/vampiric(loc)
 	else
-		new_item = new(loc)
+		new_item = ..()
 	new_item.SetName("statuette")
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	new_item.icon_state = "statuette"
@@ -208,9 +208,7 @@
 	apply_image_decorations = 1
 
 /obj/item/archaeological_find/coin/spawn_item()
-	var/obj/item/material/coin/C = pick(subtypesof(/obj/item/material/coin))
-	C = new C(loc)
-	return C
+	return new_simple_coin (loc)
 
 /obj/item/archaeological_find/trap
 	item_type = "trap"
@@ -304,7 +302,7 @@
 	if(prob(25))
 		new_item = new /obj/item/device/soulstone(loc)
 	else
-		new_item = new(loc)
+		new_item = ..()
 	apply_image_decorations = 1
 	additional_desc = pick("It shines faintly as it catches the light.","It appears to have a faint inner glow.","It seems to draw you inward as you look it at.","Something twinkles faintly as you look at it.","It's mesmerizing to behold.")
 
@@ -318,6 +316,7 @@
 	else
 		item_type = "rough red crystal"
 		new_item.icon_state = "changerock"
+	return new_item
 
 /obj/item/archaeological_find/blade
 	item_type = "blade"

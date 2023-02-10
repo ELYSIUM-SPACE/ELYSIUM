@@ -10,7 +10,7 @@
 	var/transfer_blood = 0
 	var/mob/living/carbon/human/bloody_hands_mob
 
-/obj/item/clothing/shoes/
+/obj/item/clothing/shoes
 	var/track_blood = 0
 
 /obj/item/reagent_containers/glass/rag
@@ -40,7 +40,7 @@
 
 /obj/item/reagent_containers/glass/rag/attack_self(mob/user as mob)
 	if(on_fire && user.unEquip(src))
-		user.visible_message("<span class='warning'>\The [user] stamps out [src].</span>", "<span class='warning'>You stamp out [src].</span>")
+		user.visible_message(SPAN_WARNING("\The [user] stamps out [src]."), SPAN_WARNING("You stamp out [src]."))
 		extinguish()
 	else
 		remove_contents(user)
@@ -82,25 +82,31 @@
 		return
 
 	if(reagents.total_volume)
-		var/target_text = trans_dest? "\the [trans_dest]" : "\the [user.loc]"
-		user.visible_message("<span class='danger'>\The [user] begins to wring out [src] over [target_text].</span>", "<span class='notice'>You begin to wring out [src] over [target_text].</span>")
+		var/atom/target = trans_dest ? trans_dest : user.loc
+		user.visible_message(
+			SPAN_DANGER("\The [user] begins to wring out \the [src] over \the [target]."),
+			SPAN_NOTICE("You begin to wring out \the [src] over \the [target].")
+		)
 
-		if(do_after(user, reagents.total_volume*5, do_flags = DO_DEFAULT & ~DO_SHOW_PROGRESS)) //50 for a fully soaked rag
+		if (do_after(user, reagents.total_volume * 5, target, DO_PUBLIC_UNIQUE)) //50 for a fully soaked rag
 			if(trans_dest)
 				reagents.trans_to(trans_dest, reagents.total_volume)
 			else
 				reagents.splash(user.loc, reagents.total_volume)
-			user.visible_message("<span class='danger'>\The [user] wrings out [src] over [target_text].</span>", "<span class='notice'>You finish to wringing out [src].</span>")
+			user.visible_message(
+				SPAN_DANGER("\The [user] wrings out \the [src] over [target]."),
+				SPAN_NOTICE("You finish to wringing out \the [src].")
+			)
 			update_name()
 
 /obj/item/reagent_containers/glass/rag/proc/wipe_down(atom/A, mob/user)
 	if(!reagents.total_volume)
-		to_chat(user, "<span class='warning'>The [initial(name)] is dry!</span>")
+		to_chat(user, SPAN_WARNING("The [initial(name)] is dry!"))
 	else
 		user.visible_message("\The [user] starts to wipe down [A] with [src]!")
 		reagents.splash(A, 1) //get a small amount of liquid on the thing we're wiping.
 		update_name()
-		if(do_after(user,30))
+		if (do_after(user, 3 SECONDS, A, DO_PUBLIC_UNIQUE))
 			user.visible_message("\The [user] finishes wiping off the [A]!")
 			if(isturf(A))
 				var/turf/T = A
@@ -156,7 +162,7 @@
 				if (user.skill_check(SKILL_COMBAT, SKILL_ADEPT))
 					grab_time = 3 SECONDS
 
-				if (do_after(user, grab_time, target, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
+				if (do_after(user, grab_time, target, DO_PUBLIC_UNIQUE))
 					user.visible_message(
 						SPAN_DANGER("\The [user] smothers \the [target] with \the [src]!"),
 						SPAN_DANGER("You smother \the [target] with \the [src]!")
@@ -182,11 +188,11 @@
 
 	if(istype(A, /obj/structure/reagent_dispensers))
 		if(!reagents.get_free_space())
-			to_chat(user, "<span class='warning'>\The [src] is already soaked.</span>")
+			to_chat(user, SPAN_WARNING("\The [src] is already soaked."))
 			return
 
 		if(A.reagents && A.reagents.trans_to_obj(src, reagents.maximum_volume))
-			user.visible_message("<span class='notice'>\The [user] soaks [src] using [A].</span>", "<span class='notice'>You soak [src] using [A].</span>")
+			user.visible_message(SPAN_NOTICE("\The [user] soaks [src] using [A]."), SPAN_NOTICE("You soak [src] using [A]."))
 			update_name()
 		return
 
@@ -207,9 +213,10 @@
 
 /obj/item/reagent_containers/glass/rag/proc/can_ignite()
 	var/fuel = 0
-	FOR_BLIND(datum/reagent/R, reagents?.reagent_list)
+	for (var/datum/reagent/R as anything in reagents?.reagent_list)
 		if (R.gas_flags & XGM_GAS_FUEL)
 			fuel += R.volume
+		fuel += R.accelerant_quality * R.volume
 	return (fuel >= 2 && fuel >= reagents?.total_volume * 0.8)
 
 
@@ -221,7 +228,7 @@
 
 	//also copied from matches
 	if(reagents.get_reagent_amount(/datum/reagent/toxin/phoron)) // the phoron explodes when exposed to fire
-		visible_message("<span class='danger'>\The [src] conflagrates violently!</span>")
+		visible_message(SPAN_DANGER("\The [src] conflagrates violently!"))
 		var/datum/effect/effect/system/reagents_explosion/e = new()
 		e.set_up(round(reagents.get_reagent_amount(/datum/reagent/toxin/phoron) / 2.5, 1), get_turf(src), 0, 0)
 		e.start()
@@ -242,7 +249,7 @@
 	//rags sitting around with 1 second of burn time left is dumb.
 	//ensures players always have a few seconds of burn time left when they light their rag
 	if(burn_time <= 5)
-		visible_message("<span class='warning'>\The [src] falls apart!</span>")
+		visible_message(SPAN_WARNING("\The [src] falls apart!"))
 		new /obj/effect/decal/cleanable/ash(get_turf(src))
 		qdel(src)
 	update_name()
@@ -250,7 +257,7 @@
 
 /obj/item/reagent_containers/glass/rag/Process()
 	if(!can_ignite())
-		visible_message("<span class='warning'>\The [src] burns out.</span>")
+		visible_message(SPAN_WARNING("\The [src] burns out."))
 		extinguish()
 
 	//copied from matches

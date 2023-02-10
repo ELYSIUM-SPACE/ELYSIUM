@@ -12,19 +12,18 @@ GLOBAL_LIST_INIT(exo_event_mob_count,list())// a list of all mobs currently spaw
 	var/list/players_on_site = list()
 	var/target_mob_count = 0 //overall target mob count, set to nonzero during setup
 	var/datum/mob_list/chosen_mob_list //the chosen list of mobs we will pick from when spawning, also based on severity
-	var/original_severity
 	var/delay_time // Amount of time between the event starting and mobs beginning spawns
 	var/spawning = FALSE // Set to TRUE once the initial delay passes
 
 /datum/event/exo_awakening/setup()
 	announceWhen = rand(15, 45)
 	affecting_z = list()
-	original_severity = severity //incase we need to re-roll a different event.
-	if (severity == EVENT_LEVEL_MAJOR || prob(25))
-		severity = EVENT_LEVEL_MAJOR //if original event was moderate, this will need updating
+	if (prob(25))
+		severity = EVENT_LEVEL_MAJOR
 
 		chosen_mob_list = pick(typesof(/datum/mob_list/major) - /datum/mob_list/major)
 	else
+		severity = EVENT_LEVEL_MODERATE
 		chosen_mob_list = pick(typesof(/datum/mob_list/moderate) - /datum/mob_list/moderate)
 
 	for (var/area/A in world)
@@ -50,7 +49,7 @@ GLOBAL_LIST_INIT(exo_event_mob_count,list())// a list of all mobs currently spaw
 
 /datum/event/exo_awakening/proc/count_mobs()
 	var/total_mobs
-	total_mobs = GLOB.exo_event_mob_count.len
+	total_mobs = length(GLOB.exo_event_mob_count)
 
 	if (total_mobs >= target_mob_count || SSmobs.ticks >= 10 || !living_observers_present(affecting_z))
 		stop_spawning = TRUE
@@ -67,7 +66,7 @@ GLOBAL_LIST_INIT(exo_event_mob_count,list())// a list of all mobs currently spaw
 	notify_players()
 	adjust_to_planet_size()
 
-	addtimer(CALLBACK(src, /datum/event/exo_awakening/proc/start_spawning), delay_time)
+	addtimer(new Callback(src, /datum/event/exo_awakening/proc/start_spawning), delay_time)
 
 //Locates a planet with players on it (prioritizes players from the station).
 //If no suitable planets are found, the event is killed and something else is run instead.
@@ -77,10 +76,8 @@ GLOBAL_LIST_INIT(exo_event_mob_count,list())// a list of all mobs currently spaw
 	var/list/players = list()
 
 	for (var/area/A in exoplanet_areas)
-		var/mob/M
-		for (var/i = length(GLOB.player_list) to 1 step -1)
-			M = GLOB.player_list[i]
-			if (M && M.stat != DEAD && (get_z(M) in GetConnectedZlevels(A.z)))
+		for (var/mob/M in GLOB.player_list)
+			if (M.stat != DEAD && (get_z(M) in GetConnectedZlevels(A.z)))
 				players += M
 
 				if (get_crewmember_record(M.real_name || M.name))
@@ -102,7 +99,6 @@ GLOBAL_LIST_INIT(exo_event_mob_count,list())// a list of all mobs currently spaw
 
 		if (!length(sites))
 			log_debug("Exoplanet Awakening failed to run, not enough players on any planet. Aborting.")
-			severity = original_severity
 			kill()
 			return
 
@@ -112,7 +108,6 @@ GLOBAL_LIST_INIT(exo_event_mob_count,list())// a list of all mobs currently spaw
 
 	if (!chosen_area)
 		log_debug("Exoplanet Awakening failed to start, could not find a planetary area.")
-		severity = original_severity
 		kill()
 
 //Notify all players on the planet that the event is beginning.
@@ -134,7 +129,7 @@ GLOBAL_LIST_INIT(exo_event_mob_count,list())// a list of all mobs currently spaw
 /datum/event/exo_awakening/announce()
 	var/announcement = ""
 	if (severity > EVENT_LEVEL_MODERATE)
-		announcement = "Extreme biological activity spike detected on [location_name()]. Recommend away team evacuation."
+		announcement = "Extreme biological activity spike detected on [location_name()]."
 	else
 		announcement = "Anomalous biological activity detected on [location_name()]."
 
@@ -167,18 +162,20 @@ GLOBAL_LIST_INIT(exo_event_mob_count,list())// a list of all mobs currently spaw
 				var/mob/M = pick(players_on_site[chosen_area])
 				var/turf/MT = get_turf(M)
 				if (MT)
-					T = pick(trange(10, MT) - trange(7, MT))
+					if (istype(chosen_planet, /obj/effect/overmap/visitable/sector/exoplanet))
+						T = CircularRandomTurfAround(MT, Frand(3, 5))
 				else
 					T = pick(area_turfs)
 			else
 				T = pick(area_turfs)
 
-			if (is_edge_turf(T) || T.is_wall() || T.density)
+			if (!T || is_edge_turf(T) || T.is_wall() || T.density)
+				T = null
 				continue
 
 			break
 
-		if (is_edge_turf(T) || T.is_wall() || T.density)
+		if (!T)
 			return
 
 

@@ -17,7 +17,6 @@
 		update_items()
 	if (src.stat != DEAD) //still using power
 		use_power()
-		process_queued_alarms()
 	UpdateLyingBuckledAndVerbStatus()
 
 /mob/living/silicon/robot/proc/clamp_values()
@@ -38,12 +37,8 @@
 		C.update_power_state()
 
 	if ( cell && is_component_functioning("power cell") && src.cell.charge > 0 )
-		if(src.module_state_1)
+		for (var/obj/item as anything in GetAllHeld())
 			cell_use_power(50) // 50W load for every enabled tool TODO: tool-specific loads
-		if(src.module_state_2)
-			cell_use_power(50)
-		if(src.module_state_3)
-			cell_use_power(50)
 
 		if(lights_on)
 			if(intenselight)
@@ -66,20 +61,14 @@
 
 /mob/living/silicon/robot/handle_regular_status_updates()
 
-	if(src.camera && !scrambledcodes)
-		if(src.stat == 2 || wires.IsIndexCut(BORG_WIRE_CAMERA))
-			src.camera.set_status(0)
-		else
-			src.camera.set_status(1)
-
 	updatehealth()
 
 	if(src.sleeping)
 		Paralyse(3)
 		src.sleeping--
 
-	if(src.resting)
-		Weaken(5)
+	if (resting) // Just in case. This breaks things so never allow robots to rest.
+		resting = FALSE
 
 	if(health < config.health_threshold_dead && src.stat != 2) //die only once
 		death()
@@ -214,7 +203,7 @@
 
 	if (src.cells)
 		if (src.cell)
-			var/chargeNum = Clamp(ceil(cell.percent()/25), 0, 4)	//0-100 maps to 0-4, but give it a paranoid clamp just in case.
+			var/chargeNum = clamp(Ceil(cell.percent()/25), 0, 4)	//0-100 maps to 0-4, but give it a paranoid clamp just in case.
 			src.cells.icon_state = "charge[chargeNum]"
 		else
 			src.cells.icon_state = "charge-empty"
@@ -317,5 +306,7 @@
 		overlays += image("icon"='icons/mob/OnFire.dmi', "icon_state"="Standing")
 
 /mob/living/silicon/robot/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if (status_flags & GODMODE)
+		return
 	if(!on_fire) //Silicons don't gain stacks from hotspots, but hotspots can ignite them
 		IgniteMob()

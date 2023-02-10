@@ -31,15 +31,13 @@
 
 	bleed_colour = "#aad9de"
 
-	ai_holder_type = /datum/ai_holder/hostile/melee/vagrant
+	ai_holder = /datum/ai_holder/hostile/melee/vagrant
 
 /datum/ai_holder/hostile/melee/vagrant
 
 /datum/ai_holder/hostile/melee/vagrant/engage_target()
-	. = ..()
-
-	if(ishuman(.))
-		var/mob/living/carbon/human/H = .
+	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
 		var/mob/living/simple_animal/hostile/vagrant/V = holder
 		if(V.gripping == H)
 			H.Weaken(1)
@@ -53,13 +51,15 @@
 			V.update_icon()
 			H.Weaken(1)
 			H.Stun(1)
-			H.visible_message("<span class='danger'>\the [src] latches onto \the [H], pulsating!</span>")
+			H.visible_message(SPAN_DANGER("\the [holder] latches onto \the [H], pulsating!"))
 			V.forceMove(V.gripping.loc)
 
-/mob/living/simple_animal/hostile/vagrant/Allow_Spacemove(var/check_drift = 0)
+/mob/living/simple_animal/hostile/vagrant/Allow_Spacemove(check_drift = 0)
 	return 1
 
-/mob/living/simple_animal/hostile/vagrant/bullet_act(var/obj/item/projectile/Proj)
+/mob/living/simple_animal/hostile/vagrant/bullet_act(obj/item/projectile/Proj)
+	if (status_flags & GODMODE)
+		return PROJECTILE_FORCE_MISS
 	var/oldhealth = health
 	. = ..()
 	if((target_mob != Proj.firer) && health < oldhealth && !incapacitated(INCAPACITATION_KNOCKOUT)) //Respond to being shot at
@@ -86,7 +86,7 @@
 				gripping.vessel.remove_reagent(/datum/reagent/blood, blood_per_tick)
 				health = min(health + health_per_tick, maxHealth)
 				if(prob(15))
-					to_chat(gripping, "<span class='danger'>You feel your fluids being drained!</span>")
+					to_chat(gripping, SPAN_DANGER("You feel your fluids being drained!"))
 			else
 				gripping = null
 

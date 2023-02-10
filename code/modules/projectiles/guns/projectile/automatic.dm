@@ -1,6 +1,6 @@
 /obj/item/gun/projectile/automatic
 	name = "prototype SMG"
-	desc = "A protoype lightweight, fast firing submachine gun."
+	desc = "A protoype lightweight, fast firing submachine gun chambered in a small caliber."
 	icon = 'icons/obj/guns/prototype_smg.dmi'
 	icon_state = "prototype"
 	item_state = "saber"
@@ -27,7 +27,7 @@
 
 /obj/item/gun/projectile/automatic/machine_pistol
 	name = "machine pistol"
-	desc = "The Hephaestus Industries MP6 Vesper, A fairly common machine pistol. Sometimes refered to as an 'uzi' by the backwater spacers it is often associated with."
+	desc = "The Hephaestus Industries MP6 Vesper, A fairly common machine pistol based off a mid 20th century design. Sometimes refered to as an 'uzi' by the backwater spacers it is often associated with."
 	icon = 'icons/obj/guns/machine_pistol.dmi'
 	icon_state = "mpistolen"
 	safety_icon = "safety"
@@ -53,16 +53,15 @@
 
 	if(!ammo_magazine || !LAZYLEN(ammo_magazine.stored_ammo))
 		icon_state = "mpistolen-empty"
-		overlays += image(icon, "ammo_bad")
+		overlays += image(icon, "[initial(icon_state)]-ammo0")
 	else if(LAZYLEN(ammo_magazine.stored_ammo) <= 0.5 * ammo_magazine.max_ammo)
-		overlays += image(icon, "ammo_warn")
-		return
+		overlays += image(icon, "[initial(icon_state)]-ammo1")
 	else
-		overlays += image(icon, "ammo_ok")
+		overlays += image(icon, "[initial(icon_state)]-ammo2")
 
 /obj/item/gun/projectile/automatic/merc_smg
 	name = "submachine gun"
-	desc = "The NanoTrasen C-20r is a lightweight and rapid firing SMG, for when you REALLY need someone dead. Has a 'Per falcis, per pravitas' buttstamp."
+	desc = "The Novaya Zemlya Arms C-20r is a lightweight and rapid firing SMG. In production since the 2280s, the C-20r has proliferated across human space, in some part due to it being issued to smaller ICCGN vessels."
 	icon = 'icons/obj/guns/merc_smg.dmi'
 	icon_state = "c20r"
 	item_state = "c20r"
@@ -91,13 +90,13 @@
 /obj/item/gun/projectile/automatic/merc_smg/on_update_icon()
 	..()
 	if(ammo_magazine)
-		icon_state = "c20r-[round(ammo_magazine.stored_ammo.len,4)]"
+		icon_state = "c20r-[round(length(ammo_magazine.stored_ammo),4)]"
 	else
 		icon_state = "c20r"
 
 /obj/item/gun/projectile/automatic/assault_rifle
 	name = "assault rifle"
-	desc = "The rugged STS-35 is a durable automatic weapon of a make popular on the frontier worlds. Originally produced by Hephaestus. The serial number has been scratched off."
+	desc = "The rugged STS-35 is a durable automatic weapon of a make popular on the frontier worlds. Originally designed in the mid 20th century, today variants are made by most firearm producers. This one appears to be HI made, with the serial number conveniently absent."
 	icon = 'icons/obj/guns/assault_rifle.dmi'
 	icon_state = "arifle"
 	item_state = null
@@ -161,7 +160,7 @@
 /obj/item/gun/projectile/automatic/sec_smg/on_update_icon()
 	..()
 	if(ammo_magazine)
-		overlays += image(icon, "mag-[round(ammo_magazine.stored_ammo.len,5)]")
+		overlays += image(icon, "mag-[round(length(ammo_magazine.stored_ammo),5)]")
 	if(ammo_magazine && LAZYLEN(ammo_magazine.stored_ammo))
 		overlays += image(icon, "ammo-ok")
 	else
@@ -169,7 +168,7 @@
 
 /obj/item/gun/projectile/automatic/bullpup_rifle
 	name = "bullpup assault rifle"
-	desc = "The Hephaestus Industries Z8 Bulldog is an older model bullpup carbine. Makes you feel like a space marine when you hold it."
+	desc = "The Haephestus Z8 is one of the oldest weapons currently in service by the SCGDF. Despite it's age, it still remains the de-facto main rifle of the SCG Army, due to it's ease of handling, cheap production costs, reliability, and plentiful surplus stock."
 	icon = 'icons/obj/guns/bullpup_rifle.dmi'
 	icon_state = "carbine"
 	item_state = "z8carbine"
@@ -228,7 +227,7 @@
 /obj/item/gun/projectile/automatic/bullpup_rifle/on_update_icon()
 	..()
 	if(ammo_magazine)
-		if(ammo_magazine.stored_ammo.len)
+		if(length(ammo_magazine.stored_ammo))
 			icon_state = "carbine-loaded"
 		else
 			icon_state = "carbine-empty"
@@ -242,9 +241,28 @@
 	else
 		to_chat(user, "\The [launcher] is empty.")
 
+/obj/item/gun/projectile/automatic/bullpup_rifle/light
+	name = "light bullpup assault rifle"
+	desc = "The standard-issue rifle of the SCGDF. The Z9 Pitbull is the modern answer to violence's question. It has been given a blued finish with a Sol yellow stripe on its stock for easy identification of its owner."
+	icon = 'icons/obj/guns/bullpup_rifle_light.dmi'
+	item_state = "z9carbine"
+	caliber = CALIBER_RIFLE
+	ammo_type = /obj/item/ammo_casing/rifle
+	magazine_type = /obj/item/ammo_magazine/rifle
+	allowed_magazines = /obj/item/ammo_magazine/rifle
+	one_hand_penalty = 6 //Slightly lighter than the Z8. Still don't try it.
+	wielded_item_state = "z9carbine-wielded"
+	firemodes = list( //Two round bursts. More accurate than the Z8 due to less maximum dispersion. More delay between shots, however, so slower.
+		list(mode_name="semi auto",       burst=1,    fire_delay=null,    move_delay=null, use_launcher=null, one_hand_penalty=6, burst_accuracy=null, dispersion=null),
+		list(mode_name="2-round bursts", burst=2,    fire_delay=null, move_delay=6,    use_launcher=null, one_hand_penalty=7, burst_accuracy=list(0,-1), dispersion=list(0.0, 0.6)),
+		list(mode_name="fire grenades",  burst=null, fire_delay=null, move_delay=null, use_launcher=1,    one_hand_penalty=10, burst_accuracy=null, dispersion=null)
+		)
+
+
+
 /obj/item/gun/projectile/automatic/l6_saw
 	name = "light machine gun"
-	desc = "A rather traditionally made L6 SAW with a pleasantly lacquered wooden pistol grip. Has 'Aussec Armoury- 2281' engraved on the reciever." //probably should refluff this
+	desc = "An unbranded machine gun, based off a design made long ago."
 	icon = 'icons/obj/guns/saw.dmi'
 	icon_state = "l6closed50"
 	item_state = "l6closedmag"
@@ -281,13 +299,13 @@
 
 /obj/item/gun/projectile/automatic/l6_saw/special_check(mob/user)
 	if(cover_open)
-		to_chat(user, "<span class='warning'>[src]'s cover is open! Close it before firing!</span>")
+		to_chat(user, SPAN_WARNING("[src]'s cover is open! Close it before firing!"))
 		return 0
 	return ..()
 
 /obj/item/gun/projectile/automatic/l6_saw/proc/toggle_cover(mob/user)
 	cover_open = !cover_open
-	to_chat(user, "<span class='notice'>You [cover_open ? "open" : "close"] [src]'s cover.</span>")
+	to_chat(user, SPAN_NOTICE("You [cover_open ? "open" : "close"] [src]'s cover."))
 	update_icon()
 
 /obj/item/gun/projectile/automatic/l6_saw/attack_self(mob/user as mob)
@@ -305,7 +323,7 @@
 /obj/item/gun/projectile/automatic/l6_saw/on_update_icon()
 	..()
 	if(istype(ammo_magazine, /obj/item/ammo_magazine/box))
-		icon_state = "l6[cover_open ? "open" : "closed"][round(ammo_magazine.stored_ammo.len, 10)]"
+		icon_state = "l6[cover_open ? "open" : "closed"][round(length(ammo_magazine.stored_ammo), 10)]"
 		item_state = "l6[cover_open ? "open" : "closed"]"
 	else if(ammo_magazine)
 		icon_state = "l6[cover_open ? "open" : "closed"]mag"
@@ -314,21 +332,21 @@
 		icon_state = "l6[cover_open ? "open" : "closed"]-empty"
 		item_state = "l6[cover_open ? "open" : "closed"]-empty"
 
-/obj/item/gun/projectile/automatic/l6_saw/load_ammo(var/obj/item/A, mob/user)
+/obj/item/gun/projectile/automatic/l6_saw/load_ammo(obj/item/A, mob/user)
 	if(!cover_open)
-		to_chat(user, "<span class='warning'>You need to open the cover to load that into [src].</span>")
+		to_chat(user, SPAN_WARNING("You need to open the cover to load that into [src]."))
 		return
 	..()
 
-/obj/item/gun/projectile/automatic/l6_saw/unload_ammo(mob/user, var/allow_dump=1)
+/obj/item/gun/projectile/automatic/l6_saw/unload_ammo(mob/user, allow_dump=1)
 	if(!cover_open)
-		to_chat(user, "<span class='warning'>You need to open the cover to unload [src].</span>")
+		to_chat(user, SPAN_WARNING("You need to open the cover to unload [src]."))
 		return
 	..()
 
 /obj/item/gun/projectile/automatic/battlerifle
 	name = "battle rifle"
-	desc = "The battle rifle hasn't changed much since its inception in the mid 20th century. Built to last in the toughest conditions, you can't tell if this one was even made this century."
+	desc = "The battle rifle hasn't changed much since its inception in the mid 20th century. Built to last in the toughest conditions, the select fire rifle is well reguarded as a dependable weapon."
 	icon = 'icons/obj/guns/battlerifle.dmi'
 	icon_state = "battlerifle"
 	item_state = null
@@ -362,26 +380,3 @@
 	else
 		icon_state = "battlerifle-empty"
 		wielded_item_state = "battlerifle-wielded-empty"
-
-/obj/item/gun/projectile/automatic/semistrip
-	name = "Carbine Rifle"
-	desc = "An old semi-automatic carbine chambered in large pistol rounds, this thing looks older than the SCG."
-	icon = 'icons/obj/guns/semistrip.dmi'
-	icon_state = "semistrip"
-	item_state = "semistrip"
-	w_class = ITEM_SIZE_LARGE
-	force = 10
-	origin_tech = list(TECH_COMBAT = 2)
-	slot_flags = SLOT_BACK
-	caliber = CALIBER_PISTOL_MAGNUM
-	ammo_type = /obj/item/ammo_casing/pistol/magnum
-	load_method = SINGLE_CASING|SPEEDLOADER
-	max_shells = 10
-	accuracy = 1
-	scope_zoom = 0
-	scoped_accuracy = 0
-	wielded_item_state = "semistrip-wielded"
-
-	firemodes = list(
-		list(mode_name="semi auto",       burst=1, fire_delay=2,    move_delay=null, one_hand_penalty=8, burst_accuracy=null, dispersion=null)
-		)

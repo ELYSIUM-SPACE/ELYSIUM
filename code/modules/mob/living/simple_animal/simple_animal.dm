@@ -125,15 +125,6 @@
 				"bio" = 100,
 				"rad" = 100
 				)
-	var/list/armor_soak = list(		// Values for getsoak() checks.
-				"melee" = 0,
-				"bullet" = 0,
-				"laser" = 0,
-				"energy" = 0,
-				"bomb" = 0,
-				"bio" = 0,
-				"rad" = 0
-				)
 
 	// Protection against heat/cold/electric/water effects.
 	// 0 is no protection, 1 is total protection. Negative numbers increase vulnerability.
@@ -165,23 +156,14 @@
 	. = ..()
 	if(LAZYLEN(natural_armor))
 		set_extension(src, armor_type, natural_armor)
+	if(!icon_living)
+		icon_living = initial(icon_state)
 
 /mob/living/simple_animal/Destroy()
 	if(istype(natural_weapon))
 		QDEL_NULL(natural_weapon)
 
 	. = ..()
-
-/mob/living/simple_animal/movement_delay()
-	var/tally = ..() //Incase I need to add stuff other than "speed" later
-
-	tally += speed
-	if(purge)//Purged creatures will move more slowly. The more time before their purge stops, the slower they'll move.
-		if(tally <= 0)
-			tally = 1
-		tally *= purge
-
-	return tally
 
 /mob/living/simple_animal/Stat()
 	. = ..()
@@ -198,21 +180,23 @@
 	return ..(gibbed,deathmessage,show_dead_message)
 
 /mob/living/simple_animal/ex_act(severity)
+	if (status_flags & GODMODE)
+		return
 	if(!blinded)
 		flash_eyes()
 
 	var/damage
 	switch (severity)
-		if (1)
+		if (EX_ACT_DEVASTATING)
 			damage = 500
 
-		if (2)
+		if (EX_ACT_HEAVY)
 			damage = 120
 
-		if(3)
+		if(EX_ACT_LIGHT)
 			damage = 30
 
-	apply_damage(damage, BRUTE, damage_flags = DAM_EXPLODE)
+	apply_damage(damage, DAMAGE_BRUTE, damage_flags = DAMAGE_FLAG_EXPLODE)
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 	..()
@@ -230,26 +214,26 @@
 	..()
 	updatehealth()
 
-/mob/living/simple_animal/say(var/message)
+/mob/living/simple_animal/say(message)
 	var/verb = "says"
-	if(speak_emote.len)
+	if(length(speak_emote))
 		verb = pick(speak_emote)
 
 	message = sanitize(message)
 
 	..(message, null, verb)
 
-/mob/living/simple_animal/get_speech_ending(verb, var/ending)
+/mob/living/simple_animal/get_speech_ending(verb, ending)
 	return verb
 
-/mob/living/simple_animal/put_in_hands(var/obj/item/W) // No hands.
+/mob/living/simple_animal/put_in_hands(obj/item/W) // No hands.
 	W.forceMove(get_turf(src))
 	return 1
 
 // Harvest an animal's delicious byproducts
-/mob/living/simple_animal/proc/harvest(var/mob/user, var/skill_level)
+/mob/living/simple_animal/proc/harvest(mob/user, skill_level)
 	var/actual_meat_amount = round(max(1,(meat_amount / 2) + skill_level / 2))
-	user.visible_message("<span class='danger'>\The [user] chops up \the [src]!</span>")
+	user.visible_message(SPAN_DANGER("\The [user] chops up \the [src]!"))
 	if(meat_type && actual_meat_amount > 0 && (stat == DEAD))
 		for(var/i=0;i<actual_meat_amount;i++)
 			var/obj/item/meat = new meat_type(get_turf(src))
@@ -260,39 +244,49 @@
 				splat.update_icon()
 			qdel(src)
 
-/mob/living/simple_animal/proc/subtract_meat(var/mob/user)
+/mob/living/simple_animal/proc/subtract_meat(mob/user)
 	meat_amount--
 	if(meat_amount <= 0)
 		to_chat(user, SPAN_NOTICE("\The [src] carcass is ruined beyond use."))
 
-/mob/living/simple_animal/bullet_impact_visuals(var/obj/item/projectile/P, var/def_zone)
+/mob/living/simple_animal/bullet_impact_visuals(obj/item/projectile/P, def_zone)
 	..()
 	switch(get_bullet_impact_effect_type(def_zone))
 		if(BULLET_IMPACT_MEAT)
-			if(P.damtype == BRUTE)
+			if (P.damtype == DAMAGE_BRUTE)
 				var/hit_dir = get_dir(P.starting, src)
 				var/obj/effect/decal/cleanable/blood/B = blood_splatter(get_step(src, hit_dir), src, 1, hit_dir)
 				B.icon_state = pick("dir_splatter_1","dir_splatter_2")
 				B.basecolor = bleed_colour
-				var/scale = min(1, round(mob_size / MOB_MEDIUM, 0.1))
-				var/matrix/M = new()
-				B.transform = M.Scale(scale)
+				B.SetTransform(scale = min(1, round(mob_size / MOB_MEDIUM, 0.1)))
 				B.update_icon()
 
 /mob/living/simple_animal/handle_fire()
-	return
+	. = ..()
+
+	var/burn_temperature = fire_burn_temperature()
+	var/thermal_protection = get_heat_protection(burn_temperature)
+
+	if (thermal_protection < 1 && bodytemperature < burn_temperature)
+		bodytemperature += round(BODYTEMP_HEATING_MAX*(1-thermal_protection), 1)
+
+	burn_temperature -= maxbodytemp
+
+	if(burn_temperature < 1)
+		return
+
+	adjustBruteLoss(log(10, (burn_temperature + 10)))
 
 /mob/living/simple_animal/update_fire()
-	return
-/mob/living/simple_animal/IgniteMob()
-	return
-/mob/living/simple_animal/ExtinguishMob()
-	return
+	. = ..()
+	overlays -= image("icon"='icons/mob/OnFire.dmi', "icon_state"="Generic_mob_burning")
+	if(on_fire)
+		overlays += image("icon"='icons/mob/OnFire.dmi', "icon_state"="Generic_mob_burning")
 
 /mob/living/simple_animal/is_burnable()
 	return heat_damage_per_tick
 
-/mob/living/simple_animal/proc/adjustBleedTicks(var/amount)
+/mob/living/simple_animal/proc/adjustBleedTicks(amount)
 	if(!can_bleed)
 		return
 
@@ -355,13 +349,24 @@
 
 	 . += ..()
 
-/mob/living/simple_animal/proc/pry_door(var/mob/user, var/delay, var/obj/machinery/door/pesky_door)
+/mob/living/simple_animal/get_inventory_slot(obj/item/I)
+	return -1
+
+/mob/living/simple_animal/proc/pry_door(mob/user, delay, obj/machinery/door/pesky_door)
+	set waitfor = FALSE
 	visible_message(SPAN_WARNING("\The [user] begins [pry_desc] at \the [pesky_door]!"))
 	set_AI_busy(TRUE)
-	if(do_after(user, delay, pesky_door))
+	if(do_after(user, delay, pesky_door, DO_DEFAULT | DO_PUBLIC_PROGRESS))
 		pesky_door.open(1)
 		ai_holder.prying = FALSE
 		set_AI_busy(FALSE)
 	else
 		visible_message(SPAN_NOTICE("\The [user] is interrupted."))
 		set_AI_busy(FALSE)
+
+/mob/living/simple_animal/rejuvenate()
+	..()
+	icon_state = icon_living
+	update_icon()
+	bleed_ticks = 0
+	ai_holder?.handle_stance_tactical()

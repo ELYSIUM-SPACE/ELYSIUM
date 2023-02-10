@@ -1,4 +1,4 @@
-proc/get_mech_image(var/decal, var/cache_key, var/cache_icon, var/image_colour, var/overlay_layer = FLOAT_LAYER)
+/proc/get_mech_image(decal, cache_key, cache_icon, image_colour, overlay_layer = FLOAT_LAYER)
 	var/use_key = "[cache_key]-[cache_icon]-[overlay_layer]-[decal ? decal : "none"]-[image_colour ? image_colour : "none"]"
 	if(!GLOB.mech_image_cache[use_key])
 		var/image/I = image(icon = cache_icon, icon_state = cache_key)
@@ -25,7 +25,7 @@ proc/get_mech_image(var/decal, var/cache_key, var/cache_icon, var/image_colour, 
 		GLOB.mech_image_cache[use_key] = I
 	return GLOB.mech_image_cache[use_key]
 
-proc/get_mech_images(var/list/components = list(), var/overlay_layer = FLOAT_LAYER)
+/proc/get_mech_images(list/components = list(), overlay_layer = FLOAT_LAYER)
 	var/list/all_images = list()
 	for(var/obj/item/mech_component/comp in components)
 		all_images += get_mech_image(comp.decal, comp.icon_state, comp.on_mech_icon, comp.color, overlay_layer)
@@ -49,14 +49,26 @@ proc/get_mech_images(var/list/components = list(), var/overlay_layer = FLOAT_LAY
 		if(hardpoint_object)
 			var/use_icon_state = "[hardpoint_object.icon_state]_[hardpoint]"
 			if(use_icon_state in GLOB.mech_weapon_overlays)
-				new_overlays += get_mech_image(null, use_icon_state, 'icons/mecha/mech_weapon_overlays.dmi', null, hardpoint_object.mech_layer )
+				var/color = COLOR_WHITE
+				var/decal = null
+				if(hardpoint in list(HARDPOINT_BACK, HARDPOINT_RIGHT_SHOULDER, HARDPOINT_LEFT_SHOULDER))
+					color = body.color
+					decal = body.decal
+				else if(hardpoint in list(HARDPOINT_RIGHT_HAND, HARDPOINT_LEFT_HAND))
+					color = arms.color
+					decal = arms.decal
+				else
+					color = head.color
+					decal = head.decal
+
+				new_overlays += get_mech_image(decal, use_icon_state, 'icons/mecha/mech_weapon_overlays.dmi', color, hardpoint_object.mech_layer )
 	overlays = new_overlays
 
-/mob/living/exosuit/proc/update_pilots(var/update_overlays = TRUE)
+/mob/living/exosuit/proc/update_pilots(update_overlays = TRUE)
 	if(update_overlays && LAZYLEN(pilot_overlays))
 		overlays -= pilot_overlays
 	pilot_overlays = null
-	if(!body || ((body.pilot_coverage < 100 || body.transparent_cabin) && !body.hide_pilot))
+	if(body && !(body.hide_pilot))
 		for(var/i = 1 to LAZYLEN(pilots))
 			var/mob/pilot = pilots[i]
 			var/image/draw_pilot = new
@@ -64,13 +76,21 @@ proc/get_mech_images(var/list/components = list(), var/overlay_layer = FLOAT_LAY
 			var/rel_pos = dir == NORTH ? -1 : 1
 			draw_pilot.layer = MECH_PILOT_LAYER + (body ? ((LAZYLEN(body.pilot_positions)-i)*0.001 * rel_pos) : 0)
 			draw_pilot.plane = FLOAT_PLANE
+			draw_pilot.appearance_flags = KEEP_TOGETHER
 			if(body && i <= LAZYLEN(body.pilot_positions))
 				var/list/offset_values = body.pilot_positions[i]
 				var/list/directional_offset_values = offset_values["[dir]"]
 				draw_pilot.pixel_x = pilot.default_pixel_x + directional_offset_values["x"]
 				draw_pilot.pixel_y = pilot.default_pixel_y + directional_offset_values["y"]
 				draw_pilot.pixel_z = 0
-				draw_pilot.transform = null
+				draw_pilot.ClearTransform()
+
+			//Mask pilots!
+			//Masks are 48x48 and pilots 32x32 (in theory at least) so some math is required for centering
+			var/diff_x = 8 - draw_pilot.pixel_x
+			var/diff_y = 8 - draw_pilot.pixel_y
+			draw_pilot.filters = filter(type = "alpha", icon = icon(body.on_mech_icon, "[body.icon_state]_pilot_mask[hatch_closed ? "" : "_open"]", dir), x = diff_x, y = diff_y)
+
 			LAZYADD(pilot_overlays, draw_pilot)
 		if(update_overlays && LAZYLEN(pilot_overlays))
 			overlays += pilot_overlays

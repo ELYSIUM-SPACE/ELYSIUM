@@ -47,22 +47,6 @@
 	else
 		to_chat(user, (distance <= 1 ? "It has [get_fuel()] [welding_resource] remaining. " : "") + "[tank] is attached.")
 
-/obj/item/weldingtool/MouseDrop(atom/over)
-	if(!CanMouseDrop(over, usr))
-		return
-
-	if(istype(over, /obj/item/weldpack))
-		var/obj/item/weldpack/wp = over
-		if(wp.welder)
-			to_chat(usr, "\The [wp] already has \a [wp.welder] attached.")
-		else if(usr.unEquip(src, wp))
-			wp.welder = src
-			usr.visible_message("[usr] attaches \the [src] to \the [wp].", "You attach \the [src] to \the [wp].")
-			wp.update_icon()
-		return
-
-	..()
-
 /obj/item/weldingtool/attackby(obj/item/W as obj, mob/user as mob)
 	if(welding)
 		to_chat(user, SPAN_DANGER("Stop welding first!"))
@@ -130,7 +114,7 @@
 		if((!waterproof && submerged()) || !remove_fuel(0.05))
 			setWelding(0)
 
-/obj/item/weldingtool/afterattack(var/obj/O, var/mob/user, proximity)
+/obj/item/weldingtool/afterattack(obj/O, mob/user, proximity)
 	if(!proximity)
 		return
 
@@ -166,23 +150,36 @@
 /obj/item/weldingtool/proc/get_fuel()
 	return tank ? tank.reagents.get_reagent_amount(/datum/reagent/fuel) : 0
 
-//Removes fuel from the welding tool. If a mob is passed, it will perform an eyecheck on the mob. This should probably be renamed to use()
-/obj/item/weldingtool/proc/remove_fuel(var/amount = 1, var/mob/M = null)
-	if(!welding)
-		return 0
-	if(get_fuel() >= amount)
-		burn_fuel(amount)
-		if(M)
-			M.welding_eyecheck()//located in mob_helpers.dm
-			set_light(0.7, 2, 5, l_color = COLOR_LIGHT_CYAN)
-			addtimer(CALLBACK(src, /atom/proc/update_icon), 5)
-		return 1
-	else
-		if(M)
-			to_chat(M, SPAN_NOTICE("You need more [welding_resource] to complete this task."))
-		return 0
 
-/obj/item/weldingtool/proc/burn_fuel(var/amount)
+/**
+ * Checks if the tool can be used for the given amount of fuel without actually using it.
+ *
+ * Returns boolean.
+ */
+/obj/item/weldingtool/proc/can_use(amount = 1, mob/user = null, interaction_message = "to complete this task.", silent = FALSE)
+	if (!isOn())
+		if (!silent && user)
+			to_chat(user, SPAN_WARNING("\The [src] must be turned on [interaction_message]"))
+		return FALSE
+	if (get_fuel() < amount)
+		if (!silent && user)
+			to_chat(user, SPAN_WARNING("You need at least [amount] unit\s of [welding_resource] [interaction_message]"))
+		return FALSE
+	return TRUE
+
+
+//Removes fuel from the welding tool. If a mob is passed, it will perform an eyecheck on the mob. This should probably be renamed to use()
+/obj/item/weldingtool/proc/remove_fuel(amount = 1, mob/M = null)
+	if(!can_use(amount, M))
+		return 0
+	burn_fuel(amount)
+	if(M)
+		M.welding_eyecheck()//located in mob_helpers.dm
+		set_light(0.7, 2, 5, l_color = COLOR_LIGHT_CYAN)
+		addtimer(new Callback(src, /atom/proc/update_icon), 5)
+	return 1
+
+/obj/item/weldingtool/proc/burn_fuel(amount)
 	if(!tank)
 		return
 
@@ -191,7 +188,7 @@
 	//consider ourselves in a mob if we are in the mob's contents and not in their hands
 	if(isliving(src.loc))
 		var/mob/living/L = src.loc
-		if(!(L.l_hand == src || L.r_hand == src))
+		if (!L.IsHolding(src))
 			in_mob = L
 
 	if(in_mob)
@@ -232,7 +229,7 @@
 
 //Sets the welding state of the welding tool. If you see W.welding = 1 anywhere, please change it to W.setWelding(1)
 //so that the welding tool updates accordingly
-/obj/item/weldingtool/proc/setWelding(var/set_welding, var/mob/M)
+/obj/item/weldingtool/proc/setWelding(set_welding, mob/M)
 	if (!status)
 		return
 
@@ -251,10 +248,10 @@
 				T.visible_message(SPAN_WARNING("\The [src] turns on."))
 			if (istype(src, /obj/item/weldingtool/electric))
 				src.force = 11
-				src.damtype = ELECTROCUTE
+				src.damtype = DAMAGE_SHOCK
 			else
 				src.force = tank.lit_force
-				src.damtype = BURN
+				src.damtype = DAMAGE_BURN
 			welding = 1
 			update_icon()
 			START_PROCESSING(SSobj, src)
@@ -273,7 +270,7 @@
 			src.force = initial(force)
 		else
 			src.force = tank.unlit_force
-		src.damtype = BRUTE
+		src.damtype = DAMAGE_BRUTE
 		src.welding = 0
 		update_icon()
 
@@ -293,7 +290,7 @@
 			to_chat(user, SPAN_WARNING("You'll need to turn [src] on to patch the damage on [M]'s [S.name]!"))
 			return 1
 
-		if(S.robo_repair(15, BRUTE, "some dents", src, user))
+		if(S.robo_repair(15, DAMAGE_BRUTE, "some dents", src, user))
 			remove_fuel(1, user)
 
 	else

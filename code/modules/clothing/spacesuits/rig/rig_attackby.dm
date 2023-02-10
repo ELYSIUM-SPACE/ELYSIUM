@@ -14,16 +14,16 @@
 	if(W.GetIdCard())
 		if(subverted)
 			locked = 0
-			to_chat(user, "<span class='danger'>It looks like the locking system has been shorted out.</span>")
+			to_chat(user, SPAN_DANGER("It looks like the locking system has been shorted out."))
 			return
 
 		if(!length(req_access))
 			locked = 0
-			to_chat(user, "<span class='danger'>\The [src] doesn't seem to have a locking mechanism.</span>")
+			to_chat(user, SPAN_DANGER("\The [src] doesn't seem to have a locking mechanism."))
 			return
 
 		if(security_check_enabled && !src.allowed(user))
-			to_chat(user, "<span class='danger'>Access denied.</span>")
+			to_chat(user, SPAN_DANGER("Access denied."))
 			return
 
 		locked = !locked
@@ -73,40 +73,18 @@
 
 		// Check if this is a hardsuit upgrade or a modification.
 		else if(istype(W,/obj/item/rig_module))
-
-			if(istype(src.loc,/mob/living/carbon/human))
-				var/mob/living/carbon/human/H = src.loc
-				if(H.back == src)
-					to_chat(user, "<span class='danger'>You can't install a hardsuit module while the suit is being worn.</span>")
-					return 1
-
-			if(is_type_in_list(W,banned_modules))
-				to_chat(user, SPAN_DANGER("\The [src] cannot mount this type of module."))
-				return 1
-
 			var/obj/item/rig_module/mod = W
-
-			if(!installed_modules) installed_modules = list()
-			if(installed_modules.len)
-				for(var/obj/item/rig_module/installed_mod in installed_modules)
-					if(is_type_in_list(installed_mod,mod.banned_modules))
-						to_chat(user, SPAN_DANGER("\The [installed_mod] is incompatible with this module."))
-						return 1
-					if(installed_mod.banned_modules.len)
-						if(is_type_in_list(W,installed_mod.banned_modules))
-							to_chat(user, SPAN_DANGER("\The [installed_mod] is incompatible with this module."))
-							return 1
-					if(!installed_mod.redundant && installed_mod.type == W.type)
-						to_chat(user, "The hardsuit already has a module of that class installed.")
-						return 1
+			if (!mod.can_install(src, user))
+				return TRUE
 
 			to_chat(user, "You begin installing \the [mod] into \the [src].")
-			if(!do_after(user,40,src))
+			if(!do_after(user, 4 SECONDS, src, DO_PUBLIC_UNIQUE))
 				return
-			if(!user || !W)
+			if(!user || !W || !mod.can_install(src, user))
 				return
 			if(!user.unEquip(mod)) return
 			to_chat(user, "You install \the [mod] into \the [src].")
+			LAZYADD(installed_modules, mod)
 			installed_modules |= mod
 			mod.forceMove(src)
 			mod.installed(src)
@@ -126,7 +104,7 @@
 			var/list/current_mounts = list()
 			if(cell) current_mounts   += "cell"
 			if(air_supply) current_mounts += "tank"
-			if(installed_modules && installed_modules.len) current_mounts += "system module"
+			if(installed_modules && length(installed_modules)) current_mounts += "system module"
 
 			var/to_remove = input("Which would you like to modify?") as null|anything in current_mounts
 			if(!to_remove)
@@ -168,7 +146,7 @@
 							continue
 						possible_removals[module.name] = module
 
-					if(!possible_removals.len)
+					if(!length(possible_removals))
 						to_chat(user, "There are no installed modules to remove.")
 						return
 
@@ -205,17 +183,17 @@
 	..()
 
 
-/obj/item/rig/attack_hand(var/mob/user)
+/obj/item/rig/attack_hand(mob/user)
 
 	if(electrified != 0)
 		if(shock(user)) //Handles removing charge from the cell, as well. No need to do that here.
 			return
 	..()
 
-/obj/item/rig/emag_act(var/remaining_charges, var/mob/user)
+/obj/item/rig/emag_act(remaining_charges, mob/user)
 	if(!subverted)
 		req_access.Cut()
 		locked = 0
 		subverted = 1
-		to_chat(user, "<span class='danger'>You short out the access protocol for the suit.</span>")
+		to_chat(user, SPAN_DANGER("You short out the access protocol for the suit."))
 		return 1

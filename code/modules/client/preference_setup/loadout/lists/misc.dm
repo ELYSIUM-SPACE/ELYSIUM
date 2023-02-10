@@ -6,7 +6,7 @@
 	display_name = "union membership"
 	path = /obj/item/card/union
 
-/datum/gear/union_card/spawn_on_mob(var/mob/living/carbon/human/H, var/metadata)
+/datum/gear/union_card/spawn_on_mob(mob/living/carbon/human/H, metadata)
 	. = ..()
 	if(.)
 		var/obj/item/card/union/card = .
@@ -111,6 +111,14 @@
 	plushes["lizard plush"] = /obj/item/toy/plushie/lizard
 	plushes["spider plush"] = /obj/item/toy/plushie/spider
 	plushes["farwa plush"] = /obj/item/toy/plushie/farwa
+	plushes["golden carp plush"] = /obj/item/toy/plushie/carp_gold
+	plushes["purple carp plush"] = /obj/item/toy/plushie/carp_purple
+	plushes["pink carp plush"] = /obj/item/toy/plushie/carp_pink
+	plushes["corgi plush"] = /obj/item/toy/plushie/corgi
+	plushes["corgi plush with bow"] = /obj/item/toy/plushie/corgi_bow
+	plushes["deer plush"] = /obj/item/toy/plushie/deer
+	plushes["blue squid plush"] = /obj/item/toy/plushie/squid_blue
+	plushes["orange squid plush"] = /obj/item/toy/plushie/squid_orange
 	gear_tweaks += new /datum/gear_tweak/path(plushes)
 
 /datum/gear/workvisa
@@ -123,12 +131,19 @@
 	description = "A travel visa issued by the Sol Central Government for the purpose of recreation."
 	path = /obj/item/paper/travelvisa
 
+
 /datum/gear/passport
 	display_name = "passports selection"
 	description = "A selection of passports."
 	path = /obj/item/passport
 	flags = GEAR_HAS_SUBTYPE_SELECTION
 	custom_setup_proc = /obj/item/passport/proc/set_info
+
+/datum/gear/foundation_civilian
+	display_name = "operant registration card"
+	description = "A registration card in a faux-leather case. It marks the named individual as a registered, law-abiding psionic."
+	path = /obj/item/card/operant_card
+	custom_setup_proc = /obj/item/card/operant_card/proc/set_info
 
 /datum/gear/mirror
 	display_name = "handheld mirror"
@@ -144,11 +159,6 @@
 	display_name = "plastic comb"
 	path = /obj/item/haircomb
 	flags = GEAR_HAS_COLOR_SELECTION
-
-/datum/gear/mask
-	display_name = "sterile mask"
-	path = /obj/item/clothing/mask/surgical
-	cost = 2
 
 /datum/gear/smokingpipe
 	display_name = "pipe, smoking"
@@ -198,12 +208,12 @@
 
 /datum/gear/cigscase
 	display_name = "fancy cigarette case"
-	path = /obj/item/storage/fancy/cigarettes/case
+	path = /obj/item/storage/fancy/smokable/case
 	cost = 2
 
 /datum/gear/cigars
 	display_name = "fancy cigar case"
-	path = /obj/item/storage/fancy/cigar
+	path = /obj/item/storage/fancy/smokable/cigar
 	cost = 2
 
 /datum/gear/cigar
@@ -262,20 +272,3 @@
 	crosstype["cross, silver"] = /obj/item/material/cross/silver
 	crosstype["cross, gold"] = /obj/item/material/cross/gold
 	gear_tweaks += new/datum/gear_tweak/path(crosstype)
-
-/datum/gear/coin
-	display_name = "coin"
-	path = /obj/item/material/coin
-	cost = 2
-
-/datum/gear/coin/New()
-	..()
-	var/cointype = list()
-	cointype["coin, gold"] = /obj/item/material/coin/gold
-	cointype["coin, silver"] = /obj/item/material/coin/silver
-	cointype["coin, iron"] = /obj/item/material/coin/iron
-	cointype["coin, diamond"] = /obj/item/material/coin/diamond
-	cointype["coin, uranium"] = /obj/item/material/coin/uranium
-	cointype["coin, phoron"] = /obj/item/material/coin/phoron
-	cointype["coin, platinum"] = /obj/item/material/coin/platinum
-	gear_tweaks += new/datum/gear_tweak/path(cointype)

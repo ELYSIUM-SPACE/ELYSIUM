@@ -157,6 +157,7 @@ ARMCHAIR(yellow)
 /datum/stack_recipe/furniture/rack
 	title = "rack"
 	result_type = /obj/structure/table/rack
+	send_material_data = FALSE
 
 /datum/stack_recipe/furniture/closet
 	title = "closet"
@@ -271,6 +272,12 @@ ARMCHAIR(yellow)
 	req_amount = 5
 	time = 15
 
+/datum/stack_recipe/furniture/truss
+	title = "truss"
+	result_type = /obj/structure/kitchenspike/improvised
+	req_amount = 10
+	time = 20
+
 /datum/stack_recipe/furniture/planting_bed
 	title = "planting bed"
 	result_type = /obj/machinery/portable_atmospherics/hydroponics/soil
@@ -290,7 +297,7 @@ ARMCHAIR(yellow)
 	if(.)
 		for(var/obj/structure/window/check_window in user.loc)
 			if(check_window.is_fulltile())
-				to_chat(user, "<span class='warning'>There is already a full-tile window here!</span>")
+				to_chat(user, SPAN_WARNING("There is already a full-tile window here!"))
 				return FALSE
 
 /datum/stack_recipe/furniture/fullwindow/spawn_result(mob/user, location, amount)
@@ -308,7 +315,7 @@ ARMCHAIR(yellow)
 	if(.)
 		for(var/obj/structure/window/check_window in user.loc)
 			if(check_window.dir == user.dir)
-				to_chat(user, "<span class='warning'>There is already a window facing that direction here!</span>")
+				to_chat(user, SPAN_WARNING("There is already a window facing that direction here!"))
 				return FALSE
 
 /datum/stack_recipe/furniture/borderwindow/spawn_result(mob/user, location, amount)
@@ -325,7 +332,7 @@ ARMCHAIR(yellow)
 	. = ..()
 	if(.)
 		if(locate(/obj/machinery/door/window) in user.loc)
-			to_chat(user, "<span class='warning'>There is already a windoor here!</span>")
+			to_chat(user, SPAN_WARNING("There is already a windoor here!"))
 			return FALSE
 
 /datum/stack_recipe/furniture/windoor/spawn_result(mob/user, location, amount)

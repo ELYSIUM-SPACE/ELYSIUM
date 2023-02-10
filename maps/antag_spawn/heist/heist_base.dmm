@@ -114,13 +114,6 @@
 	icon_state = "white"
 	},
 /area/map_template/syndicate_mothership/raider_base)
-"av" = (
-/obj/vehicle/bike/thermal,
-/turf/unsimulated/floor{
-	icon_state = "plating";
-	name = "plating"
-	},
-/area/map_template/syndicate_mothership/raider_base)
 "aw" = (
 /obj/random/trash,
 /turf/unsimulated/floor{
@@ -196,8 +189,12 @@
 	pixel_y = 32
 	},
 /obj/item/soap,
+/obj/item/storage/box/detergent{
+	desc = "A bag full of juicy, yummy detergent pods. Warranty void if swallowed."
+	},
+/obj/item/mop,
+/obj/item/reagent_containers/glass/bucket,
 /turf/unsimulated/floor{
-	dir = 2;
 	icon_state = "freezerfloor"
 	},
 /area/map_template/syndicate_mothership/raider_base)
@@ -206,7 +203,6 @@
 	pixel_y = 32
 	},
 /turf/unsimulated/floor{
-	dir = 2;
 	icon_state = "freezerfloor"
 	},
 /area/map_template/syndicate_mothership/raider_base)
@@ -216,7 +212,6 @@
 	},
 /obj/random/trash,
 /turf/unsimulated/floor{
-	dir = 2;
 	icon_state = "freezerfloor"
 	},
 /area/map_template/syndicate_mothership/raider_base)
@@ -313,14 +308,12 @@
 /area/map_template/syndicate_mothership/raider_base)
 "aS" = (
 /turf/unsimulated/floor{
-	dir = 2;
 	icon_state = "freezerfloor"
 	},
 /area/map_template/syndicate_mothership/raider_base)
 "aT" = (
 /obj/effect/decal/cleanable/blood,
 /turf/unsimulated/floor{
-	dir = 2;
 	icon_state = "freezerfloor"
 	},
 /area/map_template/syndicate_mothership/raider_base)
@@ -383,16 +376,13 @@
 "ba" = (
 /obj/structure/hygiene/sink{
 	dir = 8;
-	icon_state = "sink";
 	pixel_x = -12;
 	pixel_y = 2
 	},
 /obj/item/vox_changer/raider{
-	pixel_x = -28;
-	pixel_y = 0
+	pixel_x = -28
 	},
 /turf/unsimulated/floor{
-	dir = 2;
 	icon_state = "freezerfloor"
 	},
 /area/map_template/syndicate_mothership/raider_base)
@@ -448,7 +438,7 @@
 	desc = "A warning sign which reads 'NO SMOKING'. Someone has scratched a variety of crude words in gutter across the entire sign.";
 	pixel_y = 32
 	},
-/obj/item/storage/fancy/cigarettes/dromedaryco,
+/obj/item/storage/fancy/smokable/dromedaryco,
 /turf/unsimulated/floor{
 	icon_state = "plating";
 	name = "plating"
@@ -486,17 +476,14 @@
 "bl" = (
 /obj/structure/hygiene/sink{
 	dir = 8;
-	icon_state = "sink";
 	pixel_x = -12;
 	pixel_y = 2
 	},
 /obj/item/storage/mirror{
 	dir = 4;
-	pixel_x = -28;
-	pixel_y = 0
+	pixel_x = -28
 	},
 /turf/unsimulated/floor{
-	dir = 2;
 	icon_state = "freezerfloor"
 	},
 /area/map_template/syndicate_mothership/raider_base)
@@ -514,7 +501,6 @@
 	dir = 1
 	},
 /turf/unsimulated/floor{
-	dir = 2;
 	icon_state = "freezerfloor"
 	},
 /area/map_template/syndicate_mothership/raider_base)
@@ -568,8 +554,7 @@
 /area/map_template/syndicate_mothership/raider_base)
 "bt" = (
 /obj/machinery/atmospherics/pipe/simple/visible{
-	dir = 6;
-	icon_state = "intact"
+	dir = 6
 	},
 /turf/unsimulated/floor{
 	icon_state = "plating";
@@ -639,7 +624,6 @@
 /obj/item/clothing/head/helmet/space/vox/carapace,
 /obj/item/clothing/shoes/magboots/vox,
 /obj/item/clothing/gloves/vox,
-/obj/item/gun/launcher/alien/spikethrower,
 /obj/item/clothing/under/vox/vox_casual,
 /turf/unsimulated/floor{
 	icon_state = "asteroid"
@@ -651,8 +635,8 @@
 /obj/item/clothing/head/helmet/space/vox/carapace,
 /obj/item/clothing/shoes/magboots/vox,
 /obj/item/clothing/gloves/vox,
-/obj/item/gun/launcher/alien/spikethrower,
 /obj/item/clothing/under/vox/vox_robes,
+/obj/item/gun/energy/darkmatter,
 /turf/unsimulated/floor{
 	icon_state = "asteroid"
 	},
@@ -750,7 +734,7 @@
 /obj/item/tray{
 	pixel_y = 5
 	},
-/obj/item/storage/backpack,
+/obj/random/backpack,
 /turf/unsimulated/floor{
 	icon_state = "wood"
 	},
@@ -795,7 +779,6 @@
 	tag_north = 1;
 	tag_north_con = 2;
 	tag_south = null;
-	tag_south_con = null;
 	tag_west = 1;
 	tag_west_con = 0.5;
 	use_power = 0
@@ -841,6 +824,7 @@
 /obj/item/clothing/gloves/vox,
 /obj/item/clothing/under/vox/vox_robes,
 /obj/item/gun/projectile/dartgun/vox/raider,
+/obj/item/gun/energy/sonic,
 /turf/unsimulated/floor{
 	icon_state = "asteroid"
 	},
@@ -916,7 +900,7 @@
 /obj/machinery/vending/cigarette{
 	name = "hacked cigarette machine";
 	prices = list();
-	products = list(/obj/item/storage/fancy/cigarettes = 10, /obj/item/storage/box/matches = 10, /obj/item/flame/lighter/zippo/random = 4, /obj/item/clothing/mask/smokable/cigarette/cigar/havana = 2)
+	products = list(/obj/item/storage/fancy/smokable/transstellar=10,/obj/item/storage/box/matches=10,/obj/item/flame/lighter/zippo/random=4,/obj/item/clothing/mask/smokable/cigarette/cigar/havana=2)
 	},
 /turf/unsimulated/floor{
 	icon_state = "dark"
@@ -929,7 +913,7 @@
 	},
 /area/map_template/syndicate_mothership/raider_base)
 "cf" = (
-/obj/item/storage/backpack,
+/obj/random/backpack,
 /turf/unsimulated/floor{
 	icon_state = "asteroid"
 	},
@@ -957,7 +941,6 @@
 /area/map_template/syndicate_mothership/raider_base)
 "cj" = (
 /mob/living/simple_animal/hostile/retaliate/parrot{
-	available_channels = list();
 	ears = list();
 	name = "\proper Meatbag";
 	say_list_type = /datum/say_list/parrot/heist
@@ -1074,8 +1057,7 @@
 /obj/machinery/door/airlock/hatch{
 	frequency = 1331;
 	icon_state = "door_closed";
-	id_tag = "vox_northwest_lock";
-	locked = 0
+	id_tag = "vox_northwest_lock"
 	},
 /obj/machinery/shield_diffuser,
 /turf/simulated/floor/plating,
@@ -1104,7 +1086,6 @@
 /area/map_template/skipjack_station/start)
 "cA" = (
 /obj/machinery/door/airlock/external{
-	density = 1;
 	frequency = 1380;
 	id_tag = "skipjack_shuttle_outer";
 	name = "Ship External Access"
@@ -1190,15 +1171,13 @@
 	dir = 8
 	},
 /obj/machinery/computer/station_alert/all{
-	dir = 4;
-	icon_state = "computer"
+	dir = 4
 	},
 /turf/simulated/floor/shuttle/red,
 /area/map_template/skipjack_station/start)
 "cL" = (
 /obj/structure/bed/chair/shuttle{
-	dir = 8;
-	icon_state = "shuttle_chair_preview"
+	dir = 8
 	},
 /turf/simulated/floor/shuttle/red,
 /area/map_template/skipjack_station/start)
@@ -1270,8 +1249,7 @@
 /obj/machinery/door/airlock/hatch{
 	frequency = 1331;
 	icon_state = "door_closed";
-	id_tag = "vox_southwest_lock";
-	locked = 0
+	id_tag = "vox_southwest_lock"
 	},
 /obj/machinery/atmospherics/pipe/simple/visible,
 /turf/simulated/floor/plating,
@@ -1331,7 +1309,7 @@
 /obj/random/voidsuit,
 /obj/random/voidhelmet,
 /obj/item/material/harpoon,
-/obj/random/raider/lilgun,
+/obj/random/lilgun,
 /turf/simulated/floor/plating,
 /area/map_template/skipjack_station/start)
 "db" = (
@@ -1390,6 +1368,7 @@
 /obj/structure/table/rack,
 /obj/item/storage/belt/utility/full,
 /obj/item/storage/belt/utility/full,
+/obj/item/tape_roll,
 /obj/item/device/multitool,
 /obj/item/device/multitool,
 /obj/item/clothing/shoes/magboots,
@@ -1406,7 +1385,7 @@
 /area/map_template/skipjack_station/start)
 "di" = (
 /obj/structure/table/standard,
-/obj/item/storage/fancy/cigarettes,
+/obj/item/storage/fancy/smokable/transstellar,
 /obj/item/flame/lighter/zippo/random,
 /obj/item/clothing/gloves/insulated,
 /obj/item/stack/material/steel{
@@ -1425,7 +1404,7 @@
 /obj/item/tank/oxygen,
 /obj/random/voidsuit,
 /obj/random/voidhelmet,
-/obj/random/raider/biggun,
+/obj/random/biggun,
 /turf/simulated/floor/plating,
 /area/map_template/skipjack_station/start)
 "dk" = (
@@ -1474,7 +1453,7 @@
 /obj/item/tank/oxygen,
 /obj/random/voidsuit,
 /obj/random/voidhelmet,
-/obj/random/raider/lilgun,
+/obj/random/lilgun,
 /turf/simulated/floor/plating,
 /area/map_template/skipjack_station/start)
 "dr" = (
@@ -1560,8 +1539,8 @@
 /obj/structure/table/rack,
 /obj/item/grenade/empgrenade,
 /obj/item/grenade/flashbang,
-/obj/item/grenade/spawnergrenade/manhacks,
-/obj/random/raider/biggun,
+/obj/item/grenade/spawnergrenade/viscerator,
+/obj/random/biggun,
 /turf/simulated/floor/shuttle/red,
 /area/map_template/skipjack_station/start)
 "dD" = (
@@ -1608,10 +1587,7 @@
 "dK" = (
 /obj/structure/closet/crate/freezer/rations,
 /obj/item/clothing/mask/gas/cyborg,
-/obj/item/storage/box/donkpockets{
-	pixel_x = 3;
-	pixel_y = 3
-	},
+/obj/random/donkpocket_box,
 /obj/item/reagent_containers/food/snacks/tastybread,
 /obj/item/reagent_containers/food/snacks/tastybread,
 /turf/unsimulated/floor{
@@ -1650,7 +1626,6 @@
 "dP" = (
 /obj/structure/hygiene/sink{
 	dir = 8;
-	icon_state = "sink";
 	pixel_x = -12;
 	pixel_y = 2
 	},
@@ -1676,6 +1651,8 @@
 /obj/item/stack/material/steel{
 	amount = 50
 	},
+/obj/item/stack/material/aluminium/fifty,
+/obj/item/stack/material/plastic/fifty,
 /turf/simulated/floor/plating,
 /area/map_template/skipjack_station/start)
 "dS" = (
@@ -1715,7 +1692,7 @@
 "dY" = (
 /obj/item/deck/cards,
 /obj/structure/table/steel,
-/obj/random/raider/lilgun,
+/obj/random/lilgun,
 /turf/simulated/floor/shuttle/red,
 /area/map_template/skipjack_station/start)
 "dZ" = (
@@ -1777,7 +1754,7 @@
 /area/map_template/skipjack_station/start)
 "ei" = (
 /obj/structure/table/steel,
-/obj/random/raider/lilgun,
+/obj/random/lilgun,
 /turf/simulated/floor/shuttle/red,
 /area/map_template/skipjack_station/start)
 "ej" = (
@@ -1787,9 +1764,7 @@
 "ek" = (
 /obj/structure/hygiene/sink{
 	dir = 4;
-	icon_state = "sink";
-	pixel_x = 11;
-	pixel_y = 0
+	pixel_x = 11
 	},
 /turf/simulated/floor/shuttle/white,
 /area/map_template/skipjack_station/start)
@@ -1850,9 +1825,7 @@
 "eu" = (
 /obj/structure/hygiene/sink{
 	dir = 4;
-	icon_state = "sink";
-	pixel_x = 11;
-	pixel_y = 0
+	pixel_x = 11
 	},
 /turf/simulated/floor/shuttle/black,
 /area/map_template/skipjack_station/start)
@@ -1921,6 +1894,7 @@
 	pixel_x = 3;
 	pixel_y = 3
 	},
+/obj/item/storage/firstaid/radiation,
 /obj/machinery/light/small{
 	dir = 4
 	},
@@ -1957,6 +1931,18 @@
 	},
 /turf/simulated/floor/shuttle/red,
 /area/map_template/skipjack_station/start)
+"VK" = (
+/obj/structure/table/rack,
+/obj/item/clothing/suit/space/vox/carapace,
+/obj/item/clothing/head/helmet/space/vox/carapace,
+/obj/item/clothing/shoes/magboots/vox,
+/obj/item/clothing/gloves/vox,
+/obj/item/clothing/under/vox/vox_casual,
+/obj/item/gun/launcher/alien/slugsling,
+/turf/unsimulated/floor{
+	icon_state = "asteroid"
+	},
+/area/map_template/syndicate_mothership/raider_base)
 
 (1,1,1) = {"
 aa
@@ -2849,7 +2835,7 @@ ab
 ab
 aR
 aq
-bA
+VK
 bU
 bX
 aq
@@ -5218,7 +5204,7 @@ ab
 ab
 ab
 ae
-av
+aj
 az
 aj
 aj

@@ -9,6 +9,7 @@
 	item_state = "hypo"
 	icon_state = "hypo"
 	origin_tech = list(TECH_MATERIAL = 4, TECH_BIO = 5)
+	matter = list(MATERIAL_STEEL = 8000, MATERIAL_GLASS = 8000, MATERIAL_SILVER = 2000)
 	amount_per_transfer_from_this = 5
 	unacidable = TRUE
 	volume = 30
@@ -29,7 +30,7 @@
 
 /obj/item/reagent_containers/hypospray/attack(mob/living/M, mob/user)
 	if(!reagents.total_volume)
-		to_chat(user, "<span class='warning'>[src] is empty.</span>")
+		to_chat(user, SPAN_WARNING("[src] is empty."))
 		return
 	if (!istype(M))
 		return
@@ -43,7 +44,7 @@
 			user.visible_message(SPAN_WARNING("\The [user] begins hunting for an injection port on \the [M]'s suit!"))
 		else
 			to_chat(user, SPAN_NOTICE("You begin hunting for an injection port on your suit."))
-		if(!user.do_skilled(INJECTION_PORT_DELAY, SKILL_MEDICAL, M))
+		if(!user.do_skilled(INJECTION_PORT_DELAY, SKILL_MEDICAL, M, do_flags = DO_MEDICAL))
 			return
 
 	user.setClickCooldown(DEFAULT_QUICK_COOLDOWN)
@@ -51,7 +52,7 @@
 
 	if(user != M && !M.incapacitated() && time) // you're injecting someone else who is concious, so apply the device's intrisic delay
 		to_chat(user, SPAN_WARNING("\The [user] is trying to inject \the [M] with \the [name]."))
-		if(!user.do_skilled(time, SKILL_MEDICAL, M))
+		if(!user.do_skilled(time, SKILL_MEDICAL, M, do_flags = DO_MEDICAL))
 			return
 
 	if(single_use && reagents.total_volume <= 0) // currently only applies to autoinjectors
@@ -63,7 +64,7 @@
 		H.custom_pain(SPAN_WARNING("You feel a tiny prick!"), 1, TRUE, H.get_organ(user.zone_sel.selecting))
 
 	playsound(src, 'sound/effects/hypospray.ogg',25)
-	user.visible_message("<span class='warning'>[user] injects [M] with [src].</span>")
+	user.visible_message(SPAN_WARNING("[user] injects [M] with [src]."))
 
 	if(M.reagents)
 		var/should_admin_log = reagents.should_admin_log()
@@ -71,7 +72,7 @@
 		var/trans = reagents.trans_to_mob(M, amount_per_transfer_from_this, CHEM_BLOOD)
 		if (should_admin_log)
 			admin_inject_log(user, M, src, contained, trans)
-		to_chat(user, "<span class='notice'>[trans] units injected. [reagents.total_volume] units remaining in \the [src].</span>")
+		to_chat(user, SPAN_NOTICE("[trans] units injected. [reagents.total_volume] units remaining in \the [src]."))
 
 	return
 
@@ -83,7 +84,7 @@
 	possible_transfer_amounts = "1;2;5;10;15;20;30"
 	amount_per_transfer_from_this = 5
 	volume = 0
-	time = 0 // hyposprays are instant for conscious people
+	time = 7
 	single_use = FALSE
 
 /obj/item/reagent_containers/hypospray/vial/New()
@@ -106,7 +107,7 @@
 /obj/item/reagent_containers/hypospray/vial/attack_hand(mob/user)
 	if(user.get_inactive_hand() == src)
 		if(!loaded_vial)
-			to_chat(user, "<span class='notice'>There is no vial loaded in the [src].</span>")
+			to_chat(user, SPAN_NOTICE("There is no vial loaded in the [src]."))
 			return
 		remove_vial(user)
 		update_icon()
@@ -117,7 +118,7 @@
 /obj/item/reagent_containers/hypospray/vial/attackby(obj/item/W, mob/user)
 	var/usermessage = ""
 	if(istype(W, /obj/item/reagent_containers/glass/beaker/vial))
-		if(!do_after(user,10) || !(W in user))
+		if(!do_after(user, 1 SECOND, src, DO_PUBLIC_UNIQUE) || !(W in user))
 			return 0
 		if(!user.unEquip(W, src))
 			return
@@ -132,7 +133,7 @@
 		loaded_vial = W
 		reagents.maximum_volume = loaded_vial.reagents.maximum_volume
 		loaded_vial.reagents.trans_to_holder(reagents,volume)
-		user.visible_message("<span class='notice'>[user] has loaded [W] into \the [src].</span>","<span class='notice'>[usermessage]</span>")
+		user.visible_message(SPAN_NOTICE("[user] has loaded [W] into \the [src]."),SPAN_NOTICE("[usermessage]"))
 		update_icon()
 		playsound(src.loc, 'sound/weapons/empty.ogg', 50, 1)
 		return
@@ -169,8 +170,10 @@
 	origin_tech = list(TECH_MATERIAL = 2, TECH_BIO = 2)
 	slot_flags = SLOT_BELT | SLOT_EARS
 	w_class = ITEM_SIZE_TINY
-	var/list/starts_with = list(/datum/reagent/inaprovaline = 5)
-	var/band_color = COLOR_CYAN
+	matter = list(MATERIAL_PLASTIC = 150, MATERIAL_GLASS = 50)
+	var/list/starts_with = list()
+	/// Color. If set, forces the autoinjectors window color to instead be a solid band color matching the provided color. If not set, the band color instead matches the contained reagent color.
+	var/band_color
 
 /obj/item/reagent_containers/hypospray/autoinjector/New()
 	..()
@@ -183,48 +186,64 @@
 	..()
 	update_icon()
 
+/obj/item/reagent_containers/hypospray/autoinjector/on_reagent_change()
+	update_icon()
+
 /obj/item/reagent_containers/hypospray/autoinjector/on_update_icon()
 	overlays.Cut()
 	if(reagents.total_volume > 0)
 		icon_state = "[initial(icon_state)]1"
 	else
 		icon_state = "[initial(icon_state)]0"
-	overlays+= overlay_image(icon,"injector_band",band_color,RESET_COLOR)
+	var/overlay_color = band_color
+	if (isnull(overlay_color))
+		if (reagents.total_volume)
+			overlay_color = reagents.get_color()
+		else
+			overlay_color = COLOR_GRAY
+	overlays += overlay_image(icon, "injector_band", overlay_color, RESET_COLOR)
 
 /obj/item/reagent_containers/hypospray/autoinjector/examine(mob/user)
 	. = ..(user)
-	if(reagents && reagents.reagent_list.len)
-		to_chat(user, "<span class='notice'>It is currently loaded.</span>")
+	if(reagents && length(reagents.reagent_list))
+		to_chat(user, SPAN_NOTICE("It is currently loaded."))
 	else
-		to_chat(user, "<span class='notice'>It is spent.</span>")
+		to_chat(user, SPAN_NOTICE("It is spent."))
 
 /obj/item/reagent_containers/hypospray/autoinjector/detox
 	name = "autoinjector (antitox)"
-	band_color = COLOR_GREEN
 	starts_with = list(/datum/reagent/dylovene = 5)
 
 /obj/item/reagent_containers/hypospray/autoinjector/pain
 	name = "autoinjector (painkiller)"
-	band_color = COLOR_PURPLE
 	starts_with = list(/datum/reagent/tramadol = 5)
 
 /obj/item/reagent_containers/hypospray/autoinjector/combatpain
 	name = "autoinjector (oxycodone)"
-	band_color = COLOR_DARK_GRAY
 	starts_with = list(/datum/reagent/tramadol/oxycodone = 5)
 
 /obj/item/reagent_containers/hypospray/autoinjector/antirad
 	name = "autoinjector (anti-rad)"
-	band_color = COLOR_AMBER
 	starts_with = list(/datum/reagent/hyronalin = 5)
 
 /obj/item/reagent_containers/hypospray/autoinjector/mindbreaker
 	name = "autoinjector"
-	band_color = COLOR_DARK_GRAY
-	starts_with = list(/datum/reagent/mindbreaker = 5)
+	starts_with = list(/datum/reagent/drugs/mindbreaker = 5)
 
-/obj/item/reagent_containers/hypospray/autoinjector/empty
-	name = "autoinjector"
-	band_color = COLOR_WHITE
-	starts_with = list()
-	matter = list(MATERIAL_PLASTIC = 150, MATERIAL_GLASS = 50)
+/obj/item/reagent_containers/hypospray/autoinjector/combatstim
+	name ="autoinjector (combat Stimulants)"
+	volume = 15
+	amount_per_transfer_from_this = 15
+	starts_with = list(/datum/reagent/inaprovaline = 10, /datum/reagent/hyperzine = 3, /datum/reagent/synaptizine = 1)
+
+/obj/item/reagent_containers/hypospray/autoinjector/coagulant
+	name ="autoinjector (coagulant)"
+	starts_with = list(/datum/reagent/coagulant = 1, /datum/reagent/nanoblood = 4)
+
+/obj/item/reagent_containers/hypospray/autoinjector/dexalin_plus
+	name ="autoinjector (dexalin plus)"
+	starts_with = list(/datum/reagent/dexalinp = 5)
+
+/obj/item/reagent_containers/hypospray/autoinjector/inaprovaline
+	name = "autoinjector (inaprovaline)"
+	starts_with = list(/datum/reagent/inaprovaline = 5)

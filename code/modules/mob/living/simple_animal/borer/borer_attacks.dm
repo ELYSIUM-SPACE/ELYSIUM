@@ -33,7 +33,7 @@
 	to_chat(src, SPAN_NOTICE("You slither up [M] and begin probing at their ear canal..."))
 	set_ability_cooldown(5 SECONDS)
 
-	if(!do_after(src, 3 SECONDS, M))
+	if(!do_after(src, 3 SECONDS, M, DO_DEFAULT | DO_USER_UNIQUE_ACT))
 		return
 
 	to_chat(src, SPAN_NOTICE("You wiggle into \the [M]'s ear."))
@@ -59,7 +59,7 @@
 		else if(E) // If they're in normally, implant removal can get them out.
 			E.implants += src
 
-/mob/living/simple_animal/borer/RangedAttack(atom/A, var/params)
+/mob/living/simple_animal/borer/RangedAttack(atom/A, params)
 	. = ..()
 	if(!. && a_intent == I_DISARM && !host && isliving(A) && !neutered && can_use_borer_ability(requires_host_value = FALSE))
 		var/mob/living/M = A

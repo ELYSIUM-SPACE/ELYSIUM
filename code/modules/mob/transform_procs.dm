@@ -96,7 +96,10 @@
 			for(var/obj/effect/landmark/start/sloc in landmarks_list)
 				if (sloc.name == "AI")
 					loc_landmark = sloc
-		O.forceMove(loc_landmark.loc)
+		if (!loc_landmark)
+			to_chat(O, SPAN_DEBUG("We still failed to find a AI spawn location. Where you're standing is now you're new home."))
+		else
+			O.forceMove(loc_landmark.loc)
 		O.on_mob_init()
 
 	O.add_ai_verbs()
@@ -107,7 +110,7 @@
 	return O
 
 //human -> robot
-/mob/living/carbon/human/proc/Robotize(var/supplied_robot_type = /mob/living/silicon/robot)
+/mob/living/carbon/human/proc/Robotize(supplied_robot_type = /mob/living/silicon/robot)
 	if (HAS_TRANSFORMATION_MOVEMENT_HANDLER(src))
 		return
 	QDEL_NULL_LIST(worn_underwear)
@@ -189,7 +192,7 @@
 	for(var/t in organs)	//this really should not be necessary
 		qdel(t)
 
-	var/mob/living/simple_animal/friendly/corgi/new_corgi = new /mob/living/simple_animal/friendly/corgi (loc)
+	var/mob/living/simple_animal/passive/corgi/new_corgi = new /mob/living/simple_animal/passive/corgi (loc)
 	new_corgi.a_intent = I_HURT
 	new_corgi.key = key
 
@@ -203,7 +206,7 @@
 	var/mobpath = input("Which type of mob should [src] turn into?", "Choose a type") in mobtypes
 
 	if(!safe_animal(mobpath))
-		to_chat(usr, "<span class='warning'>Sorry but this mob type is currently unavailable.</span>")
+		to_chat(usr, SPAN_WARNING("Sorry but this mob type is currently unavailable."))
 		return
 
 	if(HAS_TRANSFORMATION_MOVEMENT_HANDLER(src))
@@ -236,7 +239,7 @@
 	var/mobpath = input("Which type of mob should [src] turn into?", "Choose a type") in mobtypes
 
 	if(!safe_animal(mobpath))
-		to_chat(usr, "<span class='warning'>Sorry but this mob type is currently unavailable.</span>")
+		to_chat(usr, SPAN_WARNING("Sorry but this mob type is currently unavailable."))
 		return
 
 	var/mob/new_mob = new mobpath(src.loc)
@@ -252,7 +255,7 @@
  * This proc is here to force coders to manually place their mob in this list, hopefully tested.
  * This also gives a place to explain -why- players shouldn't be turn into certain mobs and hopefully someone can fix them.
  */
-/mob/proc/safe_animal(var/MP)
+/mob/proc/safe_animal(MP)
 
 //Bad mobs! - Remember to add a comment explaining what's wrong with the mob
 	if(!MP)
@@ -271,21 +274,21 @@
 		return 0 //Verbs do not appear for players. These constructs should really have their own class simple_animal/construct/subtype
 
 //Good mobs!
-	if(ispath(MP, /mob/living/simple_animal/friendly/cat))
+	if(ispath(MP, /mob/living/simple_animal/passive/cat))
 		return 1
-	if(ispath(MP, /mob/living/simple_animal/friendly/corgi))
+	if(ispath(MP, /mob/living/simple_animal/passive/corgi))
 		return 1
-	if(ispath(MP, /mob/living/simple_animal/crab))
+	if(ispath(MP, /mob/living/simple_animal/passive/crab))
 		return 1
 	if(ispath(MP, /mob/living/simple_animal/hostile/carp))
 		return 1
-	if(ispath(MP, /mob/living/simple_animal/friendly/mushroom))
+	if(ispath(MP, /mob/living/simple_animal/passive/mushroom))
 		return 1
 	if(ispath(MP, /mob/living/simple_animal/shade))
 		return 1
-	if(ispath(MP, /mob/living/simple_animal/friendly/tomato))
+	if(ispath(MP, /mob/living/simple_animal/passive/tomato))
 		return 1
-	if(ispath(MP, /mob/living/simple_animal/friendly/mouse))
+	if(ispath(MP, /mob/living/simple_animal/passive/mouse))
 		return 1 //It is impossible to pull up the player panel for mice (Fixed! - Nodrak)
 	if(ispath(MP, /mob/living/simple_animal/hostile/bear))
 		return 1 //Bears will auto-attack mobs, even if they're player controlled (Fixed! - Nodrak)

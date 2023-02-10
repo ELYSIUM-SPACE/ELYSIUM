@@ -19,7 +19,7 @@
 	. = ..()
 
 /obj/item/implant/psi_control/emp_act()
-	. = ..()
+	..()
 	update_functionality()
 
 /obj/item/implant/psi_control/meltdown()
@@ -36,7 +36,7 @@
 		to_chat(M, SPAN_NOTICE("You feel the chilly shackles around your psionic faculties fade away."))
 	. = ..()
 
-/obj/item/implant/psi_control/proc/update_functionality(var/silent)
+/obj/item/implant/psi_control/proc/update_functionality(silent)
 	var/mob/living/M = imp_in
 	if(get_psi_mode() == PSI_IMPLANT_DISABLED || malfunction)
 		if(implanted && !silent && istype(M) && M.psi)
@@ -56,11 +56,11 @@
 
 /obj/item/implant/psi_control/proc/get_psi_mode()
 	if(psi_mode == PSI_IMPLANT_AUTOMATIC)
-		var/decl/security_state/security_state = decls_repository.get_decl(GLOB.using_map.security_state)
+		var/singleton/security_state/security_state = GET_SINGLETON(GLOB.using_map.security_state)
 		return security_state.current_security_level.psionic_control_level
 	return psi_mode
 
-/obj/item/implant/psi_control/withstand_psi_stress(var/stress, var/atom/source)
+/obj/item/implant/psi_control/withstand_psi_stress(stress, atom/source)
 
 	var/use_psi_mode = get_psi_mode()
 

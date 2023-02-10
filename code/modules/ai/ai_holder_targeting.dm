@@ -56,7 +56,7 @@
 		targets = target_filter_distance(targets)
 	else
 		targets = target_filter_closest(targets)
-	if (!targets.len) // We found nothing.
+	if (!length(targets)) // We found nothing.
 		return
 
 	var/chosen_target
@@ -141,7 +141,7 @@
 
 	if (istype(the_target, /obj/machinery/porta_turret))
 		var/obj/machinery/porta_turret/P = the_target
-		if (P.stat & BROKEN)
+		if (MACHINE_IS_BROKEN(P))
 			return FALSE // Already dead.
 		if (!(P.assess_living(holder)))
 			return FALSE // Don't shoot allied turrets.
@@ -201,7 +201,7 @@
 		ai_log("can_see_target() : Target ([the_target]) was too far from holder. Exiting.", AI_LOG_TRACE)
 		return FALSE
 
-	if (!(the_target in oview(view_range, holder)))
+	if (!can_see(holder, the_target, view_range))
 		ai_log("can_see_target() : Target ([the_target]) failed can_see(). Exiting.", AI_LOG_TRACE)
 		return FALSE
 

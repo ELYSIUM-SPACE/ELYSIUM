@@ -30,26 +30,26 @@
 /obj/item/gun/energy/laser/practice/proc/hacked()
 	return projectile_type != /obj/item/projectile/beam/practice
 
-/obj/item/gun/energy/laser/practice/emag_act(var/remaining_charges, var/mob/user, var/emag_source)
+/obj/item/gun/energy/laser/practice/emag_act(remaining_charges, mob/user, emag_source)
 	if(hacked())
 		return NO_EMAG_ACT
-	to_chat(user, "<span class='warning'>You disable the safeties on [src] and crank the output to the lethal levels.</span>")
+	to_chat(user, SPAN_WARNING("You disable the safeties on [src] and crank the output to the lethal levels."))
 	desc += " Its safeties are disabled and output is set to dangerous levels."
 	projectile_type = /obj/item/projectile/beam/midlaser
 	charge_cost = 20
 	max_shots = rand(3,6) //will melt down after those
 	return 1
 
-/obj/item/gun/energy/laser/practice/handle_post_fire(mob/user, atom/target, var/pointblank=0, var/reflex=0)
+/obj/item/gun/energy/laser/practice/handle_post_fire(mob/user, atom/target, pointblank=0, reflex=0)
 	..()
 	if(hacked())
 		max_shots--
 		if(!max_shots) //uh hoh gig is up
-			to_chat(user, "<span class='danger'>\The [src] sizzles in your hands, acrid smoke rising from the firing end!</span>")
+			to_chat(user, SPAN_DANGER("\The [src] sizzles in your hands, acrid smoke rising from the firing end!"))
 			desc += " The optical pathway is melted and useless."
 			projectile_type = null
 
-obj/item/gun/energy/retro
+/obj/item/gun/energy/retro
 	name = "retro laser"
 	icon = 'icons/obj/guns/retro_laser.dmi'
 	icon_state = "retro"
@@ -140,7 +140,7 @@ obj/item/gun/energy/retro
 	one_hand_penalty = 5 // The weapon itself is heavy, and the long barrel makes it hard to hold steady with just one hand.
 	slot_flags = SLOT_BACK
 	charge_cost = 40
-	max_shots = 4
+	max_shots = 8
 	fire_delay = 35
 	force = 10
 	w_class = ITEM_SIZE_HUGE
@@ -167,10 +167,10 @@ obj/item/gun/energy/retro
 	projectile_type = /obj/item/projectile/beam/lastertag/blue
 	var/required_vest
 
-/obj/item/gun/energy/lasertag/special_check(var/mob/living/carbon/human/M)
+/obj/item/gun/energy/lasertag/special_check(mob/living/carbon/human/M)
 	if(ishuman(M))
 		if(!istype(M.wear_suit, required_vest))
-			to_chat(M, "<span class='warning'>You need to be wearing your laser tag vest!</span>")
+			to_chat(M, SPAN_WARNING("You need to be wearing your laser tag vest!"))
 			return 0
 	return ..()
 

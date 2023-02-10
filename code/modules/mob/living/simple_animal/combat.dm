@@ -29,20 +29,19 @@
 /mob/living/simple_animal/proc/do_attack(atom/A, turf/T)
 	face_atom(A)
 	var/missed = FALSE
-	if(!isturf(A) && !(A in T) ) // Turfs don't contain themselves so checking contents is pointless if we're targeting a turf.
+	if (get_dir(src, A) == facing_dir && get_dist(src, A) <= 1) // Turfs don't contain themselves so checking contents is pointless if we're targeting a turf.
 		missed = TRUE
-	else if(!T.AdjacentQuick(src))
+	else if (!T.AdjacentQuick(src))
 		missed = TRUE
 
 	if(missed) // Most likely we have a slow attack and they dodged it or we somehow got moved.
-		// admin_attack_log(src, A, "Animal-attacked (dodged)", admin_notify = FALSE)
 		playsound(src, 'sound/weapons/punchmiss.ogg', 75, 1)
 		visible_message(SPAN_WARNING("\The [src] misses their attack."))
 		return FALSE
 
 	var/obj/item/natural_weapon/weapon = get_natural_weapon()
 
-	if (weapon.resolve_attackby(A, src))
+	if (weapon?.resolve_attackby(A, src))
 		apply_melee_effects(A)
 
 	return TRUE
@@ -73,7 +72,7 @@
 			try_reload()
 			return FALSE
 
-	visible_message("<span class='danger'><b>\The [src]</b> fires at \the [A]!</span>")
+	visible_message(SPAN_DANGER("<b>\The [src]</b> fires at \the [A]!"))
 	shoot(A)
 	if(casingtype)
 		new casingtype(loc)
@@ -104,6 +103,7 @@
 	// P.accuracy += calculate_accuracy()
 	P.dispersion += calculate_dispersion()
 
+	P.firer = src
 	P.launch(target = A)
 	if(needs_reload)
 		reload_count++
@@ -112,7 +112,7 @@
 	set waitfor = FALSE
 	set_AI_busy(TRUE)
 
-	if(do_after(src, reload_time))
+	if(do_after(src, reload_time, do_flags = DO_DEFAULT | DO_USER_UNIQUE_ACT))
 		if(reload_sound)
 			playsound(src, reload_sound, 70, 1)
 		reload_count = 0
@@ -162,6 +162,7 @@
 // Special attacks, like grenades or blinding spit or whatever.
 // Don't override this, override do_special_attack() for your blinding spit/etc.
 /mob/living/simple_animal/proc/special_attack_target(atom/A)
+	set waitfor = FALSE
 	face_atom(A)
 
 	if(special_attack_delay)

@@ -260,7 +260,7 @@
 	sale_price = null
 
 //Controls phoron and phoron based objects reaction to being in a turf over 200c -- Phoron's flashpoint.
-/material/phoron/combustion_effect(var/turf/T, var/temperature, var/effect_multiplier)
+/material/phoron/combustion_effect(turf/T, temperature, effect_multiplier)
 	if(isnull(ignition_point))
 		return 0
 	if(temperature < ignition_point)
@@ -270,5 +270,5 @@
 		var/phoronToDeduce = (temperature/30) * effect_multiplier
 		totalPhoron += phoronToDeduce
 		target_tile.assume_gas(GAS_PHORON, phoronToDeduce, 200+T0C)
-		addtimer(CALLBACK(target_tile, /turf/proc/hotspot_expose, temperature, 400), 0)
+		addtimer(new Callback(target_tile, /turf/proc/hotspot_expose, temperature, 400), 0)
 	return round(totalPhoron/100)

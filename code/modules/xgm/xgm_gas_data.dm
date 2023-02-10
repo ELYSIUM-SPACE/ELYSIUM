@@ -1,4 +1,4 @@
-/var/datum/xgm_gas_data/gas_data
+var/global/datum/xgm_gas_data/gas_data
 
 /datum/xgm_gas_data
 	//Simple list of all the gas IDs.
@@ -32,7 +32,7 @@
 	var/list/symbol_html = list()
 	var/list/symbol = list()
 
-/decl/xgm_gas
+/singleton/xgm_gas
 	var/id = ""
 	var/name = "Unnamed Gas"
 	var/specific_heat = 20	// J/(mol*K)
@@ -54,8 +54,8 @@
 
 /hook/startup/proc/generateGasData()
 	gas_data = new
-	for(var/p in (typesof(/decl/xgm_gas) - /decl/xgm_gas))
-		var/decl/xgm_gas/gas = new p //avoid initial() because of potential New() actions
+	for(var/p in (typesof(/singleton/xgm_gas) - /singleton/xgm_gas))
+		var/singleton/xgm_gas/gas = new p //avoid initial() because of potential New() actions
 
 		if(gas.id in gas_data.gases)
 			error("Duplicate gas id `[gas.id]` in `[p]`")
@@ -93,7 +93,7 @@
 	mouse_opacity = 0
 	var/gas_id
 
-/obj/effect/gas_overlay/proc/update_alpha_animation(var/new_alpha)
+/obj/effect/gas_overlay/proc/update_alpha_animation(new_alpha)
 	animate(src, alpha = new_alpha)
 	alpha = new_alpha
 	animate(src, alpha = 0.8 * new_alpha, time = 10, easing = SINE_EASING | EASE_OUT, loop = -1)
@@ -104,4 +104,16 @@
 	gas_id = gas
 	if(gas_data.tile_overlay[gas_id])
 		icon_state = gas_data.tile_overlay[gas_id]
-	color = gas_data.tile_overlay_color[gas_id]
+		color = gas_data.tile_overlay_color[gas_id]
+
+/obj/effect/gas_overlay/heat
+	name = "gas"
+	desc = "You shouldn't be clicking this."
+	plane = HEAT_EFFECT_PLANE
+	gas_id = GAS_HEAT
+	render_source = HEAT_EFFECT_TARGET
+
+/obj/effect/gas_overlay/heat/Initialize(mapload, gas)
+	. = ..()
+	icon = null
+	icon_state = null

@@ -22,10 +22,14 @@
 
 #define CELSIUS + T0C
 
+#define KELVIN_TO_CELSIUS(X) ((X) - T0C)
+
 #define ATMOS_PRECISION 0.0001
 #define QUANTIZE(variable) (round(variable, ATMOS_PRECISION))
 
 #define INFINITY	1.#INF
+
+#define SHORT_REAL_LIMIT 16777216 // 1 left-shift 24
 
 #define TICKS_IN_DAY 		24*60*60*10
 #define TICKS_IN_SECOND 	10

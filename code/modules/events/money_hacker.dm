@@ -1,4 +1,4 @@
-/var/global/account_hack_attempted = 0
+var/global/account_hack_attempted = 0
 
 /datum/event/money_hacker
 	var/datum/money_account/affected_account
@@ -7,7 +7,7 @@
 
 /datum/event/money_hacker/setup()
 	end_time = world.time + 6000
-	if(all_money_accounts.len)
+	if(length(all_money_accounts))
 		affected_account = pick(all_money_accounts)
 
 		account_hack_attempted = 1
@@ -48,9 +48,9 @@
 		var/date2 = "[num2text(rand(1,31))] [pick("January","February","March","April","May","June","July","August","September","October","November","December")], [rand(1000,3000)]"
 		T.date = pick("", stationdate2text(), date1, date2)
 		var/time1 = rand(0, 99999999)
-		var/time2 = "[round(time1 / 36000)+12]:[(time1 / 600 % 60) < 10 ? add_zero(time1 / 600 % 60, 1) : time1 / 600 % 60]"
+		var/time2 = "[round(time1 / 36000)+12]:[pad_left(time1 / 600 % 60, 2, "0")]"
 		T.time = pick("", stationtime2text(), time2)
-		
+
 		T.perform()
 
 	var/obj/machinery/message_server/MS = get_message_server()

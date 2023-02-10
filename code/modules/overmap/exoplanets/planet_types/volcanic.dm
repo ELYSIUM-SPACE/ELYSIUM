@@ -25,12 +25,12 @@
 		atmosphere.temperature = T20C + rand(220, 800)
 		atmosphere.update_values()
 
-/obj/effect/overmap/visitable/sector/exoplanet/volcanic/adapt_seed(var/datum/seed/S)
+/obj/effect/overmap/visitable/sector/exoplanet/volcanic/adapt_seed(datum/seed/S)
 	..()
 	S.set_trait(TRAIT_REQUIRES_WATER,0)
 	S.set_trait(TRAIT_HEAT_TOLERANCE, 1000 + S.get_trait(TRAIT_HEAT_TOLERANCE))
 
-/obj/effect/overmap/visitable/sector/exoplanet/volcanic/adapt_animal(var/mob/living/simple_animal/A)
+/obj/effect/overmap/visitable/sector/exoplanet/volcanic/adapt_animal(mob/living/simple_animal/A)
 	..()
 	A.heat_damage_per_tick = 0 //animals not hot, no burning in lava
 
@@ -80,7 +80,7 @@
 	mineral_turf =  /turf/simulated/mineral/random/volcanic
 	rock_color = COLOR_DARK_GRAY
 
-/datum/random_map/automata/cave_system/mountains/volcanic/get_additional_spawns(value, var/turf/simulated/mineral/T)
+/datum/random_map/automata/cave_system/mountains/volcanic/get_additional_spawns(value, turf/simulated/mineral/T)
 	..()
 	if(use_area && istype(T))
 		T.mined_turf = prob(90) ? use_area.base_turf : /turf/simulated/floor/exoplanet/lava
@@ -91,6 +91,7 @@
 	icon_state = "lava"
 	movement_delay = 4
 	dirt_color = COLOR_GRAY20
+	turf_flags = TURF_DISALLOW_BLOB
 	var/list/victims
 
 /turf/simulated/floor/exoplanet/lava/on_update_icon()
@@ -106,7 +107,7 @@
 
 /turf/simulated/floor/exoplanet/lava/Entered(atom/movable/AM)
 	..()
-	if(locate(/obj/structure/catwalk/) in src)
+	if(locate(/obj/structure/catwalk) in src)
 		return
 	var/mob/living/L = AM
 	if (istype(L) && L.can_overcome_gravity())
@@ -120,7 +121,7 @@
 	LAZYREMOVE(victims, weakref(AM))
 
 /turf/simulated/floor/exoplanet/lava/Process()
-	if(locate(/obj/structure/catwalk/) in src)
+	if(locate(/obj/structure/catwalk) in src)
 		victims = null
 		return PROCESS_KILL
 	for(var/weakref/W in victims)
@@ -136,8 +137,8 @@
 	if(!LAZYLEN(victims))
 		return PROCESS_KILL
 
-/turf/simulated/floor/exoplanet/lava/get_footstep_sound(var/mob/caller)
-	return get_footstep(/decl/footsteps/lava, caller)
+/turf/simulated/floor/exoplanet/lava/get_footstep_sound(mob/caller)
+	return get_footstep(/singleton/footsteps/lava, caller)
 
 /turf/simulated/mineral/volcanic
 	name = "volcanic rock"

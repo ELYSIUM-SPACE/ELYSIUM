@@ -1,5 +1,5 @@
-/configuration
-	var/static/list/gamemode_cache
+/datum/configuration
+	var/static/atom/movable/clickable_stat/statLine
 
 	/// server name (for world name / status)
 	var/static/server_name
@@ -9,7 +9,6 @@
 
 	/// for topic status requests
 	var/static/game_version = "Baystation12"
-
 
 	/// log OOC channel
 	var/static/log_ooc = FALSE
@@ -91,6 +90,9 @@
 	/// Length of time before round start when autogamemode vote is called (in seconds, default 100).
 	var/static/vote_autogamemode_timeleft = 100
 
+	/// Length of time before round start (in seconds)
+	var/static/pre_game_time = 180
+
 	/// vote does not default to nochange/norestart (tbi)
 	var/static/vote_no_default = FALSE
 
@@ -112,10 +114,7 @@
 	/// Gamemodes which end instantly will instead keep on going until the round ends by escape shuttle or nuke.
 	var/static/continous_rounds = FALSE
 
-	var/static/fps = 20
-
-	/// SSinitialization throttling
-	var/static/tick_limit_mc_init = TICK_LIMIT_MC_INIT_DEFAULT
+	var/static/fps = 30
 
 	var/static/list/resource_urls
 
@@ -125,19 +124,17 @@
 	/// Ghosts that turn on Antagovision cannot rejoin the round.
 	var/static/antag_hud_restricted = FALSE
 
-	var/static/list/mode_names = list()
-
-	/// allowed modes
-	var/static/list/modes = list()
-
-	/// votable modes
-	var/static/list/votable_modes = list()
+	/// modes disallowed from the vote list
+	var/static/list/disallowed_modes = list()
 
 	/// relative probability of each mode
 	var/static/list/probabilities = list()
 
 	/// Whether or not secret modes show list of possible round types
 	var/static/secret_hide_possibilities = FALSE
+
+	/// Whether or not secret - a hidden random pick from available modes - can be voted for
+	var/static/secret_disabled = FALSE
 
 	/// enables random events mid-round when set to 1
 	var/static/allow_random_events = FALSE
@@ -156,9 +153,6 @@
 
 	/// force disconnect for inactive players after this many minutes, if non-0
 	var/static/kick_inactive = FALSE
-
-	/// determines whether jobs use minimal access or expanded access.
-	var/static/jobs_have_minimal_access = FALSE
 
 	var/static/minimum_player_age = 0
 
@@ -204,13 +198,19 @@
 
 	var/static/banappeals
 
-	var/static/wikiurl
+	var/static/wiki_url
 
-	var/static/forumurl
+	var/static/rules_url
 
-	var/static/githuburl
+	var/static/lore_url
 
-	var/static/issuereporturl
+	var/static/forum_url
+
+	var/static/source_url
+
+	var/static/discord_url
+
+	var/static/issue_url
 
 	var/static/list/chat_markup
 
@@ -288,9 +288,6 @@
 	/// Do antags use account age restrictions? --requires database
 	var/static/use_age_restriction_for_antags = FALSE
 
-	/// Whether the server uses recursive or circular explosions.
-	var/static/use_recursive_explosions = FALSE
-
 	var/static/comms_password
 
 	var/static/ban_comms_password
@@ -298,11 +295,13 @@
 	/// Clients with these byond versions will be banned. "512.1234;513.2345" etc.
 	var/static/list/forbidden_versions = list()
 
-	var/static/minimum_byond_version = 512
+	var/static/minimum_byond_version = 514
 
-	var/static/minimum_byond_build = 1488
+	var/static/minimum_byond_build = 1568
 
 	var/static/login_export_addr
+
+	var/static/warn_if_staff_same_ip = FALSE
 
 	var/static/enter_allowed = TRUE
 
@@ -321,13 +320,13 @@
 	var/static/expected_round_length = 3 HOURS
 
 	/// Whether the first delay per level has a custom start time
-	var/static/list/event_first_run = list(EVENT_LEVEL_MUNDANE = null, EVENT_LEVEL_MODERATE = null, EVENT_LEVEL_MAJOR = list("lower" = 80 MINUTES, "upper" = 100 MINUTES))
+	var/static/list/event_first_run = list(EVENT_LEVEL_MUNDANE = null, EVENT_LEVEL_MODERATE = null, EVENT_LEVEL_MAJOR = list("lower" = 80 MINUTES, "upper" = 100 MINUTES), EVENT_LEVEL_EXO = list("lower" = 50 MINUTES, "upper" = 80 MINUTES))
 
 	/// The lowest delay until next event
-	var/static/list/event_delay_lower = list(EVENT_LEVEL_MUNDANE = 10 MINUTES, EVENT_LEVEL_MODERATE = 30 MINUTES, EVENT_LEVEL_MAJOR = 50 MINUTES)
+	var/static/list/event_delay_lower = list(EVENT_LEVEL_MUNDANE = 10 MINUTES, EVENT_LEVEL_MODERATE = 30 MINUTES, EVENT_LEVEL_MAJOR = 50 MINUTES, EVENT_LEVEL_EXO = 40 MINUTES)
 
 	/// The upper delay until next event
-	var/static/list/event_delay_upper = list(EVENT_LEVEL_MUNDANE = 15 MINUTES, EVENT_LEVEL_MODERATE = 45 MINUTES, EVENT_LEVEL_MAJOR = 70 MINUTES)
+	var/static/list/event_delay_upper = list(EVENT_LEVEL_MUNDANE = 15 MINUTES, EVENT_LEVEL_MODERATE = 45 MINUTES, EVENT_LEVEL_MAJOR = 70 MINUTES, EVENT_LEVEL_EXO = 60 MINUTES)
 
 	var/static/abandon_allowed = TRUE
 
@@ -418,21 +417,35 @@
 	/// Logs all timers in buckets on automatic bucket reset
 	var/static/log_timers_on_bucket_reset = FALSE
 
+	/// The maximum amount of time a round can last before it is forcefully ended.
+	var/static/maximum_round_length
 
-/configuration/New()
-	build_mode_cache()
+	/// The delay in deciseconds between stat() updates.
+	var/static/stat_delay = 5
+
+	/// The maximum number of times someone can be warned in a round before they are automatically banned
+	var/static/warn_autoban_threshold = 3
+
+	/// The length in minutes of an automatic ban created by passing the warning threshold
+	var/static/warn_autoban_duration = 30
+
+	var/static/hub_entry = "<b>$SERVER</b> by <b>$HOST</b> &#8212; $ACTIVES of $PLAYERS alive"
+
+	var/static/run_empty_levels = FALSE
+
+
+/datum/configuration/New()
 	load_config()
 	load_options()
 	load_map()
 	load_sql()
+	load_hub_entry()
 	motd = file2text("config/motd.txt") || ""
 	event = file2text("config/event.txt") || ""
-	fps = round(fps)
-	if (fps <= 0)
-		fps = initial(fps)
 
 
-/configuration/proc/read_config(filename)
+/// Read a text file, stripping lines starting with # and empties
+/datum/configuration/proc/read_commentable(filename)
 	var/list/result = list()
 	var/list/lines = file2list(filename)
 	for (var/line in lines)
@@ -441,6 +454,14 @@
 		line = trim(line)
 		if (!line || line[1] == "#")
 			continue
+		result += line
+	return result
+
+
+/datum/configuration/proc/read_config(filename)
+	var/list/result = list()
+	var/lines = read_commentable(filename)
+	for (var/line in lines)
 		var/index = findtext(line, " ")
 		var/name = index ? lowertext(copytext(line, 1, index)) : lowertext(line)
 		if (!name)
@@ -455,7 +476,7 @@
 	return result
 
 
-/configuration/proc/load_config()
+/datum/configuration/proc/load_config()
 	var/list/file = read_config("config/config.txt")
 	for (var/name in file)
 		var/value = file[name]
@@ -470,10 +491,6 @@
 				use_age_restriction_for_jobs = TRUE
 			if ("use_age_restriction_for_antags")
 				use_age_restriction_for_antags = TRUE
-			if ("jobs_have_minimal_access")
-				jobs_have_minimal_access = TRUE
-			if ("use_recursive_explosions")
-				use_recursive_explosions = TRUE
 			if ("log_ooc")
 				log_ooc = TRUE
 			if ("log_access")
@@ -552,6 +569,8 @@
 					log_misc("Invalid vote_autotransfer_interval: [value]")
 			if ("vote_autogamemode_timeleft")
 				vote_autogamemode_timeleft = text2num(value)
+			if ("pre_game_time")
+				pre_game_time = text2num(value)
 			if ("ert_admin_only")
 				ert_admin_call_only = TRUE
 			if ("respawn_delay")
@@ -572,14 +591,20 @@
 				server = value
 			if ("banappeals")
 				banappeals = value
-			if ("wikiurl")
-				wikiurl = value
-			if ("forumurl")
-				forumurl = value
-			if ("githuburl")
-				githuburl = value
-			if ("issuereporturl")
-				issuereporturl = value
+			if ("wiki_url")
+				wiki_url = value
+			if ("rules_url")
+				rules_url = value
+			if ("lore_url")
+				lore_url = value
+			if ("forum_url")
+				forum_url = value
+			if ("source_url")
+				source_url = value
+			if ("issue_url")
+				issue_url = value
+			if ("discord_url")
+				discord_url = value
 			if ("ghosts_can_possess_animals")
 				ghosts_can_possess_animals = TRUE
 			if ("guest_jobban")
@@ -625,39 +650,35 @@
 				var/regex/flatten = new (@"\s+", "g")
 				for (var/entry in value)
 					var/list/parts = splittext(replacetext(entry, flatten, " "), " ")
-					var/mode = lowertext(parts[1])
+					var/mode_tag = lowertext(parts[1])
 					var/chance = text2num(parts[2])
 					var/reason
-					if (!mode)
+					if (!mode_tag)
 						reason = "Missing a tag/chance pair."
 					else if (isnull(chance) || chance < 0)
 						reason = "Not a valid probability."
-					else if (!(mode in modes))
-						reason = "Not a valid mode tag."
 					if (reason)
 						log_misc("Invalid probability config: '[value]' - [reason]")
 					else
-						probabilities[mode] = chance
+						probabilities[mode_tag] = chance
 			if ("allow_random_events")
 				allow_random_events = TRUE
 			if ("kick_inactive")
 				kick_inactive = text2num(value)
 			if ("use_irc_bot")
 				use_irc_bot = TRUE
-			if ("ticklag")
-				var/ticklag = text2num(value)
-				if (ticklag > 0)
-					fps = 10 / ticklag
 			if ("fps")
-				fps = text2num(value)
-			if ("tick_limit_mc_init")
-				tick_limit_mc_init = text2num(value)
+				fps = round(text2num(value))
+				if (fps <= 0)
+					fps = initial(fps)
 			if ("allow_antag_hud")
 				antag_hud_allowed = TRUE
 			if ("antag_hud_restricted")
 				antag_hud_restricted = TRUE
 			if ("secret_hide_possibilities")
 				secret_hide_possibilities = TRUE
+			if ("secret_disabled")
+				secret_disabled = TRUE
 			if ("usealienwhitelist")
 				usealienwhitelist = TRUE
 			if ("usealienwhitelist_sql")
@@ -734,7 +755,7 @@
 				starlight = value >= 0 ? value : 0
 			if ("ert_species")
 				ert_species = splittext(value, ";")
-				if (!ert_species.len)
+				if (!length(ert_species))
 					ert_species += SPECIES_HUMAN
 			if ("law_zero")
 				law_zero = value
@@ -806,7 +827,7 @@
 			if ("forbidden_message_hide_details")
 				forbidden_message_hide_details = TRUE
 			if ("disallow_votable_mode")
-				votable_modes -= value
+				disallowed_modes += value
 			if ("minimum_player_age")
 				minimum_player_age = text2num(value)
 			if ("max_explosion_range")
@@ -815,11 +836,23 @@
 				game_version = value
 			if ("log_timers_on_bucket_reset")
 				log_timers_on_bucket_reset = TRUE
+			if ("maximum_round_length")
+				maximum_round_length = text2num(value) MINUTES
+			if ("stat_delay")
+				stat_delay = Floor(text2num(value))
+			if ("warn_autoban_threshold")
+				warn_autoban_threshold = max(0, text2num(value))
+			if ("warn_autoban_duration")
+				warn_autoban_duration = max(1, text2num(value))
+			if ("run_empty_levels")
+				run_empty_levels = TRUE
+			if ("warn_if_staff_same_ip")
+				warn_if_staff_same_ip = TRUE
 			else
 				log_misc("Unknown setting in config/config.txt: '[name]'")
 
 
-/configuration/proc/load_options()
+/datum/configuration/proc/load_options()
 	var/list/file = read_config("config/game_options.txt")
 	for (var/name in file)
 		var/value = file[name]
@@ -867,7 +900,7 @@
 				log_misc("Unknown setting in config/game_options.txt: '[name]'")
 
 
-/configuration/proc/load_map()
+/datum/configuration/proc/load_map()
 	if (!GLOB.using_map?.config_path)
 		return
 	var/list/file = read_config(GLOB.using_map.config_path)
@@ -876,7 +909,7 @@
 		GLOB.using_map.setup_config(name, value, GLOB.using_map.config_path)
 
 
-/configuration/proc/load_sql()
+/datum/configuration/proc/load_sql()
 	var/list/file = read_config("config/dbconfig.txt")
 	for (var/name in file)
 		var/value = file[name]
@@ -903,36 +936,56 @@
 				log_misc("Unknown setting in config/dbconfig.txt: '[name]'")
 
 
-/configuration/proc/build_mode_cache()
-	gamemode_cache = list()
-	FOR_BLIND(datum/game_mode/M, subtypesof(/datum/game_mode))
-		var/tag = initial(M.config_tag)
-		if (!tag)
-			continue
-		gamemode_cache[tag] = (M = new M)
-		if (tag in modes)
-			continue
-		modes += tag
-		mode_names[tag] = M.name
-		probabilities[tag] = M.probability
-		if (M.votable)
-			votable_modes += tag
-	votable_modes += "secret"
-
-
-/configuration/proc/pick_mode(mode_name)
-	if (!mode_name)
+/datum/configuration/proc/load_hub_entry()
+	var/list/file = read_commentable("config/hub.txt")
+	if (!length(file))
 		return
-	for (var/tag in gamemode_cache)
-		var/datum/game_mode/M = gamemode_cache[tag]
-		if (M.config_tag == mode_name)
-			return M
+	hub_entry = file.Join("<br>")
 
 
-/configuration/proc/get_runnable_modes()
-	var/list/result = list()
-	for (var/tag in gamemode_cache)
-		var/datum/game_mode/M = gamemode_cache[tag]
-		if (probabilities[tag] > 0 && !M.startRequirements())
-			result[tag] = probabilities[tag]
-	return result
+/datum/configuration/proc/generate_hub_entry()
+	var/static/regex/replace_server = new (@"\$SERVER", "g")
+	var/static/regex/replace_host = new (@"\$HOST", "g")
+	var/static/regex/replace_wiki = new (@"\$WIKI", "g")
+	var/static/regex/replace_rules = new (@"\$RULES", "g")
+	var/static/regex/replace_source = new (@"\$SOURCE", "g")
+	var/static/regex/replace_discord = new (@"\$DISCORD", "g")
+	var/static/regex/replace_forum = new (@"\$FORUM", "g")
+	var/static/regex/replace_mode = new (@"\$MODE", "g")
+	var/static/regex/replace_station = new (@"\$STATION", "g")
+	var/static/regex/replace_players = new (@"\$PLAYERS", "g")
+	var/static/regex/replace_actives = new (@"\$ACTIVES", "g")
+	var/entry = "[hub_entry]"
+	if (entry)
+		var/player_count = 0
+		var/active_count = 0
+		for (var/client/client as anything in GLOB.clients)
+			if (client.inactivity < 5 MINUTES && isliving(client.mob))
+				var/mob/living/living = client.mob
+				if (living.stat != DEAD)
+					++active_count
+			++player_count
+		entry = replacetext_char(entry, replace_server, server_name)
+		entry = replacetext_char(entry, replace_host, hostedby)
+		entry = replacetext_char(entry, replace_wiki, wiki_url)
+		entry = replacetext_char(entry, replace_rules, rules_url)
+		entry = replacetext_char(entry, replace_source, source_url)
+		entry = replacetext_char(entry, replace_discord, discord_url)
+		entry = replacetext_char(entry, replace_forum, forum_url)
+		entry = replacetext_char(entry, replace_mode, SSticker?.master_mode || "LOBBY")
+		entry = replacetext_char(entry, replace_station, station_name())
+		entry = replacetext_char(entry, replace_players, "[player_count]")
+		entry = replacetext_char(entry, replace_actives, "[active_count]")
+	else
+		entry = "It Is A Mystery"
+	var/entry_size = length(entry)
+	if (entry_size > 255)
+		log_debug("The generated hub entry was [entry_size] bytes long! It will be truncated by the hub to 255.")
+	return entry
+
+
+/datum/configuration/proc/UpdateStat()
+	if (!statLine)
+		statLine = new (null, src)
+		statLine.name = "Edit"
+	stat("Config", statLine)

@@ -37,7 +37,7 @@ var/global/list/rad_collectors = list()
 	. = ..()
 
 /obj/machinery/power/rad_collector/Process()
-	if((stat & BROKEN) || melted)
+	if(MACHINE_IS_BROKEN(src) || melted)
 		return
 	var/turf/T = get_turf(src)
 	if(T)
@@ -64,7 +64,7 @@ var/global/list/rad_collectors = list()
 
 	if(P)
 		if(P.air_contents.gas[GAS_PHORON] == 0)
-			investigate_log("<font color='red'>out of fuel</font>.","singulo")
+			investigate_log("[SPAN_COLOR("red", "out of fuel")].","singulo")
 			eject()
 		else
 			P.air_adjust_gas(GAS_PHORON, -0.01*drainratio*min(last_rads,max_rads)/max_rads) //fuel cost increases linearly with incoming radiation
@@ -78,23 +78,23 @@ var/global/list/rad_collectors = list()
 	if(!CanInteract(user, DefaultTopicState()))
 		return FALSE
 	. = TRUE
-	if((stat & BROKEN) || melted)
-		to_chat(user, "<span class='warning'>The [src] is completely destroyed!</span>")
+	if(MACHINE_IS_BROKEN(src) || melted)
+		to_chat(user, SPAN_WARNING("The [src] is completely destroyed!"))
 	if(!src.locked)
 		toggle_power()
 		user.visible_message("[user.name] turns the [src.name] [active? "on":"off"].", \
 		"You turn the [src.name] [active? "on":"off"].")
-		investigate_log("turned [active?"<font color='green'>on</font>":"<font color='red'>off</font>"] by [user.key]. [P?"Fuel: [round(P.air_contents.gas[GAS_PHORON]/0.29)]%":"<font color='red'>It is empty</font>"].","singulo")
+		investigate_log("turned [active ? SPAN_COLOR("green", "on") : SPAN_COLOR("red", "off")] by [user.key]. [P ? "Fuel: [round(P.air_contents.gas[GAS_PHORON]/0.29)]%" : SPAN_COLOR("red", "It is empty")].","singulo")
 	else
-		to_chat(user, "<span class='warning'>The controls are locked!</span>")
+		to_chat(user, SPAN_WARNING("The controls are locked!"))
 
 /obj/machinery/power/rad_collector/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/tank/phoron))
 		if(!src.anchored)
-			to_chat(user, "<span class='warning'>The [src] needs to be secured to the floor first.</span>")
+			to_chat(user, SPAN_WARNING("The [src] needs to be secured to the floor first."))
 			return 1
 		if(src.P)
-			to_chat(user, "<span class='warning'>There's already a phoron tank loaded.</span>")
+			to_chat(user, SPAN_WARNING("There's already a phoron tank loaded."))
 			return 1
 		if(!user.unEquip(W, src))
 			return
@@ -107,18 +107,18 @@ var/global/list/rad_collectors = list()
 			return 1
 	else if(isWrench(W))
 		if(P)
-			to_chat(user, "<span class='notice'>Remove the phoron tank first.</span>")
+			to_chat(user, SPAN_NOTICE("Remove the phoron tank first."))
 			return 1
 		for(var/obj/machinery/power/rad_collector/R in get_turf(src))
 			if(R != src)
-				to_chat(user, "<span class='warning'>You cannot install more than one collector on the same spot.</span>")
+				to_chat(user, SPAN_WARNING("You cannot install more than one collector on the same spot."))
 				return 1
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 		src.anchored = !src.anchored
 		user.visible_message("[user.name] [anchored? "secures":"unsecures"] the [src.name].", \
 			"You [anchored? "secure":"undo"] the external bolts.", \
 			"You hear a ratchet")
-		if(anchored && !(stat & BROKEN))
+		if(anchored && !MACHINE_IS_BROKEN(src))
 			connect_to_network()
 		else
 			disconnect_from_network()
@@ -130,21 +130,21 @@ var/global/list/rad_collectors = list()
 				to_chat(user, "The controls are now [src.locked ? "locked." : "unlocked."]")
 			else
 				src.locked = 0 //just in case it somehow gets locked
-				to_chat(user, "<span class='warning'>The controls can only be locked when the [src] is active</span>")
+				to_chat(user, SPAN_WARNING("The controls can only be locked when the [src] is active"))
 		else
-			to_chat(user, "<span class='warning'>Access denied!</span>")
+			to_chat(user, SPAN_WARNING("Access denied!"))
 		return 1
 	return ..()
 
 /obj/machinery/power/rad_collector/examine(mob/user, distance)
 	. = ..()
-	if (distance <= 3 && !(stat & BROKEN))
+	if (distance <= 3 && !MACHINE_IS_BROKEN(src))
 		to_chat(user, "The meter indicates that \the [src] is collecting [last_power] W.")
 		return 1
 
 /obj/machinery/power/rad_collector/ex_act(severity)
 	switch(severity)
-		if(2, 3)
+		if(EX_ACT_HEAVY, EX_ACT_LIGHT)
 			eject()
 	return ..()
 
@@ -155,10 +155,10 @@ var/global/list/rad_collectors = list()
 			T.assume_air(P.air_contents)
 			audible_message(SPAN_DANGER("\The [P] detonates, sending shrapnel flying!"))
 			fragmentate(T, 2, 4, list(/obj/item/projectile/bullet/pellet/fragment/tank/small = 3, /obj/item/projectile/bullet/pellet/fragment/tank = 1))
-			explosion(T, -1, -1, 0)
+			explosion(T, 1, EX_ACT_LIGHT)
 			QDEL_NULL(P)
 	disconnect_from_network()
-	stat |= BROKEN
+	set_broken(TRUE)
 	melted = TRUE
 	anchored = FALSE
 	active = FALSE
@@ -182,7 +182,7 @@ var/global/list/rad_collectors = list()
 	else
 		update_icon()
 
-/obj/machinery/power/rad_collector/proc/receive_pulse(var/pulse_strength)
+/obj/machinery/power/rad_collector/proc/receive_pulse(pulse_strength)
 	if(P && active)
 		var/power_produced = 0
 		power_produced = min(100*P.air_contents.gas[GAS_PHORON]*pulse_strength*pulse_coeff,max_power)
@@ -207,7 +207,7 @@ var/global/list/rad_collectors = list()
 		overlays += image(icon, "ptank")
 		underlays += image(icon, "ca_filling")
 	underlays += image(icon, "ca_inside")
-	if(stat & (NOPOWER|BROKEN))
+	if(inoperable())
 		return
 	if(active)
 		var/rad_power = round(min(100 * last_rads / max_rads, 100), 20)

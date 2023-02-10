@@ -3,12 +3,27 @@
 	desc = "A piercing pain strikes your mind as you peer into the tear, witnessing horrors and suffering beyond comprehension."
 	light_outer_range=5
 	light_color="#ff0000"
+	spawnable = list(
+		/mob/living/simple_animal/hostile/meat/abomination = 5,
+		/mob/living/simple_animal/hostile/meat/horror = 30,
+		/mob/living/simple_animal/hostile/meat/strippedhuman = 60,
+		/mob/living/simple_animal/hostile/meat/horrorminer = 60,
+		/mob/living/simple_animal/hostile/meat/horrorsmall = 80,
+		/mob/living/simple_animal/hostile/meat = 5,
+		/mob/living/simple_animal/hostile/scarybat = 70,
+		/mob/living/simple_animal/hostile/creature = 40
+	)
 	var/datum/artifact_effect/hellportal/parent
+	var/mob_spawn_sounds = list(
+		'sound/magic/mutate.ogg',
+		'sound/effects/squelch1.ogg',
+		'sound/effects/squelch2.ogg'
+	)
 
 /obj/effect/gateway/artifact/small/New(turf/T)
 	..()
 
-	addtimer(CALLBACK(src, .proc/create_and_delete), rand(15, 30) SECONDS)
+	addtimer(new Callback(src, .proc/create_and_delete), rand(15, 30) SECONDS)
 
 /obj/effect/gateway/artifact/small/proc/create_and_delete()
 	var/mob/living/simple_animal/T = pickweight(spawnable)
@@ -22,6 +37,7 @@
 	if (parent)
 		parent.register_mob(T)
 
+	playsound(T, pick(mob_spawn_sounds), 100)
 	visible_message(SPAN_WARNING("\The [src] widens for a moment as a horrific monster forces its way through, before it blinks out of existence."))
 	qdel(src)
 
@@ -49,8 +65,9 @@
 	..()
 
 	mob_limit = health * 2
-	transform *= size_multiplier
-	addtimer(CALLBACK(src, .proc/spawn_monster), rand(30, 60) SECONDS)
+	SetTransform(scale = size_multiplier)
+	addtimer(new Callback(src, .proc/spawn_monster), rand(30, 60) SECONDS)
+	GLOB.sound_player.PlayLoopingSound(src, "\ref[src]", 'sound/effects/Heart Beat.ogg', 70, 6)
 
 /obj/effect/gateway/artifact/big/proc/spawn_monster()
 	var/mob/living/simple_animal/T = pickweight(spawnable)
@@ -80,4 +97,4 @@
 		visible_message(SPAN_WARNING("\The [src] deposits \the [T] into the world!"))
 
 
-	addtimer(CALLBACK(src, .proc/spawn_monster), rand(15, 30) SECONDS)
+	addtimer(new Callback(src, .proc/spawn_monster), rand(15, 30) SECONDS)

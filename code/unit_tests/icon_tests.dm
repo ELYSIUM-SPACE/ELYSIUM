@@ -29,7 +29,7 @@
 	if(missing_states)
 		fail("[missing_states] eye icon state\s [missing_states == 1 ? "is" : "are"] missing.")
 		var/list/difference = uniquemergelist(original_valid_states, valid_states)
-		if(difference.len)
+		if(length(difference))
 			log_unit_test("[ascii_yellow]---  DEBUG  --- ICON STATES AT START: " + jointext(original_valid_states, ",") + "[ascii_reset]")
 			log_unit_test("[ascii_yellow]---  DEBUG  --- ICON STATES AT END: "   + jointext(valid_states, ",") + "[ascii_reset]")
 			log_unit_test("[ascii_yellow]---  DEBUG  --- UNIQUE TO EACH LIST: " + jointext(difference, ",") + "[ascii_reset]")
@@ -89,7 +89,7 @@
 		if(number_of_issues(sprite_accessories_by_name, "Sprite Accessory Names"))
 			duplicates_found = TRUE
 
-	if(failed_sprite_accessories.len || duplicates_found)
+	if(length(failed_sprite_accessories) || duplicates_found)
 		fail("One or more sprite accessory issues detected.")
 	else
 		pass("All sprite accessories were valid.")
@@ -103,15 +103,15 @@
 	var/contraband_icons = icon_states('icons/obj/contraband.dmi')
 	var/list/invalid_posters = list()
 
-	for(var/poster_type in subtypesof(/decl/poster))
-		var/decl/poster/P = decls_repository.get_decl(poster_type)
+	for(var/poster_type in subtypesof(/singleton/poster))
+		var/singleton/poster/P = GET_SINGLETON(poster_type)
 		if(!(P.icon_state in contraband_icons))
 			invalid_posters += poster_type
 
-	if(invalid_posters.len)
-		fail("/decl/poster with missing icon states: [english_list(invalid_posters)]")
+	if(length(invalid_posters))
+		fail("/singleton/poster with missing icon states: [english_list(invalid_posters)]")
 	else
-		pass("All /decl/poster subtypes have valid icon states.")
+		pass("All /singleton/poster subtypes have valid icon states.")
 	return 1
 
 /datum/unit_test/icon_test/item_modifiers_shall_have_icon_states
@@ -120,10 +120,10 @@
 
 /datum/unit_test/icon_test/item_modifiers_shall_have_icon_states/start_test()
 	var/list/bad_modifiers = list()
-	var/item_modifiers = list_values(decls_repository.get_decls(/decl/item_modifier))
+	var/item_modifiers = list_values(Singletons.GetMap(/singleton/item_modifier))
 
 	for(var/im in item_modifiers)
-		var/decl/item_modifier/item_modifier = im
+		var/singleton/item_modifier/item_modifier = im
 		for(var/type_setup_type in item_modifier.type_setups)
 			var/list/type_setup = item_modifier.type_setups[type_setup_type]
 			var/list/icon_states = icon_states_by_type[type_setup_type]
@@ -136,7 +136,7 @@
 			if(!(type_setup["icon_state"] in icon_states))
 				bad_modifiers += type_setup_type
 
-	if(bad_modifiers.len)
+	if(length(bad_modifiers))
 		fail("Item modifiers with missing icon states: [english_list(bad_modifiers)]")
 	else
 		pass("All item modifiers have valid icon states.")
@@ -161,8 +161,8 @@
 		if(!(icon_state in icon_states))
 			invalid_spawners += random_type
 
-	if(invalid_spawners.len)
-		fail("[invalid_spawners.len] /obj/random type\s with missing icon states: [json_encode(invalid_spawners)]")
+	if(length(invalid_spawners))
+		fail("[length(invalid_spawners)] /obj/random type\s with missing icon states: [json_encode(invalid_spawners)]")
 	else
 		pass("All /obj/random types have valid icon states.")
 	return 1

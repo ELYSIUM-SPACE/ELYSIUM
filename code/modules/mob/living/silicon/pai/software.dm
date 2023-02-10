@@ -1,4 +1,4 @@
-var/list/pai_emotions = list(
+var/global/list/pai_emotions = list(
 		"Happy" = 1,
 		"Cat" = 2,
 		"Extremely Happy" = 3,
@@ -25,7 +25,7 @@ var/global/list/default_pai_software = list()
 		var/datum/pai_software/P = new type()
 		if(pai_software_by_key[P.id])
 			var/datum/pai_software/O = pai_software_by_key[P.id]
-			log_error("<span class='warning'>pAI software module [P.name] has the same key as [O.name]!</span>")
+			log_error(SPAN_WARNING("pAI software module [P.name] has the same key as [O.name]!"))
 			r = 0
 			continue
 		pai_software_by_key[P.id] = P
@@ -67,10 +67,10 @@ var/global/list/default_pai_software = list()
 		software_data["id"] = S.id
 		if(key in software)
 			software_data["on"] = S.is_active(src)
-			bought_software[++bought_software.len] = software_data
+			bought_software[LIST_PRE_INC(bought_software)] = software_data
 		else
 			software_data["ram"] = S.ram_cost
-			not_bought_software[++not_bought_software.len] = software_data
+			not_bought_software[LIST_PRE_INC(not_bought_software)] = software_data
 
 	data["bought"] = bought_software
 	data["not_bought"] = not_bought_software
@@ -82,7 +82,7 @@ var/global/list/default_pai_software = list()
 		var/emote[0]
 		emote["name"] = name
 		emote["id"] = pai_emotions[name]
-		emotions[++emotions.len] = emote
+		emotions[LIST_PRE_INC(emotions)] = emote
 
 	data["emotions"] = emotions
 	data["current_emotion"] = card.current_emotion
@@ -122,7 +122,7 @@ var/global/list/default_pai_software = list()
 
 		else if(href_list["image"])
 			var/img = text2num(href_list["image"])
-			if(1 <= img && img <= pai_emotions.len)
+			if(1 <= img && img <= length(pai_emotions))
 				card.setEmotion(img)
 			return TOPIC_HANDLED
 

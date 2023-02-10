@@ -22,13 +22,13 @@
 /obj/effect/overmap/visitable/sector/skrellscoutspace
 	name = "Empty Sector"
 	desc = "Slight traces of a cloaking device are present. Unable to determine exact location."
-	in_space = 1
+	in_space = TRUE
 	icon_state = "event"
 	hide_from_reports = TRUE
 
 /obj/effect/submap_landmark/joinable_submap/skrellscoutship
 	name = "Xilvuxix"
-	archetype = /decl/submap_archetype/skrellscoutship
+	archetype = /singleton/submap_archetype/skrellscoutship
 
 /obj/effect/submap_landmark/spawnpoint/skrellscoutship
 	name = "Qrri-Zuumqix"
@@ -37,10 +37,10 @@
 /obj/effect/submap_landmark/spawnpoint/skrellscoutship/leader
 	name = "Qrri-Vuxix"
 
-/decl/webhook/submap_loaded/skrell
+/singleton/webhook/submap_loaded/skrell
 	id = WEBHOOK_SUBMAP_LOADED_SKRELL
 
-/decl/submap_archetype/skrellscoutship
+/singleton/submap_archetype/skrellscoutship
 	descriptor = "Skrellian Scout Ship"
 	map = "Xilvuxix"
 	crew_jobs = list(
@@ -51,7 +51,7 @@
 
 //Access + Loadout
 
-/var/const/access_skrellscoutship = "ACCESS_SKRELLSCOUT"
+var/global/const/access_skrellscoutship = "ACCESS_SKRELLSCOUT"
 
 /datum/access/skrellscoutship
 	id = access_skrellscoutship
@@ -67,7 +67,7 @@
 	title = "Qrri-Vuxix"
 	supervisors = "your SDTF"
 	total_positions = 1
-	outfit_type = /decl/hierarchy/outfit/job/skrellscoutship
+	outfit_type = /singleton/hierarchy/outfit/job/skrellscoutship
 	info = "Your vessel is scouting through unknown space, working to map out any potential dangers, as well as potential allies."
 	is_semi_antagonist = TRUE
 	min_skill = list(SKILL_EVA = SKILL_ADEPT,
@@ -82,7 +82,7 @@
 	supervisors = "your Qrri-Vuxix"
 	total_positions = 5
 	whitelisted_species = list("Skrell")
-	outfit_type = /decl/hierarchy/outfit/job/skrellscoutship
+	outfit_type = /singleton/hierarchy/outfit/job/skrellscoutship
 	info = "Your vessel is scouting through unknown space, working to map out any potential dangers, as well as potential allies."
 	branch = /datum/mil_branch/skrell_fleet
 	rank = /datum/mil_rank/skrell_fleet
@@ -96,13 +96,14 @@
 					SKILL_WEAPONS = SKILL_ADEPT,
 					SKILL_MEDICAL = SKILL_BASIC)
 
-/datum/job/submap/skrellscoutship_crew/equip(var/mob/living/carbon/human/H, var/alt_title, var/datum/mil_branch/branch, var/datum/mil_rank/grade)
+/datum/job/submap/skrellscoutship_crew/equip(mob/living/carbon/human/H, alt_title, datum/mil_branch/branch, datum/mil_rank/grade)
 	. = ..(H, alt_title, branch, grade)	//passing through arguments
-	//Limited to subcastes that make sense on the vessel. No need for ground-forces or R&D on such a ship.
+	//Limited to subcastes that make sense on the vessel. No need for ground-forces on such a ship.
 	var/skrellscoutcastes = list(
 		"Malish-Katish" = list(
 			"Mero'ta-Ketish",
-			"Toglo'i-Ketish"
+			"Toglo'i-Ketish",
+			"Keloa-Ketish"
 		),
 		"Kanin-Katish" = list(
 			"Xiqarr-Ketish",
@@ -134,7 +135,7 @@
 	item_state = "skrell_suit"
 	worn_state = "skrell_suit"
 
-/decl/hierarchy/outfit/job/skrellscoutship
+/singleton/hierarchy/outfit/job/skrellscoutship
 	name = "Xilvuxix Crew"
 	uniform = /obj/item/clothing/under/skrelljumpsuit
 	shoes = /obj/item/clothing/shoes/dutyboots
@@ -148,17 +149,17 @@
 
 /obj/item/reagent_containers/food/condiment/psilocybin
 	label_text = "Psilocybin"
-	starting_reagents = list(/datum/reagent/psilocybin = 50)
+	starting_reagents = list(/datum/reagent/drugs/psilocybin = 50)
 
 
 /obj/item/reagent_containers/food/condiment/mindbreaker
 	label_text = "Mindbreaker"
-	starting_reagents = list(/datum/reagent/mindbreaker = 50)
+	starting_reagents = list(/datum/reagent/drugs/mindbreaker = 50)
 
 
-/obj/item/reagent_containers/food/condiment/space_drugs
+/obj/item/reagent_containers/food/condiment/hextro
 	label_text = "Ambrosia"
-	starting_reagents = list(/datum/reagent/space_drugs = 50)
+	starting_reagents = list(/datum/reagent/drugs/hextro = 50)
 
 
 /datum/mil_branch/skrell_fleet
@@ -227,7 +228,7 @@
 		/obj/item/clothing/glasses,
 		/obj/item/ammo_casing/shotgun,
 		/obj/item/ammo_magazine,
-		/obj/item/reagent_containers/food/snacks/donut/,
+		/obj/item/reagent_containers/food/snacks/donut,
 		/obj/item/melee/baton,
 		/obj/item/melee/telebaton,
 		/obj/item/flame/lighter,
@@ -255,15 +256,15 @@
 
 /obj/item/light/tube/skrell
 	name = "skrellian light filament"
-	color = COLOR_LIGHT_CYAN
-	b_colour = COLOR_LIGHT_CYAN
+	color = LIGHT_COLOUR_SKRELL
+	b_colour = LIGHT_COLOUR_SKRELL
 	desc = "Some kind of strange alien lightbulb technology."
 	random_tone = FALSE
 
 /obj/item/light/tube/large/skrell
 	name = "skrellian light filament"
-	color = COLOR_LIGHT_CYAN
-	b_colour = COLOR_LIGHT_CYAN
+	color = LIGHT_COLOUR_SKRELL
+	b_colour = LIGHT_COLOUR_SKRELL
 	desc = "Some kind of strange alien lightbulb technology."
 
 

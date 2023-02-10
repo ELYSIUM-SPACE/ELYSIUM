@@ -1,13 +1,14 @@
-/decl/psionic_faculty/energistics
+/singleton/psionic_faculty/energistics
 	id = PSI_ENERGISTICS
 	name = "Energistics"
 	associated_intent = I_HURT
 	armour_types = list("bomb", "laser", "energy")
 
-/decl/psionic_power/energistics
+/singleton/psionic_power/energistics
 	faculty = PSI_ENERGISTICS
+	abstract_type = /singleton/psionic_power/energistics
 
-/decl/psionic_power/energistics/disrupt
+/singleton/psionic_power/energistics/disrupt
 	name =            "Disrupt"
 	cost =            10
 	cooldown =        100
@@ -15,18 +16,18 @@
 	min_rank =        PSI_RANK_MASTER
 	use_description = "Target the head, eyes or mouth while on harm intent to use a melee attack that causes a localized electromagnetic pulse."
 
-/decl/psionic_power/energistics/disrupt/invoke(var/mob/living/user, var/mob/living/target)
+/singleton/psionic_power/energistics/disrupt/invoke(mob/living/user, mob/living/target)
 	if(user.zone_sel.selecting != BP_HEAD && user.zone_sel.selecting != BP_EYES && user.zone_sel.selecting != BP_MOUTH)
 		return FALSE
 	if(istype(target, /turf))
 		return FALSE
 	. = ..()
 	if(.)
-		user.visible_message("<span class='danger'>\The [user] releases a gout of crackling static and arcing lightning over \the [target]!</span>")
+		user.visible_message(SPAN_DANGER("\The [user] releases a gout of crackling static and arcing lightning over \the [target]!"))
 		empulse(target, 0, 1)
 		return TRUE
 
-/decl/psionic_power/energistics/electrocute
+/singleton/psionic_power/energistics/electrocute
 	name =            "Electrocute"
 	cost =            15
 	cooldown =        25
@@ -34,14 +35,14 @@
 	min_rank =        PSI_RANK_GRANDMASTER
 	use_description = "Target the chest or groin while on harm intent to use a melee attack that electrocutes a victim."
 
-/decl/psionic_power/energistics/electrocute/invoke(var/mob/living/user, var/mob/living/target)
+/singleton/psionic_power/energistics/electrocute/invoke(mob/living/user, mob/living/target)
 	if(user.zone_sel.selecting != BP_CHEST && user.zone_sel.selecting != BP_GROIN)
 		return FALSE
 	if(istype(target, /turf))
 		return FALSE
 	. = ..()
 	if(.)
-		user.visible_message("<span class='danger'>\The [user] sends a jolt of electricity arcing into \the [target]!</span>")
+		user.visible_message(SPAN_DANGER("\The [user] sends a jolt of electricity arcing into \the [target]!"))
 		if(istype(target))
 			target.electrocute_act(rand(15,45), user, 1, user.zone_sel.selecting)
 			return TRUE
@@ -51,7 +52,7 @@
 				charging_cell.give(rand(15,45))
 			return TRUE
 
-/decl/psionic_power/energistics/zorch
+/singleton/psionic_power/energistics/zorch
 	name =             "Zorch"
 	cost =             20
 	cooldown =         20
@@ -59,10 +60,10 @@
 	min_rank =         PSI_RANK_MASTER
 	use_description = "Use this ranged laser attack while on harm intent. Your mastery of Energistics will determine how powerful the laser is. Be wary of overuse, and try not to fry your own brain."
 
-/decl/psionic_power/energistics/zorch/invoke(var/mob/living/user, var/mob/living/target)
+/singleton/psionic_power/energistics/zorch/invoke(mob/living/user, mob/living/target)
 	. = ..()
 	if(.)
-		user.visible_message("<span class='danger'>\The [user]'s eyes flare with light!</span>")
+		user.visible_message(SPAN_DANGER("\The [user]'s eyes flare with light!"))
 
 		var/user_rank = user.psi.get_rank(faculty)
 		var/obj/item/projectile/pew
@@ -91,7 +92,7 @@
 			pew.launch(target, user.zone_sel.selecting, (target.x-user.x), (target.y-user.y))
 			return TRUE
 
-/decl/psionic_power/energistics/spark
+/singleton/psionic_power/energistics/spark
 	name =            "Spark"
 	cost =            1
 	cooldown =        1
@@ -99,7 +100,7 @@
 	min_rank =        PSI_RANK_OPERANT
 	use_description = "Target a non-living target in melee range on harm intent to cause some sparks to appear. This can light fires."
 
-/decl/psionic_power/energistics/spark/invoke(var/mob/living/user, var/mob/living/target)
+/singleton/psionic_power/energistics/spark/invoke(mob/living/user, mob/living/target)
 	if(isnull(target) || istype(target)) return FALSE
 	. = ..()
 	if(.)

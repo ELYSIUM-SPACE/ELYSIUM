@@ -1,4 +1,4 @@
-/material/proc/get_recipes(var/reinf_mat)
+/material/proc/get_recipes(reinf_mat)
 	var/key = reinf_mat ? reinf_mat : "base"
 	if(!LAZYACCESS(recipes,key))
 		LAZYSET(recipes,key,generate_recipes(reinf_mat))
@@ -9,7 +9,7 @@
 	for(var/recipe_type in subtypesof(base_type))
 		. += new recipe_type(src)
 
-/material/proc/generate_recipes(var/reinforce_material)
+/material/proc/generate_recipes(reinforce_material)
 	. = list()
 
 	if(opacity < 0.6)
@@ -18,7 +18,7 @@
 		if(integrity > 75 || reinforce_material)
 			. += new/datum/stack_recipe/furniture/windoor(src, reinforce_material)
 
-	if(reinforce_material)	//recipies below don't support composite materials
+	if(reinforce_material)	//recipes below don't support composite materials
 		return
 
 	// If is_brittle() returns true, these are only good for a single strike.
@@ -54,11 +54,13 @@
 		. += new/datum/stack_recipe/knife(src)
 		. += new/datum/stack_recipe/bell(src)
 		. += new/datum/stack_recipe/blade(src)
+		. += new/datum/stack_recipe/large_blade(src)
 		. += new/datum/stack_recipe/drill_head(src)
+		. += new/datum/stack_recipe/weapon_frame(src)
 
-/material/steel/generate_recipes(var/reinforce_material)
+/material/steel/generate_recipes(reinforce_material)
 	. = ..()
-	if(reinforce_material)	//recipies below don't support composite materials
+	if(reinforce_material)	//recipes below don't support composite materials
 		return
 	. += new/datum/stack_recipe_list("office chairs",list(
 		new/datum/stack_recipe/furniture/chair/office/dark(src),
@@ -90,26 +92,27 @@
 	. += new/datum/stack_recipe/air_alarm(src)
 	. += new/datum/stack_recipe/fire_alarm(src)
 	. += new/datum/stack_recipe/intercom(src)
+	. += new/datum/stack_recipe/supermatter_alarm(src)
 	. += new/datum/stack_recipe_list("modular computer frames", create_recipe_list(/datum/stack_recipe/computer))
 	. += new/datum/stack_recipe/furniture/coffin(src)
 
-/material/plasteel/generate_recipes(var/reinforce_material)
+/material/plasteel/generate_recipes(reinforce_material)
 	. = ..()
-	if(reinforce_material)	//recipies below don't support composite materials
+	if(reinforce_material)	//recipes below don't support composite materials
 		return
 	. += new/datum/stack_recipe/ai_core(src)
 	. += new/datum/stack_recipe/furniture/crate(src)
 	. += new/datum/stack_recipe/grip(src)
 
-/material/stone/generate_recipes(var/reinforce_material)
+/material/stone/generate_recipes(reinforce_material)
 	. = ..()
-	if(reinforce_material)	//recipies below don't support composite materials
+	if(reinforce_material)	//recipes below don't support composite materials
 		return
 	. += new/datum/stack_recipe/furniture/planting_bed(src)
 
-/material/plastic/generate_recipes(var/reinforce_material)
+/material/plastic/generate_recipes(reinforce_material)
 	. = ..()
-	if(reinforce_material)	//recipies below don't support composite materials
+	if(reinforce_material)	//recipes below don't support composite materials
 		return
 	. += new/datum/stack_recipe/furniture/crate/plastic(src)
 	. += new/datum/stack_recipe/bag(src)
@@ -119,59 +122,71 @@
 	. += new/datum/stack_recipe/hazard_cone(src)
 	. += new/datum/stack_recipe/furniture/flaps(src)
 
-/material/wood/generate_recipes(var/reinforce_material)
+/material/wood/generate_recipes(reinforce_material)
 	. = ..()
-	if(reinforce_material)	//recipies below don't support composite materials
+	if(reinforce_material)	//recipes below don't support composite materials
 		return
-	. += new/datum/stack_recipe/sandals(src)
+	. += new/datum/stack_recipe/sandal(src)
 	. += new/datum/stack_recipe/tile/wood(src)
 	. += create_recipe_list(/datum/stack_recipe/furniture/chair/wood)
-	. += new/datum/stack_recipe/crossbowframe(src)
 	. += new/datum/stack_recipe/furniture/coffin/wooden(src)
 	. += new/datum/stack_recipe/beehive_assembly(src)
 	. += new/datum/stack_recipe/beehive_frame(src)
 	. += new/datum/stack_recipe/furniture/bookcase(src)
-	. += new/datum/stack_recipe/zipgunframe(src)
-	. += new/datum/stack_recipe/coilgun(src)
+	. += new/datum/stack_recipe/weapon_frame(src)
 	. += new/datum/stack_recipe/stick(src)
 	. += new/datum/stack_recipe/noticeboard(src)
 	. += new/datum/stack_recipe/furniture/table_frame(src)
+	. += new/datum/stack_recipe/shield(src)
+	. += new/datum/stack_recipe/furniture/truss(src)
 
-/material/wood/mahogany/generate_recipes(var/reinforce_material)
+/material/wood/mahogany/generate_recipes(reinforce_material)
 	. = ..()
 	if(reinforce_material)
 		return
 	. += new/datum/stack_recipe/tile/mahogany(src)
 
-/material/wood/maple/generate_recipes(var/reinforce_material)
+/material/wood/maple/generate_recipes(reinforce_material)
 	. = ..()
 	if(reinforce_material)
 		return
 	. += new/datum/stack_recipe/tile/maple(src)
 
-/material/wood/ebony/generate_recipes(var/reinforce_material)
+/material/wood/ebony/generate_recipes(reinforce_material)
 	. = ..()
 	if(reinforce_material)
 		return
 	. += new/datum/stack_recipe/tile/ebony(src)
 
-/material/wood/walnut/generate_recipes(var/reinforce_material)
+/material/wood/walnut/generate_recipes(reinforce_material)
 	. = ..()
 	if(reinforce_material)
 		return
 	. += new/datum/stack_recipe/tile/walnut(src)
 
-/material/cardboard/generate_recipes(var/reinforce_material)
+/material/cardboard/generate_recipes(reinforce_material)
 	. = ..()
-	if(reinforce_material)	//recipies below don't support composite materials
+	if(reinforce_material)	//recipes below don't support composite materials
 		return
 	. += create_recipe_list(/datum/stack_recipe/box)
 	. += new/datum/stack_recipe/cardborg_suit(src)
 	. += new/datum/stack_recipe/cardborg_helmet(src)
 	. += new/datum/stack_recipe_list("folders", create_recipe_list(/datum/stack_recipe/folder))
 
-/material/aluminium/generate_recipes(var/reinforce_material)
+/material/aluminium/generate_recipes(reinforce_material)
 	. = ..()
-	if(reinforce_material)	//recipies below don't support composite materials
+	if(reinforce_material)	//recipes below don't support composite materials
 		return
 	. += new/datum/stack_recipe/grenade(src)
+
+/material/leather/generate_recipes(reinforce_material)
+	. = ..()
+	if(reinforce_material)	//recipes below don't support composite materials
+		return
+	. += new/datum/stack_recipe/toolbelt(src)
+	. += new/datum/stack_recipe/pockets(src)
+	. += new/datum/stack_recipe/large_webbing(src)
+	. += new/datum/stack_recipe/bandolier(src)
+	. += new/datum/stack_recipe/holster(src)
+	. += new/datum/stack_recipe/holster_machete(src)
+	. += new/datum/stack_recipe/holster_knife(src)

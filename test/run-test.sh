@@ -199,7 +199,6 @@ function run_code_tests {
     pip install --user PyYaml -q
     pip install --user beautifulsoup4 -q
     shopt -s globstar
-    run_test "check unit tests contains all maps" "scripts/validateTestingContainsAllMaps.sh"
     run_test_fail "maps contain no step_[xy]" "grep 'step_[xy]' maps/**/*.dmm"
     run_test_fail "maps contain no layer adjustments" "grep 'layer = ' maps/**/*.dmm"
     run_test_fail "maps contain no plane adjustments" "grep 'plane = ' maps/**/*.dmm"
@@ -228,8 +227,6 @@ function run_byond_tests {
         ./install-byond.sh || exit 1
         source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
     fi
-    run_test_ci "check globals build" "python3 tools/GenerateGlobalVarAccess/gen_globals.py baystation12.dme code/_helpers/global_access.dm"
-    run_test "check globals unchanged" "md5sum -c - <<< 'a6837e92ba80a781c4fac8a98ce67d01 *code/_helpers/global_access.dm'"
     run_test "build map unit tests" "scripts/dm.sh -DUNIT_TEST -M$MAP_PATH baystation12.dme"
     run_test "check no warnings in build" "grep ', 0 warnings' build_log.txt"
     run_test "run unit tests" "DreamDaemon baystation12.dmb -invisible -trusted -core 2>&1 | tee log.txt"

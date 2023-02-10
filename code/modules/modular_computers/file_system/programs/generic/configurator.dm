@@ -14,14 +14,14 @@
 	size = 4
 	available_on_ntnet = FALSE
 	requires_ntnet = FALSE
-	nanomodule_path = /datum/nano_module/program/computer_configurator/
+	nanomodule_path = /datum/nano_module/program/computer_configurator
 	usage_flags = PROGRAM_ALL
 	category = PROG_UTIL
 
 /datum/nano_module/program/computer_configurator
 	name = "NTOS Computer Configuration Tool"
 
-/datum/nano_module/program/computer_configurator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = GLOB.default_state)
+/datum/nano_module/program/computer_configurator/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, datum/topic_state/state = GLOB.default_state)
 	var/list/data = list()
 
 	data = program.get_header_data()

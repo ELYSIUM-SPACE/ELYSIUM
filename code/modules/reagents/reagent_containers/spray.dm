@@ -35,7 +35,7 @@
 			return
 
 	if(reagents.total_volume < amount_per_transfer_from_this)
-		to_chat(user, "<span class='notice'>\The [src] is empty!</span>")
+		to_chat(user, SPAN_NOTICE("\The [src] is empty!"))
 		return
 
 	Spray_at(A, user, proximity)
@@ -54,9 +54,9 @@
 	if (A.density && proximity)
 		reagents.splash(A, amount_per_transfer_from_this)
 		if(A == user)
-			A.visible_message("<span class='notice'>\The [user] sprays themselves with \the [src].</span>")
+			A.visible_message(SPAN_NOTICE("\The [user] sprays themselves with \the [src]."))
 		else
-			A.visible_message("<span class='notice'>\The [user] sprays \the [A] with \the [src].</span>")
+			A.visible_message(SPAN_NOTICE("\The [user] sprays \the [A] with \the [src]."))
 	else
 		spawn(0)
 			var/obj/effect/effect/water/chempuff/D = new/obj/effect/effect/water/chempuff(get_turf(src))
@@ -69,17 +69,22 @@
 			D.set_up(my_target, spray_size, step_delay)
 	return
 
-/obj/item/reagent_containers/spray/attack_self(var/mob/user)
+/obj/item/reagent_containers/spray/attack_self(mob/user)
 	if(!possible_transfer_amounts)
 		return
 	amount_per_transfer_from_this = next_in_list(amount_per_transfer_from_this, cached_number_list_decode(possible_transfer_amounts))
 	spray_size = next_in_list(spray_size, spray_sizes)
-	to_chat(user, "<span class='notice'>You adjusted the pressure nozzle. You'll now use [amount_per_transfer_from_this] units per spray.</span>")
+	to_chat(user, SPAN_NOTICE("You adjusted the pressure nozzle. You'll now use [amount_per_transfer_from_this] units per spray."))
 
 /obj/item/reagent_containers/spray/examine(mob/user, distance)
 	. = ..()
-	if(distance == 0 && loc == user)
-		to_chat(user, "[round(reagents.total_volume)] unit\s left.")
+	if(distance > 0)
+		return
+
+	if(length(reagents?.reagent_list))
+		to_chat(user, SPAN_NOTICE("It contains [round(reagents.total_volume)] units of liquid."))
+	else
+		to_chat(user, SPAN_NOTICE("It is empty."))
 
 /obj/item/reagent_containers/spray/verb/empty()
 
@@ -90,7 +95,7 @@
 	if (alert(usr, "Are you sure you want to empty that?", "Empty Bottle:", "Yes", "No") != "Yes")
 		return
 	if(isturf(usr.loc))
-		to_chat(usr, "<span class='notice'>You empty \the [src] onto the floor.</span>")
+		to_chat(usr, SPAN_NOTICE("You empty \the [src] onto the floor."))
 		reagents.splash(usr.loc, reagents.total_volume)
 
 //space cleaner
@@ -139,20 +144,20 @@
 	if(distance <= 1)
 		to_chat(user, "The safety is [safety ? "on" : "off"].")
 
-/obj/item/reagent_containers/spray/pepper/attack_self(var/mob/user)
+/obj/item/reagent_containers/spray/pepper/attack_self(mob/user)
 	safety = !safety
-	to_chat(usr, "<span class = 'notice'>You switch the safety [safety ? "on" : "off"].</span>")
+	to_chat(usr, SPAN_NOTICE("You switch the safety [safety ? "on" : "off"]."))
 
 /obj/item/reagent_containers/spray/pepper/Spray_at(atom/A as mob|obj)
 	if(safety)
-		to_chat(usr, "<span class = 'warning'>The safety is on!</span>")
+		to_chat(usr, SPAN_WARNING("The safety is on!"))
 		return
 	..()
 
 /obj/item/reagent_containers/spray/waterflower
 	name = "water flower"
 	desc = "A seemingly innocent sunflower...with a twist."
-	icon = 'icons/obj/device.dmi'
+	icon = 'icons/obj/sunflower.dmi'
 	icon_state = "sunflower"
 	item_state = "sunflower"
 	amount_per_transfer_from_this = 1
@@ -176,12 +181,19 @@
 	origin_tech = list(TECH_COMBAT = 3, TECH_MATERIAL = 3, TECH_ENGINEERING = 3)
 	step_delay = 8
 
-/obj/item/reagent_containers/spray/chemsprayer/Spray_at(atom/A as mob|obj)
+/obj/item/reagent_containers/spray/chemsprayer/Spray_at(atom/A, mob/user, proximity)
 	var/direction = get_dir(src, A)
 	var/turf/T = get_turf(A)
 	var/turf/T1 = get_step(T,turn(direction, 90))
 	var/turf/T2 = get_step(T,turn(direction, -90))
 	var/list/the_targets = list(T, T1, T2)
+
+	if (reagents.should_admin_log())
+		var/contained = reagents.get_reagents()
+		if (istype(A, /mob))
+			admin_attack_log(user, A, "Used \the [src] containing [contained] to spray the victim", "Was sprayed by \the [src] containing [contained]", "used \the [src] containing [contained] to spray")
+		else
+			admin_attacker_log(user, "Used \the [name] containing [contained] to spray \the [A]")
 
 	for(var/a = 1 to 3)
 		spawn(0)

@@ -13,11 +13,11 @@ In short:
 	name = "Hell Rising"
 	desc = "OH FUCK OH FUCK OH FUCK"
 
-/datum/universal_state/hell/OnShuttleCall(var/mob/user)
+/datum/universal_state/hell/OnShuttleCall(mob/user)
 	return 1
 	/*
 	if(user)
-		to_chat(user, "<span class='sinister'>All you hear on the frequency is static and panicked screaming. There will be no shuttle call today.</span>")
+		to_chat(user, SPAN_CLASS("sinister", "All you hear on the frequency is static and panicked screaming. There will be no shuttle call today."))
 	return 0
 	*/
 
@@ -33,7 +33,7 @@ In short:
 
 /datum/universal_state/hell/OnExit()
 	SSskybox.change_skybox("dyable", new_use_stars = TRUE, new_use_overmap_details = TRUE)
-	for (var/mob/living/simple_animal/S in GLOB.living_mob_list_)
+	for (var/mob/living/simple_animal/S in GLOB.alive_mobs)
 		if (S.faction == "cult")
 			to_chat(S, SPAN_OCCULT("You hear a terrible scream from a place beyond reality, as a life's sacrifice banishes your master. The dark power animating your form wavers, and withdraws, leaving it an unliving shell of meat. Your mind puffs away, like mist under a hot sun."))
 			S.set_stat(DEAD)

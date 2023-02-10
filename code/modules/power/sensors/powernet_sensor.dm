@@ -12,7 +12,7 @@
 	desc = "Small machine which transmits data about specific powernet."
 	anchored = TRUE
 	density = FALSE
-	level = 1
+	level = ATOM_LEVEL_UNDER_TILE
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "floor_beacon" // If anyone wants to make better sprite, feel free to do so without asking me.
 
@@ -45,7 +45,7 @@
 // Proc: reading_to_text()
 // Parameters: 1 (amount - Power in Watts to be converted to W, kW or MW)
 // Description: Helper proc that converts reading in Watts to kW or MW (returns string version of amount parameter)
-/obj/machinery/power/sensor/proc/reading_to_text(var/amount = 0)
+/obj/machinery/power/sensor/proc/reading_to_text(amount = 0)
 	var/units = ""
 	// 10kW and less - Watts
 	if(amount < 10000)
@@ -94,7 +94,7 @@
 
 	var/list/L = find_apcs()
 	var/total_apc_load = 0
-	if(L.len <= 0) 	// No APCs found.
+	if(length(L) <= 0) 	// No APCs found.
 		out = "<b>No APCs located in connected powernet!</b>"
 	else			// APCs found. Create very ugly (but working!) HTML table.
 
@@ -144,7 +144,7 @@
 	var/list/L = find_apcs()
 	var/total_apc_load = 0
 	var/list/APC_data = list()
-	if(L.len > 0)
+	if(length(L) > 0)
 		// These lists are used as replacement for number based APC settings
 		var/list/S = list("M-OFF", "DC-OFF","A-OFF","M-ON", "A-ON")
 		var/list/chg = list("N","C","F")
@@ -178,8 +178,3 @@
 		data["load_percentage"] = 100
 	data["alarm"] = powernet.problem ? 1 : 0
 	return data
-
-
-
-
-

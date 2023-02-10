@@ -2,12 +2,12 @@
 /obj/item/device/scanner/plant
 	name = "plant analyzer"
 	desc = "A hand-held botanical scanner used to analyze plants."
-	icon = 'icons/obj/device.dmi'
+	icon = 'icons/obj/plant_analyzer.dmi'
 	icon_state = "hydro"
 	item_state = "analyzer"
 	scan_sound = 'sound/effects/fastbeep.ogg'
 	printout_color = "#eeffe8"
-	var/global/list/valid_targets = list(
+	var/static/list/valid_targets = list(
 		/obj/item/reagent_containers/food/snacks/grown,
 		/obj/machinery/portable_atmospherics/hydroponics,
 		/obj/item/seeds
@@ -48,7 +48,7 @@
 		var/area/map = locate(/area/overmap)
 		for(var/obj/effect/overmap/visitable/sector/exoplanet/P in map)
 			if(grown_seed in P.seeds)
-				SSstatistics.add_field(STAT_XENOPLANTS_SCANNED, 1)
+				GLOB.stat_flora_scanned += 1
 				break
 
 	var/list/dat = list()
@@ -66,7 +66,7 @@
 	dat += "<tr><td><b>Potency</b></td><td>[grown_seed.get_trait(TRAIT_POTENCY)]</td></tr>"
 	dat += "</table>"
 
-	if(grown_reagents && grown_reagents.reagent_list && grown_reagents.reagent_list.len)
+	if(grown_reagents && grown_reagents.reagent_list && length(grown_reagents.reagent_list))
 		dat += "<h2>Reagent Data</h2>"
 
 		dat += "<br>This sample contains: "
@@ -76,12 +76,12 @@
 	dat += "<h2>Other Data</h2>"
 
 	if(grown_seed.get_trait(TRAIT_HARVEST_REPEAT))
-		dat += "This plant can be harvested repeatedly.<br>"
+		dat += "This species can be harvested repeatedly.<br>"
 
 	if(grown_seed.get_trait(TRAIT_IMMUTABLE) == -1)
-		dat += "This plant is highly mutable.<br>"
+		dat += "This species is highly mutable.<br>"
 	else if(grown_seed.get_trait(TRAIT_IMMUTABLE) > 0)
-		dat += "This plant does not possess genetics that are alterable.<br>"
+		dat += "This species does not possess genetics that are alterable.<br>"
 
 	if(grown_seed.get_trait(TRAIT_REQUIRES_NUTRIENTS))
 		if(grown_seed.get_trait(TRAIT_NUTRIENT_CONSUMPTION) < 0.05)
@@ -99,7 +99,7 @@
 		else
 			dat += "It requires a stable supply of water.<br>"
 
-	if(grown_seed.mutants && grown_seed.mutants.len)
+	if(grown_seed.mutants && length(grown_seed.mutants))
 		dat += "It exhibits a high degree of potential subspecies shift.<br>"
 
 	dat += "It thrives in a temperature of [grown_seed.get_trait(TRAIT_IDEAL_HEAT)] Kelvin."
@@ -154,7 +154,7 @@
 		dat += "<br>It will periodically alter the local temperature by [grown_seed.get_trait(TRAIT_ALTER_TEMP)] degrees Kelvin."
 
 	if(grown_seed.get_trait(TRAIT_BIOLUM))
-		dat += "<br>It is [grown_seed.get_trait(TRAIT_BIOLUM_COLOUR)  ? "<font color='[grown_seed.get_trait(TRAIT_BIOLUM_COLOUR)]'>bio-luminescent</font>" : "bio-luminescent"]."
+		dat += "<br>It is [grown_seed.get_trait(TRAIT_BIOLUM_COLOUR)  ? SPAN_COLOR("[grown_seed.get_trait(TRAIT_BIOLUM_COLOUR)]", "bio-luminescent") : "bio-luminescent"]."
 
 	if(grown_seed.get_trait(TRAIT_PRODUCES_POWER))
 		dat += "<br>The fruit will function as a battery if prepared appropriately."

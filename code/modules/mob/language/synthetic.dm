@@ -10,7 +10,7 @@
 	shorthand = "N/A"
 	var/drone_only
 
-/datum/language/binary/broadcast(var/mob/living/speaker,var/message,var/speaker_mask)
+/datum/language/binary/broadcast(mob/living/speaker,message,speaker_mask)
 
 	if(!speaker.binarycheck())
 		return
@@ -18,25 +18,25 @@
 	if (!message)
 		return
 
-	var/message_start = "<i><span class='game say'>[name], <span class='name'>[speaker.name]</span>"
-	var/message_body = "<span class='message'>[speaker.say_quote(message)], \"[message]\"</span></span></i>"
+	var/message_start = "[name], [SPAN_CLASS("name", speaker.name)]"
+	var/message_body = SPAN_CLASS("message", "[speaker.say_quote(message)], \"[message]\"")
 
-	for (var/mob/observer/ghost/O in GLOB.ghost_mob_list)
+	for (var/mob/observer/ghost/O in GLOB.ghost_mobs)
 		O.show_message("[message_start] ([ghost_follow_link(speaker, O)]) [message_body]", 2)
 
-	for (var/mob/M in GLOB.dead_mob_list_)
+	for (var/mob/M in GLOB.dead_mobs)
 		if(!istype(M,/mob/new_player) && !istype(M,/mob/living/carbon/brain)) //No meta-evesdropping
 			M.show_message("[message_start] ([ghost_follow_link(speaker, M)]) [message_body]", 2)
 
-	for (var/mob/living/S in GLOB.living_mob_list_)
+	for (var/mob/living/S in GLOB.alive_mobs)
 		if(drone_only && !istype(S,/mob/living/silicon/robot/drone))
 			continue
 		else if(istype(S , /mob/living/silicon/ai))
-			message_start = "<i><span class='game say'>[name], <a href='byond://?src=\ref[S];track2=\ref[S];track=\ref[speaker];trackname=[html_encode(speaker.name)]'><span class='name'>[speaker.name]</span></a></span></i>"
+			message_start = "[name], <a href='byond://?src=\ref[S];track2=\ref[S];track=\ref[speaker];trackname=[html_encode(speaker.name)]'>[SPAN_CLASS("name", speaker.name)]</a>"
 		else if (!S.binarycheck())
 			continue
 
-		S.show_message("[message_start] [message_body]", 2)
+		S.show_message("<i>[SPAN_CLASS("game say", "[message_start] [message_body]")]</i>", 2)
 
 	var/list/listening = hearers(1, src)
 	listening -= src
@@ -44,7 +44,7 @@
 	for (var/mob/living/M in listening)
 		if(istype(M, /mob/living/silicon) || M.binarycheck())
 			continue
-		M.show_message("<i><span class='game say'><span class='name'>synthesised voice</span> <span class='message'>beeps, \"beep beep beep\"</span></span></i>",2)
+		M.show_message("<i>[SPAN_CLASS("game say", "[SPAN_CLASS("name", "synthesised voice")] [SPAN_CLASS("message", "beeps, \"beep beep beep\"")]")]</i>",2)
 
 	//robot binary xmitter component power usage
 	if (isrobot(speaker))
@@ -77,11 +77,10 @@
 	space_chance = 10
 	shorthand = "EAL"
 
-/datum/language/machine/can_speak_special(var/mob/living/speaker)
+/datum/language/machine/can_speak_special(mob/living/speaker)
 	return speaker.isSynthetic()
 
 /datum/language/machine/get_random_name()
 	if(prob(70))
 		return "[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[rand(100, 999)]"
 	return pick(GLOB.ai_names)
-

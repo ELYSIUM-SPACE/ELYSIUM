@@ -3,8 +3,8 @@
 	icon_state = "cap_cypherkey"
 	channels = list("Command" = 1, "Security" = 1, "Engineering" = 1, "Science" = 1, "Medical" = 1, "Supply" = 1, "Service" = 1, "Exploration" = 1, "Hailing" = 1)
 
-/obj/item/device/encryptionkey/headset_torchnt
-	name = "corporate radio encryption key"
+/obj/item/device/encryptionkey/science
+	name = "science radio encryption key"
 	icon_state = "nt_cypherkey"
 	channels = list("Science" = 1, "Exploration" = 1)
 
@@ -27,6 +27,11 @@
 	name = "deck chief's encryption key"
 	icon_state = "qm_cypherkey"
 	channels = list("Supply" = 1, "Command" = 1, "Exploration" = 1, "Hailing" = 1)
+
+/obj/item/device/encryptionkey/headset_chief_steward
+	name = "chief steward's encryption key"
+	icon_state = "srv_cypherkey"
+	channels = list("Service" = 1, "Command" = 1, "Hailing" = 1)
 
 /obj/item/device/encryptionkey/bridgeofficer
 	name = "bridge officer's encryption key"

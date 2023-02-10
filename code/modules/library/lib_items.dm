@@ -39,9 +39,9 @@
 			SetName("bookcase ([newname])")
 	else if(isScrewdriver(O))
 		playsound(loc, 'sound/items/Screwdriver.ogg', 75, 1)
-		to_chat(user, "<span class='notice'>You begin dismantling \the [src].</span>")
-		if(do_after(user,25,src))
-			to_chat(user, "<span class='notice'>You dismantle \the [src].</span>")
+		to_chat(user, SPAN_NOTICE("You begin dismantling \the [src]."))
+		if(do_after(user, 2.5 SECONDS, src, DO_PUBLIC_UNIQUE))
+			to_chat(user, SPAN_NOTICE("You dismantle \the [src]."))
 			new/obj/item/stack/material/wood(get_turf(src), 5)
 			for(var/obj/item/book/b in contents)
 				b.dropInto(loc)
@@ -51,8 +51,8 @@
 		..()
 	return
 
-/obj/structure/bookcase/attack_hand(var/mob/user as mob)
-	if(contents.len)
+/obj/structure/bookcase/attack_hand(mob/user as mob)
+	if(length(contents))
 		var/obj/item/book/choice = input("Which book would you like to remove from the shelf?") as null|obj in contents
 		if(choice)
 			if(!CanPhysicallyInteract(user))
@@ -66,18 +66,18 @@
 
 /obj/structure/bookcase/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(EX_ACT_DEVASTATING)
 			for(var/obj/item/book/b in contents)
 				qdel(b)
 			qdel(src)
 			return
-		if(2.0)
+		if(EX_ACT_HEAVY)
 			for(var/obj/item/book/b in contents)
 				if (prob(50)) b.dropInto(loc)
 				else qdel(b)
 			qdel(src)
 			return
-		if(3.0)
+		if(EX_ACT_LIGHT)
 			if (prob(50))
 				for(var/obj/item/book/b in contents)
 					b.dropInto(loc)
@@ -87,8 +87,8 @@
 	return
 
 /obj/structure/bookcase/on_update_icon()
-	if(contents.len < 5)
-		icon_state = "book-[contents.len]"
+	if(length(contents) < 5)
+		icon_state = "book-[length(contents)]"
 	else
 		icon_state = "book-5"
 
@@ -97,38 +97,38 @@
 /obj/structure/bookcase/manuals/medical
 	name = "Medical Manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/book/manual/medical_cloning(src)
-		new /obj/item/book/manual/medical_diagnostics_manual(src)
-		new /obj/item/book/manual/medical_diagnostics_manual(src)
-		new /obj/item/book/manual/medical_diagnostics_manual(src)
-		new /obj/item/book/manual/chemistry_recipes(src)
-		update_icon()
+/obj/structure/bookcase/manuals/medical/New()
+	..()
+	new /obj/item/book/manual/medical_cloning(src)
+	new /obj/item/book/manual/medical_diagnostics_manual(src)
+	new /obj/item/book/manual/medical_diagnostics_manual(src)
+	new /obj/item/book/manual/medical_diagnostics_manual(src)
+	new /obj/item/book/manual/chemistry_recipes(src)
+	update_icon()
 
 
 /obj/structure/bookcase/manuals/engineering
 	name = "Engineering Manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/book/manual/engineering_construction(src)
-		new /obj/item/book/manual/engineering_particle_accelerator(src)
-		new /obj/item/book/manual/engineering_hacking(src)
-		new /obj/item/book/manual/engineering_guide(src)
-		new /obj/item/book/manual/atmospipes(src)
-		new /obj/item/book/manual/engineering_singularity_safety(src)
-		new /obj/item/book/manual/evaguide(src)
-		new /obj/item/book/manual/rust_engine(src)
-		update_icon()
+/obj/structure/bookcase/manuals/engineering/New()
+	..()
+	new /obj/item/book/manual/engineering_construction(src)
+	new /obj/item/book/manual/engineering_particle_accelerator(src)
+	new /obj/item/book/manual/engineering_hacking(src)
+	new /obj/item/book/manual/engineering_guide(src)
+	new /obj/item/book/manual/atmospipes(src)
+	new /obj/item/book/manual/engineering_singularity_safety(src)
+	new /obj/item/book/manual/evaguide(src)
+	new /obj/item/book/manual/rust_engine(src)
+	update_icon()
 
 /obj/structure/bookcase/manuals/research_and_development
 	name = "R&D Manuals bookcase"
 
-	New()
-		..()
-		new /obj/item/book/manual/research_and_development(src)
-		update_icon()
+/obj/structure/bookcase/manuals/research_and_development/New()
+	..()
+	new /obj/item/book/manual/research_and_development(src)
+	update_icon()
 
 
 /*
@@ -149,15 +149,15 @@
 	var/carved = 0	 // Has the book been hollowed out for use as a secret storage item?
 	var/obj/item/store	//What's in the book?
 
-/obj/item/book/attack_self(var/mob/user as mob)
+/obj/item/book/attack_self(mob/user as mob)
 	if(carved)
 		if(store)
-			to_chat(user, "<span class='notice'>[store] falls out of [title]!</span>")
+			to_chat(user, SPAN_NOTICE("[store] falls out of [title]!"))
 			store.dropInto(loc)
 			store = null
 			return
 		else
-			to_chat(user, "<span class='notice'>The pages of [title] have been cut out!</span>")
+			to_chat(user, SPAN_NOTICE("The pages of [title] have been cut out!"))
 			return
 	if(src.dat)
 		show_browser(user, dat, "window=book;size=1000x550")
@@ -173,13 +173,13 @@
 				if(!user.unEquip(W, src))
 					return
 				store = W
-				to_chat(user, "<span class='notice'>You put [W] in [title].</span>")
+				to_chat(user, SPAN_NOTICE("You put [W] in [title]."))
 				return
 			else
-				to_chat(user, "<span class='notice'>[W] won't fit in [title].</span>")
+				to_chat(user, SPAN_NOTICE("[W] won't fit in [title]."))
 				return
 		else
-			to_chat(user, "<span class='notice'>There's already something in [title]!</span>")
+			to_chat(user, SPAN_NOTICE("There's already something in [title]!"))
 			return
 	if(istype(W, /obj/item/pen))
 		if(unique)
@@ -213,9 +213,9 @@
 				return
 	else if(istype(W, /obj/item/material/knife) || isWirecutter(W))
 		if(carved)	return
-		to_chat(user, "<span class='notice'>You begin to carve out [title].</span>")
-		if(do_after(user, 30, src))
-			to_chat(user, "<span class='notice'>You carve out the pages from [title]! You didn't want to read it anyway.</span>")
+		to_chat(user, SPAN_NOTICE("You begin to carve out [title]."))
+		if(do_after(user, 3 SECONDS, src, DO_PUBLIC_UNIQUE))
+			to_chat(user, SPAN_NOTICE("You carve out the pages from [title]! You didn't want to read it anyway."))
 			carved = 1
 			return
 	else
@@ -223,8 +223,8 @@
 
 /obj/item/book/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(user.zone_sel.selecting == BP_EYES)
-		user.visible_message("<span class='notice'>You open up the book and show it to [M]. </span>", \
-			"<span class='notice'> [user] opens up a book and shows it to [M]. </span>")
+		user.visible_message(SPAN_NOTICE("You open up the book and show it to [M]. "), \
+			SPAN_NOTICE(" [user] opens up a book and shows it to [M]. "))
 		show_browser(M, "<i>Author: [author].</i><br><br>" + "[dat]", "window=book;size=1000x550")
 		user.setClickCooldown(DEFAULT_QUICK_COOLDOWN) //to prevent spam
 
@@ -240,15 +240,15 @@
 	..()
 	if(url)		// URL provided for this manual
 		// If we haven't wikiurl or it included in url - just use url
-		if(config.wikiurl && !findtextEx(url, config.wikiurl, 1, length(config.wikiurl)+1))
+		if(config.wiki_url && !findtextEx(url, config.wiki_url, 1, length(config.wiki_url)+1))
 			// If we have wikiurl, but it hasn't "index.php" then add it and making full link in url
-			if(config.wikiurl && !findtextEx(config.wikiurl, "/index.php", -10))
-				if(findtextEx(config.wikiurl, "/", -1))
-					url = config.wikiurl + "index.php?title=" + url
+			if(config.wiki_url && !findtextEx(config.wiki_url, "/index.php", -10))
+				if(findtextEx(config.wiki_url, "/", -1))
+					url = config.wiki_url + "index.php?title=" + url
 				else
-					url = config.wikiurl + "/index.php?title=" + url
+					url = config.wiki_url + "/index.php?title=" + url
 			else	//Or just making full link in url
-				url = config.wikiurl + "?title=" + url
+				url = config.wiki_url + "?title=" + url
 		dat = {"
 			<html>
 				<head>

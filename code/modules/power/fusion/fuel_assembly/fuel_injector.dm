@@ -7,7 +7,7 @@
 	req_access = list(access_engine)
 	idle_power_usage = 10
 	active_power_usage = 500
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	uncreated_component_parts = null
 	stat_immune = 0
 	base_type = /obj/machinery/fusion_fuel_injector
@@ -36,7 +36,7 @@
 
 /obj/machinery/fusion_fuel_injector/Process()
 	if(injecting)
-		if(stat & (BROKEN|NOPOWER))
+		if(inoperable())
 			StopInjecting()
 		else
 			Inject()
@@ -44,33 +44,32 @@
 /obj/machinery/fusion_fuel_injector/attackby(obj/item/W, mob/user)
 
 	if(isMultitool(W))
-		var/datum/extension/local_network_member/lanm = get_extension(src, /datum/extension/local_network_member)
-		lanm.set_tag(null, initial_id_tag)
+		var/datum/extension/local_network_member/fusion = get_extension(src, /datum/extension/local_network_member)
+		fusion.get_new_tag(user)
 		return
 
 	if(istype(W, /obj/item/fuel_assembly))
-
 		if(injecting)
-			to_chat(user, "<span class='warning'>Shut \the [src] off before playing with the fuel rod!</span>")
+			to_chat(user, SPAN_WARNING("Shut \the [src] off before playing with the fuel rod!"))
 			return
 		if(!user.unEquip(W, src))
 			return
 		if(cur_assembly)
-			visible_message("<span class='notice'>\The [user] swaps \the [src]'s [cur_assembly] for \a [W].</span>")
+			visible_message(SPAN_NOTICE("\The [user] swaps \the [src]'s [cur_assembly] for \a [W]."))
 		else
-			visible_message("<span class='notice'>\The [user] inserts \a [W] into \the [src].</span>")
+			visible_message(SPAN_NOTICE("\The [user] inserts \a [W] into \the [src]."))
 		if(cur_assembly)
 			cur_assembly.dropInto(loc)
 			user.put_in_hands(cur_assembly)
 		cur_assembly = W
 		return
 
-	if(isWrench(W))
+	if(isWelder(W))
 		if(injecting)
-			to_chat(user, "<span class='warning'>Shut \the [src] off first!</span>")
+			to_chat(user, SPAN_WARNING("Shut \the [src] off first!"))
 			return
 		anchored = !anchored
-		playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
+		playsound(src.loc, 'sound/items/Welder.ogg', 75, 1)
 		if(anchored)
 			user.visible_message("\The [user] secures \the [src] to the floor.")
 		else
@@ -81,17 +80,17 @@
 
 /obj/machinery/fusion_fuel_injector/physical_attack_hand(mob/user)
 	if(injecting)
-		to_chat(user, "<span class='warning'>Shut \the [src] off before playing with the fuel rod!</span>")
+		to_chat(user, SPAN_WARNING("Shut \the [src] off before playing with the fuel rod!"))
 		return TRUE
 
 	if(cur_assembly)
 		cur_assembly.dropInto(loc)
 		user.put_in_hands(cur_assembly)
-		visible_message("<span class='notice'>\The [user] removes \the [cur_assembly] from \the [src].</span>")
+		visible_message(SPAN_NOTICE("\The [user] removes \the [cur_assembly] from \the [src]."))
 		cur_assembly = null
 		return TRUE
 	else
-		to_chat(user, "<span class='warning'>There is no fuel rod in \the [src].</span>")
+		to_chat(user, SPAN_WARNING("There is no fuel rod in \the [src]."))
 		return TRUE
 
 /obj/machinery/fusion_fuel_injector/proc/BeginInjecting()

@@ -15,7 +15,7 @@
 	bandages_icon = 'icons/mob/bandage.dmi'
 
 	spawn_flags = SPECIES_CAN_JOIN
-	appearance_flags = HAS_HAIR_COLOR | HAS_SKIN_TONE_NORMAL | HAS_LIPS | HAS_UNDERWEAR | HAS_EYE_COLOR
+	appearance_flags = SPECIES_APPEARANCE_HAS_HAIR_COLOR | SPECIES_APPEARANCE_HAS_SKIN_TONE_NORMAL | SPECIES_APPEARANCE_HAS_LIPS | SPECIES_APPEARANCE_HAS_UNDERWEAR | SPECIES_APPEARANCE_HAS_EYE_COLOR
 
 	sexybits_location = BP_GROIN
 
@@ -36,6 +36,7 @@
 			CULTURE_HUMAN_SPACER,
 			CULTURE_HUMAN_SPAFRO,
 			CULTURE_HUMAN_CONFED,
+			CULTURE_HUMAN_GAIAN,
 			CULTURE_HUMAN_OTHER
 		)
 	)
@@ -46,19 +47,19 @@
 	exertion_reagent_scale = 5
 	exertion_reagent_path = /datum/reagent/lactate
 	exertion_emotes_biological = list(
-		/decl/emote/exertion/biological,
-		/decl/emote/exertion/biological/breath,
-		/decl/emote/exertion/biological/pant
+		/singleton/emote/exertion/biological,
+		/singleton/emote/exertion/biological/breath,
+		/singleton/emote/exertion/biological/pant
 	)
 	exertion_emotes_synthetic = list(
-		/decl/emote/exertion/synthetic,
-		/decl/emote/exertion/synthetic/creak
+		/singleton/emote/exertion/synthetic,
+		/singleton/emote/exertion/synthetic/creak
 	)
 
-/datum/species/human/get_bodytype(var/mob/living/carbon/human/H)
+/datum/species/human/get_bodytype(mob/living/carbon/human/H)
 	return SPECIES_HUMAN
 
-/datum/species/human/handle_npc(var/mob/living/carbon/human/H)
+/datum/species/human/handle_npc(mob/living/carbon/human/H)
 	if(H.stat != CONSCIOUS)
 		return
 
@@ -102,7 +103,10 @@
 				var/obj/item/organ/external/parent = H.get_organ(I.parent_organ)
 				H.custom_emote("clutches [T.his] [parent.name]!")
 
-/datum/species/human/get_ssd(var/mob/living/carbon/human/H)
+/datum/species/human/get_ssd(mob/living/carbon/human/H)
+	if (H.ai_holder)
+		return
+
 	if(H.stat == CONSCIOUS)
 		return "staring blankly, not reacting to your presence"
 	return ..()
@@ -147,7 +151,7 @@
 	darksight_tint = DARKTINT_MODERATE
 
 	spawn_flags = SPECIES_CAN_JOIN | SPECIES_IS_WHITELISTED
-	appearance_flags = HAS_HAIR_COLOR | HAS_LIPS | HAS_UNDERWEAR | HAS_SKIN_COLOR
+	appearance_flags = SPECIES_APPEARANCE_HAS_HAIR_COLOR | SPECIES_APPEARANCE_HAS_STATIC_HAIR | SPECIES_APPEARANCE_HAS_LIPS | SPECIES_APPEARANCE_HAS_UNDERWEAR | SPECIES_APPEARANCE_HAS_SKIN_COLOR
 
 	flesh_color = "#8cd7a3"
 	blood_color = "#1d2cbf"
@@ -165,13 +169,18 @@
 	cold_discomfort_level = 292 //Higher than perhaps it should be, to avoid big speed reduction at normal room temp
 	heat_discomfort_level = 368
 
-	reagent_tag = IS_SKRELL
-
 	descriptors = list(
 		/datum/mob_descriptor/height = 1,
 		/datum/mob_descriptor/build = 0,
 		/datum/mob_descriptor/headtail_length = 0
 	)
+
+	speech_sounds = list(
+		'sound/skrell/warble1.ogg',
+		'sound/skrell/warble2.ogg',
+		'sound/skrell/warble3.ogg'
+	)
+	speech_chance = 10
 
 	available_cultural_info = list(
 		TAG_CULTURE = list(
@@ -186,7 +195,8 @@
 			HOME_SYSTEM_TALAMIRA,
 			HOME_SYSTEM_ROASORA,
 			HOME_SYSTEM_MITORQI,
-			HOME_SYSTEM_SKRELLSPACE
+			HOME_SYSTEM_SKRELLSPACE,
+			HOME_SYSTEM_OTHERSKRELL
 		),
 		TAG_FACTION = list(
 			FACTION_EXPEDITIONARY,
@@ -200,13 +210,16 @@
 			FACTION_SKRELL_YIITALANA,
 			FACTION_SKRELL_KRRIGLI,
 			FACTION_SKRELL_QONPRRI,
+			FACTION_SKRELL_OTHERSKRELLFAC,
+			FACTION_SKRELL_OTHERSDTF,
 			FACTION_OTHER
 		),
 		TAG_RELIGION = list(
 			RELIGION_OTHER,
 			RELIGION_ATHEISM,
 			RELIGION_DEISM,
-			RELIGION_AGNOSTICISM
+			RELIGION_AGNOSTICISM,
+			RELIGION_SKRELL
 		)
 	)
 
@@ -226,32 +239,30 @@
 	exertion_reagent_scale = 5
 	exertion_reagent_path = /datum/reagent/lactate
 	exertion_emotes_biological = list(
-		/decl/emote/exertion/biological,
-		/decl/emote/exertion/biological/breath,
-		/decl/emote/exertion/biological/pant
+		/singleton/emote/exertion/biological,
+		/singleton/emote/exertion/biological/breath,
+		/singleton/emote/exertion/biological/pant
 	)
 	exertion_emotes_synthetic = list(
-		/decl/emote/exertion/synthetic,
-		/decl/emote/exertion/synthetic/creak
+		/singleton/emote/exertion/synthetic,
+		/singleton/emote/exertion/synthetic/creak
 	)
 
+	ingest_amount = 15
 
-/datum/species/skrell/proc/handle_protein(mob/living/carbon/human/M, datum/reagent/protein)
-	var/effective_dose = M.chem_doses[protein.type] * protein.protein_amount
-	if (effective_dose > 20)
-		M.adjustToxLoss(Clamp((effective_dose - 20) / 4, 2, 10))
-		M.vomit(8, 3, rand(1 SECONDS, 5 SECONDS))
-	else if (effective_dose > 10)
-		M.vomit(4, 2, rand(3 SECONDS, 10 SECONDS))
-	else
-		M.vomit(1, 1, rand(5 SECONDS, 15 SECONDS))	
+	traits = list(
+		/singleton/trait/boon/clear_mind = TRAIT_LEVEL_MINOR,
+		/singleton/trait/malus/animal_protein = TRAIT_LEVEL_MAJOR,
+		/singleton/trait/malus/ethanol = TRAIT_LEVEL_MODERATE,
+		/singleton/trait/general/permeable_skin = TRAIT_LEVEL_MINOR
+	)
 
-/datum/species/skrell/get_sex(var/mob/living/carbon/human/H)
+/datum/species/skrell/get_sex(mob/living/carbon/human/H)
 	return istype(H) && (H.descriptors["headtail length"] == 1 ? MALE : FEMALE)
 
 /datum/species/skrell/check_background()
 	return TRUE
-	
+
 /datum/species/skrell/can_float(mob/living/carbon/human/H)
 	if(!H.is_physically_disabled())
 		if(H.encumbrance() < 2)
@@ -265,7 +276,7 @@
 	deform = 'icons/mob/human_races/species/diona/deformed_body.dmi'
 	preview_icon = 'icons/mob/human_races/species/diona/preview.dmi'
 	hidden_from_codex = FALSE
-	move_intents = list(/decl/move_intent/walk, /decl/move_intent/creep)
+	move_intents = list(/singleton/move_intent/walk, /singleton/move_intent/creep)
 	unarmed_types = list(/datum/unarmed_attack/stomp, /datum/unarmed_attack/kick, /datum/unarmed_attack/diona)
 	//primitive_form = "Nymph"
 	slowdown = 5
@@ -344,7 +355,6 @@
 	blood_color = "#004400"
 	flesh_color = "#907e4a"
 
-	reagent_tag = IS_DIONA
 	genders = list(PLURAL)
 
 	available_cultural_info = list(
@@ -354,13 +364,19 @@
 		TAG_RELIGION =  list(RELIGION_OTHER)
 	)
 
+	traits = list(
+		/singleton/trait/boon/clear_mind = TRAIT_LEVEL_MAJOR,
+		/singleton/trait/general/metabolically_inert = TRAIT_LEVEL_MODERATE,
+		/singleton/trait/general/nonpermeable_skin = TRAIT_LEVEL_EXISTS
+	)
+
 /proc/spawn_diona_nymph(turf/target)
 	if (!istype(target))
 		return
 	var/mob/living/carbon/alien/diona/nymph = new (target)
 	var/datum/ghosttrap/trap = get_ghost_trap("living plant")
 	trap.request_player(nymph, "A diona nymph has split from its gestalt.", 30 SECONDS)
-	addtimer(CALLBACK(nymph, /mob/living/carbon/alien/diona/proc/check_spawn_death), 30 SECONDS)
+	addtimer(new Callback(nymph, /mob/living/carbon/alien/diona/proc/check_spawn_death), 30 SECONDS)
 
 /mob/living/carbon/alien/diona/proc/check_spawn_death()
 	if (QDELETED(src))
@@ -369,8 +385,8 @@
 		death()
 
 #define DIONA_LIMB_DEATH_COUNT 9
-/datum/species/diona/handle_death_check(var/mob/living/carbon/human/H)
-	var/lost_limb_count = has_limbs.len - H.organs.len
+/datum/species/diona/handle_death_check(mob/living/carbon/human/H)
+	var/lost_limb_count = length(has_limbs) - length(H.organs)
 	if(lost_limb_count >= DIONA_LIMB_DEATH_COUNT)
 		return TRUE
 	for(var/thing in H.bad_external_organs)
@@ -380,13 +396,13 @@
 	return (lost_limb_count >= DIONA_LIMB_DEATH_COUNT)
 #undef DIONA_LIMB_DEATH_COUNT
 
-/datum/species/diona/can_understand(var/mob/other)
+/datum/species/diona/can_understand(mob/other)
 	var/mob/living/carbon/alien/diona/D = other
 	if(istype(D))
 		return 1
 	return 0
 
-/datum/species/diona/equip_survival_gear(var/mob/living/carbon/human/H)
+/datum/species/diona/equip_survival_gear(mob/living/carbon/human/H)
 	if(istype(H.get_equipped_item(slot_back), /obj/item/storage/backpack))
 		H.equip_to_slot_or_del(new /obj/item/device/flashlight/flare(H.back), slot_in_backpack)
 	else
@@ -397,15 +413,15 @@
 		if(101 to 200)	. = 12 // age bracket before this is 46 to 100 . = 8 making this +4
 		if(201 to 300)	. = 16 // + 8
 		else			. = ..()
-		
+
 // Dionaea spawned by hand or by joining will not have any
 // nymphs passed to them. This should take care of that.
-/datum/species/diona/handle_post_spawn(var/mob/living/carbon/human/H)
+/datum/species/diona/handle_post_spawn(mob/living/carbon/human/H)
 	H.gender = NEUTER
 	. = ..()
-	addtimer(CALLBACK(src, .proc/fill_with_nymphs, H), 0)
+	addtimer(new Callback(src, .proc/fill_with_nymphs, H), 0)
 
-/datum/species/diona/proc/fill_with_nymphs(var/mob/living/carbon/human/H)
+/datum/species/diona/proc/fill_with_nymphs(mob/living/carbon/human/H)
 
 	if(!H || H.species.name != name) return
 
@@ -418,14 +434,14 @@
 		new /mob/living/carbon/alien/diona/sterile(H)
 		nymph_count++
 
-/datum/species/diona/handle_death(var/mob/living/carbon/human/H)
+/datum/species/diona/handle_death(mob/living/carbon/human/H)
 
 	if(H.isSynthetic())
 		var/mob/living/carbon/alien/diona/S = new(get_turf(H))
 
 		if(H.mind)
 			H.mind.transfer_to(S)
-		H.visible_message("<span class='danger'>\The [H] collapses into parts, revealing a solitary diona nymph at the core.</span>")
+		H.visible_message(SPAN_DANGER("\The [H] collapses into parts, revealing a solitary diona nymph at the core."))
 		return
 	else
 		split_into_nymphs(H, TRUE)
@@ -433,7 +449,7 @@
 /datum/species/diona/get_blood_name()
 	return "sap"
 
-/datum/species/diona/handle_environment_special(var/mob/living/carbon/human/H)
+/datum/species/diona/handle_environment_special(mob/living/carbon/human/H)
 	if(H.InStasis() || H.stat == DEAD)
 		return
 

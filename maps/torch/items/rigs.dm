@@ -20,21 +20,13 @@
 		bio = ARMOR_BIO_SHIELDED,
 		rad = ARMOR_RAD_SMALL
 		)
-	online_slowdown = 0.50
-	offline_slowdown = 2
+	online_slowdown = 0.75
 	offline_vision_restriction = TINT_HEAVY
 
 	chest_type = /obj/item/clothing/suit/space/rig/command
 	helm_type = /obj/item/clothing/head/helmet/space/rig/command
 	boot_type = /obj/item/clothing/shoes/magboots/rig/command
 	glove_type = /obj/item/clothing/gloves/rig/command
-
-	allowed = list(/obj/item/gun,
-				   /obj/item/ammo_magazine,
-				   /obj/item/device/flashlight,
-				   /obj/item/tank,
-				   /obj/item/device/suit_cooling_unit,
-				   /obj/item/storage/secure/briefcase)
 
 	req_access = list(access_bridge)
 
@@ -49,6 +41,14 @@
 	icon = 'maps/torch/icons/obj/obj_suit_solgov.dmi'
 	item_icons = list(slot_wear_suit_str = 'maps/torch/icons/mob/onmob_suit_solgov.dmi')
 	species_restricted = list(SPECIES_HUMAN,SPECIES_IPC)
+	allowed = list(
+		/obj/item/gun,
+		/obj/item/ammo_magazine,
+		/obj/item/device/flashlight,
+		/obj/item/tank,
+		/obj/item/device/suit_cooling_unit,
+		/obj/item/storage/secure/briefcase
+	)
 
 /obj/item/clothing/shoes/magboots/rig/command
 	icon = 'maps/torch/icons/obj/obj_feet_solgov.dmi'
@@ -106,7 +106,8 @@
 		/obj/item/rig_module/maneuvering_jets,
 		/obj/item/rig_module/device/flash/advanced,
 		/obj/item/rig_module/grenade_launcher/smoke,
-		/obj/item/rig_module/cooling_unit)
+		/obj/item/rig_module/cooling_unit
+	)
 
 /*
  * COMMANDING OFFICER
@@ -147,7 +148,8 @@
 		/obj/item/rig_module/maneuvering_jets,
 		/obj/item/rig_module/device/flash/advanced,
 		/obj/item/rig_module/grenade_launcher/smoke,
-		/obj/item/rig_module/cooling_unit)
+		/obj/item/rig_module/cooling_unit
+	)
 
 /*
  * CHIEF MEDICAL OFFICER
@@ -157,19 +159,18 @@
 	suit_type = "medical command hardsuit"
 	desc = "A specialized hardsuit rig control module issued to ranking medical officers of the Expeditionary Corps and their peers."
 	icon_state = "command_med_rig"
+	armor = list(
+		melee = ARMOR_MELEE_KNIVES,
+		bullet = ARMOR_BALLISTIC_SMALL,
+		laser = ARMOR_LASER_MINOR,
+		energy = ARMOR_ENERGY_SMALL,
+		bomb = ARMOR_BOMB_PADDED,
+		bio = ARMOR_BIO_SHIELDED,
+		rad = ARMOR_RAD_SHIELDED
+		)
 
 	chest_type = /obj/item/clothing/suit/space/rig/command/medical
 	helm_type = /obj/item/clothing/head/helmet/space/rig/command/medical
-
-	allowed = list(/obj/item/gun,
-				   /obj/item/ammo_magazine,
-				   /obj/item/device/flashlight,
-				   /obj/item/tank,
-			 	   /obj/item/device/suit_cooling_unit,
-				   /obj/item/storage/firstaid,
-				   /obj/item/device/scanner/health,
-				   /obj/item/stack/medical,
-				   /obj/item/roller)
 
 	req_access = list(access_cmo)
 
@@ -177,6 +178,17 @@
 	icon_state = "command_med_rig"
 /obj/item/clothing/suit/space/rig/command/medical
 	icon_state = "command_med_rig"
+	allowed = list(
+		/obj/item/gun,
+		/obj/item/ammo_magazine,
+		/obj/item/device/flashlight,
+		/obj/item/tank,
+		/obj/item/device/suit_cooling_unit,
+		/obj/item/storage/firstaid,
+		/obj/item/device/scanner/health,
+		/obj/item/stack/medical,
+		/obj/item/roller_bed
+	)
 /obj/item/clothing/shoes/magboots/rig/command/medical
 /obj/item/clothing/gloves/rig/command/medical
 
@@ -189,7 +201,8 @@
 		/obj/item/rig_module/device/defib,
 		/obj/item/rig_module/chem_dispenser/injector,
 		/obj/item/rig_module/vision/medhud,
-		/obj/item/rig_module/cooling_unit)
+		/obj/item/rig_module/cooling_unit
+	)
 
 /*
 * CHIEF OF SECURITY
@@ -201,7 +214,7 @@
 	icon_state = "command_sec_rig"
 	armor = list(
 		melee = ARMOR_MELEE_RESISTANT,
-		bullet = ARMOR_BALLISTIC_PISTOL,
+		bullet = ARMOR_BALLISTIC_RESISTANT,
 		laser = ARMOR_LASER_SMALL,
 		energy = ARMOR_ENERGY_SMALL,
 		bomb = ARMOR_BOMB_PADDED,
@@ -212,22 +225,24 @@
 	chest_type = /obj/item/clothing/suit/space/rig/command/security
 	helm_type = /obj/item/clothing/head/helmet/space/rig/command/security
 
-	allowed = list(/obj/item/gun,
-	 			  /obj/item/ammo_magazine,
-	  			  /obj/item/handcuffs,
-	   			  /obj/item/device/flashlight,
-	    		  /obj/item/tank,
-				  /obj/item/device/suit_cooling_unit,
-				  /obj/item/melee/baton)
-
 	req_access = list(access_hos)
 
 /obj/item/clothing/head/helmet/space/rig/command/security
 	icon_state = "command_sec_rig"
 /obj/item/clothing/suit/space/rig/command/security
 	icon_state = "command_sec_rig"
+	allowed = list(
+		/obj/item/gun,
+		/obj/item/ammo_magazine,
+		/obj/item/handcuffs,
+		/obj/item/device/flashlight,
+		/obj/item/tank,
+		/obj/item/device/suit_cooling_unit,
+		/obj/item/melee/baton
+	)
 /obj/item/clothing/shoes/magboots/rig/command/security
 /obj/item/clothing/gloves/rig/command/security
+
 
 
 /obj/item/rig/command/security/equipped
@@ -235,7 +250,8 @@
 		/obj/item/rig_module/maneuvering_jets,
 		/obj/item/rig_module/device/flash,
 		/obj/item/rig_module/vision/sechud,
-		/obj/item/rig_module/cooling_unit)
+		/obj/item/rig_module/cooling_unit
+	)
 
 /*
 * CHIEF SCIENCE OFFICER
@@ -254,27 +270,10 @@
 		bio = ARMOR_BIO_SHIELDED,
 		rad = ARMOR_RAD_SHIELDED
 		)
+	anomaly_protection = 1
 
 	chest_type = /obj/item/clothing/suit/space/rig/command/science
 	helm_type = /obj/item/clothing/head/helmet/space/rig/command/science
-
-	allowed = list(/obj/item/gun,
-				   /obj/item/ammo_magazine,
-				   /obj/item/device/flashlight,
-				   /obj/item/tank,
-				   /obj/item/device/suit_cooling_unit,
-			       /obj/item/stack/flag,
-				   /obj/item/storage/excavation,
-				   /obj/item/device/scanner/health,
-				   /obj/item/device/measuring_tape,
-				   /obj/item/device/ano_scanner,
-				   /obj/item/device/depth_scanner,
-				   /obj/item/device/core_sampler,
-				   /obj/item/device/gps,
-				   /obj/item/pinpointer/radio,
-				   /obj/item/pickaxe/xeno,
-				   /obj/item/storage/bag/fossils,
-				   /obj/item/rig_module/grenade_launcher/light)
 
 	req_access = list(access_rd)
 
@@ -283,6 +282,25 @@
 
 /obj/item/clothing/suit/space/rig/command/science
 	icon_state = "command_sci_rig"
+	allowed = list(
+		/obj/item/gun,
+		/obj/item/ammo_magazine,
+		/obj/item/device/flashlight,
+		/obj/item/tank,
+		/obj/item/device/suit_cooling_unit,
+		/obj/item/stack/flag,
+		/obj/item/storage/excavation,
+		/obj/item/device/scanner/health,
+		/obj/item/device/measuring_tape,
+		/obj/item/device/ano_scanner,
+		/obj/item/device/depth_scanner,
+		/obj/item/device/core_sampler,
+		/obj/item/device/gps,
+		/obj/item/pinpointer/radio,
+		/obj/item/pickaxe/xeno,
+		/obj/item/storage/bag/fossils,
+		/obj/item/rig_module/grenade_launcher/light
+	)
 
 /obj/item/clothing/shoes/magboots/rig/command/science
 /obj/item/clothing/gloves/rig/command/science
@@ -294,7 +312,8 @@
 		/obj/item/rig_module/device/flash,
 		/obj/item/rig_module/device/anomaly_scanner,
 		/obj/item/rig_module/grenade_launcher/light,
-		/obj/item/rig_module/cooling_unit)
+		/obj/item/rig_module/cooling_unit
+	)
 
 /*
 * EXPLORATION
@@ -320,6 +339,22 @@
 	boot_type = /obj/item/clothing/shoes/magboots/rig/command
 	glove_type = /obj/item/clothing/gloves/rig/command/exploration
 
+
+	offline_vision_restriction = TINT_BLIND
+
+	req_access = list(access_pathfinder)
+
+/obj/item/clothing/gloves/rig/command/exploration
+	siemens_coefficient = 0
+
+/obj/item/clothing/head/helmet/space/rig/command/exploration
+	camera = /obj/machinery/camera/network/exploration
+	icon_state = "command_exp_rig"
+	light_overlay = "helmet_light_wide"
+	brightness_on = 0.8
+
+/obj/item/clothing/suit/space/rig/command/exploration
+	icon_state = "command_exp_rig"
 	allowed = list(
 		/obj/item/gun,
 		/obj/item/ammo_magazine,
@@ -335,28 +370,14 @@
 		/obj/item/storage/plants
 	)
 
-	online_slowdown = 0.50
-	offline_slowdown = 4
-	offline_vision_restriction = TINT_BLIND
-
-	req_access = list(access_pathfinder)
-
-/obj/item/clothing/gloves/rig/command/exploration
-	siemens_coefficient = 0
-
-/obj/item/clothing/head/helmet/space/rig/command/exploration
-	camera = /obj/machinery/camera/network/exploration
-	icon_state = "command_exp_rig"
-	light_overlay = "helmet_light_wide"
-	brightness_on = 0.8
-
 /obj/item/rig/exploration/equipped
 	initial_modules = list(
 		/obj/item/rig_module/maneuvering_jets,
 		/obj/item/rig_module/device/flash,
 		/obj/item/rig_module/device/anomaly_scanner,
 		/obj/item/rig_module/grenade_launcher/light,
-		/obj/item/rig_module/cooling_unit)
+		/obj/item/rig_module/cooling_unit
+	)
 
 /*
  Overrides for standard mapset rig items

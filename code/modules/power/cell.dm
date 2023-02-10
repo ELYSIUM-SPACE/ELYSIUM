@@ -25,7 +25,7 @@
 		charge = maxcharge
 	update_icon()
 
-/obj/item/cell/drain_power(var/drain_check, var/surge, var/power = 0)
+/obj/item/cell/drain_power(drain_check, surge, power = 0)
 
 	if(drain_check)
 		return 1
@@ -61,11 +61,11 @@
 	return (charge == maxcharge)
 
 // checks if the power cell is able to provide the specified amount of charge
-/obj/item/cell/proc/check_charge(var/amount)
+/obj/item/cell/proc/check_charge(amount)
 	return (charge >= amount)
 
 // use power from a cell, returns the amount actually used
-/obj/item/cell/proc/use(var/amount)
+/obj/item/cell/proc/use(amount)
 	var/used = min(charge, amount)
 	charge -= used
 	update_icon()
@@ -73,13 +73,13 @@
 
 // Checks if the specified amount can be provided. If it can, it removes the amount
 // from the cell and returns 1. Otherwise does nothing and returns 0.
-/obj/item/cell/proc/checked_use(var/amount)
+/obj/item/cell/proc/checked_use(amount)
 	if(!check_charge(amount))
 		return 0
 	use(amount)
 	return 1
 
-/obj/item/cell/proc/give(var/amount)
+/obj/item/cell/proc/give(amount)
 	var/amount_used = min(maxcharge-charge,amount)
 	charge += amount_used
 	update_icon()
@@ -237,25 +237,3 @@
 	icon_state = "yellow slime extract" //"potato_battery"
 	maxcharge = 200
 	matter = null
-
-// Self-charging power cell.
-/obj/item/cell/mantid
-	name = "mantid microfusion plant"
-	desc = "An impossibly tiny fusion reactor of mantid design."
-	icon = 'icons/obj/ascent.dmi'
-	icon_state = "plant"
-	maxcharge = 1500
-	w_class = ITEM_SIZE_NORMAL
-	var/recharge_amount = 12
-
-/obj/item/cell/mantid/Initialize()
-	START_PROCESSING(SSobj, src)
-	. = ..()
-
-/obj/item/cell/mantid/Destroy()
-	STOP_PROCESSING(SSobj, src)
-	. = ..()
-
-/obj/item/cell/mantid/Process()
-	if(charge < maxcharge)
-		give(recharge_amount)

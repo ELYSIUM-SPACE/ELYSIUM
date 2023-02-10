@@ -1,5 +1,5 @@
 /mob/living/carbon/human
-	move_intents = list(/decl/move_intent/walk)
+	move_intents = list(/singleton/move_intent/walk)
 
 /mob/living/carbon/human/movement_delay()
 	var/tally = ..()
@@ -78,7 +78,7 @@
 	. = ..()
 	. += species.strength
 
-/mob/living/carbon/human/Allow_Spacemove(var/check_drift = 0)
+/mob/living/carbon/human/Allow_Spacemove(check_drift = 0)
 	. = ..()
 	if(.)
 		return
@@ -104,7 +104,7 @@
 
 	if(thrust && thrust.on)
 		if(prob(skill_fail_chance(SKILL_EVA, 10, SKILL_ADEPT)))
-			to_chat(src, "<span class='warning'>You fumble with [thrust] controls!</span>")
+			to_chat(src, SPAN_WARNING("You fumble with [thrust] controls!"))
 			inertia_dir = pick(GLOB.cardinal)
 			return 0
 
@@ -112,7 +112,7 @@
 			inertia_dir = 0
 			return 1
 
-/mob/living/carbon/human/slip_chance(var/prob_slip = 5)
+/mob/living/carbon/human/slip_chance(prob_slip = 5)
 	if(!..())
 		return 0
 
@@ -141,7 +141,7 @@
 	if(!can_feel_pain())
 		return
 	var/crutches = 0
-	for(var/obj/item/cane/C in list(l_hand, r_hand))
+	for (var/obj/item/cane/C as anything in GetAllHeld(/obj/item/cane))
 		if(istype(C))
 			crutches++
 	for(var/organ_name in list(BP_L_LEG, BP_R_LEG, BP_L_FOOT, BP_R_FOOT))

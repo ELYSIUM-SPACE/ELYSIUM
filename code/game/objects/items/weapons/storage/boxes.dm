@@ -51,7 +51,7 @@
 	if(..()) return
 
 	//try to fold it.
-	if ( contents.len )
+	if ( length(contents) )
 		return
 
 	if ( !ispath(src.foldable) )
@@ -66,7 +66,7 @@
 	if ( !found )	// User is too far away
 		return
 	// Now make the cardboard
-	to_chat(user, "<span class='notice'>You fold [src] flat.</span>")
+	to_chat(user, SPAN_NOTICE("You fold [src] flat."))
 	if(ispath(foldable, /obj/item/stack))
 		var/stack_amt = max(2**(w_class - 3), 1)
 		new src.foldable(get_turf(src), stack_amt)
@@ -78,35 +78,35 @@
 	..()
 	foldable = null //special form fitted boxes should not be foldable.
 
-/obj/item/storage/box/survival/
+/obj/item/storage/box/survival
 	name = "crew survival kit"
 	desc = "A box decorated in warning colors that contains a limited supply of survival tools. The panel and white stripe indicate this one contains oxygen."
 	icon_state = "survival"
 	startswith = list(/obj/item/clothing/mask/breath/scba = 1,
-					/obj/item/tank/emergency/oxygen = 1,
+					/obj/item/tank/oxygen_emergency = 1,
 					/obj/item/reagent_containers/hypospray/autoinjector/pouch_auto/inaprovaline = 1,
 					/obj/item/stack/medical/bruise_pack = 1,
 					/obj/item/device/flashlight/flare/glowstick = 1,
 					/obj/item/reagent_containers/food/snacks/proteinbar = 1,
 					/obj/item/device/oxycandle = 1)
 
-/obj/item/storage/box/vox/
+/obj/item/storage/box/vox
 	name = "vox survival kit"
 	desc = "A box decorated in warning colors that contains a limited supply of survival tools. The panel and black stripe indicate this one contains nitrogen."
 	icon_state = "survivalvox"
 	startswith = list(/obj/item/clothing/mask/breath = 1,
-					/obj/item/tank/emergency/nitrogen = 1,
+					/obj/item/tank/nitrogen_emergency = 1,
 					/obj/item/reagent_containers/hypospray/autoinjector/pouch_auto/inaprovaline = 1,
 					/obj/item/stack/medical/bruise_pack = 1,
 					/obj/item/device/flashlight/flare/glowstick = 1,
 					/obj/item/reagent_containers/food/snacks/proteinbar = 1)
 
-/obj/item/storage/box/engineer/
+/obj/item/storage/box/engineer
 	name = "engineer survival kit"
 	desc = "A box decorated in warning colors that contains a limited supply of survival tools. The panel and orange stripe indicate this one as the engineering variant."
 	icon_state = "survivaleng"
 	startswith = list(/obj/item/clothing/mask/breath/scba = 1,
-					/obj/item/tank/emergency/oxygen/engi = 1,
+					/obj/item/tank/oxygen_emergency_extended = 1,
 					/obj/item/reagent_containers/hypospray/autoinjector/pouch_auto/inaprovaline = 1,
 					/obj/item/reagent_containers/hypospray/autoinjector/antirad = 1,
 					/obj/item/stack/medical/bruise_pack = 1,
@@ -286,18 +286,6 @@
 	desc = "It has pictures of paper cups on the front."
 	startswith = list(/obj/item/reagent_containers/food/drinks/sillycup = 7)
 
-/obj/item/storage/box/donkpockets
-	name = "box of donk-pockets"
-	desc = "<B>Instructions:</B> <I>Heat in microwave. Product will cool if not eaten within seven minutes.</I>"
-	icon_state = "donk_kit"
-	startswith = list(/obj/item/reagent_containers/food/snacks/donkpocket = 6)
-
-/obj/item/storage/box/sinpockets
-	name = "box of sin-pockets"
-	desc = "<B>Instructions:</B> <I>Crush bottom of package to initiate chemical heating. Wait for 20 seconds before consumption. Product will cool if not eaten within seven minutes.</I>"
-	icon_state = "donk_kit"
-	startswith = list(/obj/item/reagent_containers/food/snacks/donkpocket/sinpocket = 6)
-
 //cubed animals
 
 /obj/item/storage/box/monkeycubes
@@ -348,7 +336,7 @@
 
 /obj/item/storage/box/mousetraps
 	name = "box of Pest-B-Gon mousetraps"
-	desc = "<B><FONT color='red'>WARNING:</FONT></B> <I>Keep out of reach of children</I>."
+	desc = "<B><span style='color: red'>WARNING:</span></B> <I>Keep out of reach of children</I>."
 	icon_state = "mousetraps"
 	startswith = list(/obj/item/device/assembly/mousetrap = 6)
 
@@ -382,11 +370,11 @@
 /obj/item/storage/box/matches/attackby(obj/item/flame/match/W as obj, mob/user as mob)
 	if(istype(W) && !W.lit && !W.burnt)
 		W.lit = 1
-		W.damtype = "burn"
+		W.damtype = INJURY_TYPE_BURN
 		W.icon_state = "match_lit"
 		START_PROCESSING(SSobj, W)
 		playsound(src.loc, 'sound/items/match.ogg', 60, 1, -4)
-		user.visible_message("<span class='notice'>[user] strikes the match on the matchbox.</span>")
+		user.visible_message(SPAN_NOTICE("[user] strikes the match on the matchbox."))
 	W.update_icon()
 	return
 
@@ -452,22 +440,6 @@
 	icon_state = "box"
 	startswith = list(/obj/item/device/flashlight/flare/glowstick = 6)
 
-/obj/item/storage/box/freezer
-	name = "portable freezer"
-	desc = "This nifty shock-resistant device will keep your 'groceries' nice and non-spoiled."
-	icon = 'icons/obj/storage.dmi'
-	icon_state = "portafreezer"
-	item_state = "medicalpack"
-	foldable = null
-	max_w_class = ITEM_SIZE_NORMAL
-	w_class = ITEM_SIZE_LARGE
-	can_hold = list(/obj/item/organ, /obj/item/reagent_containers/food, /obj/item/reagent_containers/glass)
-	max_storage_space = DEFAULT_LARGEBOX_STORAGE
-	use_to_pickup = 1 // for picking up broken bulbs, not that most people will try
-	temperature = -16 CELSIUS
-
-/obj/item/storage/box/freezer/ProcessAtomTemperature()
-	return PROCESS_KILL
 
 /obj/item/storage/box/checkers
 	name = "checkers box"
@@ -619,17 +591,42 @@
 /obj/item/storage/box/snack/chips
 	startswith = list(/obj/item/reagent_containers/food/snacks/chips = 7)
 
-//canned goods in cardboard
-/obj/item/storage/box/canned
+
+/obj/item/storage/box/canned_spinach
 	name = "box of canned food"
 	desc = "A box full of canned foods."
-	startswith = list(/obj/item/reagent_containers/food/snacks/canned/spinach = 1)
+	startswith = list(
+		/obj/item/reagent_containers/food/snacks/canned/spinach = 6
+	)
 
-/obj/item/storage/box/canned/beef
-	startswith = list(/obj/item/reagent_containers/food/snacks/canned/beef = 6)
 
-/obj/item/storage/box/canned/beans
-	startswith = list(/obj/item/reagent_containers/food/snacks/canned/beans = 6)
+/obj/item/storage/box/canned_beef
+	name = "box of canned food"
+	desc = "A box full of canned foods."
+	startswith = list(
+		/obj/item/reagent_containers/food/snacks/canned/beef = 6
+	)
 
-/obj/item/storage/box/canned/tomato
-	startswith = list(/obj/item/reagent_containers/food/snacks/canned/tomato = 6)
+
+/obj/item/storage/box/canned_beans
+	name = "box of canned food"
+	desc = "A box full of canned foods."
+	startswith = list(
+		/obj/item/reagent_containers/food/snacks/canned/beans = 6
+	)
+
+
+/obj/item/storage/box/canned_tomato
+	name = "box of canned food"
+	desc = "A box full of canned foods."
+	startswith = list(
+		/obj/item/reagent_containers/food/snacks/canned/tomato = 6
+	)
+
+
+/obj/item/storage/box/canned_berries
+	name = "box of canned food"
+	desc = "A box full of canned foods."
+	startswith = list(
+		/obj/item/reagent_containers/food/snacks/canned/berries = 6
+	)

@@ -28,7 +28,11 @@
 	var/static/list/chemical_types = list(
 		"bicaridine" = /datum/reagent/bicaridine,
 		"hyperzine" =  /datum/reagent/hyperzine,
-		"tramadol" =   /datum/reagent/tramadol
+		"tramadol" =   /datum/reagent/tramadol,
+		"dermaline" =  /datum/reagent/dermaline,
+		"peridaxon" =  /datum/reagent/peridaxon,
+		"inaprovaline" =  /datum/reagent/inaprovaline,
+		"dylovene" =  /datum/reagent/dylovene
 	)
 
 	var/generation = 1
@@ -68,7 +72,7 @@
 		client.screen -= hud_elements
 		client.screen -= hud_intent_selector
 
-/mob/living/simple_animal/borer/Initialize(var/mapload, var/gen=1)
+/mob/living/simple_animal/borer/Initialize(mapload, gen=1)
 
 	hud_intent_selector =  new
 	hud_inject_chemicals = new
@@ -97,9 +101,7 @@
 	aura_image.color = "#aaffaa"
 	aura_image.blend_mode = BLEND_SUBTRACT
 	aura_image.alpha = 125
-	var/matrix/M = matrix()
-	M.Scale(0.33)
-	aura_image.transform = M
+	aura_image.SetTransform(scale = 0.33)
 
 /mob/living/simple_animal/borer/death(gibbed, deathmessage, show_dead_message)
 	if(aura_image)
@@ -122,7 +124,7 @@
 	. = ..()
 
 /mob/living/simple_animal/borer/proc/set_borer_name()
-	truename = "[borer_names[min(generation, borer_names.len)]] [random_id("borer[generation]", 1000, 9999)]"
+	truename = "[borer_names[min(generation, length(borer_names))]] [random_id("borer[generation]", 1000, 9999)]"
 
 /mob/living/simple_animal/borer/Life()
 
@@ -248,11 +250,11 @@
 	qdel(host_brain)
 
 #define COLOR_BORER_RED "#ff5555"
-/mob/living/simple_animal/borer/proc/set_ability_cooldown(var/amt)
+/mob/living/simple_animal/borer/proc/set_ability_cooldown(amt)
 	last_special = world.time + amt
 	for(var/obj/thing in hud_elements)
 		thing.color = COLOR_BORER_RED
-	addtimer(CALLBACK(src, /mob/living/simple_animal/borer/proc/reset_ui_callback), amt)
+	addtimer(new Callback(src, /mob/living/simple_animal/borer/proc/reset_ui_callback), amt)
 #undef COLOR_BORER_RED
 
 /mob/living/simple_animal/borer/proc/leave_host()

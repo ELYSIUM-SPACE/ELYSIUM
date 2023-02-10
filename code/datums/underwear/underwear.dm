@@ -10,7 +10,7 @@
 /datum/category_group/underwear
 	var/sort_order		// Lower sort order is applied as icons first
 
-datum/category_group/underwear/dd_SortValue()
+/datum/category_group/underwear/dd_SortValue()
 	return sort_order
 
 /datum/category_group/underwear/top
@@ -57,10 +57,10 @@ datum/category_group/underwear/dd_SortValue()
 		return "~"+name
 	return name
 
-/datum/category_item/underwear/proc/is_default(var/gender)
+/datum/category_item/underwear/proc/is_default(gender)
 	return is_default
 
-/datum/category_item/underwear/proc/create_underwear(var/mob/user, var/list/metadata)
+/datum/category_item/underwear/proc/create_underwear(mob/user, list/metadata)
 	if(!underwear_type)
 		return
 

@@ -3,8 +3,8 @@
 	icon_state = "bullet"
 	fire_sound = 'sound/weapons/gunshot/gunshot_strong.ogg'
 	damage = 50
-	damage_type = BRUTE
-	damage_flags = DAM_BULLET | DAM_SHARP
+	damage_type = DAMAGE_BRUTE
+	damage_flags = DAMAGE_FLAG_BULLET | DAMAGE_FLAG_SHARP
 	embed = TRUE
 	penetration_modifier = 1.0
 	var/mob_passthrough_check = 0
@@ -16,12 +16,12 @@
 							'sound/weapons/guns/ricochet3.ogg', 'sound/weapons/guns/ricochet4.ogg')
 	impact_sounds = list(BULLET_IMPACT_MEAT = SOUNDS_BULLET_MEAT, BULLET_IMPACT_METAL = SOUNDS_BULLET_METAL)
 
-/obj/item/projectile/bullet/on_hit(var/atom/target, var/blocked = 0)
+/obj/item/projectile/bullet/on_hit(atom/target, blocked = 0)
 	if (..(target, blocked))
 		var/mob/living/L = target
 		shake_camera(L, 3, 2)
 
-/obj/item/projectile/bullet/attack_mob(var/mob/living/target_mob, var/distance, var/miss_modifier)
+/obj/item/projectile/bullet/attack_mob(mob/living/target_mob, distance, miss_modifier)
 	if(penetrating > 0 && damage > 20 && prob(damage))
 		mob_passthrough_check = 1
 	else
@@ -37,7 +37,7 @@
 		return 0
 	return ..()
 
-/obj/item/projectile/bullet/check_penetrate(var/atom/A)
+/obj/item/projectile/bullet/check_penetrate(atom/A)
 	if(QDELETED(A) || !A.density) return 1 //if whatever it was got destroyed when we hit it, then I guess we can just keep going
 
 	if(ismob(A))
@@ -53,7 +53,7 @@
 	if(prob(chance))
 		if(A.opacity)
 			//display a message so that people on the other side aren't so confused
-			A.visible_message("<span class='warning'>\The [src] pierces through \the [A]!</span>")
+			A.visible_message(SPAN_WARNING("\The [src] pierces through \the [A]!"))
 		return 1
 
 	return 0
@@ -73,12 +73,12 @@
 	. = ..()
 	bumped = 0 //can hit all mobs in a tile. pellets is decremented inside attack_mob so this should be fine.
 
-/obj/item/projectile/bullet/pellet/proc/get_pellets(var/distance)
+/obj/item/projectile/bullet/pellet/proc/get_pellets(distance)
 	/// pellets lost due to distance
 	var/pellet_loss = round(max(distance - 1, 0)/range_step)
 	return max(pellets - pellet_loss, 1)
 
-/obj/item/projectile/bullet/pellet/attack_mob(var/mob/living/target_mob, var/distance, var/miss_modifier)
+/obj/item/projectile/bullet/pellet/attack_mob(mob/living/target_mob, distance, miss_modifier)
 	if (pellets < 0) return 1
 
 	var/total_pellets = get_pellets(distance)
@@ -235,13 +235,12 @@
 /obj/item/projectile/bullet/gyro
 	name = "minirocket"
 	fire_sound = 'sound/effects/Explosion1.ogg'
-	var/gyro_devastation = -1
-	var/gyro_heavy_impact = 0
-	var/gyro_light_impact = 2
+	var/explosion_radius = 2
+	var/explosion_max_power = EX_ACT_LIGHT
 
-/obj/item/projectile/bullet/gyro/on_hit(var/atom/target, var/blocked = 0)
+/obj/item/projectile/bullet/gyro/on_hit(atom/target, blocked = 0)
 	if(isturf(target))
-		explosion(target, gyro_devastation, gyro_heavy_impact, gyro_light_impact)
+		explosion(target, explosion_radius, explosion_max_power)
 	..()
 
 /obj/item/projectile/bullet/blank
@@ -265,7 +264,7 @@
 	name = "cap"
 	invisibility = 101
 	fire_sound = null
-	damage_type = PAIN
+	damage_type = DAMAGE_PAIN
 	damage_flags = 0
 	damage = 0
 	nodamage = TRUE

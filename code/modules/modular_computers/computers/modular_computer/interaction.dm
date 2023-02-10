@@ -21,11 +21,11 @@
 	set src in view(1)
 
 	if(usr.incapacitated() || !istype(usr, /mob/living))
-		to_chat(usr, "<span class='warning'>You can't do that.</span>")
+		to_chat(usr, SPAN_WARNING("You can't do that."))
 		return
 
 	if(!Adjacent(usr))
-		to_chat(usr, "<span class='warning'>You can't reach it.</span>")
+		to_chat(usr, SPAN_WARNING("You can't reach it."))
 		return
 
 	if(enabled)
@@ -48,7 +48,7 @@
 		return
 
 	if(!Adjacent(usr))
-		to_chat(usr, "<span class='warning'>You can't reach it.</span>")
+		to_chat(usr, SPAN_WARNING("You can't reach it."))
 		return
 
 	proc_eject_usb(usr)
@@ -64,15 +64,15 @@
 /obj/item/modular_computer/proc/remove_pen(mob/user)
 
 	if(user.incapacitated() || !istype(user, /mob/living))
-		to_chat(user, "<span class='warning'>You can't do that.</span>")
+		to_chat(user, SPAN_WARNING("You can't do that."))
 		return
 
 	if(!Adjacent(user))
-		to_chat(user, "<span class='warning'>You can't reach it.</span>")
+		to_chat(user, SPAN_WARNING("You can't reach it."))
 		return
 
 	if(istype(stored_pen))
-		to_chat(user, "<span class='notice'>You remove [stored_pen] from [src].</span>")
+		to_chat(user, SPAN_NOTICE("You remove [stored_pen] from [src]."))
 		user.put_in_hands(stored_pen) // Silicons will drop it anyway.
 		stored_pen = null
 		update_verbs()
@@ -87,7 +87,7 @@
 
 	uninstall_component(user, portable_drive)
 
-/obj/item/modular_computer/attack_ghost(var/mob/observer/ghost/user)
+/obj/item/modular_computer/attack_ghost(mob/observer/ghost/user)
 	if(enabled)
 		ui_interact(user)
 	else if(check_rights(R_ADMIN, 0, user))
@@ -95,16 +95,16 @@
 		if(response == "Yes")
 			turn_on(user)
 
-/obj/item/modular_computer/attack_ai(var/mob/user)
+/obj/item/modular_computer/attack_ai(mob/user)
 	return attack_self(user)
 
-/obj/item/modular_computer/attack_hand(var/mob/user)
+/obj/item/modular_computer/attack_hand(mob/user)
 	if(anchored)
 		return attack_self(user)
 	return ..()
 
 // On-click handling. Turns on the computer if it's off and opens the GUI.
-/obj/item/modular_computer/attack_self(var/mob/user)
+/obj/item/modular_computer/attack_self(mob/user)
 	if(MUTATION_CLUMSY in user.mutations)
 		to_chat(user, SPAN_WARNING("You can't quite work out how to use [src]."))
 		return
@@ -113,7 +113,7 @@
 	else if(!enabled && screen_on)
 		turn_on(user)
 
-/obj/item/modular_computer/attackby(var/obj/item/W as obj, var/mob/user as mob)
+/obj/item/modular_computer/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/card/id)) // ID Card, try to insert it.
 		var/obj/item/card/id/I = W
 		if(!card_slot)
@@ -123,16 +123,16 @@
 		if(card_slot.insert_id(I, user))
 			update_verbs()
 		return
-		
+
 	if(istype(W, /obj/item/pen) && stores_pen)
 		if(istype(stored_pen))
-			to_chat(user, "<span class='notice'>There is already a pen in [src].</span>")
+			to_chat(user, SPAN_NOTICE("There is already a pen in [src]."))
 			return
 		if(!user.unEquip(W, src))
 			return
 		stored_pen = W
 		update_verbs()
-		to_chat(user, "<span class='notice'>You insert [W] into [src].</span>")
+		to_chat(user, SPAN_NOTICE("You insert [W] into [src]."))
 		return
 	if(istype(W, /obj/item/paper))
 		var/obj/item/paper/paper = W
@@ -158,7 +158,7 @@
 			to_chat(user, "This component is too large for \the [src].")
 	if(isWrench(W))
 		var/list/components = get_all_components()
-		if(components.len)
+		if(length(components))
 			to_chat(user, "Remove all components from \the [src] before disassembling it.")
 			return
 		new /obj/item/stack/material/steel( get_turf(src.loc), steel_sheet_cost )
@@ -171,19 +171,20 @@
 			to_chat(user, "\The [W] is off.")
 			return
 
-		if(!damage)
+		if(!get_damage_value())
 			to_chat(user, "\The [src] does not require repairs.")
 			return
 
 		to_chat(user, "You begin repairing damage to \the [src]...")
-		if(WT.remove_fuel(round(damage/75)) && do_after(usr, damage/10))
-			damage = 0
+		var/damage = get_damage_value()
+		if(WT.remove_fuel(round(damage / 75)) && do_after(user, damage / 10, src, DO_REPAIR_CONSTRUCT))
+			revive_health()
 			to_chat(user, "You repair \the [src].")
 		return
 
 	if(isScrewdriver(W))
 		var/list/all_components = get_all_components()
-		if(!all_components.len)
+		if(!length(all_components))
 			to_chat(user, "This device doesn't have any components installed.")
 			return
 		var/list/component_names = list()
@@ -218,7 +219,7 @@
 	if(card_slot && card_slot.stored_card)
 		to_chat(user, "[card_slot.stored_card] is inserted into it.")
 
-/obj/item/modular_computer/MouseDrop(var/atom/over_object)
+/obj/item/modular_computer/MouseDrop(atom/over_object)
 	var/mob/M = usr
 	if(!istype(over_object, /obj/screen) && CanMouseDrop(M))
 		return attack_self(M)
@@ -236,7 +237,7 @@
 		os.open_terminal(user)
 		return 1
 
-/obj/item/modular_computer/CouldUseTopic(var/mob/user)
+/obj/item/modular_computer/CouldUseTopic(mob/user)
 	..()
 	if(LAZYLEN(interact_sounds) && CanPhysicallyInteract(user))
 		playsound(src, pick(interact_sounds), interact_sound_volume)

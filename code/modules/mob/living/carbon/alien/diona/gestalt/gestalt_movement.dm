@@ -1,8 +1,8 @@
-/obj/structure/diona_gestalt/relaymove(var/mob/user, var/direction)
+/obj/structure/diona_gestalt/relaymove(mob/user, direction)
 	if(nymphs[user]) step(src, direction) // ANARCHY! DEMOCRACY! ANARCHY! DEMOCRACY!
 
 // Naaaa na na na na naa naa https://www.youtube.com/watch?v=iMH49ieL4es
-/obj/structure/diona_gestalt/Bump(var/atom/movable/AM, var/yes) // what a useful argname, thanks oldcoders
+/obj/structure/diona_gestalt/Bump(atom/movable/AM, yes) // what a useful argname, thanks oldcoders
 	. = ..()
 	if(AM && can_roll_up_atom(AM) && AM.Adjacent(src))
 		var/turf/stepping = AM.loc
@@ -19,10 +19,10 @@
 			gestalt.nymphs.Cut()
 		var/gestalt_loc = gestalt.loc
 		qdel(gestalt)
-		visible_message("<span class='notice'>The nascent gestalts combine together!</span>") // Combine!
+		visible_message(SPAN_NOTICE("The nascent gestalts combine together!")) // Combine!
 		step_towards(src, gestalt_loc)
 
-/obj/structure/diona_gestalt/Bumped(var/atom/A)
+/obj/structure/diona_gestalt/Bumped(atom/A)
 	. = ..()
 	if(istype(A, /mob/living/carbon/alien/diona) && A.Adjacent(src)) // Combine...
 		roll_up_atom(A)
@@ -34,7 +34,7 @@
 			if(can_roll_up_atom(AM))
 				roll_up_atom(AM)
 
-/obj/structure/diona_gestalt/proc/can_roll_up_atom(var/atom/movable/thing)
+/obj/structure/diona_gestalt/proc/can_roll_up_atom(atom/movable/thing)
 	if(!istype(thing) || thing.anchored || !thing.simulated)
 		return FALSE
 	if(valid_things_to_roll_up[thing.type])
@@ -47,17 +47,17 @@
 		return rolling_up.mob_size <= get_max_mob_rollup_size()
 
 /obj/structure/diona_gestalt/proc/get_max_item_rollup_size()
-	if(nymphs.len > 9)
+	if(length(nymphs) > 9)
 		return ITEM_SIZE_GARGANTUAN
-	if(nymphs.len > 6)
+	if(length(nymphs) > 6)
 		return ITEM_SIZE_HUGE
-	if(nymphs.len > 4)
+	if(length(nymphs) > 4)
 		return ITEM_SIZE_LARGE
-	if(nymphs.len > 2)
+	if(length(nymphs) > 2)
 		return ITEM_SIZE_NORMAL
 	return ITEM_SIZE_SMALL
 
 /obj/structure/diona_gestalt/proc/get_max_mob_rollup_size()
-	if(nymphs.len >= 20)
+	if(length(nymphs) >= 20)
 		return MOB_MEDIUM
 	return MOB_SMALL

@@ -1,25 +1,25 @@
 /*
  * Torch Command
  */
-/decl/closet_appearance/secure_closet/torch/command
+/singleton/closet_appearance/secure_closet/torch/command
 	extra_decals = list(
 		"stripe_vertical_mid_full" = COLOR_CLOSET_GOLD
 	)
 
-/decl/closet_appearance/secure_closet/torch/command/bo
+/singleton/closet_appearance/secure_closet/torch/command/bo
 	extra_decals = list(
 		"stripe_vertical_left_full" = COLOR_CLOSET_GOLD,
 		"stripe_vertical_right_full" = COLOR_CLOSET_GOLD
 	)
 
-/decl/closet_appearance/secure_closet/torch/command/xo
+/singleton/closet_appearance/secure_closet/torch/command/xo
 	extra_decals = list(
 		"stripe_vertical_left_full" = COLOR_CLOSET_GOLD,
 		"stripe_vertical_right_full" = COLOR_CLOSET_GOLD,
 		"command" = COLOR_CLOSET_GOLD
 	)
 
-/decl/closet_appearance/secure_closet/torch/command/co
+/singleton/closet_appearance/secure_closet/torch/command/co
 	extra_decals = list(
 		"stripe_vertical_left_full" = COLOR_CLOSET_GOLD,
 		"stripe_vertical_mid_full" = COLOR_OFF_WHITE,
@@ -30,7 +30,7 @@
 /obj/structure/closet/secure_closet/CO
 	name = "commanding officer's locker"
 	req_access = list(access_captain)
-	closet_appearance = /decl/closet_appearance/secure_closet/torch/command/co
+	closet_appearance = /singleton/closet_appearance/secure_closet/torch/command/co
 
 /obj/structure/closet/secure_closet/CO/WillContain()
 	return list(
@@ -55,7 +55,7 @@
 /obj/structure/closet/secure_closet/XO
 	name = "executive officer's locker"
 	req_access = list(access_hop)
-	closet_appearance = /decl/closet_appearance/secure_closet/torch/command/xo
+	closet_appearance = /singleton/closet_appearance/secure_closet/torch/command/xo
 
 /obj/structure/closet/secure_closet/XO/WillContain()
 	return list(
@@ -84,7 +84,7 @@
 /obj/structure/closet/secure_closet/sea
 	name = "senior enlisted advisor's locker"
 	req_access = list(access_senadv)
-	closet_appearance = /decl/closet_appearance/secure_closet/torch/command
+	closet_appearance = /singleton/closet_appearance/secure_closet/torch/command
 
 /obj/structure/closet/secure_closet/sea/WillContain()
 	return list(
@@ -103,14 +103,13 @@
 		/obj/item/device/holowarrant,
 		/obj/item/folder/blue,
 		/obj/item/material/knife/folding/swiss/officer,
-		new /datum/atom_creator/weighted(list(/obj/item/storage/backpack, /obj/item/storage/backpack/satchel/grey)),
-		new /datum/atom_creator/weighted(list(/obj/item/storage/backpack/dufflebag, /obj/item/storage/backpack/messenger))
+		/obj/item/storage/backpack/dufflebag
 	)
 
 /obj/structure/closet/secure_closet/bridgeofficer
 	name = "bridge officer's locker"
 	req_access = list(access_bridge, access_keycard_auth)
-	closet_appearance = /decl/closet_appearance/secure_closet/torch/command/bo
+	closet_appearance = /singleton/closet_appearance/secure_closet/torch/command/bo
 
 /obj/structure/closet/secure_closet/bridgeofficer/WillContain()
 	return list(
@@ -127,7 +126,6 @@
 		/obj/item/device/radio/headset/bridgeofficer/alt,
 		/obj/item/storage/belt/general,
 		/obj/item/material/knife/folding/swiss/officer,
-		new /datum/atom_creator/weighted(list(/obj/item/storage/backpack, /obj/item/storage/backpack/satchel/grey)),
-		new /datum/atom_creator/weighted(list(/obj/item/storage/backpack/dufflebag, /obj/item/storage/backpack/messenger)),
-		new /datum/atom_creator/weighted(list(/obj/item/device/flashlight, /obj/item/device/flashlight/flare, /obj/item/device/flashlight/flare/glowstick/random))
+		/obj/item/storage/backpack/dufflebag,
+		/obj/item/device/flashlight
 	)

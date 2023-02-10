@@ -1,7 +1,8 @@
 /obj/item/stack/medical
+	abstract_type = /obj/item/stack/medical
 	name = "medical pack"
 	singular_name = "medical pack"
-	icon = 'icons/obj/medical_kits.dmi'
+	icon = 'icons/obj/medical.dmi'
 	amount = 5
 	max_amount = 5
 	w_class = ITEM_SIZE_SMALL
@@ -12,17 +13,18 @@
 	var/heal_burn = 0
 	var/animal_heal = 3
 	var/apply_sounds
+	var/can_treat_robots = FALSE
 
-/obj/item/stack/medical/proc/check_limb_state(var/mob/user, var/obj/item/organ/external/limb)
+/obj/item/stack/medical/proc/check_limb_state(mob/user, obj/item/organ/external/limb)
 	. = FALSE
 	if(BP_IS_CRYSTAL(limb))
 		to_chat(user, SPAN_WARNING("You cannot use \the [src] to treat a crystalline limb."))
-	else if(BP_IS_ROBOTIC(limb))
+	else if(BP_IS_ROBOTIC(limb) && !can_treat_robots)
 		to_chat(user, SPAN_WARNING("You cannot use \the [src] to treat a robotic limb."))
 	else
 		. = TRUE
 
-/obj/item/stack/medical/attack(var/mob/living/carbon/M, var/mob/user)
+/obj/item/stack/medical/attack(mob/living/carbon/M, mob/user)
 
 	if (!istype(M))
 		to_chat(user, SPAN_WARNING("\The [src] cannot be applied to [M]!"))
@@ -69,13 +71,13 @@
 	name = "roll of gauze"
 	singular_name = "gauze length"
 	desc = "Some sterile gauze to wrap around bloody stumps."
-	icon_state = "brutepack"
+	icon_state = "gauze"
 	origin_tech = list(TECH_BIO = 1)
 	animal_heal = 5
 	apply_sounds = list('sound/effects/rip1.ogg','sound/effects/rip2.ogg')
 	amount = 10
 
-/obj/item/stack/medical/bruise_pack/attack(var/mob/living/carbon/M, var/mob/user)
+/obj/item/stack/medical/bruise_pack/attack(mob/living/carbon/M, mob/user)
 	if(..())
 		return 1
 
@@ -95,14 +97,14 @@
 					continue
 				if(used == amount)
 					break
-				if(!do_after(user, W.damage / 5, M))
+				if(!do_after(user, W.damage / 5, M, DO_MEDICAL))
 					break
 
 				if (W.current_stage <= W.max_bleeding_stage)
 					user.visible_message(SPAN_NOTICE("\The [user] bandages \a [W.desc] on [M]'s [affecting.name]."), \
 					                              SPAN_NOTICE("You bandage \a [W.desc] on [M]'s [affecting.name]."))
 					//H.add_side_effect("Itch")
-				else if (W.damage_type == BRUISE)
+				else if (W.damage_type == INJURY_TYPE_BRUISE)
 					user.visible_message(SPAN_NOTICE("\The [user] places a bruise patch over \a [W.desc] on [M]'s [affecting.name]."), \
 					                              SPAN_NOTICE("You place a bruise patch over \a [W.desc] on [M]'s [affecting.name].") )
 				else
@@ -133,7 +135,7 @@
 	animal_heal = 4
 	apply_sounds = list('sound/effects/ointment.ogg')
 
-/obj/item/stack/medical/ointment/attack(var/mob/living/carbon/M, var/mob/user)
+/obj/item/stack/medical/ointment/attack(mob/living/carbon/M, mob/user)
 	if(..())
 		return 1
 
@@ -148,7 +150,7 @@
 			user.visible_message(SPAN_NOTICE("\The [user] starts salving wounds on [M]'s [affecting.name]."), \
 					             SPAN_NOTICE("You start salving the wounds on [M]'s [affecting.name].") )
 			playsound(src, pick(apply_sounds), 25)
-			if(!do_after(user, 1 SECOND, M))
+			if(!do_after(user, 1 SECOND, M, DO_MEDICAL))
 				return 1
 			user.visible_message(SPAN_NOTICE("[user] salved wounds on [M]'s [affecting.name]."), \
 			                         SPAN_NOTICE("You salved wounds on [M]'s [affecting.name].") )
@@ -167,7 +169,7 @@
 	apply_sounds = list('sound/effects/rip1.ogg','sound/effects/rip2.ogg','sound/effects/tape.ogg')
 	amount = 10
 
-/obj/item/stack/medical/advanced/bruise_pack/attack(var/mob/living/carbon/M, var/mob/user)
+/obj/item/stack/medical/advanced/bruise_pack/attack(mob/living/carbon/M, mob/user)
 	if(..())
 		return 1
 
@@ -186,12 +188,12 @@
 					continue
 				if(used == amount)
 					break
-				if(!do_after(user, W.damage / 5, M))
+				if(!do_after(user, W.damage / 5, M, DO_MEDICAL))
 					break
 				if (W.current_stage <= W.max_bleeding_stage)
 					user.visible_message(SPAN_NOTICE("\The [user] cleans \a [W.desc] on [M]'s [affecting.name] and seals the edges with bioglue."), \
 					                     SPAN_NOTICE("You clean and seal \a [W.desc] on [M]'s [affecting.name].") )
-				else if (W.damage_type == BRUISE)
+				else if (W.damage_type == INJURY_TYPE_BRUISE)
 					user.visible_message(SPAN_NOTICE("\The [user] places a medical patch over \a [W.desc] on [M]'s [affecting.name]."), \
 					                              SPAN_NOTICE("You place a medical patch over \a [W.desc] on [M]'s [affecting.name].") )
 				else
@@ -224,7 +226,7 @@
 	apply_sounds = list('sound/effects/ointment.ogg')
 
 
-/obj/item/stack/medical/advanced/ointment/attack(var/mob/living/carbon/M, var/mob/user)
+/obj/item/stack/medical/advanced/ointment/attack(mob/living/carbon/M, mob/user)
 	if(..())
 		return 1
 
@@ -239,7 +241,7 @@
 			user.visible_message(SPAN_NOTICE("\The [user] starts salving wounds on [M]'s [affecting.name]."), \
 					             SPAN_NOTICE("You start salving the wounds on [M]'s [affecting.name].") )
 			playsound(src, pick(apply_sounds), 25)
-			if(!do_after(user, 1 SECOND, M))
+			if(!do_after(user, 1 SECOND, M, DO_MEDICAL))
 				return 1
 			user.visible_message( 	SPAN_NOTICE("[user] covers wounds on [M]'s [affecting.name] with regenerative membrane."), \
 									SPAN_NOTICE("You cover wounds on [M]'s [affecting.name] with regenerative membrane.") )
@@ -258,15 +260,10 @@
 	amount = 5
 	max_amount = 5
 	animal_heal = 0
+	can_treat_robots = TRUE
 	var/list/splintable_organs = list(BP_L_ARM, BP_R_ARM, BP_L_LEG, BP_R_LEG, BP_L_HAND, BP_R_HAND, BP_L_FOOT, BP_R_FOOT)	//List of organs you can splint, natch.
 
-/obj/item/stack/medical/splint/check_limb_state(var/mob/user, var/obj/item/organ/external/limb)
-	if(BP_IS_ROBOTIC(limb))
-		to_chat(user, SPAN_WARNING("You cannot use \the [src] to treat a robotic limb."))
-		return FALSE
-	return TRUE
-
-/obj/item/stack/medical/splint/attack(var/mob/living/carbon/M, var/mob/user)
+/obj/item/stack/medical/splint/attack(mob/living/carbon/M, mob/user)
 	if(..())
 		return 1
 
@@ -288,7 +285,7 @@
 				to_chat(user, SPAN_DANGER("You can't apply a splint to the arm you're using!"))
 				return
 			user.visible_message(SPAN_DANGER("[user] starts to apply \the [src] to their [limb]."), SPAN_DANGER("You start to apply \the [src] to your [limb]."), SPAN_DANGER("You hear something being wrapped."))
-		if(user.do_skilled(5 SECONDS, SKILL_MEDICAL, M))
+		if(user.do_skilled(5 SECONDS, SKILL_MEDICAL, M, do_flags = DO_MEDICAL))
 			if((M == user && prob(75)) || prob(user.skill_fail_chance(SKILL_MEDICAL,50, SKILL_ADEPT)))
 				user.visible_message(SPAN_DANGER("\The [user] fumbles [src]."), SPAN_DANGER("You fumble [src]."), SPAN_DANGER("You hear something being wrapped."))
 				return
@@ -314,12 +311,14 @@
 	amount = 1
 	splintable_organs = list(BP_L_ARM, BP_R_ARM, BP_L_LEG, BP_R_LEG)
 
-// For Kharmaani/adherent.
+// For adherent.
 /obj/item/stack/medical/resin
 	name = "resin patches"
 	singular_name = "resin patch"
 	desc = "A resin-based patching kit used to repair crystalline bodyparts. The label is written in a colourful, angular, unreadable script."
 	icon_state = "resin-pack"
+	can_treat_robots = TRUE
+	apply_sounds = list('sound/effects/ointment.ogg')
 	heal_brute = 10
 	heal_burn =  10
 
@@ -335,13 +334,13 @@
 	heal_brute = 5
 	heal_burn =  5
 
-/obj/item/stack/medical/resin/check_limb_state(var/mob/user, var/obj/item/organ/external/limb)
+/obj/item/stack/medical/resin/check_limb_state(mob/user, obj/item/organ/external/limb)
 	if(!BP_IS_ROBOTIC(limb) && !BP_IS_CRYSTAL(limb))
 		to_chat(user, SPAN_WARNING("You cannot use \the [src] to treat an organic limb."))
 		return FALSE
 	return TRUE
 
-/obj/item/stack/medical/resin/attack(var/mob/living/carbon/M, var/mob/user)
+/obj/item/stack/medical/resin/attack(mob/living/carbon/M, mob/user)
 	. = ..()
 	if(!. && ishuman(M))
 		var/mob/living/carbon/human/H = M
@@ -353,7 +352,7 @@
 			SPAN_NOTICE("\The [user] starts patching fractures on \the [M]'s [affecting.name]."), \
 			SPAN_NOTICE("You start patching fractures on \the [M]'s [affecting.name].") )
 		playsound(src, pick(apply_sounds), 25)
-		if(!do_after(user, 1 SECOND, M))
+		if(!do_after(user, 1 SECOND, M, DO_MEDICAL))
 			to_chat(user, SPAN_NOTICE("You must stand still to patch fractures."))
 			return 1
 		user.visible_message( \

@@ -47,7 +47,7 @@
 	else
 		set_dir(SOUTH)
 
-/obj/machinery/door/airlock/multi_tile/update_connections(var/propagate = 0)
+/obj/machinery/door/airlock/multi_tile/update_connections(propagate = 0)
 	var/dirs = 0
 
 	for(var/direction in GLOB.cardinal)
@@ -132,8 +132,8 @@
 
 /obj/machinery/door/airlock/multi_tile/glass
 	name = "Glass Airlock"
-	hitsound = 'sound/effects/Glasshit.ogg'
-	glass = 1
+	damage_hitsound = 'sound/effects/Glasshit.ogg'
+	glass = TRUE
 
 /obj/machinery/door/airlock/multi_tile/glass/command
 	door_color = COLOR_COMMAND_BLUE

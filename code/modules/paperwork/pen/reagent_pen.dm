@@ -6,7 +6,7 @@
 	..()
 	create_reagents(30)
 
-/obj/item/pen/reagent/attack(mob/living/M, mob/user, var/target_zone)
+/obj/item/pen/reagent/attack(mob/living/M, mob/user, target_zone)
 
 	if(!istype(M))
 		return
@@ -20,7 +20,7 @@
 				to_chat(user, SPAN_WARNING("You begin hunting for an injection port on \the [M]'s suit!"))
 			else
 				to_chat(user, SPAN_NOTICE("You begin hunting for an injection port on your suit."))
-			if(!user.do_skilled(INJECTION_PORT_DELAY, SKILL_MEDICAL, M))
+			if(!user.do_skilled(INJECTION_PORT_DELAY, SKILL_MEDICAL, M, do_flags = DO_MEDICAL))
 				return
 		if(reagents.total_volume)
 			if(M.reagents)

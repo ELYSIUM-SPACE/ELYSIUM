@@ -29,7 +29,7 @@
 	var/list/wound_descriptors = list()
 	for(var/datum/wound/W in wounds)
 		var/this_wound_desc = W.desc
-		if(W.damage_type == BURN && W.salved)
+		if (W.damage_type == INJURY_TYPE_BURN && W.salved)
 			this_wound_desc = "salved [this_wound_desc]"
 
 		if(W.bleeding())
@@ -62,7 +62,7 @@
 				bits += organ.get_visible_state()
 			for(var/obj/item/implant in implants)
 				bits += implant.name
-			if(bits.len)
+			if(length(bits))
 				wound_descriptors["[english_list(bits)] visible in the wounds"] = 1
 
 	for(var/wound in wound_descriptors)
@@ -78,21 +78,21 @@
 
 	return english_list(flavor_text)
 
-/obj/item/organ/external/get_scan_results()
+/obj/item/organ/external/get_scan_results(tag = FALSE)
 	. = ..()
 	if(status & ORGAN_ARTERY_CUT)
-		. += "[capitalize(artery_name)] ruptured"
+		. += tag ? "<span style='font-weight: bold; color: [COLOR_MEDICAL_INTERNAL_DANGER]'>[capitalize(artery_name)] ruptured</span>" : "[capitalize(artery_name)] ruptured"
 	if(status & ORGAN_TENDON_CUT)
-		. += "Severed [tendon_name]"
-	if(dislocated == 2) // non-magical constants when
-		. += "Dislocated"
+		. += tag ? "<span style='font-weight: bold; color: [COLOR_MEDICAL_INTERNAL]'>Severed [tendon_name]</span>" : "Severed [tendon_name]"
+	if(dislocated >= 1) // non-magical constants when
+		. += tag ? "<span style='font-weight: bold; color: [COLOR_MEDICAL_DISLOCATED]'>Dislocated</span>" : "Dislocated"
 	if(splinted)
-		. += "Splinted"
+		. += tag ? "<span style='font-weight: bold; color: [COLOR_MEDICAL_SPLINTED]'>Splinted</span>" : "Splinted"
 	if(status & ORGAN_BLEEDING)
-		. += "Bleeding"
+		. += tag ? "<span style='font-weight: bold; color: [COLOR_MEDICAL_BRUTE]'>Bleeding</span>" : "Bleeding"
 	if(status & ORGAN_BROKEN)
-		. += capitalize(broken_description)
-	if (implants && implants.len)
+		. += tag ? "<span style='font-weight: bold; color: [COLOR_MEDICAL_BROKEN]'>[capitalize(broken_description)]</span>" : capitalize(broken_description)
+	if (implants && length(implants))
 		var/unknown_body = 0
 		for(var/I in implants)
 			var/obj/item/implant/imp = I
@@ -100,66 +100,66 @@
 				if(imp.hidden)
 					continue
 				if (imp.known)
-					. += "[capitalize(imp.name)] implanted"
+					. += tag ? "<span style='font-weight: bold; color: [COLOR_MEDICAL_IMPLANT]'>[capitalize(imp.name)] implanted</span>" : "[capitalize(imp.name)] implanted"
 					continue
 			unknown_body++
 		if(unknown_body)
-			. += "Unknown body present"
-	for(var/obj/item/organ/internal/augment/aug in internal_organs)
-		if(istype(aug) && aug.known)
-			. += "[capitalize(aug.name)] implanted"
+			. += tag ? "<span style='font-weight: bold; color: [COLOR_MEDICAL_UNKNOWN_IMPLANT]'>Unknown body present</span>" : "Unknown body present"
+	for (var/obj/item/organ/internal/augment/aug in internal_organs)
+		if (aug.augment_flags & AUGMENT_SCANNABLE)
+			. += tag ? "<span style='font-weight: bold; color: [COLOR_MEDICAL_IMPLANT]'>[capitalize(aug.name)] implanted</span>" : "[capitalize(aug.name)] implanted"
 
 /obj/item/organ/external/proc/inspect(mob/user)
 	if(is_stump())
-		to_chat(user, "<span class='notice'>[owner] is missing that bodypart.</span>")
+		to_chat(user, SPAN_NOTICE("[owner] is missing that bodypart."))
 		return
 
-	user.visible_message("<span class='notice'>[user] starts inspecting [owner]'s [name] carefully.</span>")
+	user.visible_message(SPAN_NOTICE("[user] starts inspecting [owner]'s [name] carefully."))
 	if(LAZYLEN(wounds))
-		to_chat(user, "<span class='warning'>You find [get_wounds_desc()]</span>")
+		to_chat(user, SPAN_WARNING("You find [get_wounds_desc()]"))
 		var/list/stuff = list()
 		for(var/datum/wound/wound in wounds)
 			if(LAZYLEN(wound.embedded_objects))
 				stuff |= wound.embedded_objects
-		if(stuff.len)
-			to_chat(user, "<span class='warning'>There's [english_list(stuff)] sticking out of [owner]'s [name].</span>")
+		if(length(stuff))
+			to_chat(user, SPAN_WARNING("There's [english_list(stuff)] sticking out of [owner]'s [name]."))
 	else
-		to_chat(user, "<span class='notice'>You find no visible wounds.</span>")
+		to_chat(user, SPAN_NOTICE("You find no visible wounds."))
 
-	to_chat(user, "<span class='notice'>Checking skin now...</span>")
-	if(!do_after(user, 1 SECOND, owner))
+	to_chat(user, SPAN_NOTICE("Checking skin now..."))
+	if(!do_after(user, 1 SECOND, owner, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
 		return
 
 	var/list/badness = list()
-	var/list/symptoms = decls_repository.get_decls_of_subtype(/decl/diagnostic_sign)
+	var/list/symptoms = GET_SINGLETON_SUBTYPE_MAP(/singleton/diagnostic_sign)
 	for(var/S in symptoms)
-		var/decl/diagnostic_sign/sign = symptoms[S]
+		var/singleton/diagnostic_sign/sign = symptoms[S]
 		if(sign.manifested_in(src))
 			badness += sign.get_description(user)
-	if(!badness.len)
-		to_chat(user, "<span class='notice'>[owner]'s skin is normal.</span>")
+	if(!length(badness))
+		to_chat(user, SPAN_NOTICE("[owner]'s skin is normal."))
 	else
-		to_chat(user, "<span class='warning'>[owner]'s skin is [english_list(badness)].</span>")
+		to_chat(user, SPAN_WARNING("[owner]'s skin is [english_list(badness)]."))
 
-	to_chat(user, "<span class='notice'>Checking bones now...</span>")
-	if(!do_after(user, 1 SECOND, owner))
+	to_chat(user, SPAN_NOTICE("Checking bones now..."))
+	if(!do_after(user, 1 SECOND, owner, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
 		return
 
 	if(status & ORGAN_BROKEN)
-		to_chat(user, "<span class='warning'>The [encased ? encased : "bone in the [name]"] moves slightly when you poke it!</span>")
+		to_chat(user, SPAN_WARNING("The [encased ? encased : "bone in the [name]"] moves slightly when you poke it!"))
 		owner.custom_pain("Your [name] hurts where it's poked.",40, affecting = src)
 	else
-		to_chat(user, "<span class='notice'>The [encased ? encased : "bones in the [name]"] seem to be fine.</span>")
+		to_chat(user, SPAN_NOTICE("The [encased ? encased : "bones in the [name]"] seem to be fine."))
 
 	for (var/obj/item/organ/internal/augment/A in internal_organs) // Locate any non-concealed augments
-		if (A.discoverable)
+		if (A.augment_flags & AUGMENT_INSPECTABLE)
 			to_chat(user, SPAN_WARNING("You feel a foreign object inside of \the [owner]'s [name]!"))
 			owner.custom_pain("Your [name] hurts as your [A.name] is jostled inside it.", 20, affecting = src)
 			break
 	if(status & ORGAN_TENDON_CUT)
-		to_chat(user, "<span class='warning'>The tendons in [name] are severed!</span>")
-	if(dislocated == 2)
-		to_chat(user, "<span class='warning'>The [joint] is dislocated!</span>")
+		to_chat(user, SPAN_WARNING("The tendons in [name] are severed!"))
+	if(dislocated >= 1)
+		to_chat(user, SPAN_WARNING("The [joint] is dislocated!"))
 	return 1
 
 /obj/item/organ/external/listen()
@@ -168,26 +168,26 @@
 		var/gutsound = I.listen()
 		if(gutsound)
 			sounds += gutsound
-	if(!sounds.len)
+	if(!length(sounds))
 		if(owner.pulse())
 			sounds += "faint pulse"
 	return sounds
 
-/decl/diagnostic_sign
+/singleton/diagnostic_sign
 	var/name = "Some symptom"
 	var/descriptor
 	var/explanation
 	var/hint_min_skill = SKILL_BASIC
 
 //Checks conditions for this sign to appear
-/decl/diagnostic_sign/proc/manifested_in(obj/item/organ/external/victim)
+/singleton/diagnostic_sign/proc/manifested_in(obj/item/organ/external/victim)
 
-/decl/diagnostic_sign/proc/get_description(mob/user)
+/singleton/diagnostic_sign/proc/get_description(mob/user)
 	. = descriptor
 	if(user && user.skill_check(SKILL_MEDICAL, hint_min_skill))
 		. += "<small><a href='?src=\ref[src];show_diagnostic_hint=1'>(?)</a></small>"
 
-/decl/diagnostic_sign/Topic(var/href, var/list/href_list)
+/singleton/diagnostic_sign/Topic(href, list/href_list)
 	. = ..()
 	if(.)
 		return
@@ -195,42 +195,42 @@
 		to_chat(usr, SPAN_NOTICE("[name] - [explanation]"))
 		return TOPIC_HANDLED
 
-/decl/diagnostic_sign/shock
+/singleton/diagnostic_sign/shock
 	name = "Clammy skin"
 	descriptor = "clammy and cool to the touch"
 	explanation = "Patient is in shock from severe pain."
 
-/decl/diagnostic_sign/shock/manifested_in(obj/item/organ/external/victim)
+/singleton/diagnostic_sign/shock/manifested_in(obj/item/organ/external/victim)
 	return victim.owner && victim.owner.shock_stage >= 30
 
-/decl/diagnostic_sign/liver
+/singleton/diagnostic_sign/liver
 	name = "Jaundice"
 	descriptor = "jaundiced"
 	explanation = "Patient has internal organ damage."
 
-/decl/diagnostic_sign/liver/manifested_in(obj/item/organ/external/victim)
+/singleton/diagnostic_sign/liver/manifested_in(obj/item/organ/external/victim)
 	return victim.owner && victim.owner.getToxLoss() >= 25
 
-/decl/diagnostic_sign/oxygenation
+/singleton/diagnostic_sign/oxygenation
 	name = "Cyanosis"
 	descriptor = "turning blue"
 	explanation = "Patient has low blood oxygenation."
 
-/decl/diagnostic_sign/oxygenation/manifested_in(obj/item/organ/external/victim)
+/singleton/diagnostic_sign/oxygenation/manifested_in(obj/item/organ/external/victim)
 	return victim.owner && victim.owner.get_blood_oxygenation() <= 50
 
-/decl/diagnostic_sign/circulation
+/singleton/diagnostic_sign/circulation
 	name = "Paleness"
 	descriptor = "very pale"
 	explanation = "Patient has issues with blood circulaion or volume."
 
-/decl/diagnostic_sign/circulation/manifested_in(obj/item/organ/external/victim)
+/singleton/diagnostic_sign/circulation/manifested_in(obj/item/organ/external/victim)
 	return victim.owner && victim.owner.get_blood_circulation() <= 60
 
-/decl/diagnostic_sign/gangrene
+/singleton/diagnostic_sign/gangrene
 	name = "Rot"
 	descriptor = "rotting"
 	explanation = "Patient has lost this bodypart to an irreversible bacterial infection."
 
-/decl/diagnostic_sign/gangrene/manifested_in(obj/item/organ/external/victim)
+/singleton/diagnostic_sign/gangrene/manifested_in(obj/item/organ/external/victim)
 	return victim.status & ORGAN_DEAD

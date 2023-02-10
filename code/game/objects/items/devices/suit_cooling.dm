@@ -4,7 +4,7 @@
 	w_class = ITEM_SIZE_LARGE
 	icon = 'icons/obj/suitcooler.dmi'
 	icon_state = "suitcooler0"
-	item_state = "coolingpack"			// beautiful codersprites until someone makes a prettier one.
+	item_state = "coolingpack"
 	slot_flags = SLOT_BACK
 
 	//copied from tank.dm
@@ -80,12 +80,12 @@
 	on = 1
 	update_icon()
 
-/obj/item/device/suit_cooling_unit/proc/turn_off(var/failed)
+/obj/item/device/suit_cooling_unit/proc/turn_off(failed)
 	if(failed) visible_message("\The [src] clicks and whines as it powers down.")
 	on = 0
 	update_icon()
 
-/obj/item/device/suit_cooling_unit/attack_self(var/mob/user)
+/obj/item/device/suit_cooling_unit/attack_self(mob/user)
 	if(cover_open && cell)
 		if(ishuman(user))
 			user.put_in_hands(cell)
@@ -102,12 +102,12 @@
 
 	toggle(user)
 
-/obj/item/device/suit_cooling_unit/proc/toggle(var/mob/user)
+/obj/item/device/suit_cooling_unit/proc/toggle(mob/user)
 	if(on)
 		turn_off()
 	else
 		turn_on()
-	to_chat(user, "<span class='notice'>You switch \the [src] [on ? "on" : "off"].</span>")
+	to_chat(user, SPAN_NOTICE("You switch \the [src] [on ? "on" : "off"]."))
 
 /obj/item/device/suit_cooling_unit/attackby(obj/item/W as obj, mob/user as mob)
 	if(isScrewdriver(W))
@@ -117,6 +117,7 @@
 		else
 			cover_open = 1
 			to_chat(user, "You unscrew the panel.")
+		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
 		update_icon()
 		return
 

@@ -1,14 +1,12 @@
-#define subtypesof(prototype) (typesof(prototype) - prototype)
-
 // Helper macros to aid in optimizing lazy instantiation of lists.
 // All of these are null-safe, you can use them without knowing if the list var is initialized yet
 
 //Picks from the list, with some safeties, and returns the "default" arg if it fails
-#define DEFAULTPICK(L, default) ((istype(L, /list) && L:len) ? pick(L) : default)
+#define DEFAULTPICK(L, default) ((islist(L) && length(L)) ? pick(L) : default)
 // Ensures L is initailized after this point
 #define LAZYINITLIST(L) if (!L) L = list()
 // Sets a L back to null iff it is empty
-#define UNSETEMPTY(L) if (L && !L.len) L = null
+#define UNSETEMPTY(L) if (L && !length(L)) L = null
 // Removes I from list L, and sets I to null if it is now empty
 #define LAZYREMOVE(L, I) if(L) { L -= I; if(!length(L)) { L = null; } }
 // Adds I to L, initalizing L if necessary
@@ -27,52 +25,22 @@
 #define LAZYISIN(L, I) (L ? (I in L) : FALSE)
 // Null-safe List.Cut() and discard.
 #define LAZYCLEARLIST(L) if(L) { L.Cut(); L = null; }
+// Safely merges L2 into L1 as lazy lists, initializing L1 if necessary.
+#define LAZYMERGELIST(L1, L2) if (length(L2)) { if (!L1) { L1 = list() } L1 |= L2 }
 // Reads L or an empty list if L is not a list.  Note: Does NOT assign, L may be an expression.
 #define SANITIZE_LIST(L) ( islist(L) ? L : list() )
 
-// binary search sorted insert
-// IN: Object to be inserted
-// LIST: List to insert object into
-// TYPECONT: The typepath of the contents of the list
-// COMPARE: The variable on the objects to compare
-#define BINARY_INSERT(IN, LIST, TYPECONT, COMPARE) \
-	var/__BIN_CTTL = length(LIST);\
-	if(!__BIN_CTTL) {\
-		LIST += IN;\
-	} else {\
-		var/__BIN_LEFT = 1;\
-		var/__BIN_RIGHT = __BIN_CTTL;\
-		var/__BIN_MID = (__BIN_LEFT + __BIN_RIGHT) >> 1;\
-		var/##TYPECONT/__BIN_ITEM;\
-		while(__BIN_LEFT < __BIN_RIGHT) {\
-			__BIN_ITEM = LIST[__BIN_MID];\
-			if(__BIN_ITEM.##COMPARE <= IN.##COMPARE) {\
-				__BIN_LEFT = __BIN_MID + 1;\
-			} else {\
-				__BIN_RIGHT = __BIN_MID;\
-			};\
-			__BIN_MID = (__BIN_LEFT + __BIN_RIGHT) >> 1;\
-		};\
-		__BIN_ITEM = LIST[__BIN_MID];\
-		__BIN_MID = __BIN_ITEM.##COMPARE > IN.##COMPARE ? __BIN_MID : __BIN_MID + 1;\
-		LIST.Insert(__BIN_MID, IN);\
-	}
-
-/// Passed into BINARY_INSERT to compare keys
-#define COMPARE_KEY __BIN_LIST[__BIN_MID]
-/// Passed into BINARY_INSERT to compare values
-#define COMPARE_VALUE __BIN_LIST[__BIN_LIST[__BIN_MID]]
 
 /****
-	* Binary search sorted insert from TG
-	* INPUT: Object to be inserted
-	* LIST: List to insert object into
-	* TYPECONT: The typepath of the contents of the list
-	* COMPARE: The object to compare against, usualy the same as INPUT
-	* COMPARISON: The variable on the objects to compare
-	* COMPTYPE: How should the values be compared? Either COMPARE_KEY or COMPARE_VALUE.
-	*/
-#define BINARY_INSERT_TG(INPUT, LIST, TYPECONT, COMPARE, COMPARISON, COMPTYPE) \
+* Binary search sorted insert
+* INPUT: Object to be inserted
+* LIST: List to insert object into
+* TYPECONT: The typepath of the contents of the list
+* COMPARE: The object to compare against, usualy the same as INPUT
+* COMPARISON: The variable on the objects to compare
+* COMPTYPE: How should the values be compared? Either COMPARE_KEY or COMPARE_VALUE.
+****/
+#define BINARY_INSERT(INPUT, LIST, TYPECONT, COMPARE, COMPARISON, COMPTYPE) \
 	do {\
 		var/list/__BIN_LIST = LIST;\
 		var/__BIN_CTTL = length(__BIN_LIST);\
@@ -81,7 +49,7 @@
 		} else {\
 			var/__BIN_LEFT = 1;\
 			var/__BIN_RIGHT = __BIN_CTTL;\
-			var/__BIN_MID = (__BIN_LEFT + __BIN_RIGHT) >> 1;\
+			var/__BIN_MID = SHIFTR((__BIN_LEFT + __BIN_RIGHT), 1);\
 			var ##TYPECONT/__BIN_ITEM;\
 			while(__BIN_LEFT < __BIN_RIGHT) {\
 				__BIN_ITEM = COMPTYPE;\
@@ -90,10 +58,16 @@
 				} else {\
 					__BIN_RIGHT = __BIN_MID;\
 				};\
-				__BIN_MID = (__BIN_LEFT + __BIN_RIGHT) >> 1;\
+				__BIN_MID = SHIFTR((__BIN_LEFT + __BIN_RIGHT), 1);\
 			};\
 			__BIN_ITEM = COMPTYPE;\
 			__BIN_MID = __BIN_ITEM.##COMPARISON > COMPARE.##COMPARISON ? __BIN_MID : __BIN_MID + 1;\
 			__BIN_LIST.Insert(__BIN_MID, INPUT);\
 		};\
 	} while(FALSE)
+
+/// Passed into BINARY_INSERT to compare keys
+#define COMPARE_KEY __BIN_LIST[__BIN_MID]
+
+/// Passed into BINARY_INSERT to compare values
+#define COMPARE_VALUE __BIN_LIST[__BIN_LIST[__BIN_MID]]

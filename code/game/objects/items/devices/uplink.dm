@@ -31,11 +31,12 @@
 	var/next_offer_time					//The time a discount will next be offered
 	var/datum/uplink_item/discount_item	//The item to be discounted
 	var/discount_amount					//The amount as a percent the item will be discounted by
+	var/datum/computer_file/program/uplink/program
 
 /obj/item/device/uplink/nano_host()
 	return loc
 
-/obj/item/device/uplink/New(var/atom/location, var/datum/mind/owner, var/telecrystals = DEFAULT_TELECRYSTAL_AMOUNT)
+/obj/item/device/uplink/New(atom/location, datum/mind/owner, telecrystals = DEFAULT_TELECRYSTAL_AMOUNT)
 	if(!istype(location, /atom))
 		CRASH("Invalid spawn location. Expected /atom, was [location ? location.type : "NULL"]")
 
@@ -72,7 +73,7 @@
 		update_nano_data()
 		SSnano.update_uis(src)
 
-/obj/item/device/uplink/proc/is_improper_item(var/datum/uplink_item/new_discount_item, discount_amount)
+/obj/item/device/uplink/proc/is_improper_item(datum/uplink_item/new_discount_item, discount_amount)
 	if(!new_discount_item)
 		return FALSE
 
@@ -88,7 +89,7 @@
 
 	return FALSE
 
-/obj/item/device/uplink/proc/get_item_cost(var/item_type, var/item_cost)
+/obj/item/device/uplink/proc/get_item_cost(item_type, item_cost)
 	return item_type == discount_item ? max(1, round(item_cost*discount_amount)) : item_cost
 
 // Toggles the uplink on and off. Normally this will bypass the item's normal functions and go to the uplink menu, if activated.
@@ -104,7 +105,7 @@
 // Checks to see if the value meets the target. Like a frequency being a traitor_frequency, in order to unlock a headset.
 // If true, it accesses trigger() and returns 1. If it fails, it returns false. Use this to see if you need to close the
 // current item's menu.
-/obj/item/device/uplink/proc/check_trigger(mob/user as mob, var/value, var/target)
+/obj/item/device/uplink/proc/check_trigger(mob/user as mob, value, target)
 	if(value == target)
 		trigger(user)
 		return 1
@@ -113,7 +114,7 @@
 /*
 	NANO UI FOR UPLINK WOOP WOOP
 */
-/obj/item/device/uplink/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/uistate = GLOB.inventory_state)
+/obj/item/device/uplink/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, uistate = GLOB.inventory_state)
 	var/title = "Remote Uplink"
 	var/data[0]
 
@@ -153,6 +154,9 @@
 	else if(href_list["lock"])
 		toggle()
 		SSnano.close_user_uis(user, src, "main")
+		if (program)
+			program.authenticated = FALSE
+			program.computer.kill_program(program)
 		. = TOPIC_HANDLED
 	else if(href_list["return"])
 		nanoui_menu = round(nanoui_menu/10)
@@ -173,7 +177,7 @@
 		var/categories[0]
 		for(var/datum/uplink_category/category in uplink.categories)
 			if(category.can_view(src))
-				categories[++categories.len] = list("name" = category.name, "ref" = "\ref[category]")
+				categories[LIST_PRE_INC(categories)] = list("name" = category.name, "ref" = "\ref[category]")
 		nanoui_data["categories"] = categories
 	else if(nanoui_menu == 1)
 		var/items[0]
@@ -181,12 +185,12 @@
 			if(item.can_view(src))
 				var/cost = item.cost(uses, src)
 				if(!cost) cost = "???"
-				items[++items.len] = list("name" = item.name(), "description" = replacetext(item.description(), "\n", "<br>"), "can_buy" = item.can_buy(src), "cost" = cost, "ref" = "\ref[item]")
+				items[LIST_PRE_INC(items)] = list("name" = item.name(), "description" = replacetext(item.description(), "\n", "<br>"), "can_buy" = item.can_buy(src), "cost" = cost, "ref" = "\ref[item]")
 		nanoui_data["items"] = items
 	else if(nanoui_menu == 2)
 		var/permanentData[0]
 		for(var/datum/computer_file/report/crew_record/L in GLOB.all_crew_records)
-			permanentData[++permanentData.len] = list(Name = L.get_name(),"id" = L.uid, "exploit" = length(L.get_antagRecord()))
+			permanentData[LIST_PRE_INC(permanentData)] = list(Name = L.get_name(),"id" = L.uid, "exploit" = length(L.get_antagRecord()))
 		nanoui_data["exploit_records"] = permanentData
 	else if(nanoui_menu == 21)
 		nanoui_data["exploit_exists"] = 0
@@ -215,16 +219,15 @@
 // Includes normal radio uplink, multitool uplink,
 // implant uplink (not the implant tool) and a preset headset uplink.
 
-/obj/item/device/radio/uplink/New(var/loc, var/owner, var/amount)
+/obj/item/device/radio/uplink/New(loc, owner, amount)
 	..()
 	hidden_uplink = new(src, owner, amount)
-	icon_state = "radio"
 
 /obj/item/device/radio/uplink/attack_self(mob/user as mob)
 	if(hidden_uplink)
 		hidden_uplink.trigger(user)
 
-/obj/item/device/multitool/uplink/New(var/loc, var/owner)
+/obj/item/device/multitool/uplink/New(loc, owner)
 	..()
 	hidden_uplink = new(src, owner)
 
@@ -239,5 +242,5 @@
 	..()
 	hidden_uplink = new(src)
 
-/obj/item/device/uplink/contained/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/uistate = GLOB.contained_state)
+/obj/item/device/uplink/contained/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, uistate = GLOB.contained_state)
 	return ..()

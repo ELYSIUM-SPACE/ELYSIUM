@@ -20,13 +20,13 @@
 	build_path = /obj/item/airlock_brace
 	sort_string = "VAGAC"
 
-/datum/design/item/tool/brace_jack
+/datum/design/item/tool/jack
 	name = "maintenance jack"
 	desc = "A special maintenance tool that can be used to remove airlock braces."
 	id = "bracejack"
 	req_tech = list(TECH_ENGINEERING = 3, TECH_MATERIAL = 2)
 	materials = list(MATERIAL_STEEL = 120)
-	build_path = /obj/item/crowbar/brace_jack
+	build_path = /obj/item/material/twohanded/jack
 	sort_string = "VAGAD"
 
 /datum/design/item/tool/clamp
@@ -91,3 +91,12 @@
 	chemicals = list(/datum/reagent/sodiumchloride = 20, /datum/reagent/acetone = 20)
 	build_path = /obj/item/device/oxycandle
 	sort_string = "VAGAJ"
+
+/datum/design/item/tool/arc_welder
+	name = "arc welding tool"
+	desc = "a portable welder that uses an internal powercell instead of welding fuel."
+	id = "arc_welder"
+	req_tech = list(TECH_ENGINEERING = 3, TECH_POWER = 4)
+	materials = list(MATERIAL_STEEL = 6000, MATERIAL_GLASS = 6000, MATERIAL_ALUMINIUM = 4000, MATERIAL_PHORON = 4000)
+	build_path = /obj/item/weldingtool/electric
+	sort_string = "VAGAK"

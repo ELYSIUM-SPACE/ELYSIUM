@@ -7,15 +7,15 @@
 	opacity = 1
 	density = TRUE
 	anchored = TRUE
+	health_max = 40
 
 	var/list/loot = list(/obj/item/cell,/obj/item/stack/material/iron,/obj/item/stack/material/rods)
 	var/lootleft = 1
 	var/emptyprob = 95
-	var/health = 40
 	var/is_rummaging = 0
 
 /obj/structure/rubble/New()
-	if(prob(emptyprob)) 
+	if(prob(emptyprob))
 		lootleft = 0
 	..()
 
@@ -39,9 +39,7 @@
 		I.appearance_flags = DEFAULT_APPEARANCE_FLAGS | PIXEL_SCALE
 		I.pixel_x = rand(-16,16)
 		I.pixel_y = rand(-16,16)
-		var/matrix/M = matrix()
-		M.Turn(rand(0,360))
-		I.transform = M
+		I.SetTransform(rotation = rand(0,360))
 		parts += I
 	overlays = parts
 	if(lootleft)
@@ -50,36 +48,41 @@
 /obj/structure/rubble/attack_hand(mob/user)
 	if(!is_rummaging)
 		if(!lootleft)
-			to_chat(user, "<span class='warning'>There's nothing left in this one but unusable garbage...</span>")
+			to_chat(user, SPAN_WARNING("There's nothing left in this one but unusable garbage..."))
 			return
 		visible_message("[user] starts rummaging through \the [src].")
 		is_rummaging = 1
-		if(do_after(user, 30))
+		if(do_after(user, 3 SECONDS, src, DO_PUBLIC_UNIQUE))
 			var/obj/item/booty = pickweight(loot)
 			booty = new booty(loc)
 			lootleft--
 			update_icon()
-			to_chat(user, "<span class='notice'>You find \a [booty] and pull it carefully out of \the [src].</span>")
+			to_chat(user, SPAN_NOTICE("You find \a [booty] and pull it carefully out of \the [src]."))
 		is_rummaging = 0
 	else
-		to_chat(user, "<span class='warning'>Someone is already rummaging here!</span>")
-		
-/obj/structure/rubble/attackby(var/obj/item/I, var/mob/user)
+		to_chat(user, SPAN_WARNING("Someone is already rummaging here!"))
+
+/obj/structure/rubble/attackby(obj/item/I, mob/user)
+	if (user.a_intent == I_HURT)
+		..()
+		return
+
 	if (istype(I, /obj/item/pickaxe))
 		var/obj/item/pickaxe/P = I
 		visible_message("[user] starts clearing away \the [src].")
-		if(do_after(user,P.digspeed, src))
+		if(do_after(user, P.digspeed, src, DO_PUBLIC_UNIQUE))
 			visible_message("[user] clears away \the [src].")
 			if(lootleft && prob(1))
 				var/obj/item/booty = pickweight(loot)
 				booty = new booty(loc)
 			qdel(src)
-	else 
-		..()
-		health -= I.force
-		if(health < 1)
-			visible_message("[user] clears away \the [src].")
-			qdel(src)
+		return
+
+	..()
+
+/obj/structure/rubble/on_death()
+	visible_message(SPAN_WARNING("\The [src] breaks apart!"))
+	qdel(src)
 
 /obj/structure/rubble/house
 	loot = list(/obj/item/archaeological_find/bowl,

@@ -12,14 +12,14 @@
 		/obj/item/stock_parts/power/apc
 	)
 	public_variables = list(
-		/decl/public_access/public_variable/gas,
-		/decl/public_access/public_variable/pressure,
-		/decl/public_access/public_variable/temperature		
+		/singleton/public_access/public_variable/gas,
+		/singleton/public_access/public_variable/pressure,
+		/singleton/public_access/public_variable/temperature
 	)
-	stock_part_presets = list(/decl/stock_part_preset/radio/basic_transmitter/meter = 1)
+	stock_part_presets = list(/singleton/stock_part_preset/radio/basic_transmitter/meter = 1)
 
 	frame_type = /obj/item/machine_chassis/pipe_meter
-	construct_state = /decl/machine_construction/default/item_chassis
+	construct_state = /singleton/machine_construction/default/item_chassis
 	base_type = /obj/machinery/meter
 
 /obj/machinery/meter/Initialize()
@@ -37,7 +37,7 @@
 /obj/machinery/meter/proc/clear_target()
 	if(target)
 		GLOB.destroyed_event.unregister(target, src)
-		target = null	
+		target = null
 
 /obj/machinery/meter/return_air()
 	if(target)
@@ -54,7 +54,7 @@
 		icon_state = "meterX"
 		return 0
 
-	if(stat & (BROKEN|NOPOWER))
+	if(inoperable())
 		icon_state = "meter0"
 		return 0
 
@@ -83,10 +83,10 @@
 	. = ..()
 
 	if(distance > 3 && !(istype(user, /mob/living/silicon/ai) || isghost(user)))
-		to_chat(user, "<span class='warning'>You are too far away to read it.</span>")
+		to_chat(user, SPAN_WARNING("You are too far away to read it."))
 
-	else if(stat & (NOPOWER|BROKEN))
-		to_chat(user, "<span class='warning'>The display is off.</span>")
+	else if(inoperable())
+		to_chat(user, SPAN_WARNING("The display is off."))
 
 	else if(src.target)
 		var/datum/gas_mixture/environment = target.return_air()
@@ -99,6 +99,10 @@
 
 
 /obj/machinery/meter/interface_interact(mob/user)
+	if (!target)
+		log_debug(append_admin_tools("\A [src] interacted with by \the [user] had no target.", user, get_turf(src)))
+		to_chat(user, SPAN_WARNING("\The [src] has no target! This might be a bug. Please report it."))
+		return TRUE
 	var/datum/gas_mixture/environment = target.return_air()
 	to_chat(user, "The pressure gauge reads [round(environment.return_pressure(), 0.01)] kPa; [round(environment.temperature,0.01)]K ([round(environment.temperature-T0C,0.01)]&deg;C)")
 	return TRUE
@@ -116,8 +120,8 @@
 		/obj/item/stock_parts/power/apc/buildable
 	)
 
-/decl/stock_part_preset/radio/basic_transmitter/meter
+/singleton/stock_part_preset/radio/basic_transmitter/meter
 	transmit_on_tick = list(
-		"pressure" = /decl/public_access/public_variable/pressure,
+		"pressure" = /singleton/public_access/public_variable/pressure,
 	)
 	frequency = ATMOS_TANK_FREQ

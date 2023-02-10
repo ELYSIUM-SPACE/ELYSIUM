@@ -30,7 +30,7 @@
 /obj/effect/landmark/clear/Initialize()
 	var/turf/simulated/wall/W = get_turf(src)
 	if(istype(W))
-		W.dismantle_wall(1,1,1)
+		W.dismantle_wall(TRUE, TRUE)
 	var/turf/simulated/mineral/M = W
 	if(istype(M))
 		M.GetDrilled()
@@ -58,7 +58,7 @@
 	. = ..()
 	GLOB.shuttle_added.register_global(src, .proc/check_shuttle)
 
-/obj/effect/landmark/delete_on_shuttle/proc/check_shuttle(var/shuttle)
+/obj/effect/landmark/delete_on_shuttle/proc/check_shuttle(shuttle)
 	if(SSshuttle.shuttles[shuttle_name] == shuttle)
 		GLOB.shuttle_moved_event.register(shuttle, src, .proc/delete_everything)
 		shuttle_datum = shuttle

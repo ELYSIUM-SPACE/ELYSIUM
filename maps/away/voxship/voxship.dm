@@ -4,6 +4,7 @@
 #include "voxship_jobs.dm"
 #include "voxship_radio.dm"
 #include "voxship_machines.dm"
+#include "voxship_antagonism.dm"
 
 /datum/map_template/ruin/away_site/scavship
 	name = "Vox Scavenger Ship"
@@ -19,7 +20,7 @@
 /obj/effect/overmap/visitable/sector/vox_scav_ship
 	name = "small asteroid cluster"
 	desc = "Sensor array detects a small asteroid cluster."
-	in_space = 1
+	in_space = TRUE
 	icon_state = "meteor4"
 	hide_from_reports = TRUE
 	initial_generic_waypoints = list(
@@ -99,7 +100,7 @@
 	vessel_size = SHIP_SIZE_TINY
 
 /obj/effect/submap_landmark/joinable_submap/voxship/scavship
-	archetype = /decl/submap_archetype/derelict/voxship
+	archetype = /singleton/submap_archetype/derelict/voxship
 	movable_flags = MOVABLE_FLAG_EFFECTMOVE
 
 //shuttle APC terminal kept being deleted by z level changes
@@ -112,10 +113,10 @@
 	name = "[pidgin.get_random_name()]-[pidgin.get_random_name()]"
 	..()
 
-/decl/webhook/submap_loaded/vox
+/singleton/webhook/submap_loaded/vox
 	id = WEBHOOK_SUBMAP_LOADED_VOX
 
-/decl/submap_archetype/derelict/voxship
+/singleton/submap_archetype/derelict/voxship
 	descriptor = "Shoal Scavenger Vessel"
 	map = "Vox Scavenger Ship"
 	crew_jobs = list(
@@ -157,5 +158,24 @@
 	_input_on = TRUE
 	_output_on = TRUE
 	_fully_charged = TRUE
+
+
+/singleton/closet_appearance/crate/vox_uranium
+	color = COLOR_OLIVE
+	extra_decals = list(
+		"crate_radiation_left" = COLOR_YELLOW,
+		"crate_radiation_right" = COLOR_YELLOW,
+		"lid_stripes" = COLOR_VIOLET
+	)
+
+
+/obj/structure/closet/crate/vox_uranium
+	name = "fissibles crate"
+	closet_appearance = /singleton/closet_appearance/crate/vox_uranium
+
+
+/obj/structure/closet/crate/uranium/WillContain()
+	return list(/obj/item/stack/material/uranium/fifty = 4)
+
 
 #undef WEBHOOK_SUBMAP_LOADED_VOX

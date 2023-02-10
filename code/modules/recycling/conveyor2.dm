@@ -48,20 +48,20 @@
 	update_icon()
 
 /obj/machinery/conveyor/on_update_icon()
-	if(stat & BROKEN)
+	if(MACHINE_IS_BROKEN(src))
 		icon_state = "conveyor-broken"
 		operating = 0
 		return
 	if(!operable)
 		operating = 0
-	if(stat & NOPOWER)
+	if(!is_powered())
 		operating = 0
 	icon_state = "conveyor[operating]"
 
 	// machine process
 	// move items to the target location
 /obj/machinery/conveyor/Process()
-	if(stat & (BROKEN | NOPOWER))
+	if(inoperable())
 		return
 	if(!operating)
 		return
@@ -83,8 +83,8 @@
 		if(!AM.anchored && AM.simulated)
 			affecting += AM
 			items_moved++
-	if(affecting.len)
-		addtimer(CALLBACK(src, .proc/post_process, affecting), 1) // slight delay to prevent infinite propagation due to map order
+	if(length(affecting))
+		addtimer(new Callback(src, .proc/post_process, affecting), 1) // slight delay to prevent infinite propagation due to map order
 
 /obj/machinery/conveyor/proc/post_process(list/affecting)
 	for(var/A in affecting)
@@ -95,13 +95,13 @@
 			step(A,movedir)
 
 // attack with item, place item on conveyor
-/obj/machinery/conveyor/attackby(var/obj/item/I, mob/user)
+/obj/machinery/conveyor/attackby(obj/item/I, mob/user)
 	if(isCrowbar(I))
-		if(!(stat & BROKEN))
+		if(!MACHINE_IS_BROKEN(src))
 			var/obj/item/conveyor_construct/C = new/obj/item/conveyor_construct(src.loc)
 			C.id = id
 			transfer_fingerprints_to(C)
-		to_chat(user, "<span class='notice'>You remove the conveyor belt.</span>")
+		to_chat(user, SPAN_NOTICE("You remove the conveyor belt."))
 		qdel(src)
 		return
 	user.unequip_item(get_turf(src))
@@ -237,7 +237,7 @@
 		var/obj/item/conveyor_switch_construct/C = new/obj/item/conveyor_switch_construct(src.loc)
 		C.id = id
 		transfer_fingerprints_to(C)
-		to_chat(user, "<span class='notice'>You deattach the conveyor switch.</span>")
+		to_chat(user, SPAN_NOTICE("You deattach the conveyor switch."))
 		qdel(src)
 
 /obj/machinery/conveyor_switch/oneway
@@ -266,7 +266,7 @@
 /obj/item/conveyor_construct/attackby(obj/item/I, mob/user, params)
 	..()
 	if(istype(I, /obj/item/conveyor_switch_construct))
-		to_chat(user, "<span class='notice'>You link the switch to the conveyor belt assembly.</span>")
+		to_chat(user, SPAN_NOTICE("You link the switch to the conveyor belt assembly."))
 		var/obj/item/conveyor_switch_construct/C = I
 		id = C.id
 
@@ -309,7 +309,7 @@
 			found = 1
 			break
 	if(!found)
-		to_chat(user, "[icon2html(src, user)]<span class=notice>The conveyor switch did not detect any linked conveyor belts in range.</span>")
+		to_chat(user, "[icon2html(src, user)][SPAN_NOTICE("The conveyor switch did not detect any linked conveyor belts in range.")]")
 		return
 	var/obj/machinery/conveyor_switch/NC = new /obj/machinery/conveyor_switch(A, id)
 	transfer_fingerprints_to(NC)
@@ -328,7 +328,7 @@
 			found = 1
 			break
 	if(!found)
-		to_chat(user, "[icon2html(src, user)]<span class=notice>The conveyor switch did not detect any linked conveyor belts in range.</span>")
+		to_chat(user, "[icon2html(src, user)][SPAN_NOTICE("The conveyor switch did not detect any linked conveyor belts in range.")]")
 		return
 	var/obj/machinery/conveyor_switch/oneway/NC = new /obj/machinery/conveyor_switch/oneway(A, id)
 	transfer_fingerprints_to(NC)

@@ -25,7 +25,7 @@
 	var/sharp_tools = list(SWISSKNF_LBLADE, SWISSKNF_SBLADE, SWISSKNF_GBLADE, SWISSKNF_WBLADE)
 
 /obj/item/material/knife/folding/swiss/attack_self(mob/user)
-	var/choice	
+	var/choice
 	if(user.a_intent != I_HELP && ((SWISSKNF_LBLADE in tools) || (SWISSKNF_SBLADE in tools)) && active_tool == SWISSKNF_CLOSED)
 		open = TRUE
 		if(SWISSKNF_LBLADE in tools)
@@ -38,20 +38,20 @@
 		else
 			choice = SWISSKNF_CLOSED
 			open = FALSE
-	
+
 	if(!choice || !CanPhysicallyInteract(user))
 		return
 	if(choice == SWISSKNF_CLOSED)
 		open = FALSE
-		user.visible_message("<span class='notice'>\The [user] closes the [name].</span>")
+		user.visible_message(SPAN_NOTICE("\The [user] closes the [name]."))
 	else
 		open = TRUE
 		if(choice == SWISSKNF_LBLADE || choice == SWISSKNF_SBLADE)
-			user.visible_message("<span class='warning'>\The [user] opens the [lowertext(choice)].</span>")
+			user.visible_message(SPAN_WARNING("\The [user] opens the [lowertext(choice)]."))
 			playsound(user, 'sound/weapons/flipblade.ogg', 15, 1)
 		else
-			user.visible_message("<span class='notice'>\The [user] opens the [lowertext(choice)].</span>")
-			
+			user.visible_message(SPAN_NOTICE("\The [user] opens the [lowertext(choice)]."))
+
 	active_tool = choice
 	update_force()
 	update_icon()
@@ -90,16 +90,16 @@
 		if(blood_overlay)
 			overlays += blood_overlay
 
-/obj/item/material/knife/folding/swiss/iscrowbar()
+/obj/item/material/knife/folding/swiss/IsCrowbar()
 	return active_tool == SWISSKNF_CROWBAR && can_use_tools
 
-/obj/item/material/knife/folding/swiss/isscrewdriver()
+/obj/item/material/knife/folding/swiss/IsScrewdriver()
 	return (active_tool == SWISSKNF_CLIFTER || active_tool == SWISSKNF_COPENER) && can_use_tools
 
-/obj/item/material/knife/folding/swiss/iswirecutter()
+/obj/item/material/knife/folding/swiss/IsWirecutter()
 	return active_tool == SWISSKNF_WCUTTER && can_use_tools
 
-/obj/item/material/knife/folding/swiss/ishatchet()
+/obj/item/material/knife/folding/swiss/IsHatchet()
 	return active_tool == SWISSKNF_WBLADE
 
 /obj/item/material/knife/folding/swiss/resolve_attackby(obj/target, mob/user)
@@ -109,7 +109,7 @@
 		update_force()
 		return
 	if(istype(target, /obj/item))
-		if(target.w_class <= ITEM_SIZE_NORMAL)
+		if(target.w_class <= ITEM_SIZE_HUGE)
 			can_use_tools = TRUE
 			. = ..()
 			can_use_tools = FALSE

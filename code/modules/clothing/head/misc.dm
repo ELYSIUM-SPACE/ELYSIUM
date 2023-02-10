@@ -373,6 +373,7 @@
 	name = "face cover"
 	desc = "A helmet made of plastic. It's completely opaque. This will stop the stare."
 	icon_state = "facecover"
+	valid_accessory_slots = null
 	tint = TINT_BLIND
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|BLOCKHAIR
 	body_parts_covered = HEAD|FACE|EYES
@@ -387,3 +388,35 @@
 	name = "\improper SAARE beret"
 	desc = "A gray beret with the emblem of Strategic Assault and Asset Retention Enterprises, a private military corporation. For mercenaries that are more inclined towards style than safety."
 	icon_state = "beret_corporate_saare"
+
+/obj/item/clothing/head/deckcrew
+	name = "deck crew helmet"
+	desc = "A helmet with ear protection and a visor, used in hangars on many ships."
+	icon_state = "deckcrew"
+	flags_inv = BLOCKHEADHAIR
+	volume_multiplier = 0.1
+
+/obj/item/clothing/head/deckcrew/green
+	name = "green deck crew helmet"
+	desc = "A helmet with ear protection and a visor, used by support staff in Fleet hangars."
+	icon_state = "deckcrew_g"
+
+/obj/item/clothing/head/deckcrew/blue
+	name = "blue deck crew helmet"
+	desc = "A helmet with ear protection and a visor, used by tug operators in Fleet hangars."
+	icon_state = "deckcrew_b"
+
+/obj/item/clothing/head/deckcrew/yellow
+	name = "yellow deck crew helmet"
+	desc = "A helmet with ear protection and a visor, used by traffic control in Fleet hangars."
+	icon_state = "deckcrew_y"
+
+/obj/item/clothing/head/deckcrew/purple
+	name = "purple deck crew helmet"
+	desc = "A helmet with ear protection and a visor, used by fueling personnel in Fleet hangars."
+	icon_state = "deckcrew_p"
+
+/obj/item/clothing/head/deckcrew/red
+	name = "red deck crew helmet"
+	desc = "A helmet with ear protection and a visor, used by munitions handlers in Fleet hangars."
+	icon_state = "deckcrew_r"

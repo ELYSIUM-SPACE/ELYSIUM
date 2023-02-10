@@ -12,7 +12,7 @@
 	var/radioactivity = 0
 	var/initial_amount
 
-/obj/item/fuel_assembly/New(var/newloc, var/_material, var/_colour)
+/obj/item/fuel_assembly/New(newloc, _material, _colour)
 	fuel_type = _material
 	fuel_colour = _colour
 	..(newloc)
@@ -54,24 +54,24 @@
 		return PROCESS_KILL
 
 	if(istype(loc, /turf))
-		SSradiation.radiate(src, max(1,ceil(radioactivity/15)))
+		SSradiation.radiate(src, max(1,Ceil(radioactivity/15)))
 
 /obj/item/fuel_assembly/Destroy()
 	STOP_PROCESSING(SSobj, src)
 	return ..()
 
 // Mapper shorthand.
-/obj/item/fuel_assembly/deuterium/New(var/newloc)
+/obj/item/fuel_assembly/deuterium/New(newloc)
 	..(newloc, MATERIAL_DEUTERIUM)
 
-/obj/item/fuel_assembly/tritium/New(var/newloc)
+/obj/item/fuel_assembly/tritium/New(newloc)
 	..(newloc, MATERIAL_TRITIUM)
 
-/obj/item/fuel_assembly/phoron/New(var/newloc)
+/obj/item/fuel_assembly/phoron/New(newloc)
 	..(newloc, MATERIAL_PHORON)
 
-/obj/item/fuel_assembly/supermatter/New(var/newloc)
+/obj/item/fuel_assembly/supermatter/New(newloc)
 	..(newloc, MATERIAL_SUPERMATTER)
 
-/obj/item/fuel_assembly/hydrogen/New(var/newloc)
+/obj/item/fuel_assembly/hydrogen/New(newloc)
 	..(newloc, MATERIAL_HYDROGEN)

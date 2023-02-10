@@ -229,7 +229,7 @@
 				to_chat(user, SPAN_NOTICE("You start prying out the circuits from \the [src]."))
 
 				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
-				if (do_after(user, 20) && buildstage == 1)
+				if (do_after(user, 2 SECONDS, src, DO_REPAIR_CONSTRUCT) && buildstage == 1)
 					user.visible_message(
 
 					SPAN_NOTICE("\The [user] has pried the circuits out of \the [src]."),
@@ -279,6 +279,15 @@
 				<li>Crowbar to remove the circuitry</li>\
 				<li>Wrench to remove the frame from the wall</li>\
 			</ol>"
+
+/obj/item/device/radio/intercom/get_interactions_info()
+	. = ..()
+	.["Cable Coil"] += "<p>Used for construction. See construction steps.</p>"
+	.["Circuitboard"] += "<p>Used for construction. See construction steps.</p>"
+	.["Crowbar"] += "<p>Used for desconstruction. See deconstruction steps.</p>"
+	.["Screwdriver"] += "<p>Toggles the maintenance panel open and closed.</p>"
+	.["Wirecutters"] += "<p>Used for deconstruction. See deconstruction steps.</p>"
+	.["Wrench"] += "<p>Used for deconstruction. See deconstruction steps.</p>"
 
 /obj/item/device/radio/intercom/Process()
 	if (wiresexposed)

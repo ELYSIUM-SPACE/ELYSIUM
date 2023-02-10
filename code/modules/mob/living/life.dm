@@ -4,7 +4,7 @@
 
 	..()
 
-	if (HasMovementHandler(/datum/movement_handler/mob/transformation/))
+	if (HasMovementHandler(/datum/movement_handler/mob/transformation))
 		return
 	if (!loc)
 		return
@@ -56,7 +56,7 @@
 /mob/living/proc/handle_random_events()
 	return
 
-/mob/living/proc/handle_environment(var/datum/gas_mixture/environment)
+/mob/living/proc/handle_environment(datum/gas_mixture/environment)
 	return
 
 /mob/living/proc/update_pulling()
@@ -189,7 +189,7 @@
 	else if(eyeobj)
 		if(eyeobj.owner != src)
 			reset_view(null)
-	else if(!client.adminobs)
+	else if(!client?.adminobs)
 		reset_view(null)
 
 /mob/living/proc/update_sight()

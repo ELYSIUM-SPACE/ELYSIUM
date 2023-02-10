@@ -61,18 +61,18 @@
 /obj/item/ammo_casing/attackby(obj/item/W as obj, mob/user as mob)
 	if(isScrewdriver(W))
 		if(!BB)
-			to_chat(user, "<span class='notice'>There is no bullet in the casing to inscribe anything into.</span>")
+			to_chat(user, SPAN_NOTICE("There is no bullet in the casing to inscribe anything into."))
 			return
 
 		var/tmp_label = ""
 		var/label_text = sanitizeSafe(input(user, "Inscribe some text into \the [initial(BB.name)]","Inscription",tmp_label), MAX_NAME_LEN)
 		if(length(label_text) > 20)
-			to_chat(user, "<span class='warning'>The inscription can be at most 20 characters long.</span>")
+			to_chat(user, SPAN_WARNING("The inscription can be at most 20 characters long."))
 		else if(!label_text)
-			to_chat(user, "<span class='notice'>You scratch the inscription off of [initial(BB)].</span>")
+			to_chat(user, SPAN_NOTICE("You scratch the inscription off of [initial(BB)]."))
 			BB.SetName(initial(BB.name))
 		else
-			to_chat(user, "<span class='notice'>You inscribe \"[label_text]\" into \the [initial(BB.name)].</span>")
+			to_chat(user, SPAN_NOTICE("You inscribe \"[label_text]\" into \the [initial(BB.name)]."))
 			BB.SetName("[initial(BB.name)] (\"[label_text]\")")
 	else ..()
 
@@ -140,10 +140,10 @@
 	if(istype(W, /obj/item/ammo_casing))
 		var/obj/item/ammo_casing/C = W
 		if(C.caliber != caliber)
-			to_chat(user, "<span class='warning'>[C] does not fit into [src].</span>")
+			to_chat(user, SPAN_WARNING("[C] does not fit into [src]."))
 			return
-		if(stored_ammo.len >= max_ammo)
-			to_chat(user, "<span class='warning'>[src] is full!</span>")
+		if(length(stored_ammo) >= max_ammo)
+			to_chat(user, SPAN_WARNING("[src] is full!"))
 			return
 		if(!user.unEquip(C, src))
 			return
@@ -152,10 +152,10 @@
 	else ..()
 
 /obj/item/ammo_magazine/attack_self(mob/user)
-	if(!stored_ammo.len)
-		to_chat(user, "<span class='notice'>[src] is already empty!</span>")
+	if(!length(stored_ammo))
+		to_chat(user, SPAN_NOTICE("[src] is already empty!"))
 		return
-	to_chat(user, "<span class='notice'>You empty [src].</span>")
+	to_chat(user, SPAN_NOTICE("You empty [src]."))
 	for(var/obj/item/ammo_casing/C in stored_ammo)
 		C.forceMove(user.loc)
 		C.set_dir(pick(GLOB.alldirs))
@@ -165,13 +165,13 @@
 
 /obj/item/ammo_magazine/attack_hand(mob/user)
 	if(user.get_inactive_hand() == src)
-		if(!stored_ammo.len)
-			to_chat(user, "<span class='notice'>[src] is already empty!</span>")
+		if(!length(stored_ammo))
+			to_chat(user, SPAN_NOTICE("[src] is already empty!"))
 		else
-			var/obj/item/ammo_casing/C = stored_ammo[stored_ammo.len]
+			var/obj/item/ammo_casing/C = stored_ammo[length(stored_ammo)]
 			stored_ammo-=C
 			user.put_in_hands(C)
-			user.visible_message("\The [user] removes \a [C] from [src].", "<span class='notice'>You remove \a [C] from [src].</span>")
+			user.visible_message("\The [user] removes \a [C] from [src].", SPAN_NOTICE("You remove \a [C] from [src]."))
 			update_icon()
 	else
 		..()
@@ -179,24 +179,24 @@
 
 /obj/item/ammo_magazine/on_update_icon()
 	if(multiple_sprites)
-		//find the lowest key greater than or equal to stored_ammo.len
+		//find the lowest key greater than or equal to length(stored_ammo)
 		var/new_state = null
-		for(var/idx in 1 to icon_keys.len)
+		for(var/idx in 1 to length(icon_keys))
 			var/ammo_count = icon_keys[idx]
-			if (ammo_count >= stored_ammo.len)
+			if (ammo_count >= length(stored_ammo))
 				new_state = ammo_states[idx]
 				break
 		icon_state = (new_state)? new_state : initial(icon_state)
 
 /obj/item/ammo_magazine/examine(mob/user)
 	. = ..()
-	to_chat(user, "There [(stored_ammo.len == 1)? "is" : "are"] [stored_ammo.len] round\s left!")
+	to_chat(user, "There [(length(stored_ammo) == 1)? "is" : "are"] [length(stored_ammo)] round\s left!")
 
 //magazine icon state caching
-/var/global/list/magazine_icondata_keys = list()
-/var/global/list/magazine_icondata_states = list()
+var/global/list/magazine_icondata_keys = list()
+var/global/list/magazine_icondata_states = list()
 
-/proc/initialize_magazine_icondata(var/obj/item/ammo_magazine/M)
+/proc/initialize_magazine_icondata(obj/item/ammo_magazine/M)
 	var/typestr = "[M.type]"
 	if(!(typestr in magazine_icondata_keys) || !(typestr in magazine_icondata_states))
 		magazine_icondata_cache_add(M)
@@ -204,7 +204,7 @@
 	M.icon_keys = magazine_icondata_keys[typestr]
 	M.ammo_states = magazine_icondata_states[typestr]
 
-/proc/magazine_icondata_cache_add(var/obj/item/ammo_magazine/M)
+/proc/magazine_icondata_cache_add(obj/item/ammo_magazine/M)
 	var/list/icon_keys = list()
 	var/list/ammo_states = list()
 	var/list/states = icon_states(M.icon)
@@ -216,4 +216,3 @@
 
 	magazine_icondata_keys["[M.type]"] = icon_keys
 	magazine_icondata_states["[M.type]"] = ammo_states
-

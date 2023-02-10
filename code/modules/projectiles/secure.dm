@@ -11,7 +11,7 @@ GLOBAL_LIST_INIT(secure_weapons, list())
 		if(!authorized_modes)
 			authorized_modes = list()
 
-		for(var/i = authorized_modes.len + 1 to firemodes.len)
+		for(var/i = length(authorized_modes) + 1 to length(firemodes))
 			authorized_modes.Add(default_mode_authorization)
 
 	. = ..()
@@ -38,7 +38,7 @@ GLOBAL_LIST_INIT(secure_weapons, list())
 	else
 		..()
 
-/obj/item/gun/emag_act(var/charges, var/mob/user)
+/obj/item/gun/emag_act(charges, mob/user)
 	if(!charges)
 		return NO_EMAG_ACT
 
@@ -73,7 +73,7 @@ GLOBAL_LIST_INIT(secure_weapons, list())
 
 
 /obj/item/gun/proc/authorize(mode, authorized)
-	if(mode < 1 || mode > authorized_modes.len || authorized_modes[mode] == authorized)
+	if(mode < 1 || mode > length(authorized_modes) || authorized_modes[mode] == authorized)
 		return FALSE
 
 	authorized_modes[mode] = authorized
@@ -91,7 +91,7 @@ GLOBAL_LIST_INIT(secure_weapons, list())
 	return length(req_access)
 
 /obj/item/gun/proc/free_fire()
-	var/decl/security_state/security_state = decls_repository.get_decl(GLOB.using_map.security_state)
+	var/singleton/security_state/security_state = GET_SINGLETON(GLOB.using_map.security_state)
 	return security_state.current_security_level_is_same_or_higher_than(security_state.high_security_level)
 
 /obj/item/gun/special_check()
@@ -108,7 +108,7 @@ GLOBAL_LIST_INIT(secure_weapons, list())
 	. = sel_mode
 	do
 		.++
-		if(. > authorized_modes.len)
+		if(. > length(authorized_modes))
 			. = 1
 		if(. == sel_mode) // just in case all modes are unauthorized
 			return null

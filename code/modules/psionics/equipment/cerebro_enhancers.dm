@@ -33,7 +33,7 @@
 	. = ..()
 	verbs += /obj/item/clothing/head/helmet/space/psi_amp/proc/integrate
 
-/obj/item/clothing/head/helmet/space/psi_amp/attack_self(var/mob/user)
+/obj/item/clothing/head/helmet/space/psi_amp/attack_self(mob/user)
 
 	if(operating)
 		return
@@ -53,7 +53,7 @@
 
 	var/removed
 	var/slots_left = max_boosted_faculties - LAZYLEN(boosted_faculties)
-	var/decl/psionic_faculty/faculty = SSpsi.get_faculty(choice)
+	var/singleton/psionic_faculty/faculty = SSpsi.get_faculty(choice)
 	if(faculty.id in boosted_faculties)
 		LAZYREMOVE(boosted_faculties, faculty.id)
 		removed = TRUE
@@ -91,7 +91,7 @@
 
 	sleep(80)
 
-	if(H.psi) 
+	if(H.psi)
 		H.psi.reset()
 
 	to_chat(H, SPAN_NOTICE("\The [src] chimes quietly as it finishes removing the slave-minds from your brain."))

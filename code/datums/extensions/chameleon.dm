@@ -15,7 +15,7 @@
 		chameleon_choices = LAZYACCESS(chameleon_choices_by_type, chameleon_type)
 		if(!chameleon_choices)
 			chameleon_choices = generate_chameleon_choices(chameleon_type)
-			LAZYSET(chameleon_choices_by_type, chameleon_type, chameleon_choices)	
+			LAZYSET(chameleon_choices_by_type, chameleon_type, chameleon_choices)
 	else
 		var/list/choices = list()
 		for(var/path in chameleon_choices)
@@ -66,13 +66,14 @@
 	var/obj/item/clothing/accessory/A = holder
 
 	A.slot = copy.slot
-	A.has_suit = copy.has_suit
+	A.parent = copy.parent
 	A.inv_overlay = copy.inv_overlay
 	A.mob_overlay = copy.mob_overlay
 	A.overlay_state = copy.overlay_state
 	A.accessory_icons = copy.accessory_icons
-	A.on_rolled = copy.on_rolled
-	A.high_visibility = copy.high_visibility
+	A.on_rolled_down = copy.on_rolled_down
+	A.on_rolled_sleeves = copy.on_rolled_sleeves
+	A.accessory_flags = copy.accessory_flags
 
 /datum/extension/chameleon/proc/add_chameleon_choice(list/target, path)
 	var/obj/item/I = path
@@ -95,6 +96,9 @@
 		add_chameleon_choice(choices, path)
 	return sortAssoc(choices)
 
+/**
+ * Verb to handle changing the appearance of atoms that have the chameleon extension.
+ */
 /atom/proc/chameleon_appearance()
 	set name = "Change Appearance"
 	set desc = "Activate the holographic appearance changing module."

@@ -30,13 +30,13 @@
 	flesh_color = "#525252"
 	blood_oxy = 0
 
-	reagent_tag = IS_NABBER
-
 	icon_template = 'icons/mob/human_races/species/template_tall.dmi'
 	icobase = 'icons/mob/human_races/species/nabber/body.dmi'
 	deform = 'icons/mob/human_races/species/nabber/body.dmi'
 	preview_icon = 'icons/mob/human_races/species/nabber/preview.dmi'
 	blood_mask = 'icons/mob/human_races/species/nabber/blood_mask.dmi'
+
+	icon_height = 40
 
 	limb_blend = ICON_MULTIPLY
 
@@ -69,7 +69,7 @@
 	heat_level_3 = 800 //Default 1000
 
 	species_flags = SPECIES_FLAG_NO_SLIP | SPECIES_FLAG_NO_BLOCK | SPECIES_FLAG_NO_MINOR_CUT | SPECIES_FLAG_NEED_DIRECT_ABSORB
-	appearance_flags = HAS_SKIN_COLOR | HAS_EYE_COLOR | HAS_SKIN_TONE_NORMAL | HAS_BASE_SKIN_COLOURS
+	appearance_flags = SPECIES_APPEARANCE_HAS_SKIN_COLOR | SPECIES_APPEARANCE_HAS_EYE_COLOR | SPECIES_APPEARANCE_HAS_SKIN_TONE_NORMAL | SPECIES_APPEARANCE_HAS_BASE_SKIN_COLOURS
 	spawn_flags = SPECIES_CAN_JOIN | SPECIES_IS_WHITELISTED | SPECIES_NO_FBP_CONSTRUCTION | SPECIES_NO_FBP_CHARGEN
 
 	bump_flag = HEAVY
@@ -141,7 +141,7 @@
 		)
 	)
 	pain_emotes_with_pain_level = list(
-			list(/decl/emote/audible/bug_hiss) = 40
+			list(/singleton/emote/audible/bug_hiss) = 40
 	)
 
 	exertion_effect_chance = 10
@@ -149,10 +149,14 @@
 	exertion_reagent_scale = 5
 	exertion_reagent_path = /datum/reagent/lactate
 	exertion_emotes_biological = list(
-		/decl/emote/exertion/biological,
-		/decl/emote/exertion/biological/breath,
-		/decl/emote/exertion/biological/pant
+		/singleton/emote/exertion/biological,
+		/singleton/emote/exertion/biological/breath,
+		/singleton/emote/exertion/biological/pant
 	)
+
+	ingest_amount = 6
+
+	traits = list(/singleton/trait/general/serpentid_adapted = TRAIT_LEVEL_EXISTS)
 
 /datum/species/nabber/New()
 	equip_adjust = list(
@@ -166,7 +170,7 @@
 /datum/species/nabber/get_blood_name()
 	return "haemolymph"
 
-/datum/species/nabber/can_overcome_gravity(var/mob/living/carbon/human/H)
+/datum/species/nabber/can_overcome_gravity(mob/living/carbon/human/H)
 	var/datum/gas_mixture/mixture = H.loc.return_air()
 
 	if(mixture)
@@ -180,17 +184,12 @@
 	return FALSE
 
 /datum/species/nabber/handle_environment_special(mob/living/carbon/human/H)
-	if(!H.on_fire && H.fire_stacks < 2 && H.species.get_bodytype() != SPECIES_MONARCH_QUEEN)
+	if(!H.on_fire && H.fire_stacks < 2)
 		H.fire_stacks += 0.2
 	return
 
-/datum/species/nabber/monarch_worker/handle_environment_special(mob/living/carbon/human/H) //Workers have their bodytype overwritten to SPECIES_NABBER on line 452, so checking for it in conditions won't work.
-	if(!H.on_fire && H.fire_stacks < 2)
-		H.fire_stacks += 0
-	return
-
 // Nabbers will only fall when there isn't enough air pressure for them to keep themselves aloft.
-/datum/species/nabber/can_fall(var/mob/living/carbon/human/H)
+/datum/species/nabber/can_fall(mob/living/carbon/human/H)
 	var/datum/gas_mixture/mixture = H.loc.return_air()
 
 	//nabbers should not be trying to break their fall on stairs.
@@ -206,7 +205,7 @@
 	return TRUE
 
 // Even when nabbers do fall, if there's enough air pressure they won't hurt themselves.
-/datum/species/nabber/handle_fall_special(var/mob/living/carbon/human/H, var/turf/landing)
+/datum/species/nabber/handle_fall_special(mob/living/carbon/human/H, turf/landing)
 
 	var/datum/gas_mixture/mixture = H.loc.return_air()
 
@@ -230,13 +229,13 @@
 	return FALSE
 
 
-/datum/species/nabber/can_shred(var/mob/living/carbon/human/H, var/ignore_intent, var/ignore_antag)
+/datum/species/nabber/can_shred(mob/living/carbon/human/H, ignore_intent, ignore_antag)
 	if(!H.handcuffed || H.buckled)
 		return ..(H, ignore_intent, TRUE)
 	else
 		return 0
 
-/datum/species/nabber/handle_movement_delay_special(var/mob/living/carbon/human/H)
+/datum/species/nabber/handle_movement_delay_special(mob/living/carbon/human/H)
 	var/tally = 0
 
 	H.remove_cloaking_source(src)
@@ -255,11 +254,11 @@
 /obj/item/grab/nab/special/init()
 	if(!(. = ..()))
 		return
-	affecting.apply_damage(15, BRUTE, BP_CHEST, DAM_SHARP, "organic punctures")
-	affecting.visible_message("<span class='danger'>[assailant]'s spikes dig in painfully!</span>")
+	affecting.apply_damage(15, DAMAGE_BRUTE, BP_CHEST, DAMAGE_FLAG_SHARP, "organic punctures")
+	affecting.visible_message(SPAN_DANGER("[assailant]'s spikes dig in painfully!"))
 	affecting.Stun(10)
 
-/datum/species/nabber/update_skin(var/mob/living/carbon/human/H)
+/datum/species/nabber/update_skin(mob/living/carbon/human/H)
 
 	if(H.stat)
 		H.skin_state = SKIN_NORMAL
@@ -298,60 +297,53 @@
 			return(threat_image)
 	return
 
-/datum/species/nabber/disarm_attackhand(var/mob/living/carbon/human/attacker, var/mob/living/carbon/human/target)
+/datum/species/nabber/disarm_attackhand(mob/living/carbon/human/attacker, mob/living/carbon/human/target)
 	if(attacker.pulling_punches || target.lying || attacker == target)
 		return ..(attacker, target)
 	if(world.time < attacker.last_attack + 20)
-		to_chat(attacker, "<span class='notice'>You can't attack again so soon.</span>")
+		to_chat(attacker, SPAN_NOTICE("You can't attack again so soon."))
 		return 0
 	attacker.last_attack = world.time
 	var/turf/T = get_step(get_turf(target), get_dir(get_turf(attacker), get_turf(target)))
 	playsound(target.loc, 'sound/weapons/pushhiss.ogg', 50, 1, -1)
 	if(!T.density)
 		step(target, get_dir(get_turf(attacker), get_turf(target)))
-		target.visible_message("<span class='danger'>[pick("[target] was sent flying backward!", "[target] staggers back from the impact!")]</span>")
+		target.visible_message(SPAN_CLASS("danger", "[pick("[target] was sent flying backward!", "[target] staggers back from the impact!")]"))
 	else
 		target.turf_collision(T, target.throw_speed / 2)
 	if(prob(50))
 		target.set_dir(GLOB.reverse_dir[target.dir])
 
-/datum/species/nabber/get_additional_examine_text(var/mob/living/carbon/human/H)
-	if(H.species.get_bodytype() == SPECIES_MONARCH_QUEEN)
-		return ..()
+/datum/species/nabber/get_additional_examine_text(mob/living/carbon/human/H)
 	var/datum/gender/T = gender_datums[H.get_gender()]
 	if(H.pulling_punches)
 		return "\n[T.His] manipulation arms are out and [T.he] looks ready to use complex items."
 	else
-		return "\n<span class='warning'>[T.His] deadly upper arms are raised and [T.he] looks ready to attack!</span>"
+		return "\n[SPAN_WARNING("[T.His] deadly upper arms are raised and [T.he] looks ready to attack!")]"
 
-/datum/species/nabber/handle_post_spawn(var/mob/living/carbon/human/H)
+/datum/species/nabber/handle_post_spawn(mob/living/carbon/human/H)
 	..()
 	return H.pulling_punches = TRUE
 
-/datum/species/nabber/has_fine_manipulation(var/mob/living/carbon/human/H)
-	if(H.species.get_bodytype() == SPECIES_MONARCH_QUEEN)
-		return ..()
-	else
-		return (..() && (H && H.pulling_punches))
+/datum/species/nabber/has_fine_manipulation(mob/living/carbon/human/H)
+	return (..() && (H && H.pulling_punches))
 
-/datum/species/nabber/attempt_grab(var/mob/living/carbon/human/grabber, var/mob/living/target)
-	if(grabber.species.get_bodytype() == SPECIES_MONARCH_QUEEN)
-		return ..()
+/datum/species/nabber/attempt_grab(mob/living/carbon/human/grabber, mob/living/target)
 	if(grabber.pulling_punches)
 		return ..()
 	if(grabber == target)
 		return ..()
 
-	grabber.unEquip(grabber.l_hand)
-	grabber.unEquip(grabber.r_hand)
-	to_chat(grabber, "<span class='warning'>You drop everything as you spring out to nab \the [target]!.</span>")
+	for (var/obj/item/item as anything in grabber.GetAllHeld())
+		grabber.unEquip(item)
+	to_chat(grabber, SPAN_WARNING("You drop everything as you spring out to nab \the [target]!."))
 	playsound(grabber.loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 
 	if(!grabber.is_cloaked())
 		return ..(grabber, target, GRAB_NAB)
 
 	if(grabber.last_special > world.time)
-		to_chat(grabber, "<span class='warning'>It is too soon to make another nab attempt.</span>")
+		to_chat(grabber, SPAN_WARNING("It is too soon to make another nab attempt."))
 		return
 
 	grabber.last_special = world.time + 50
@@ -360,57 +352,55 @@
 	if(prob(90) && grabber.make_grab(grabber, target, GRAB_NAB_SPECIAL))
 		target.Weaken(rand(1,3))
 		target.LAssailant = grabber
-		grabber.visible_message("<span class='danger'>\The [grabber] suddenly lunges out and grabs \the [target]!</span>")
+		grabber.visible_message(SPAN_DANGER("\The [grabber] suddenly lunges out and grabs \the [target]!"))
 		grabber.do_attack_animation(target)
 		playsound(grabber.loc, 'sound/weapons/thudswoosh.ogg', 50, 1, -1)
 		return 1
 	else
-		grabber.visible_message("<span class='danger'>\The [grabber] suddenly lunges out, almost grabbing \the [target]!</span>")
+		grabber.visible_message(SPAN_DANGER("\The [grabber] suddenly lunges out, almost grabbing \the [target]!"))
 
-/datum/species/nabber/toggle_stance(var/mob/living/carbon/human/H)
-	if(H.species.get_bodytype() == SPECIES_MONARCH_QUEEN)
-		return ..()
+/datum/species/nabber/toggle_stance(mob/living/carbon/human/H)
 	if(H.incapacitated())
 		return FALSE
 	var/datum/gender/T = gender_datums[H.get_gender()]
-	to_chat(H, "<span class='notice'>You begin to adjust the fluids in your arms, dropping everything and getting ready to swap which set you're using.</span>")
+	to_chat(H, SPAN_NOTICE("You begin to adjust the fluids in your arms, dropping everything and getting ready to swap which set you're using."))
 	var/hidden = H.is_cloaked()
-	if(!hidden) H.visible_message("<span class='warning'>\The [H] shifts [T.his] arms.</span>")
-	H.unEquip(H.l_hand)
-	H.unEquip(H.r_hand)
-	if(do_after(H, 30))
+	if(!hidden) H.visible_message(SPAN_WARNING("\The [H] shifts [T.his] arms."))
+	for (var/obj/item/item as anything in H.GetAllHeld())
+		H.unEquip(item)
+	if(do_after(H, 3 SECONDS, do_flags = DO_DEFAULT | DO_USER_UNIQUE_ACT))
 		arm_swap(H)
 	else
-		to_chat(H, "<span class='notice'>You stop adjusting your arms and don't switch between them.</span>")
+		to_chat(H, SPAN_NOTICE("You stop adjusting your arms and don't switch between them."))
 	return TRUE
 
-/datum/species/nabber/proc/arm_swap(var/mob/living/carbon/human/H, var/forced)
-	H.unEquip(H.l_hand)
-	H.unEquip(H.r_hand)
+/datum/species/nabber/proc/arm_swap(mob/living/carbon/human/H, forced)
+	for (var/obj/item/item as anything in H.GetAllHeld())
+		H.unEquip(item)
 	var/hidden = H.is_cloaked()
 	var/datum/gender/T = gender_datums[H.get_gender()]
 	H.pulling_punches = !H.pulling_punches
 	if(H.pulling_punches)
 		H.current_grab_type = all_grabobjects[GRAB_NORMAL]
 		if(forced)
-			to_chat(H, "<span class='notice'>You can't keep your hunting arms prepared and they drop, forcing you to use your manipulation arms.</span>")
+			to_chat(H, SPAN_NOTICE("You can't keep your hunting arms prepared and they drop, forcing you to use your manipulation arms."))
 			if(!hidden)
-				H.visible_message("<span class='notice'>[H] falters, [T.his] hunting arms failing.</span>")
+				H.visible_message(SPAN_NOTICE("[H] falters, [T.his] hunting arms failing."))
 		else
-			to_chat(H, "<span class='notice'>You relax your hunting arms, lowering the pressure and folding them tight to your thorax. \
-			You reach out with your manipulation arms, ready to use complex items.</span>")
+			to_chat(H, SPAN_NOTICE("You relax your hunting arms, lowering the pressure and folding them tight to your thorax. \
+			You reach out with your manipulation arms, ready to use complex items."))
 			if(!hidden)
-				H.visible_message("<span class='notice'>[H] seems to relax as [T.he] folds [T.his] massive curved arms to [T.his] thorax and reaches out \
-				with [T.his] small handlike limbs.</span>")
+				H.visible_message(SPAN_NOTICE("[H] seems to relax as [T.he] folds [T.his] massive curved arms to [T.his] thorax and reaches out \
+				with [T.his] small handlike limbs."))
 	else
 		H.current_grab_type = all_grabobjects[GRAB_NAB]
-		to_chat(H, "<span class='notice'>You pull in your manipulation arms, dropping any items and unfolding your massive hunting arms in preparation of grabbing prey.</span>")
+		to_chat(H, SPAN_NOTICE("You pull in your manipulation arms, dropping any items and unfolding your massive hunting arms in preparation of grabbing prey."))
 		if(!hidden)
-			H.visible_message("<span class='warning'>[H] tenses as [T.he] brings [T.his] smaller arms in close to [T.his] body. [T.His] two massive spiked arms reach \
-			out. [T.He] looks ready to attack.</span>")
+			H.visible_message(SPAN_WARNING("[H] tenses as [T.he] brings [T.his] smaller arms in close to [T.his] body. [T.His] two massive spiked arms reach \
+			out. [T.He] looks ready to attack."))
 
-/datum/species/nabber/check_background(var/datum/job/job, var/datum/preferences/prefs)
-	var/decl/cultural_info/culture/nabber/grade = SSculture.get_culture(prefs.cultural_info[TAG_CULTURE])
+/datum/species/nabber/check_background(datum/job/job, datum/preferences/prefs)
+	var/singleton/cultural_info/culture/nabber/grade = SSculture.get_culture(prefs.cultural_info[TAG_CULTURE])
 	. = istype(grade) ? (job.type in grade.valid_jobs) : ..()
 
 /datum/species/nabber/skills_from_age(age)	//Converts an age into a skill point allocation modifier. Can be used to give skill point bonuses/penalities not depending on job.
@@ -419,117 +409,3 @@
 		if(19 to 27) 	. = 2
 		if(28 to 40)	. = -2
 		else			. = -4
-
-/datum/species/nabber/monarch_worker
-	name = SPECIES_MONARCH_WORKER
-	name_plural = "Monarch Serpentid Workers"
-	description = "close cousins to the Giant Armoured Serpentids, saved from their crippled homeworld hundreds of \
-	years ago and now allies and peers within the Ascent."
-	icobase = 'icons/mob/human_races/species/nabber/body_msw.dmi'
-	deform = 'icons/mob/human_races/species/nabber/body_msw.dmi'
-	spawn_flags = SPECIES_IS_RESTRICTED | SPECIES_NO_FBP_CONSTRUCTION | SPECIES_NO_FBP_CHARGEN
-	appearance_flags = 0
-	base_skin_colours = null
-	has_organ = list(
-		BP_BRAIN =             /obj/item/organ/internal/brain/insectoid/nabber,
-		BP_EYES =              /obj/item/organ/internal/eyes/insectoid/nabber,
-		BP_TRACH =             /obj/item/organ/internal/lungs/insectoid/nabber,
-		BP_HEART =             /obj/item/organ/internal/heart/open,
-		BP_LIVER =             /obj/item/organ/internal/liver/insectoid/nabber,
-		BP_STOMACH =           /obj/item/organ/internal/stomach/insectoid,
-		BP_SYSTEM_CONTROLLER = /obj/item/organ/internal/controller
-	)
-
-	force_cultural_info = list(
-		TAG_CULTURE =   CULTURE_ASCENT,
-		TAG_HOMEWORLD = HOME_SYSTEM_KHARMAANI,
-		TAG_FACTION =   FACTION_ASCENT_SERPENTID,
-		TAG_RELIGION =  RELIGION_KHARMAANI
-	)
-
-/datum/species/nabber/monarch_worker/get_bodytype(mob/living/carbon/human/H)
-	return SPECIES_NABBER
-
-/datum/species/nabber/monarch_worker/equip_survival_gear(mob/living/carbon/human/H)
-	return
-
-
-/datum/species/nabber/monarch_queen
-	name = SPECIES_MONARCH_QUEEN
-	name_plural = "Monarch Serpentid Queens"
-	description = "close cousins to the Giant Armoured Serpentids, saved from their crippled homeworld hundreds of \
-	years ago and now allies and peers within the Ascent. Queens, who were saved from a dying world by the Kharmaani \
-	and eventually promoted from 'entertaining pets' to the middle men that keep Ascent society functioning smoothly. \
-	Gynes have tremendous difficulties in communicating with each other politely, so the queens act as intermediaries, \
-	smoothing over the fractious and unproductive squabbling."
-
-	silent_steps = TRUE
-
-	icobase = 'icons/mob/human_races/species/nabber/msq/body.dmi'
-	deform = 'icons/mob/human_races/species/nabber/msq/body.dmi'
-	blood_mask = 'icons/mob/human_races/species/nabber/msq/blood_mask.dmi'
-	damage_mask = 'icons/mob/human_races/species/nabber/msq/damage_mask.dmi'
-
-	genders = list(FEMALE)
-
-	total_health = 150
-
-	mob_size = MOB_MEDIUM
-	breath_pressure = 21
-	blood_volume = 600
-
-	appearance_flags = 0
-	base_skin_colours = null
-	spawn_flags = SPECIES_IS_RESTRICTED | SPECIES_NO_FBP_CONSTRUCTION | SPECIES_NO_FBP_CHARGEN
-
-	has_organ = list(
-		BP_BRAIN =             /obj/item/organ/internal/brain/insectoid/nabber,
-		BP_EYES =              /obj/item/organ/internal/eyes/insectoid/msq,
-		BP_TRACH =             /obj/item/organ/internal/lungs/insectoid/nabber,
-		BP_LIVER =             /obj/item/organ/internal/liver/insectoid/nabber,
-		BP_HEART =             /obj/item/organ/internal/heart/open,
-		BP_STOMACH =           /obj/item/organ/internal/stomach,
-		BP_SYSTEM_CONTROLLER = /obj/item/organ/internal/controller,
-		BP_VOICE =    /obj/item/organ/internal/voicebox/nabber/ascent
-		)
-
-	has_limbs = list(
-		BP_CHEST =  list("path" = /obj/item/organ/external/chest/insectoid),
-		BP_GROIN =  list("path" = /obj/item/organ/external/groin/insectoid/nabber),
-		BP_HEAD =   list("path" = /obj/item/organ/external/head/insectoid),
-		BP_L_ARM =  list("path" = /obj/item/organ/external/arm/insectoid),
-		BP_L_HAND = list("path" = /obj/item/organ/external/hand/insectoid),
-		BP_R_ARM =  list("path" = /obj/item/organ/external/arm/right/insectoid),
-		BP_R_HAND = list("path" = /obj/item/organ/external/hand/right/insectoid),
-		BP_R_LEG =  list("path" = /obj/item/organ/external/leg/right/insectoid),
-		BP_L_LEG =  list("path" = /obj/item/organ/external/leg/insectoid),
-		BP_L_FOOT = list("path" = /obj/item/organ/external/foot/insectoid),
-		BP_R_FOOT = list("path" = /obj/item/organ/external/foot/right/insectoid)
-		)
-
-	descriptors = list(
-		/datum/mob_descriptor/height = -1,
-		/datum/mob_descriptor/body_length = -1
-		)
-
-
-	force_cultural_info = list(
-		TAG_CULTURE =   CULTURE_ASCENT,
-		TAG_HOMEWORLD = HOME_SYSTEM_KHARMAANI,
-		TAG_FACTION =   FACTION_ASCENT_SERPENTID,
-		TAG_RELIGION =  RELIGION_KHARMAANI
-		)
-
-/datum/species/nabber/monarch_queen/New()
-	equip_adjust = list(
-		slot_belt_str = list(
-			"[NORTH]" = list("x" = 0, "y" = 0),
-			"[EAST]" = list("x" = 8, "y" = 0),
-			"[SOUTH]" = list("x" = 0, "y" = 0),
-			"[WEST]" = list("x" = -8, "y" = 0)
-		)
-	)
-	..()
-
-/datum/species/nabber/monarch_queen/equip_survival_gear(mob/living/carbon/human/H)
-	return

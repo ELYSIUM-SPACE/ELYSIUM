@@ -6,25 +6,17 @@
 	icon = 'icons/obj/closets/bodybag.dmi'
 	icon_state = "bodybag_folded"
 	w_class = ITEM_SIZE_SMALL
-	attack_self(mob/user)
-		var/obj/structure/closet/body_bag/R = new /obj/structure/closet/body_bag(user.loc)
-		R.add_fingerprint(user)
-		qdel(src)
+/obj/item/bodybag/attack_self(mob/user)
+	var/obj/structure/closet/body_bag/R = new /obj/structure/closet/body_bag(user.loc)
+	R.add_fingerprint(user)
+	qdel(src)
 
 
 /obj/item/storage/box/bodybags
 	name = "body bags"
 	desc = "This box contains body bags."
 	icon_state = "bodybags"
-	New()
-		..()
-		new /obj/item/bodybag(src)
-		new /obj/item/bodybag(src)
-		new /obj/item/bodybag(src)
-		new /obj/item/bodybag(src)
-		new /obj/item/bodybag(src)
-		new /obj/item/bodybag(src)
-		new /obj/item/bodybag(src)
+	startswith = list(/obj/item/bodybag = 7)
 
 
 /obj/structure/closet/body_bag
@@ -40,7 +32,7 @@
 	var/contains_body = 0
 	var/has_label = FALSE
 
-/obj/structure/closet/body_bag/attackby(var/obj/item/W, mob/user as mob)
+/obj/structure/closet/body_bag/attackby(obj/item/W, mob/user as mob)
 	if (istype(W, /obj/item/pen))
 		var/t = input(user, "What would you like the label to be?", text("[]", src.name), null)  as text
 		if (user.get_active_hand() != W)
@@ -73,7 +65,7 @@
 	if(has_label)
 		src.overlays += image(src.icon, "bodybag_label")
 
-/obj/structure/closet/body_bag/store_mobs(var/stored_units)
+/obj/structure/closet/body_bag/store_mobs(stored_units)
 	contains_body = ..()
 	return contains_body
 
@@ -83,7 +75,7 @@
 		return 1
 	return 0
 
-/obj/structure/closet/body_bag/proc/fold(var/user)
+/obj/structure/closet/body_bag/proc/fold(user)
 	if(!(ishuman(user) || isrobot(user)))
 		to_chat(user, SPAN_NOTICE("You lack the dexterity to close \the [name]."))
 		return FALSE
@@ -92,7 +84,7 @@
 		to_chat(user, SPAN_NOTICE("You must close \the [name] before it can be folded."))
 		return FALSE
 
-	if(contents.len)
+	if(length(contents))
 		to_chat(user, SPAN_NOTICE("You can't fold \the [name] while it has something inside it."))
 		return FALSE
 
@@ -102,7 +94,7 @@
 
 /obj/structure/closet/body_bag/MouseDrop(over_object, src_location, over_location)
 	..()
-	if((over_object == usr && (in_range(src, usr) || list_find(usr.contents, src))))
+	if((over_object == usr && (in_range(src, usr) || usr.contents.Find(src))))
 		fold(usr)
 
 /obj/item/robot_rack/body_bag

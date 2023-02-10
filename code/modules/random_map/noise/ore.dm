@@ -7,7 +7,7 @@
 	var/min_rare_ratio = MIN_RARE_COUNT_PER_CHUNK
 	var/min_deep_ratio = MIN_DEEP_COUNT_PER_CHUNK
 
-/datum/random_map/noise/ore/New(var/seed, var/tx, var/ty, var/tz, var/tlx, var/tly, var/do_not_apply, var/do_not_announce, var/never_be_priority = 0)
+/datum/random_map/noise/ore/New(seed, tx, ty, tz, tlx, tly, do_not_apply, do_not_announce, never_be_priority = 0)
 	rare_val = cell_range * rare_val
 	deep_val = cell_range * deep_val
 	..(seed, tx, ty, tz, (tlx / chunk_size), (tly / chunk_size), do_not_apply, do_not_announce, never_be_priority)
@@ -31,18 +31,18 @@
 
 	// Sanity check.
 	if(surface_count < (min_surface_ratio * num_chunks))
-		admin_notice("<span class='danger'>Insufficient surface minerals. Rerolling...</span>", R_DEBUG)
+		admin_notice(SPAN_DANGER("Insufficient surface minerals. Rerolling..."), R_DEBUG)
 		return 0
 	else if(rare_count < (min_rare_ratio * num_chunks))
-		admin_notice("<span class='danger'>Insufficient rare minerals. Rerolling...</span>", R_DEBUG)
+		admin_notice(SPAN_DANGER("Insufficient rare minerals. Rerolling..."), R_DEBUG)
 		return 0
 	else if(deep_count < (min_deep_ratio * num_chunks))
-		admin_notice("<span class='danger'>Insufficient deep minerals. Rerolling...</span>", R_DEBUG)
+		admin_notice(SPAN_DANGER("Insufficient deep minerals. Rerolling..."), R_DEBUG)
 		return 0
 	else
 		return 1
 
-/datum/random_map/noise/ore/apply_to_turf(var/x,var/y)
+/datum/random_map/noise/ore/apply_to_turf(x,y)
 
 	var/tx = ((origin_x-1)+x)*chunk_size
 	var/ty = ((origin_y-1)+y)*chunk_size
@@ -93,7 +93,7 @@
 				T.resources[MATERIAL_GOLD] =     0
 				T.resources[MATERIAL_SILVER] =   0
 
-/datum/random_map/noise/ore/get_map_char(var/value)
+/datum/random_map/noise/ore/get_map_char(value)
 	if(value < rare_val)
 		return "S"
 	else if(value < deep_val)
@@ -108,7 +108,7 @@
 /datum/random_map/noise/ore/rich
 	deep_val = 0.7
 	rare_val = 0.5
-	
+
 /datum/random_map/noise/ore/poor
 	deep_val = 0.8
 	rare_val = 0.7

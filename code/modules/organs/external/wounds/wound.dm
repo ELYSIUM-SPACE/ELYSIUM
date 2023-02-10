@@ -21,15 +21,16 @@
 	/*  These are defined by the wound type and should not be changed */
 	var/list/stages            // stages such as "cut", "deep cut", etc.
 	var/max_bleeding_stage = 0 // maximum stage at which bleeding should still happen. Beyond this stage bleeding is prevented.
-	var/damage_type = CUT      // one of CUT, PIERCE, BRUISE, BURN
+	/// String (One of `DAMAGE_TYPE_*`). The wound's injury type.
+	var/damage_type = INJURY_TYPE_CUT
 	var/autoheal_cutoff = 15   // the maximum amount of damage that this wound can have and still autoheal
 
 	// helper lists
-	var/tmp/list/embedded_objects
-	var/tmp/list/desc_list = list()
-	var/tmp/list/damage_list = list()
+	var/list/embedded_objects
+	var/list/desc_list = list()
+	var/list/damage_list = list()
 
-/datum/wound/New(var/damage, var/obj/item/organ/external/organ = null)
+/datum/wound/New(damage, obj/item/organ/external/organ = null)
 
 	created = world.time
 
@@ -57,8 +58,8 @@
 	. = ..()
 
 // returns 1 if there's a next stage, 0 otherwise
-/datum/wound/proc/init_stage(var/initial_damage)
-	current_stage = stages.len
+/datum/wound/proc/init_stage(initial_damage)
+	current_stage = length(stages)
 
 	while(src.current_stage > 1 && src.damage_list[current_stage-1] <= initial_damage / src.amount)
 		src.current_stage--
@@ -79,13 +80,13 @@
 /datum/wound/proc/is_treated()
 	if(!LAZYLEN(embedded_objects))
 		switch(damage_type)
-			if(BRUISE, CUT, PIERCE)
+			if (INJURY_TYPE_BRUISE, INJURY_TYPE_CUT, INJURY_TYPE_PIERCE)
 				return bandaged
-			if(BURN)
+			if (INJURY_TYPE_BURN)
 				return salved
 
 	// Checks whether other other can be merged into src.
-/datum/wound/proc/can_merge(var/datum/wound/other)
+/datum/wound/proc/can_merge(datum/wound/other)
 	if (other.type != src.type) return 0
 	if (other.current_stage != src.current_stage) return 0
 	if (other.damage_type != src.damage_type) return 0
@@ -98,7 +99,7 @@
 	if (other.parent_organ != parent_organ) return 0
 	return 1
 
-/datum/wound/proc/merge_wound(var/datum/wound/other)
+/datum/wound/proc/merge_wound(datum/wound/other)
 	if(LAZYLEN(other.embedded_objects))
 		LAZYDISTINCTADD(src.embedded_objects, other.embedded_objects)
 	src.damage += other.damage
@@ -119,16 +120,16 @@
 		germ_level = 0	//reset this, just in case
 		return 0
 
-	if (damage_type == BRUISE && !bleeding()) //bruises only infectable if bleeding
+	if (damage_type == INJURY_TYPE_BRUISE && !bleeding()) //bruises only infectable if bleeding
 		return 0
 
 	var/dam_coef = round(damage/10)
 	switch (damage_type)
-		if (BRUISE)
+		if (INJURY_TYPE_BRUISE)
 			return prob(dam_coef*5)
-		if (BURN)
+		if (INJURY_TYPE_BURN)
 			return prob(dam_coef*25)
-		if (CUT)
+		if (INJURY_TYPE_CUT)
 			return prob(dam_coef*10)
 
 	return 0
@@ -148,7 +149,7 @@
 	if(LAZYLEN(embedded_objects))
 		return amount // heal nothing
 	if(parent_organ)
-		if(damage_type == BURN && !(parent_organ.burn_ratio < 1 || (parent_organ.limb_flags & ORGAN_FLAG_HEALS_OVERKILL)))
+		if (damage_type == INJURY_TYPE_BURN && !(parent_organ.burn_ratio < 1 || (parent_organ.limb_flags & ORGAN_FLAG_HEALS_OVERKILL)))
 			return amount	//We don't want to heal wounds on irreparable organs.
 		else if(!(parent_organ.brute_ratio < 1 || (parent_organ.limb_flags & ORGAN_FLAG_HEALS_OVERKILL)))
 			return amount
@@ -157,7 +158,7 @@
 	amount -= healed_damage
 	src.damage -= healed_damage
 
-	while(src.wound_damage() < damage_list[current_stage] && current_stage < src.desc_list.len)
+	while(src.wound_damage() < damage_list[current_stage] && current_stage < length(src.desc_list))
 		current_stage++
 	desc = desc_list[current_stage]
 	src.min_damage = damage_list[current_stage]

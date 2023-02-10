@@ -19,25 +19,25 @@
 	if(!owned_scanner)
 		owned_scanner = locate(/obj/machinery/artifact_scanpad) in orange(1, src)
 
-/obj/machinery/artifact_harvester/attackby(var/obj/I as obj, var/mob/user as mob)
+/obj/machinery/artifact_harvester/attackby(obj/I as obj, mob/user as mob)
 	if(istype(I,/obj/item/anobattery))
 		if(!inserted_battery)
 			if(!user.unEquip(I, src))
 				return
-			to_chat(user, "<span class='notice'>You insert [I] into [src].</span>")
+			to_chat(user, SPAN_NOTICE("You insert [I] into [src]."))
 			src.inserted_battery = I
 			updateDialog()
 		else
-			to_chat(user, "<span class='warning'>There is already a battery in [src].</span>")
+			to_chat(user, SPAN_WARNING("There is already a battery in [src]."))
 	else
 		return..()
 
-/obj/machinery/artifact_harvester/attack_hand(var/mob/user as mob)
+/obj/machinery/artifact_harvester/attack_hand(mob/user as mob)
 	..()
 	interact(user)
 
-/obj/machinery/artifact_harvester/interact(var/mob/user as mob)
-	if(stat & (NOPOWER|BROKEN))
+/obj/machinery/artifact_harvester/interact(mob/user as mob)
+	if(inoperable())
 		return
 	user.set_machine(src)
 	var/dat = "<B>Artifact Power Harvester</B><BR>"
@@ -61,7 +61,7 @@
 			else
 				dat += "No battery inserted.<BR>"
 	else
-		dat += "<B><font color=red>Unable to locate analysis pad.</font><BR></b>"
+		dat += "<B>[SPAN_COLOR("red", "Unable to locate analysis pad.")]<BR></b>"
 	dat += "<A href='?src=\ref[src];close=1'>Close</a><BR>"
 	dat += "<HR>"
 	var/datum/browser/popup = new(user, "artifact_harvester", "Artifact Power Harvester", 450, 500)
@@ -69,7 +69,7 @@
 	popup.open()
 
 /obj/machinery/artifact_harvester/Process()
-	if(stat & (NOPOWER|BROKEN))
+	if(inoperable())
 		return
 
 	updateDialog()
@@ -145,9 +145,9 @@
 					cur_artifact = analysed
 
 					//if both effects are active, we can't harvest either
-					if(cur_artifact.my_effect && cur_artifact.my_effect.activated && cur_artifact.secondary_effect && cur_artifact.secondary_effect.activated)
+					if (cur_artifact.my_effect?.activated && cur_artifact.secondary_effect?.activated)
 						src.visible_message("<b>[src]</b> states, \"Cannot harvest. Source is emitting conflicting energy signatures.\"")
-					else if(!cur_artifact.my_effect.activated && !(cur_artifact.secondary_effect && cur_artifact.secondary_effect.activated))
+					else if (!cur_artifact.my_effect?.activated && !cur_artifact.secondary_effect?.activated)
 						src.visible_message("<b>[src]</b> states, \"Cannot harvest. No energy emitting from source.\"")
 
 					else

@@ -31,7 +31,7 @@
 	. = ..()
 	unregister_monitor()
 
-/obj/machinery/computer/station_alert/proc/register_monitor(var/datum/nano_module/alarm_monitor/monitor)
+/obj/machinery/computer/station_alert/proc/register_monitor(datum/nano_module/alarm_monitor/monitor)
 	if(monitor.host != src)
 		return
 
@@ -57,7 +57,7 @@
 
 /obj/machinery/computer/station_alert/on_update_icon()
 	icon_screen = initial(icon_screen)
-	if(!(stat & (BROKEN|NOPOWER)))
+	if(operable())
 		if(alarm_monitor)
 			if(alarm_monitor.has_major_alarms(get_z(src)))
 				icon_screen = "alert:2"

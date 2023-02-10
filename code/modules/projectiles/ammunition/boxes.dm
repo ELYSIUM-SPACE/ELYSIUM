@@ -30,14 +30,24 @@
 	multiple_sprites = 1
 
 /obj/item/ammo_magazine/speedloader/pclip
-	name = "pistol stripper clip"
-	desc = "A stripper clip for pistol caliber weapons."
+	name = "magnum pistol stripper clip"
+	desc = "A stripper clip for pistol magnum caliber weapons."
 	icon_state = "pclip"
 	caliber = CALIBER_PISTOL_MAGNUM
 	ammo_type = /obj/item/ammo_casing/pistol/magnum
 	matter = list(MATERIAL_STEEL = 1300)
 	max_ammo = 5
 	multiple_sprites = 1
+
+/obj/item/ammo_magazine/speedloader/hpclip
+	name = "holdout pistol stripper clip"
+	desc = "A stripper clip for pistol holdout caliber weapons."
+	icon_state = "hpclip"
+	caliber = CALIBER_PISTOL_SMALL
+	ammo_type = /obj/item/ammo_casing/pistol/small
+	matter = list(MATERIAL_STEEL = 1800)
+	max_ammo = 10
+	multiple_sprites = TRUE
 
 /obj/item/ammo_magazine/speedloader/clip
 	name = "rifle stripper clip"
@@ -69,11 +79,11 @@
 		overlays += I
 
 /obj/item/ammo_magazine/shotholder/attack_hand(mob/user)
-	if((user.a_intent == I_HURT) && (stored_ammo.len))
-		var/obj/item/ammo_casing/C = stored_ammo[stored_ammo.len]
+	if((user.a_intent == I_HURT) && (length(stored_ammo)))
+		var/obj/item/ammo_casing/C = stored_ammo[length(stored_ammo)]
 		stored_ammo-=C
 		user.put_in_hands(C)
-		user.visible_message("\The [user] removes \a [C] from [src].", "<span class='notice'>You remove \a [C] from [src].</span>")
+		user.visible_message("\The [user] removes \a [C] from [src].", SPAN_NOTICE("You remove \a [C] from [src]."))
 		update_icon()
 	else
 		..()
@@ -167,7 +177,7 @@
 	caliber = CALIBER_PISTOL
 	matter = list(MATERIAL_STEEL = 750)
 	ammo_type = /obj/item/ammo_casing/pistol
-	max_ammo = 10
+	max_ammo = 8
 	multiple_sprites = 1
 
 /obj/item/ammo_magazine/pistol/empty
@@ -331,3 +341,14 @@
 	matter = list(MATERIAL_STEEL = 600)
 	max_ammo = 7
 	multiple_sprites = 1
+
+/obj/item/ammo_magazine/iclipr
+	name = "en-bloc clip"
+	desc = "An en-bloc clip for the garand rifle."
+	icon_state = "iclipr"
+	caliber = CALIBER_RIFLE
+	mag_type = MAGAZINE
+	ammo_type = /obj/item/ammo_casing/rifle
+	matter = list(MATERIAL_STEEL = 1500)
+	max_ammo = 8
+	multiple_sprites = TRUE

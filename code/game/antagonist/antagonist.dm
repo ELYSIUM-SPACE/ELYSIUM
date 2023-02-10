@@ -142,7 +142,7 @@
 	return candidates
 
 // Builds a list of potential antags without actually setting them. Used to test mode viability.
-/datum/antagonist/proc/get_potential_candidates(var/datum/game_mode/mode, var/ghosts_only)
+/datum/antagonist/proc/get_potential_candidates(datum/game_mode/mode, ghosts_only)
 	var/candidates = list()
 
 	// Keeping broken up for readability
@@ -177,12 +177,12 @@
 		return 0
 
 	build_candidate_list(SSticker.mode, flags & (ANTAG_OVERRIDE_MOB|ANTAG_OVERRIDE_JOB))
-	if(!candidates.len)
+	if(!length(candidates))
 		message_admins("Could not auto-spawn a [role_text], no candidates found.")
 		return 0
 
 	attempt_spawn(1) //auto-spawn antags one at a time
-	if(!pending_antagonists.len)
+	if(!length(pending_antagonists))
 		message_admins("Could not auto-spawn a [role_text], none of the available candidates could be selected.")
 		return 0
 
@@ -200,16 +200,16 @@
 //Attempting to spawn an antag role with ANTAG_OVERRIDE_JOB should be done before jobs are assigned,
 //so that they do not occupy regular job slots. All other antag roles should be spawned after jobs are
 //assigned, so that job restrictions can be respected.
-/datum/antagonist/proc/attempt_spawn(var/spawn_target = null)
+/datum/antagonist/proc/attempt_spawn(spawn_target = null)
 	if(spawn_target == null)
 		spawn_target = initial_spawn_target
 
 	// Update our boundaries.
-	if(!candidates.len)
+	if(!length(candidates))
 		return 0
 
 	//Grab candidates randomly until we have enough.
-	while(candidates.len && pending_antagonists.len < spawn_target)
+	while(length(candidates) && length(pending_antagonists) < spawn_target)
 		var/datum/mind/player = pick(candidates)
 		candidates -= player
 		draft_antagonist(player)
@@ -260,7 +260,7 @@
 /datum/antagonist/proc/post_spawn()
 	return
 
-//Resets the antag selection, clearing all pending_antagonists and their special_role
+//Resets the antag selection, clearing all pending_antagonists
 //(and assigned_role if ANTAG_OVERRIDE_JOB is set) as well as clearing the candidate list.
 //Existing antagonists are left untouched.
 /datum/antagonist/proc/reset_antag_selection()
@@ -268,6 +268,5 @@
 		if(flags & ANTAG_OVERRIDE_JOB)
 			player.assigned_job = null
 			player.assigned_role = null
-		player.special_role = null
 	pending_antagonists.Cut()
 	candidates.Cut()

@@ -22,7 +22,7 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 	. = ..()
 	GLOB.all_crew_records.Remove(src)
 
-/datum/computer_file/report/crew_record/proc/load_from_mob(var/mob/living/carbon/human/H)
+/datum/computer_file/report/crew_record/proc/load_from_mob(mob/living/carbon/human/H)
 	if(istype(H))
 		photo_front = getFlatIcon(H, SOUTH, always_use_defdir = 1)
 		photo_side = getFlatIcon(H, WEST, always_use_defdir = 1)
@@ -38,7 +38,7 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 		formal_name = H.real_name
 		if(H.client && H.client.prefs)
 			for(var/culturetag in H.client.prefs.cultural_info)
-				var/decl/cultural_info/culture = SSculture.get_culture(H.client.prefs.cultural_info[culturetag])
+				var/singleton/cultural_info/culture = SSculture.get_culture(H.client.prefs.cultural_info[culturetag])
 				if(H.char_rank && H.char_rank.name_short)
 					formal_name = "[formal_name][culture.get_formal_name_suffix()]"
 				else
@@ -101,7 +101,7 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 		if(H.client && H.client.prefs)
 			var/list/qualifications
 			for(var/culturetag in H.client.prefs.cultural_info)
-				var/decl/cultural_info/culture = SSculture.get_culture(H.client.prefs.cultural_info[culturetag])
+				var/singleton/cultural_info/culture = SSculture.get_culture(H.client.prefs.cultural_info[culturetag])
 				var/extra_note = culture.get_qualifications()
 				if(extra_note)
 					LAZYADD(qualifications, extra_note)
@@ -111,12 +111,11 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 
 	// Misc cultural info.
 	set_homeSystem(H ? html_decode(H.get_cultural_value(TAG_HOMEWORLD)) : "Unset")
-	set_faction(H ? html_decode(H.get_cultural_value(TAG_FACTION)) : "Unset")
 	set_religion(H ? html_decode(H.get_cultural_value(TAG_RELIGION)) : "Unset")
 
 	if(H)
 		var/skills = list()
-		for(var/decl/hierarchy/skill/S in GLOB.skills)
+		for(var/singleton/hierarchy/skill/S in GLOB.skills)
 			var/level = H.get_skill_value(S.type)
 			if(level > SKILL_NONE)
 				skills += "[S.name], [S.levels[level]]"
@@ -124,18 +123,19 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 		set_skillset(jointext(skills,"\n"))
 
 	// Antag record
+	set_faction(H ? html_decode(H.get_cultural_value(TAG_FACTION)) : "Unset")
 	set_antagRecord(H && H.exploit_record && !jobban_isbanned(H, "Records") ? html_decode(H.exploit_record) : "")
 
 // Global methods
 // Used by character creation to create a record for new arrivals.
-/proc/CreateModularRecord(var/mob/living/carbon/human/H)
+/proc/CreateModularRecord(mob/living/carbon/human/H)
 	var/datum/computer_file/report/crew_record/CR = new/datum/computer_file/report/crew_record()
 	GLOB.all_crew_records.Add(CR)
 	CR.load_from_mob(H)
 	return CR
 
 // Gets crew records filtered by set of positions
-/proc/department_crew_manifest(var/list/filter_positions, var/blacklist = FALSE)
+/proc/department_crew_manifest(list/filter_positions, blacklist = FALSE)
 	var/list/matches = list()
 	for(var/datum/computer_file/report/crew_record/CR in GLOB.all_crew_records)
 		var/rank = CR.get_job()
@@ -149,7 +149,7 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 
 // Simple record to HTML (for paper purposes) conversion.
 // Not visually that nice, but it gets the work done, feel free to tweak it visually
-/proc/record_to_html(var/datum/computer_file/report/crew_record/CR, var/access)
+/proc/record_to_html(datum/computer_file/report/crew_record/CR, access)
 	var/dat = "<tt><H2>RECORD DATABASE DATA DUMP</H2><i>Generated on: [stationdate2text()] [stationtime2text()]</i><br>******************************<br>"
 	dat += "<table>"
 	for(var/datum/report_field/F in CR.fields)
@@ -161,14 +161,14 @@ GLOBAL_VAR_INIT(arrest_security_status, "Arrest")
 	dat += "</tt>"
 	return dat
 
-/proc/get_crewmember_record(var/name)
+/proc/get_crewmember_record(name)
 	name = sanitize(name)
 	for(var/datum/computer_file/report/crew_record/CR in GLOB.all_crew_records)
 		if(CR.get_name() == name)
 			return CR
 	return null
 
-/proc/GetAssignment(var/mob/living/carbon/human/H)
+/proc/GetAssignment(mob/living/carbon/human/H)
 	if(!H)
 		return "Unassigned"
 	if(!H.mind)
@@ -222,16 +222,16 @@ FIELD_SHORT("Fingerprint", fingerprint, access_security, access_security)
 // EMPLOYMENT RECORDS
 FIELD_LONG("Employment Record", emplRecord, access_bridge, access_bridge)
 FIELD_SHORT("Home System", homeSystem, access_bridge, access_change_ids)
-FIELD_SHORT("Faction", faction, access_bridge, access_bridge)
 FIELD_LONG("Qualifications", skillset, access_bridge, access_bridge)
 
 // ANTAG RECORDS
+FIELD_SHORT("Faction", faction, access_syndicate, access_syndicate)
 FIELD_LONG("Exploitable Information", antagRecord, access_syndicate, access_syndicate)
 
 //Options builderes
 /datum/report_field/options/crew_record/rank/proc/record_ranks()
 	var/datum/computer_file/report/crew_record/record = owner
-	var/datum/mil_branch/branch = mil_branches.get_branch(record.get_branch())
+	var/datum/mil_branch/branch = GLOB.mil_branches.get_branch(record.get_branch())
 	if(!branch)
 		return
 	. = list()
@@ -250,8 +250,8 @@ FIELD_LONG("Exploitable Information", antagRecord, access_syndicate, access_synd
 /datum/report_field/options/crew_record/branch/proc/record_branches()
 	. = list()
 	. |= "Unset"
-	for(var/B in mil_branches.branches)
-		var/datum/mil_branch/BR = mil_branches.branches[B]
+	for(var/B in GLOB.mil_branches.branches)
+		var/datum/mil_branch/BR = GLOB.mil_branches.branches[B]
 		. |= BR.name
 
 #undef GETTER_SETTER

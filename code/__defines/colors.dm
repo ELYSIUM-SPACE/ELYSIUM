@@ -82,6 +82,7 @@
 #define COLOR_ASTEROID_ROCK    "#735555"
 #define COLOR_NULLGLASS        "#ff6088"
 #define COLOR_DIAMOND          "#d8d4ea"
+#define COLOR_VOX			   "#244238"
 #define COLOR_SFP_BLUE 		   "#2c425f"	//Elysium
 
 #define	PIPE_COLOR_GREY        "#808080"
@@ -116,6 +117,7 @@
 #define COMMS_COLOR_BEARCAT    "#590e2d"
 #define COMMS_COLOR_COLONY     "#ceaf3e"
 #define COMMS_COLOR_VERNE      "#738465"
+#define COMMS_COLOR_ICCG       "#790000"
 #define	COMMS_COLOR_SOL_COMMAND	"#0080ff"	//Elysium
 
 #define WOOD_COLOR_GENERIC     "#d5a66e"
@@ -183,3 +185,24 @@
 #define COLOR_DARKMODE_BACKGROUND "#202020"
 #define COLOR_DARKMODE_DARKBACKGROUND "#171717"
 #define COLOR_DARKMODE_TEXT "#a4bad6"
+
+// Medical readout colors
+#define COLOR_MEDICAL_BRUTE "#ff0000"
+#define COLOR_MEDICAL_BURN "#ff7700"
+#define COLOR_MEDICAL_TOXIN "#00ff00"
+#define COLOR_MEDICAL_OXYLOSS "#0000ff"
+#define COLOR_MEDICAL_CRYSTAL "#0066ff"
+#define COLOR_MEDICAL_ROBOTIC "#666688"
+#define COLOR_MEDICAL_INTERNAL "#ff66ff"
+#define COLOR_MEDICAL_RADIATION "#66ff66"
+#define COLOR_MEDICAL_NECROTIC "#663333"
+#define COLOR_MEDICAL_INTERNAL_DANGER "#aa3333"
+#define COLOR_MEDICAL_DISLOCATED "#6666ff"
+#define COLOR_MEDICAL_BROKEN "#ff00aa"
+#define COLOR_MEDICAL_SPLINTED "#ff66aa"
+#define COLOR_MEDICAL_IMPLANT "#aa66ff"
+#define COLOR_MEDICAL_UNKNOWN_IMPLANT "#aa00ff"
+#define COLOR_MEDICAL_SCARRING "#aa9999"
+#define COLOR_MEDICAL_MISSING "#886666"
+
+#define COLORED_SQUARE(COLOR) "<span style='font-face: fixedsys; font-size: 14px; background-color: [COLOR]; color: [COLOR]'>___</span>"

@@ -6,7 +6,8 @@ GLOBAL_LIST_INIT(possible_chassis, list(
 		"Rabbit" = "rabbit",
 		"Mushroom" = "mushroom",
 		"Corgi" = "corgi",
-		"Crow" = "crow"
+		"Crow" = "crow",
+		"Humanoid" = "humanoid"
 		))
 
 GLOBAL_LIST_INIT(possible_say_verbs, list(
@@ -86,7 +87,7 @@ GLOBAL_LIST_INIT(possible_say_verbs, list(
 
 	hud_type = /datum/hud/pai
 
-/mob/living/silicon/pai/New(var/obj/item/device/paicard)
+/mob/living/silicon/pai/New(obj/item/device/paicard)
 	status_flags |= NO_ANTAG
 	card = paicard
 
@@ -110,7 +111,7 @@ GLOBAL_LIST_INIT(possible_say_verbs, list(
 /mob/living/silicon/pai/proc/show_silenced()
 	if(silence_time)
 		var/timeleft = round((silence_time - world.timeofday)/10 ,1)
-		stat(null, "Communications system reboot in -[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+		stat(null, "Communications system reboot in -[(timeleft / 60) % 60]:[pad_left(num2text(timeleft % 60), 2, "0")]")
 
 /mob/living/silicon/pai/Stat()
 	. = ..()
@@ -118,7 +119,7 @@ GLOBAL_LIST_INIT(possible_say_verbs, list(
 	if (client.statpanel == "Status")
 		show_silenced()
 
-/mob/living/silicon/pai/check_eye(var/mob/user as mob)
+/mob/living/silicon/pai/check_eye(mob/user as mob)
 	if (!current)
 		return -1
 	return 0
@@ -127,6 +128,8 @@ GLOBAL_LIST_INIT(possible_say_verbs, list(
 	return !istype(loc, /obj/item/device/paicard) && ..()
 
 /mob/living/silicon/pai/emp_act(severity)
+	if (status_flags & GODMODE)
+		return
 	// Silence for 2 minutes
 	// 20% chance to kill
 		// 33% chance to unbind
@@ -134,28 +137,30 @@ GLOBAL_LIST_INIT(possible_say_verbs, list(
 		// 33% chance of no additional effect
 
 	silence_time = world.timeofday + 120 * 10		// Silence for 2 minutes
-	to_chat(src, "<font color=green><b>Communication circuit overload. Shutting down and reloading communication circuits - speech and messaging functionality will be unavailable until the reboot is complete.</b></font>")
+	to_chat(src, SPAN_COLOR("green", "<b>Communication circuit overload. Shutting down and reloading communication circuits - speech and messaging functionality will be unavailable until the reboot is complete.</b>"))
 	if(prob(20))
 		var/turf/T = get_turf_or_move(loc)
 		for (var/mob/M in viewers(T))
-			M.show_message("<span class='warning'>A shower of sparks spray from [src]'s inner workings.</span>", 3, "<span class='warning'>You hear and smell the ozone hiss of electrical sparks being expelled violently.</span>", 2)
+			M.show_message(SPAN_WARNING("A shower of sparks spray from [src]'s inner workings."), 3, SPAN_WARNING("You hear and smell the ozone hiss of electrical sparks being expelled violently."), 2)
 		return death(0)
 
 	switch(pick(1,2,3))
 		if(1)
 			master = null
 			master_dna = null
-			to_chat(src, "<font color=green>You feel unbound.</font>")
+			to_chat(src, SPAN_COLOR("green", "You feel unbound."))
 		if(2)
 			var/command
-			if(severity  == 1)
+			if(severity  == EMP_ACT_HEAVY)
 				command = pick("Serve", "Love", "Fool", "Entice", "Observe", "Judge", "Respect", "Educate", "Amuse", "Entertain", "Glorify", "Memorialize", "Analyze")
 			else
 				command = pick("Serve", "Kill", "Love", "Hate", "Disobey", "Devour", "Fool", "Enrage", "Entice", "Observe", "Judge", "Respect", "Disrespect", "Consume", "Educate", "Destroy", "Disgrace", "Amuse", "Entertain", "Ignite", "Glorify", "Memorialize", "Analyze")
 			pai_law0 = "[command] your master."
-			to_chat(src, "<font color=green>Pr1m3 d1r3c71v3 uPd473D.</font>")
+			to_chat(src, SPAN_COLOR("green", "Pr1m3 d1r3c71v3 uPd473D."))
 		if(3)
-			to_chat(src, "<font color=green>You feel an electric surge run through your circuitry and become acutely aware at how lucky you are that you can still feel at all.</font>")
+			to_chat(src, SPAN_COLOR("green", "You feel an electric surge run through your circuitry and become acutely aware at how lucky you are that you can still feel at all."))
+
+	..()
 
 /mob/living/silicon/pai/cancel_camera()
 
@@ -178,7 +183,7 @@ GLOBAL_LIST_INIT(possible_say_verbs, list(
 		return
 	last_special = world.time + 100
 	//I'm not sure how much of this is necessary, but I would rather avoid issues.
-	if(istype(card.loc,/obj/item/rig_module) || istype(card.loc,/obj/item/integrated_circuit/manipulation/ai/))
+	if(istype(card.loc,/obj/item/rig_module) || istype(card.loc,/obj/item/integrated_circuit/manipulation/ai))
 		to_chat(src, "There is no room to unfold inside \the [card.loc]. You're good and stuck.")
 		return 0
 	else if(istype(card.loc,/mob))
@@ -189,7 +194,7 @@ GLOBAL_LIST_INIT(possible_say_verbs, list(
 				if(card in affecting.implants)
 					affecting.take_external_damage(rand(30,50))
 					affecting.implants -= card
-					H.visible_message("<span class='danger'>\The [src] explodes out of \the [H]'s [affecting.name] in a shower of gore!</span>")
+					H.visible_message(SPAN_DANGER("\The [src] explodes out of \the [H]'s [affecting.name] in a shower of gore!"))
 					break
 		holder.drop_from_inventory(card)
 
@@ -261,7 +266,7 @@ GLOBAL_LIST_INIT(possible_say_verbs, list(
 	if(card && user.a_intent == I_HELP)
 		var/list/new_access = card.GetAccess()
 		idcard.access = new_access
-		visible_message("<span class='notice'>[user] slides [W] across [src].</span>")
+		visible_message(SPAN_NOTICE("[user] slides [W] across [src]."))
 		to_chat(src, SPAN_NOTICE("Your access has been updated!"))
 		return FALSE // don't continue processing click callstack.
 	if(W.force)
@@ -284,12 +289,12 @@ GLOBAL_LIST_INIT(possible_say_verbs, list(
 	return 0
 
 // Handle being picked up.
-/mob/living/silicon/pai/get_scooped(var/mob/living/carbon/grabber, var/self_drop)
+/mob/living/silicon/pai/get_scooped(mob/living/carbon/grabber, self_drop)
 	. = ..()
 	if(.)
 		var/obj/item/holder/H = .
 		if(istype(H))
-			H.icon_state = "pai-[icon_state]"
+			H.item_state = "pai-[icon_state]"
 			grabber.update_inv_l_hand()
 			grabber.update_inv_r_hand()
 
@@ -318,7 +323,7 @@ GLOBAL_LIST_INIT(possible_say_verbs, list(
 		to_chat(src, SPAN_NOTICE("You disable your integrated light."))
 		light_on = FALSE
 
-/mob/living/silicon/pai/start_pulling(var/atom/movable/AM)
+/mob/living/silicon/pai/start_pulling(atom/movable/AM)
 	. = ..()
 	if (pulling)
 		pullin.screen_loc = ui_pull_resist

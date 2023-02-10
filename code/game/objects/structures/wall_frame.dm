@@ -12,8 +12,8 @@
 	density = TRUE
 	throwpass = 1
 	layer = TABLE_LAYER
+	health_max = 100
 
-	var/health = 100
 	var/paint_color
 	var/stripe_color
 	rad_resistance_modifier = 0.5
@@ -22,13 +22,17 @@
 	noblend_objects = list(/obj/machinery/door/window)
 	material = DEFAULT_WALL_MATERIAL
 
-/obj/structure/wall_frame/New(var/new_loc, var/materialtype)
+/obj/structure/wall_frame/New(new_loc, materialtype)
 	..(new_loc)
 
-	if(!materialtype)
-		materialtype = DEFAULT_WALL_MATERIAL
+	if (!materialtype)
+		if (istext(material))
+			materialtype = material
+		else
+			materialtype = DEFAULT_WALL_MATERIAL
+
 	material = SSmaterials.get_material_by_name(materialtype)
-	health = material.integrity
+	set_max_health(material.integrity)
 
 	update_connections(1)
 	update_icon()
@@ -44,62 +48,61 @@
 /obj/structure/wall_frame/examine(mob/user)
 	. = ..()
 
-	if(health == material.integrity)
-		to_chat(user, "<span class='notice'>It seems to be in fine condition.</span>")
-	else
-		var/dam = health / material.integrity
-		if(dam <= 0.3)
-			to_chat(user, "<span class='notice'>It's got a few dents and scratches.</span>")
-		else if(dam <= 0.7)
-			to_chat(user, "<span class='warning'>A few pieces of panelling have fallen off.</span>")
-		else
-			to_chat(user, "<span class='danger'>It's nearly falling to pieces.</span>")
 	if(paint_color)
-		to_chat(user, "<span class='notice'>It has a smooth coat of paint applied.</span>")
+		to_chat(user, SPAN_NOTICE("It has a smooth coat of paint applied."))
 
-/obj/structure/wall_frame/attackby(var/obj/item/W, var/mob/user)
+/obj/structure/wall_frame/attackby(obj/item/W, mob/user)
 	src.add_fingerprint(user)
+
+	if (user.a_intent == I_HURT)
+		..()
+		return
 
 	//grille placing
 	if(istype(W, /obj/item/stack/material/rods))
 		for(var/obj/structure/window/WINDOW in loc)
 			if(WINDOW.dir == get_dir(src, user))
-				to_chat(user, "<span class='notice'>There is a window in the way.</span>")
+				to_chat(user, SPAN_NOTICE("There is a window in the way."))
 				return
 		place_grille(user, loc, W)
 		return
 
 	//window placing
-	else if(istype(W,/obj/item/stack/material))
+	if(istype(W,/obj/item/stack/material))
 		var/obj/item/stack/material/ST = W
 		if(ST.material.opacity > 0.7)
 			return 0
-		place_window(user, loc, SOUTHWEST, ST)
+
+		place_window(user, loc, ST)
+		return
 
 	if(isWrench(W))
 		for(var/obj/structure/S in loc)
 			if(istype(S, /obj/structure/window))
-				to_chat(user, "<span class='notice'>There is still a window on the low wall!</span>")
+				to_chat(user, SPAN_NOTICE("There is still a window on the low wall!"))
 				return
 			else if(istype(S, /obj/structure/grille))
-				to_chat(user, "<span class='notice'>There is still a grille on the low wall!</span>")
+				to_chat(user, SPAN_NOTICE("There is still a grille on the low wall!"))
 				return
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 100, 1)
-		to_chat(user, "<span class='notice'>Now disassembling the low wall...</span>")
-		if(do_after(user, 40,src))
-			to_chat(user, "<span class='notice'>You dissasembled the low wall!</span>")
+		to_chat(user, SPAN_NOTICE("Now disassembling the low wall..."))
+		if(do_after(user, 4 SECONDS, src, DO_REPAIR_CONSTRUCT))
+			to_chat(user, SPAN_NOTICE("You dissasembled the low wall!"))
 			dismantle()
+		return
 
-	else if(istype(W, /obj/item/gun/energy/plasmacutter))
+	if(istype(W, /obj/item/gun/energy/plasmacutter))
 		var/obj/item/gun/energy/plasmacutter/cutter = W
 		if(!cutter.slice(user))
 			return
 		playsound(src.loc, 'sound/items/Welder.ogg', 100, 1)
-		to_chat(user, "<span class='notice'>Now slicing through the low wall...</span>")
-		if(do_after(user, 20,src))
-			to_chat(user, "<span class='warning'>You have sliced through the low wall!</span>")
+		to_chat(user, SPAN_NOTICE("Now slicing through the low wall..."))
+		if(do_after(user, 2 SECONDS, src, DO_PUBLIC_UNIQUE))
+			to_chat(user, SPAN_WARNING("You have sliced through the low wall!"))
 			dismantle()
-	return ..()
+		return
+
+	..()
 
 /obj/structure/wall_frame/CanPass(atom/movable/mover, turf/target, height=0, air_group=0)
 	if(air_group || (height==0)) return 1
@@ -119,17 +122,17 @@
 
 	for(var/i = 1 to 4)
 		if(other_connections[i] != "0")
-			I = image('icons/obj/wall_frame.dmi', "frame_other[connections[i]]", dir = 1<<(i-1))
+			I = image('icons/obj/wall_frame.dmi', "frame_other[connections[i]]", dir = SHIFTL(1, i - 1))
 		else
-			I = image('icons/obj/wall_frame.dmi', "frame[connections[i]]", dir = 1<<(i-1))
+			I = image('icons/obj/wall_frame.dmi', "frame[connections[i]]", dir = SHIFTL(1, i - 1))
 		overlays += I
 
 	if(stripe_color)
 		for(var/i = 1 to 4)
 			if(other_connections[i] != "0")
-				I = image('icons/obj/wall_frame.dmi', "stripe_other[connections[i]]", dir = 1<<(i-1))
+				I = image('icons/obj/wall_frame.dmi', "stripe_other[connections[i]]", dir = SHIFTL(1, i - 1))
 			else
-				I = image('icons/obj/wall_frame.dmi', "stripe[connections[i]]", dir = 1<<(i-1))
+				I = image('icons/obj/wall_frame.dmi', "stripe[connections[i]]", dir = SHIFTL(1, i - 1))
 			I.color = stripe_color
 			overlays += I
 
@@ -148,29 +151,8 @@
 			paint_color = adjust_brightness(paint_color, bleach_factor)
 		update_icon()
 
-/obj/structure/wall_frame/bullet_act(var/obj/item/projectile/Proj)
-	var/proj_damage = Proj.get_structure_damage()
-	var/damage = min(proj_damage, 100)
-	take_damage(damage)
-	return
-
-/obj/structure/wall_frame/hitby(AM as mob|obj, var/datum/thrownthing/TT)
-	..()
-	var/tforce = 0
-	if(ismob(AM)) // All mobs have a multiplier and a size according to mob_defines.dm
-		var/mob/I = AM
-		tforce = I.mob_size * (TT.speed/THROWFORCE_SPEED_DIVISOR)
-	else
-		var/obj/O = AM
-		tforce = O.throwforce * (TT.speed/THROWFORCE_SPEED_DIVISOR)
-	if (tforce < 15)
-		return
-	take_damage(tforce)
-
-/obj/structure/wall_frame/take_damage(damage)
-	health -= damage
-	if(health <= 0)
-		dismantle()
+/obj/structure/wall_frame/on_death()
+	dismantle()
 
 /obj/structure/wall_frame/proc/dismantle()
 	new /obj/item/stack/material/steel(get_turf(src), 3)
@@ -179,7 +161,7 @@
 /obj/structure/wall_frame/get_color()
 	return paint_color
 
-/obj/structure/wall_frame/set_color(var/color)
+/obj/structure/wall_frame/set_color(color)
 	paint_color = color
 	update_icon()
 
@@ -195,9 +177,6 @@
 
 /obj/structure/wall_frame/hull/vox
 	paint_color = COLOR_GREEN_GRAY
-
-/obj/structure/wall_frame/hull/ascent
-	paint_color = COLOR_PURPLE
 
 /obj/structure/wall_frame/hull/verne
 	paint_color = COLOR_GUNMETAL

@@ -117,7 +117,7 @@
 	else
 		direction_mode = IC_REAGENTS_INJECT
 	if(isnum(new_amount))
-		new_amount = Clamp(new_amount, 0, volume)
+		new_amount = clamp(new_amount, 0, volume)
 		transfer_amount = new_amount
 
 
@@ -129,13 +129,13 @@
 			set_pin_data(IC_OUTPUT, 2, weakref(src))
 			push_data()
 
-/obj/item/integrated_circuit/reagent/injector/proc/target_nearby(var/weakref/target)
+/obj/item/integrated_circuit/reagent/injector/proc/target_nearby(weakref/target)
 	var/mob/living/L = target.resolve()
 	if(!L || get_dist(src,L) > 1)
 		return
 	return L
 
-/obj/item/integrated_circuit/reagent/injector/proc/inject_after(var/weakref/target)
+/obj/item/integrated_circuit/reagent/injector/proc/inject_after(weakref/target)
 	busy = FALSE
 	var/mob/living/L = target_nearby(target)
 	if(!L)
@@ -143,12 +143,12 @@
 		return
 	var/atom/movable/acting_object = get_object()
 	log_admin("[key_name(L)] was successfully injected with " + reagents.get_reagents() + " by \the [acting_object]")
-	L.visible_message("<span class='warning'>\The [acting_object] injects [L] with its needle!</span>", \
-					"<span class='warning'>\The [acting_object] injects you with its needle!</span>")
+	L.visible_message(SPAN_WARNING("\The [acting_object] injects [L] with its needle!"), \
+					SPAN_WARNING("\The [acting_object] injects you with its needle!"))
 	reagents.trans_to_mob(L, transfer_amount, CHEM_BLOOD)
 	activate_pin(2)
 
-/obj/item/integrated_circuit/reagent/injector/proc/draw_after(var/weakref/target, var/amount)
+/obj/item/integrated_circuit/reagent/injector/proc/draw_after(weakref/target, amount)
 	busy = FALSE
 	var/mob/living/carbon/C = target_nearby(target)
 	if(!C)
@@ -156,8 +156,8 @@
 		return
 	var/atom/movable/acting_object = get_object()
 
-	C.visible_message("<span class='warning'>\The [acting_object] draws blood from \the [C]</span>",
-					"<span class='warning'>\The [acting_object] draws blood from you.</span>"
+	C.visible_message(SPAN_WARNING("\The [acting_object] draws blood from \the [C]"),
+					SPAN_WARNING("\The [acting_object] draws blood from you.")
 					)
 	C.take_blood(src, amount)
 	activate_pin(2)
@@ -193,10 +193,10 @@
 				return
 			//Always log attemped injections for admins
 			log_admin("[key_name(L)] is getting injected with " + reagents.get_reagents() + " by \the [acting_object]")
-			L.visible_message("<span class='danger'>\The [acting_object] is trying to inject [L]!</span>", \
-								"<span class='danger'>\The [acting_object] is trying to inject you!</span>")
+			L.visible_message(SPAN_DANGER("\The [acting_object] is trying to inject [L]!"), \
+								SPAN_DANGER("\The [acting_object] is trying to inject you!"))
 			busy = TRUE
-			addtimer(CALLBACK(src, .proc/inject_after, weakref(L)), injection_delay)
+			addtimer(new Callback(src, .proc/inject_after, weakref(L)), injection_delay)
 			return
 		else
 			if(!AM.is_open_container())
@@ -223,15 +223,15 @@
 			if(istype(C, /mob/living/carbon/slime) || !C.dna || !injection_status)
 				activate_pin(3)
 				return
-			C.visible_message("<span class='danger'>\The [acting_object] is trying to take a blood sample from [C]!</span>", \
-								"<span class='danger'>\The [acting_object] is trying to take a blood sample from you!</span>")
+			C.visible_message(SPAN_DANGER("\The [acting_object] is trying to take a blood sample from [C]!"), \
+								SPAN_DANGER("\The [acting_object] is trying to take a blood sample from you!"))
 			busy = TRUE
-			addtimer(CALLBACK(src, .proc/draw_after, weakref(C), tramount), injection_delay)
+			addtimer(new Callback(src, .proc/draw_after, weakref(C), tramount), injection_delay)
 			return
 
 		else
 			if(!AM.reagents.total_volume)
-				acting_object.visible_message("<span class='notice'>\The [acting_object] tries to draw from [AM], but it is empty!</span>")
+				acting_object.visible_message(SPAN_NOTICE("\The [acting_object] tries to draw from [AM], but it is empty!"))
 				activate_pin(3)
 				return
 
@@ -270,7 +270,7 @@
 	else
 		direction_mode = IC_REAGENTS_INJECT
 	if(isnum(new_amount))
-		new_amount = Clamp(new_amount, 0, 50)
+		new_amount = clamp(new_amount, 0, 50)
 		transfer_amount = new_amount
 
 /obj/item/integrated_circuit/reagent/pump/do_work()
@@ -465,7 +465,7 @@
 	else
 		direction_mode = IC_REAGENTS_INJECT
 	if(isnum(new_amount))
-		new_amount = Clamp(new_amount, 0, 50)
+		new_amount = clamp(new_amount, 0, 50)
 		transfer_amount = new_amount
 
 /obj/item/integrated_circuit/reagent/filter/do_work()
@@ -577,7 +577,7 @@
 				return
 
 			// +/- T0C to convert to/from kelvin
-			target_temp = Clamp(target_temp + T0C, min_temp, max_temp)
+			target_temp = clamp(target_temp + T0C, min_temp, max_temp)
 			set_pin_data(IC_INPUT, 1, target_temp - T0C)
 
 			active = !active
@@ -639,6 +639,8 @@
 	min_temp = -80 CELSIUS
 	max_temp = 30 CELSIUS
 	mode = IC_HEATER_MODE_COOL
+
+//undefs
 
 #undef IC_HEATER_MODE_HEAT
 #undef IC_HEATER_MODE_COOL

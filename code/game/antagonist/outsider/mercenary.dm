@@ -28,11 +28,11 @@ GLOBAL_DATUM_INIT(mercs, /datum/antagonist/mercenary, new)
 	global_objectives |= new /datum/objective/nuclear
 	return 1
 
-/datum/antagonist/mercenary/equip(var/mob/living/carbon/human/player)
+/datum/antagonist/mercenary/equip(mob/living/carbon/human/player)
 	if(!..())
 		return 0
 
-	var/decl/hierarchy/outfit/mercenary = outfit_by_type(/decl/hierarchy/outfit/mercenary)
+	var/singleton/hierarchy/outfit/mercenary = outfit_by_type(/singleton/hierarchy/outfit/mercenary)
 	mercenary.equip(player)
 
 	var/obj/item/device/radio/uplink/U = new(get_turf(player), player.mind, DEFAULT_TELECRYSTAL_AMOUNT)

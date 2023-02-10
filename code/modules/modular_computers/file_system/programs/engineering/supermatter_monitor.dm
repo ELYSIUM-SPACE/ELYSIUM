@@ -5,7 +5,7 @@
 /datum/computer_file/program/supermatter_monitor
 	filename = "supmon"
 	filedesc = "Supermatter Monitoring"
-	nanomodule_path = /datum/nano_module/supermatter_monitor/
+	nanomodule_path = /datum/nano_module/supermatter_monitor
 	program_icon_state = "smmon_0"
 	program_key_state = "tech_key"
 	program_menu_icon = "notice"
@@ -49,7 +49,7 @@
 	var/valid_z_levels = GetConnectedZlevels(get_host_z())
 	for(var/obj/machinery/power/supermatter/S in SSmachines.machinery)
 		// Delaminating, not within coverage, not on a tile.
-		if(S.grav_pulling || S.exploded || !(S.z in valid_z_levels) || !istype(S.loc, /turf/))
+		if(S.grav_pulling || S.exploded || !(S.z in valid_z_levels) || !isturf(S.loc))
 			continue
 		supermatters.Add(S)
 
@@ -91,7 +91,7 @@
 			continue
 		entry[category] = value
 
-/datum/nano_module/supermatter_monitor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = GLOB.default_state)
+/datum/nano_module/supermatter_monitor/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1, datum/topic_state/state = GLOB.default_state)
 	var/list/data = host.initial_data()
 	var/engine_skill = user.get_skill_value(SKILL_ENGINES)
 

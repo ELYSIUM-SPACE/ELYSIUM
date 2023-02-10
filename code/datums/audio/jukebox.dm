@@ -25,7 +25,7 @@
 	owner = _owner
 	tracks = list()
 	for (var/path in GLOB.jukebox_tracks)
-		var/decl/audio/track/track = decls_repository.get_decl(path)
+		var/singleton/audio/track/track = GET_SINGLETON(path)
 		AddTrack(track.display || track.title, track.source)
 	sound_id = "[/jukebox]_[sequential_id(/jukebox)]"
 	template = _template
@@ -43,6 +43,11 @@
 
 /jukebox/proc/AddTrack(title = "Track [length(tracks) + 1]", source)
 	tracks += new /jukebox_track (title, source)
+
+
+/jukebox/proc/ClearTracks()
+	QDEL_NULL_LIST(tracks)
+	tracks = list()
 
 
 /jukebox/proc/Next()
@@ -65,7 +70,7 @@
 	_index = text2num(_index)
 	if (!IsInteger(_index))
 		return
-	index = Clamp(_index, 1, length(tracks))
+	index = clamp(_index, 1, length(tracks))
 	if (playing)
 		Stop()
 		Play()
@@ -150,70 +155,40 @@
 
 
 GLOBAL_LIST_INIT(jukebox_tracks, list(
-	/decl/audio/track/absconditus,
-	/decl/audio/track/ambispace,
-	/decl/audio/track/asfarasitgets,
-	/decl/audio/track/clouds_of_fire,
-	/decl/audio/track/comet_haley,
-	/decl/audio/track/df_theme,
-	/decl/audio/track/digit_one,
-	/decl/audio/track/dilbert,
-	/decl/audio/track/eighties,
-	/decl/audio/track/elevator,
-	/decl/audio/track/elibao,
-	/decl/audio/track/endless_space,
-	/decl/audio/track/floating,
-	/decl/audio/track/hull_rupture,
-	/decl/audio/track/human,
-	/decl/audio/track/inorbit,
-	/decl/audio/track/lasers,
-	/decl/audio/track/level3_mod,
-	/decl/audio/track/lysendraa,
-	/decl/audio/track/marhaba,
-	/decl/audio/track/martiancowboy,
-	/decl/audio/track/misanthropic_corridors,
-	/decl/audio/track/monument,
-	/decl/audio/track/nebula,
-	/decl/audio/track/on_the_rocks,
-	/decl/audio/track/one_loop,
-	/decl/audio/track/pwmur,
-	/decl/audio/track/rimward_cruise,
-	/decl/audio/track/space_oddity,
-	/decl/audio/track/thunderdome,
-	/decl/audio/track/torch,
-	/decl/audio/track/torn,
-	/decl/audio/track/treacherous_voyage,
-	/decl/audio/track/voidsent,
-	/decl/audio/track/wake,
-	/decl/audio/track/wildencounters,
-
-	//arc music from here,
-	/decl/audio/track/bensound_relaxing,
-	/decl/audio/track/bensound_better_days,
-	// INSTRUMENTAL,
-	/decl/audio/track/bensound_sad_day,
-	/decl/audio/track/bensound_tomorrow,
-	/decl/audio/track/emininni_sicilian_cafe,
-	// JAZZ,
-	/decl/audio/track/bensound_love,
-	/decl/audio/track/bensound_the_jazz_piano,
-	/decl/audio/track/kmacleod_night_on_the_docks_sax,
-	/decl/audio/track/kmacleod_shades_of_spring,
-	/decl/audio/track/pedro_noire_one,
-	// CURRENTLY UNSORTED,
-	/decl/audio/track/kom_voice_of_eternity,
-	/decl/audio/track/sbuckley_beautiful_oblivion,
-	/decl/audio/track/sbuckley_discovery,
-	/decl/audio/track/sbuckley_electric_dreams,
-	/decl/audio/track/sbuckley_emergent,
-	/decl/audio/track/sbuckley_filaments,
-	/decl/audio/track/sbuckley_in_dreams,
-	/decl/audio/track/sbuckley_jul,
-	/decl/audio/track/sbuckley_machina,
-	/decl/audio/track/sbuckley_neon,
-	/decl/audio/track/sbuckley_signal_to_noise,
-	/decl/audio/track/sbuckley_solecism,
-	/decl/audio/track/sbuckley_tears_in_rain,
-	/decl/audio/track/sbuckley_twilight_echo,
-	/decl/audio/track/sbuckley_undertow,
+	/singleton/audio/track/absconditus,
+	/singleton/audio/track/ambispace,
+	/singleton/audio/track/asfarasitgets,
+	/singleton/audio/track/clouds_of_fire,
+	/singleton/audio/track/comet_haley,
+	/singleton/audio/track/df_theme,
+	/singleton/audio/track/digit_one,
+	/singleton/audio/track/dilbert,
+	/singleton/audio/track/eighties,
+	/singleton/audio/track/elevator,
+	/singleton/audio/track/elibao,
+	/singleton/audio/track/endless_space,
+	/singleton/audio/track/floating,
+	/singleton/audio/track/hull_rupture,
+	/singleton/audio/track/human,
+	/singleton/audio/track/inorbit,
+	/singleton/audio/track/lasers,
+	/singleton/audio/track/level3_mod,
+	/singleton/audio/track/lysendraa,
+	/singleton/audio/track/marhaba,
+	/singleton/audio/track/martiancowboy,
+	/singleton/audio/track/misanthropic_corridors,
+	/singleton/audio/track/monument,
+	/singleton/audio/track/nebula,
+	/singleton/audio/track/on_the_rocks,
+	/singleton/audio/track/one_loop,
+	/singleton/audio/track/pwmur,
+	/singleton/audio/track/rimward_cruise,
+	/singleton/audio/track/space_oddity,
+	/singleton/audio/track/thunderdome,
+	/singleton/audio/track/torch,
+	/singleton/audio/track/torn,
+	/singleton/audio/track/treacherous_voyage,
+	/singleton/audio/track/voidsent,
+	/singleton/audio/track/wake,
+	/singleton/audio/track/wildencounters
 ))

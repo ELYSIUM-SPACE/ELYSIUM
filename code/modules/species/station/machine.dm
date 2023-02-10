@@ -34,7 +34,7 @@
 
 	species_flags = SPECIES_FLAG_NO_SCAN | SPECIES_FLAG_NO_PAIN | SPECIES_FLAG_NO_POISON
 	spawn_flags = SPECIES_CAN_JOIN | SPECIES_IS_WHITELISTED | SPECIES_NO_FBP_CONSTRUCTION
-	appearance_flags = HAS_UNDERWEAR | HAS_EYE_COLOR //IPCs can wear undies too :(
+	appearance_flags = SPECIES_APPEARANCE_HAS_UNDERWEAR | SPECIES_APPEARANCE_HAS_EYE_COLOR //IPCs can wear undies too :(
 
 	blood_color = "#1f181f"
 	flesh_color = "#575757"
@@ -86,18 +86,18 @@
 	exertion_effect_chance = 10
 	exertion_charge_scale = 1
 	exertion_emotes_synthetic = list(
-		/decl/emote/exertion/synthetic,
-		/decl/emote/exertion/synthetic/creak
+		/singleton/emote/exertion/synthetic,
+		/singleton/emote/exertion/synthetic/creak
 	)
 
-/datum/species/machine/handle_death(var/mob/living/carbon/human/H)
+/datum/species/machine/handle_death(mob/living/carbon/human/H)
 	..()
 	if(istype(H.wear_mask,/obj/item/clothing/mask/monitor))
 		var/obj/item/clothing/mask/monitor/M = H.wear_mask
 		M.monitor_state_index = "blank"
 		M.update_icon()
 
-/datum/species/machine/post_organ_rejuvenate(var/obj/item/organ/org, var/mob/living/carbon/human/H)
+/datum/species/machine/post_organ_rejuvenate(obj/item/organ/org, mob/living/carbon/human/H)
 	var/obj/item/organ/external/E = org
 	if(istype(E) && !BP_IS_ROBOTIC(E))
 		E.robotize("Morpheus")
@@ -105,9 +105,9 @@
 /datum/species/machine/get_blood_name()
 	return "oil"
 
-/datum/species/machine/disfigure_msg(var/mob/living/carbon/human/H)
+/datum/species/machine/disfigure_msg(mob/living/carbon/human/H)
 	var/datum/gender/T = gender_datums[H.get_gender()]
-	return "<span class='danger'>[T.His] monitor is completely busted!</span>\n"
+	return "[SPAN_DANGER("[T.His] monitor is completely busted!")]\n"
 
 /datum/species/machine/can_float(mob/living/carbon/human/H)
 	return FALSE

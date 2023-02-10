@@ -8,7 +8,7 @@
 	icon = 'icons/mecha/mech_part_items.dmi'
 	var/prepared
 
-/obj/structure/mech_wreckage/New(var/newloc, var/mob/living/exosuit/exosuit, var/gibbed)
+/obj/structure/mech_wreckage/New(newloc, mob/living/exosuit/exosuit, gibbed)
 	if(exosuit)
 		name = "wreckage of \the [exosuit.name]"
 		if(!gibbed)
@@ -16,18 +16,24 @@
 				if(thing && prob(40))
 					thing.forceMove(src)
 			for(var/hardpoint in exosuit.hardpoints)
-				if(exosuit.hardpoints[hardpoint] && prob(40))
-					var/obj/item/thing = exosuit.hardpoints[hardpoint]
-					if(exosuit.remove_system(hardpoint))
-						thing.forceMove(src)
+				if(exosuit.hardpoints[hardpoint])
+					if(prob(40))
+						var/obj/item/thing = exosuit.hardpoints[hardpoint]
+						if(exosuit.remove_system(hardpoint))
+							thing.forceMove(src)
+					else
+						//This has been destroyed, some modules may need to perform bespoke logic
+						var/obj/item/mech_equipment/E = exosuit.hardpoints[hardpoint]
+						if(istype(E))
+							E.wreck()
 
 	..()
 
-/obj/structure/mech_wreckage/powerloader/New(var/newloc)
+/obj/structure/mech_wreckage/powerloader/New(newloc)
 	..(newloc, new /mob/living/exosuit/premade/powerloader(newloc), FALSE)
 
-/obj/structure/mech_wreckage/attack_hand(var/mob/user)
-	if(contents.len)
+/obj/structure/mech_wreckage/attack_hand(mob/user)
+	if(length(contents))
 		var/obj/item/thing = pick(contents)
 		if(istype(thing))
 			thing.forceMove(get_turf(user))
@@ -36,7 +42,7 @@
 			return
 	return ..()
 
-/obj/structure/mech_wreckage/attackby(var/obj/item/W, var/mob/user)
+/obj/structure/mech_wreckage/attackby(obj/item/W, mob/user)
 
 	var/cutting
 	if(isWelder(W))

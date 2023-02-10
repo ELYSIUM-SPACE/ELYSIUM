@@ -32,7 +32,7 @@
 	else
 		to_chat(user, "It has a blank space for a signature.")
 
-/obj/item/card/union/attackby(var/obj/item/thing, var/mob/user)
+/obj/item/card/union/attackby(obj/item/thing, mob/user)
 	if(istype(thing, /obj/item/pen))
 		if(signed_by)
 			to_chat(user, SPAN_WARNING("\The [src] has already been signed."))
@@ -43,6 +43,56 @@
 				user.visible_message(SPAN_NOTICE("\The [user] signs \the [src] with a flourish."))
 		return
 	..()
+
+/obj/item/card/operant_card
+	name = "operant registration card"
+	icon_state = "warrantcard_civ"
+	desc = "A registration card in a faux-leather case. It marks the named individual as a registered, law-abiding psionic."
+	w_class = ITEM_SIZE_SMALL
+	attack_verb = list("whipped")
+	hitsound = 'sound/weapons/towelwhip.ogg'
+	var/info
+	var/potential
+	var/use_rating
+
+
+/obj/item/card/operant_card/proc/set_info(mob/living/carbon/human/human)
+	if(!istype(human))
+		return
+	switch(human.psi?.rating)
+		if(0)
+			use_rating = "[human.psi.rating]-Lambda"
+		if(1)
+			use_rating = "[human.psi.rating]-Epsilon"
+		if(2)
+			use_rating = "[human.psi.rating]-Gamma"
+		if(3)
+			use_rating = "[human.psi.rating]-Delta"
+		if(4)
+			use_rating = "[human.psi.rating]-Beta"
+		if(5)
+			use_rating = "[human.psi.rating]-Alpha"
+		if (6 to INFINITY)
+			use_rating = "[human.psi.rating]-Omega"
+		else
+			use_rating = "Non-Psionic"
+
+	potential = "This individual has an overall psi rating of [use_rating]."
+	info = {"\
+		Name: [human.real_name]\n\
+		Species: [human.get_species()]\n\
+		Fingerprint: [human.dna?.uni_identity ? md5(human.dna.uni_identity) : "N/A"]\n\
+		Assessed Potential: [potential]\
+	"}
+
+
+/obj/item/card/operant_card/attack_self(mob/living/user)
+	user.visible_message(
+		SPAN_ITALIC("\The [user] examines \a [src]."),
+		SPAN_ITALIC("You examine \the [src]."),
+		3
+	)
+	to_chat(user, info || SPAN_WARNING("\The [src] is completely blank!"))
 
 /obj/item/card/data
 	name = "data card"
@@ -107,7 +157,7 @@
 	origin_tech = list(TECH_MAGNET = 2, TECH_ESOTERIC = 2)
 	var/uses = 10
 
-var/const/NO_EMAG_ACT = -50
+var/global/const/NO_EMAG_ACT = -50
 
 /obj/item/card/emag/resolve_attackby(atom/A, mob/user)
 	var/used_uses = A.emag_act(uses, user, src)
@@ -120,7 +170,7 @@ var/const/NO_EMAG_ACT = -50
 		log_and_message_admins("emagged \an [A].")
 
 	if(uses<1)
-		user.visible_message("<span class='warning'>\The [src] fizzles and sparks - it seems it's been used once too often, and is now spent.</span>")
+		user.visible_message(SPAN_WARNING("\The [src] fizzles and sparks - it seems it's been used once too often, and is now spent."))
 		var/obj/item/card/emag_broken/junk = new(user.loc)
 		junk.add_fingerprint(user)
 		qdel(src)
@@ -130,7 +180,7 @@ var/const/NO_EMAG_ACT = -50
 /obj/item/card/emag/Initialize()
 	. = ..()
 	set_extension(src,/datum/extension/chameleon/emag)
-	
+
 /obj/item/card/emag/get_antag_info()
 	. = ..()
 	. += "You can use this cryptographic sequencer in order to subvert electronics or forcefully open doors you don't have access to. These actions are irreversible and the card only has a limited number of charges!"
@@ -194,11 +244,11 @@ var/const/NO_EMAG_ACT = -50
 	for(var/detail in extra_details)
 		overlays += overlay_image(icon, detail, flags=RESET_COLOR)
 
-/obj/item/card/id/CanUseTopic(var/user)
+/obj/item/card/id/CanUseTopic(user)
 	if(user in view(get_turf(src)))
 		return STATUS_INTERACTIVE
 
-/obj/item/card/id/OnTopic(var/mob/user, var/list/href_list)
+/obj/item/card/id/OnTopic(mob/user, list/href_list)
 	if(href_list["look_at_id"])
 		if(istype(user))
 			user.examinate(src)
@@ -232,18 +282,18 @@ var/const/NO_EMAG_ACT = -50
 	if(assignment)
 		. += ", [assignment]"
 
-/obj/item/card/id/proc/set_id_photo(var/mob/M)
+/obj/item/card/id/proc/set_id_photo(mob/M)
 	front = getFlatIcon(M, SOUTH, always_use_defdir = 1)
 	side = getFlatIcon(M, WEST, always_use_defdir = 1)
 
-/mob/proc/set_id_info(var/obj/item/card/id/id_card)
+/mob/proc/set_id_info(obj/item/card/id/id_card)
 	id_card.age = 0
 
 	id_card.formal_name_prefix = initial(id_card.formal_name_prefix)
 	id_card.formal_name_suffix = initial(id_card.formal_name_suffix)
 	if(client && client.prefs)
 		for(var/culturetag in client.prefs.cultural_info)
-			var/decl/cultural_info/culture = SSculture.get_culture(client.prefs.cultural_info[culturetag])
+			var/singleton/cultural_info/culture = SSculture.get_culture(client.prefs.cultural_info[culturetag])
 			if(culture)
 				id_card.formal_name_prefix = "[culture.get_formal_name_prefix()][id_card.formal_name_prefix]"
 				id_card.formal_name_suffix = "[id_card.formal_name_suffix][culture.get_formal_name_suffix()]"
@@ -262,7 +312,7 @@ var/const/NO_EMAG_ACT = -50
 		id_card.dna_hash		= dna.unique_enzymes
 		id_card.fingerprint_hash= md5(dna.uni_identity)
 
-/mob/living/carbon/human/set_id_info(var/obj/item/card/id/id_card)
+/mob/living/carbon/human/set_id_info(obj/item/card/id/id_card)
 	..()
 	id_card.age = age
 	if(GLOB.using_map.flags & MAP_HAS_BRANCH)
@@ -314,11 +364,11 @@ var/const/NO_EMAG_ACT = -50
 	to_chat(usr, "The fingerprint hash on the card is [fingerprint_hash].")
 	return
 
-/decl/vv_set_handler/id_card_military_branch
+/singleton/vv_set_handler/id_card_military_branch
 	handled_type = /obj/item/card/id
 	handled_vars = list("military_branch")
 
-/decl/vv_set_handler/id_card_military_branch/handle_set_var(var/obj/item/card/id/id, variable, var_value, client)
+/singleton/vv_set_handler/id_card_military_branch/handle_set_var(obj/item/card/id/id, variable, var_value, client)
 	if(!var_value)
 		id.military_branch = null
 		id.military_rank = null
@@ -331,20 +381,20 @@ var/const/NO_EMAG_ACT = -50
 		return
 
 	if(ispath(var_value, /datum/mil_branch) || istext(var_value))
-		var/datum/mil_branch/new_branch = mil_branches.get_branch(var_value)
+		var/datum/mil_branch/new_branch = GLOB.mil_branches.get_branch(var_value)
 		if(new_branch)
 			if(new_branch != id.military_branch)
 				id.military_branch = new_branch
 				id.military_rank = null
 			return
-	
+
 	to_chat(client, SPAN_WARNING("Input, must be an existing branch - [var_value] is invalid"))
 
-/decl/vv_set_handler/id_card_military_rank
+/singleton/vv_set_handler/id_card_military_rank
 	handled_type = /obj/item/card/id
 	handled_vars = list("military_rank")
 
-/decl/vv_set_handler/id_card_military_rank/handle_set_var(var/obj/item/card/id/id, variable, var_value, client)
+/singleton/vv_set_handler/id_card_military_rank/handle_set_var(obj/item/card/id/id, variable, var_value, client)
 	if(!var_value)
 		id.military_rank = null
 		return
@@ -362,11 +412,11 @@ var/const/NO_EMAG_ACT = -50
 		var_value = rank.name
 
 	if(istext(var_value))
-		var/new_rank = mil_branches.get_rank(id.military_branch.name, var_value)
+		var/new_rank = GLOB.mil_branches.get_rank(id.military_branch.name, var_value)
 		if(new_rank)
 			id.military_rank = new_rank
 			return
-	
+
 	to_chat(client, SPAN_WARNING("Input must be an existing rank belonging to military_branch - [var_value] is invalid"))
 
 /obj/item/card/id/silver
@@ -462,7 +512,7 @@ var/const/NO_EMAG_ACT = -50
 		else
 			to_chat(user, SPAN_NOTICE("This is the real deal, stamped by [GLOB.using_map.boss_name]. It gives the holder the full authority to pursue their goals. You believe it implicitly."))
 
-/obj/item/card/id/foundation/attack_self(var/mob/living/user)
+/obj/item/card/id/foundation/attack_self(mob/living/user)
 	. = ..()
 	if(istype(user))
 		for(var/mob/M in viewers(world.view, get_turf(user))-user)
@@ -586,9 +636,6 @@ var/const/NO_EMAG_ACT = -50
 	desc = "A card issued to civilian staff."
 	job_access_type = DEFAULT_JOB_TYPE
 	detail_color = COLOR_CIVIE_GREEN
-
-/obj/item/card/id/civilian/bartender
-	job_access_type = /datum/job/bartender
 
 /obj/item/card/id/civilian/chef
 	job_access_type = /datum/job/chef

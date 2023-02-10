@@ -72,7 +72,7 @@ var/global/list/stool_cache = list() //haha stool
 		SetName("[material.display_name] [initial(name)]")
 		desc = "A stool. Apply butt with care. It's made of [material.use_name]."
 
-/obj/item/stool/proc/add_padding(var/padding_type)
+/obj/item/stool/proc/add_padding(padding_type)
 	padding_material = SSmaterials.get_material_by_name(padding_type)
 	update_icon()
 
@@ -82,30 +82,30 @@ var/global/list/stool_cache = list() //haha stool
 		padding_material = null
 	update_icon()
 
-/obj/item/stool/apply_hit_effect(mob/living/target, mob/living/user, var/hit_zone)
+/obj/item/stool/apply_hit_effect(mob/living/target, mob/living/user, hit_zone)
 	if (prob(5))
-		user.visible_message("<span class='danger'>[user] breaks [src] over [target]'s back!</span>")
+		user.visible_message(SPAN_DANGER("[user] breaks [src] over [target]'s back!"))
 		user.setClickCooldown(DEFAULT_ATTACK_COOLDOWN)
 		user.do_attack_animation(target)
 		dismantle() //This deletes self.
 
-		var/blocked = target.get_blocked_ratio(hit_zone, BRUTE, damage = 20)
+		var/blocked = target.get_blocked_ratio(hit_zone, DAMAGE_BRUTE, damage = 20)
 		target.Weaken(10 * (1 - blocked))
-		target.apply_damage(20, BRUTE, hit_zone, src)
+		target.apply_damage(20, DAMAGE_BRUTE, hit_zone, src)
 		return 1
 
 	return ..()
 
 /obj/item/stool/ex_act(severity)
 	switch(severity)
-		if(1.0)
+		if(EX_ACT_DEVASTATING)
 			qdel(src)
 			return
-		if(2.0)
+		if(EX_ACT_HEAVY)
 			if (prob(50))
 				qdel(src)
 				return
-		if(3.0)
+		if(EX_ACT_LIGHT)
 			if (prob(5))
 				qdel(src)
 				return
@@ -159,5 +159,5 @@ var/global/list/stool_cache = list() //haha stool
 
 //Generated subtypes for mapping porpoises
 
-/obj/item/stool/wood/New(var/newloc)
+/obj/item/stool/wood/New(newloc)
 	..(newloc,MATERIAL_WOOD)

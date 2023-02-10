@@ -7,10 +7,10 @@
 	minimal_player_age = 7
 	ideal_character_age = 35
 	minimum_character_age = list(SPECIES_HUMAN = 27)
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/security/brig_chief
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/security/brig_chief
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps,
-		/datum/mil_branch/fleet = /decl/hierarchy/outfit/job/torch/crew/security/brig_chief/fleet
+		/datum/mil_branch/fleet = /singleton/hierarchy/outfit/job/torch/crew/security/brig_chief/fleet
 	)
 	allowed_ranks = list(
 		/datum/mil_rank/ec/e7,
@@ -36,8 +36,6 @@
 		access_radio_sec
 	)
 
-	minimal_access = list()
-
 	software_on_spawn = list(/datum/computer_file/program/digitalwarrant,
 							 /datum/computer_file/program/camera_monitor)
 
@@ -54,12 +52,12 @@
 	alt_titles = list(
 		"Criminal Investigator"
 	)
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/security/forensic_tech
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/security/forensic_tech
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps,
-		/datum/mil_branch/civilian = /decl/hierarchy/outfit/job/torch/crew/security/forensic_tech/contractor,
-		/datum/mil_branch/fleet = /decl/hierarchy/outfit/job/torch/crew/security/forensic_tech/fleet,
-		/datum/mil_branch/solgov = /decl/hierarchy/outfit/job/torch/crew/security/forensic_tech/agent
+		/datum/mil_branch/civilian = /singleton/hierarchy/outfit/job/torch/crew/security/forensic_tech/contractor,
+		/datum/mil_branch/fleet = /singleton/hierarchy/outfit/job/torch/crew/security/forensic_tech/fleet,
+		/datum/mil_branch/solgov = /singleton/hierarchy/outfit/job/torch/crew/security/forensic_tech/agent
 	)
 	allowed_ranks = list(
 		/datum/mil_rank/fleet/e3,
@@ -86,10 +84,8 @@
 		access_security, access_brig, access_forensics_lockers,
 		access_maint_tunnels, access_emergency_storage,
 		access_sec_doors, access_solgov_crew, access_morgue,
-		access_torch_fax, access_radio_sec
+		access_torch_fax, access_network, access_radio_sec
 	)
-
-	minimal_access = list()
 
 	software_on_spawn = list(/datum/computer_file/program/digitalwarrant,
 							 /datum/computer_file/program/camera_monitor)
@@ -104,15 +100,16 @@
 	minimum_character_age = list(SPECIES_HUMAN = 18)
 	ideal_character_age = 25
 	alt_titles = list() // This is a hack. Overriding a list var with null does not actually override it due to the particulars of dm list init. Do not "clean up" without testing.
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/security/maa
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/security/maa
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps,
-		/datum/mil_branch/fleet = /decl/hierarchy/outfit/job/torch/crew/security/maa/fleet,
+		/datum/mil_branch/fleet = /singleton/hierarchy/outfit/job/torch/crew/security/maa/fleet,
 	)
 	allowed_ranks = list(
 		/datum/mil_rank/ec/e3,
 		/datum/mil_rank/fleet/e3,
 		/datum/mil_rank/fleet/e4,
+		/datum/mil_rank/fleet/e5
 	)
 	min_skill = list(   SKILL_BUREAUCRACY = SKILL_BASIC,
 	                    SKILL_EVA         = SKILL_BASIC,
@@ -130,8 +127,6 @@
 		access_eva, access_sec_doors, access_solgov_crew,
 		access_radio_sec
 	)
-
-	minimal_access = list()
 
 	software_on_spawn = list(/datum/computer_file/program/digitalwarrant,
 							 /datum/computer_file/program/camera_monitor)

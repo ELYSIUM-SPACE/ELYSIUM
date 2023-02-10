@@ -8,6 +8,7 @@
 
 	unarmed_types = list(/datum/unarmed_attack/stomp, /datum/unarmed_attack/kick, /datum/unarmed_attack/punch)
 	species_flags = SPECIES_FLAG_NO_PAIN | SPECIES_FLAG_NO_SCAN | SPECIES_FLAG_NO_POISON
+	appearance_flags = SPECIES_APPEARANCE_HAS_STATIC_HAIR
 	spawn_flags = SPECIES_IS_RESTRICTED
 	siemens_coefficient = 0
 
@@ -42,7 +43,13 @@
 		TAG_FACTION =   FACTION_OTHER
 	)
 
-/datum/species/golem/handle_post_spawn(var/mob/living/carbon/human/H)
+	traits = list(
+		/singleton/trait/boon/clear_mind = TRAIT_LEVEL_MAJOR,
+		/singleton/trait/general/metabolically_inert = TRAIT_LEVEL_MAJOR,
+		/singleton/trait/general/nonpermeable_skin = TRAIT_LEVEL_EXISTS
+	)
+
+/datum/species/golem/handle_post_spawn(mob/living/carbon/human/H)
 	if(H.mind)
 		H.mind.reset()
 		H.mind.assigned_role = "Golem"
@@ -52,7 +59,7 @@
 	H.status_flags |= NO_ANTAG
 	..()
 
-/datum/species/golem/post_organ_rejuvenate(var/obj/item/organ/org, var/mob/living/carbon/human/H)
+/datum/species/golem/post_organ_rejuvenate(obj/item/organ/org, mob/living/carbon/human/H)
 	org.status |= (ORGAN_BRITTLE|ORGAN_CRYSTAL)
 
 /datum/species/golem/can_float(mob/living/carbon/human/H)

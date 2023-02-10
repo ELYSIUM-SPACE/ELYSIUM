@@ -3,16 +3,16 @@
 	desc = "A machine for breaking bonds in carbon dioxide and releasing pure oxygen."
 	icon = 'icons/atmos/oxyregenerator.dmi'
 	icon_state = "off"
-	level = 1
+	level = ATOM_LEVEL_UNDER_TILE
 	density = TRUE
 	use_power = POWER_USE_OFF
 	idle_power_usage = 200		//internal circuitry, friction losses and stuff
 	power_rating = 10000
 	base_type = /obj/machinery/atmospherics/binary/oxyregenerator
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	uncreated_component_parts = null
 	stat_immune = 0
-	
+
 	machine_name = "oxygen regenerator"
 	machine_desc = "Catalyzes gaseous CO2 to convert it into gaseous oxygen. The excess carbon is condensed and ejected as graphite sheets."
 
@@ -31,17 +31,17 @@
 	carbon_efficiency = initial(carbon_efficiency)
 	carbon_efficiency += 0.25 * total_component_rating_of_type(/obj/item/stock_parts/matter_bin)
 	carbon_efficiency -= 0.25 * number_of_components(/obj/item/stock_parts/matter_bin)
-	carbon_efficiency = Clamp(carbon_efficiency, initial(carbon_efficiency), 5)
+	carbon_efficiency = clamp(carbon_efficiency, initial(carbon_efficiency), 5)
 
 	intake_power_efficiency = initial(intake_power_efficiency)
 	intake_power_efficiency -= 0.1 * total_component_rating_of_type(/obj/item/stock_parts/manipulator)
 	intake_power_efficiency += 0.1 * number_of_components(/obj/item/stock_parts/manipulator)
-	intake_power_efficiency = Clamp(intake_power_efficiency, 0.1, initial(intake_power_efficiency))
+	intake_power_efficiency = clamp(intake_power_efficiency, 0.1, initial(intake_power_efficiency))
 
 	power_rating = 1
 	power_rating -= 0.05 * total_component_rating_of_type(/obj/item/stock_parts/micro_laser)
 	power_rating += 0.05 * number_of_components(/obj/item/stock_parts/micro_laser)
-	power_rating = Clamp(power_rating, 0.1, 1)
+	power_rating = clamp(power_rating, 0.1, 1)
 	power_rating *= initial(power_rating)
 	..()
 
@@ -49,7 +49,7 @@
 	. = ..()
 	to_chat(user,"Its outlet port is to the [dir2text(dir)]")
 
-/obj/machinery/atmospherics/binary/oxyregenerator/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/atmospherics/binary/oxyregenerator/attackby(obj/item/O as obj, mob/user as mob)
 	if(component_attackby(O, user))
 		return TRUE
 	if(isWrench(O))
@@ -104,9 +104,9 @@
 
 	src.set_dir(turn(src.dir, 90))
 
-/obj/machinery/atmospherics/binary/oxyregenerator/Process(var/delay)
+/obj/machinery/atmospherics/binary/oxyregenerator/Process(delay)
 	..()
-	if((stat & (NOPOWER|BROKEN)) || !use_power)
+	if((inoperable()) || !use_power)
 		return
 
 	var/power_draw = -1
@@ -127,7 +127,7 @@
 
 	if (phase == "processing")//processing CO2 in tank
 		if (inner_tank.gas[GAS_CO2])
-			var/co2_intake = between(0, inner_tank.gas[GAS_CO2], power_setting*delay/10)
+			var/co2_intake = clamp(inner_tank.gas[GAS_CO2], 0, power_setting * delay * 0.1)
 			last_flow_rate = co2_intake
 			inner_tank.adjust_gas(GAS_CO2, -co2_intake, 1)
 			var/datum/gas_mixture/new_oxygen = new
@@ -162,7 +162,7 @@
 			phase = "filling"
 
 /obj/machinery/atmospherics/binary/oxyregenerator/on_update_icon()
-	if(stat & NOPOWER)
+	if(!is_powered())
 		icon_state = "off"
 	else
 		icon_state = "[use_power ? "on" : "off"]"
@@ -171,7 +171,7 @@
 	ui_interact(user)
 	return TRUE
 
-/obj/machinery/atmospherics/binary/oxyregenerator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/atmospherics/binary/oxyregenerator/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 	var/data[0]
 	data["on"] = use_power ? 1 : 0
 	data["powerSetting"] = power_setting
@@ -203,5 +203,5 @@
 		update_icon()
 		return 1
 	if(href_list["setPower"]) //setting power to 0 is redundant anyways
-		power_setting = between(1, text2num(href_list["setPower"]), 5)
+		power_setting = clamp(text2num(href_list["setPower"]), 1, 5)
 		return 1

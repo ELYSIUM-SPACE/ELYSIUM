@@ -35,7 +35,7 @@
 	QDEL_NULL_LIST(encryption_keys)
 	return ..()
 
-/obj/item/device/radio/headset/list_channels(var/mob/user)
+/obj/item/device/radio/headset/list_channels(mob/user)
 	return list_secure_channels()
 
 /obj/item/device/radio/headset/examine(mob/user, distance)
@@ -102,6 +102,13 @@
 /obj/item/device/radio/headset/raider/Initialize()
 	. = ..()
 	set_frequency(RAID_FREQ)
+
+/obj/item/device/radio/headset/vox_raider
+	ks1type = /obj/item/device/encryptionkey/vox_raider
+
+/obj/item/device/radio/headset/vox_raider/Initialize()
+	. = ..()
+	set_frequency(V_RAID_FREQ)
 
 /obj/item/device/radio/headset/binary
 	origin_tech = list(TECH_ESOTERIC = 3)
@@ -330,7 +337,7 @@
 		return
 
 	if(isScrewdriver(W))
-		if(encryption_keys.len)
+		if(length(encryption_keys))
 			for(var/ch_name in channels)
 				radio_controller.remove_object(src, radiochannels[ch_name])
 				secure_radio_connections[ch_name] = null
@@ -344,22 +351,22 @@
 		else
 			to_chat(user, "This headset doesn't have any encryption keys!  How useless...")
 
-	if(istype(W, /obj/item/device/encryptionkey/))
-		if(encryption_keys.len >= max_keys)
+	if(istype(W, /obj/item/device/encryptionkey))
+		if(length(encryption_keys) >= max_keys)
 			to_chat(user, "The headset can't hold another key!")
 			return
 		if(user.unEquip(W, target = src))
-			to_chat(user, "<span class='notice'>You put \the [W] into \the [src].</span>")
+			to_chat(user, SPAN_NOTICE("You put \the [W] into \the [src]."))
 			encryption_keys += W
 			recalculateChannels(1)
 
-/obj/item/device/radio/headset/MouseDrop(var/obj/over_object)
+/obj/item/device/radio/headset/MouseDrop(obj/over_object)
 	var/mob/M = usr
 	if((!istype(over_object, /obj/screen)) && (src in M) && CanUseTopic(M))
 		return attack_self(M)
 	return
 
-/obj/item/device/radio/headset/recalculateChannels(var/setDescription = 0)
+/obj/item/device/radio/headset/recalculateChannels(setDescription = 0)
 	src.channels = list()
 	src.translate_binary = 0
 	src.syndie = 0
@@ -388,11 +395,11 @@
 
 /obj/item/device/radio/headset/proc/setupRadioDescription()
 	var/radio_text = ""
-	for(var/i = 1 to channels.len)
+	for(var/i = 1 to length(channels))
 		var/channel = channels[i]
 		var/key = get_radio_key_from_channel(channel)
 		radio_text += "[key] - [channel]"
-		if(i != channels.len)
+		if(i != length(channels))
 			radio_text += ", "
 
 	radio_desc = radio_text

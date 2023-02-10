@@ -1,14 +1,14 @@
 #define SAVE_RESET -1
 
-#define JOB_PRIORITY_HIGH   0x1
-#define JOB_PRIORITY_MEDIUM 0x2
-#define JOB_PRIORITY_LOW    0x4
-#define JOB_PRIORITY_LIKELY 0x3
-#define JOB_PRIORITY_PICKED 0x7
+#define JOB_PRIORITY_HIGH   FLAG(0)
+#define JOB_PRIORITY_MEDIUM FLAG(1)
+#define JOB_PRIORITY_LOW    FLAG(2)
+#define JOB_PRIORITY_LIKELY (JOB_PRIORITY_HIGH | JOB_PRIORITY_MEDIUM)
+#define JOB_PRIORITY_PICKED (JOB_PRIORITY_HIGH | JOB_PRIORITY_MEDIUM | JOB_PRIORITY_LOW)
 
 #define MAX_LOAD_TRIES 5
 
-datum/preferences
+/datum/preferences
 	//doohickeys for savefiles
 	var/is_guest = FALSE
 	var/default_slot = 1				//Holder so it doesn't default to slot 1, rather the last one used
@@ -29,11 +29,10 @@ datum/preferences
 	//game-preferences
 	var/lastchangelog = ""				//Saved changlog filesize to detect if there was a change
 
-	// Mob preview
-	var/icon/preview_icon = null
-
 	var/client/client = null
 	var/client_ckey = null
+
+	var/datum/browser/popup
 
 	var/datum/category_collection/player_setup_collection/player_setup
 	var/datum/browser/panel
@@ -51,7 +50,7 @@ datum/preferences
 
 /datum/preferences/proc/setup()
 	if(!length(GLOB.skills))
-		decls_repository.get_decl(/decl/hierarchy/skill)
+		GET_SINGLETON(/singleton/hierarchy/skill)
 	player_setup = new(src)
 	gender = pick(MALE, FEMALE)
 	real_name = random_name(gender,species)
@@ -109,7 +108,7 @@ datum/preferences
 
 	S.cd = "/torch"
 	for(var/slot = 1 to 40)
-		if(!list_find(S.dir, "character[slot]"))
+		if(!S.dir.Find("character[slot]"))
 			continue
 		S.cd = "/torch/character[slot]"
 		default_slot = slot
@@ -151,8 +150,7 @@ datum/preferences
 /datum/preferences/proc/open_setup_window(mob/user)
 	if (!SScharacter_setup.initialized)
 		return
-
-	var/datum/browser/popup = new(user, "preferences_browser", "Character Setup", 1200, 800, src)
+	popup = new (user, "preferences_browser", "Character Setup", 1200, 800, src)
 	var/content = {"
 	<script type='text/javascript'>
 		function update_content(data){
@@ -173,10 +171,10 @@ datum/preferences
 	if(isliving(user)) return
 
 	if(href_list["preference"] == "open_whitelist_forum")
-		if(config.forumurl)
-			send_link(user, config.forumurl)
+		if(config.forum_url)
+			send_link(user, config.forum_url)
 		else
-			to_chat(user, "<span class='danger'>The forum URL is not set in the server configuration.</span>")
+			to_chat(user, SPAN_DANGER("The forum URL is not set in the server configuration."))
 			return
 	update_setup_window(usr)
 	return 1
@@ -184,6 +182,9 @@ datum/preferences
 /datum/preferences/Topic(href, list/href_list)
 	if(..())
 		return 1
+
+	if (href_list["close"])
+		popup = null
 
 	if(href_list["save"])
 		save_preferences()
@@ -226,39 +227,24 @@ datum/preferences
 	player_setup.sanitize_setup()
 	character.set_species(species)
 
-	if(be_random_name)
-		var/decl/cultural_info/culture = SSculture.get_culture(cultural_info[TAG_CULTURE])
-		if(culture) real_name = culture.get_random_name(gender)
-
 	character.fully_replace_character_name(real_name)
 
 	character.gender = gender
 	character.age = age
 	character.b_type = b_type
 
-	character.r_eyes = r_eyes
-	character.g_eyes = g_eyes
-	character.b_eyes = b_eyes
+	character.eye_color = eye_color
 
-	character.h_style = h_style
-	character.r_hair = r_hair
-	character.g_hair = g_hair
-	character.b_hair = b_hair
+	character.head_hair_style = head_hair_style
+	character.head_hair_color = head_hair_color
 
-	character.f_style = f_style
-	character.r_facial = r_facial
-	character.g_facial = g_facial
-	character.b_facial = b_facial
+	character.facial_hair_style = facial_hair_style
+	character.facial_hair_color = facial_hair_color
 
-	character.r_skin = r_skin
-	character.g_skin = g_skin
-	character.b_skin = b_skin
+	character.skin_color = skin_color
 
-	character.s_tone = s_tone
-	character.s_base = s_base
-
-	character.h_style = h_style
-	character.f_style = f_style
+	character.skin_tone = skin_tone
+	character.base_skin = base_skin
 
 	// Replace any missing limbs.
 	for(var/name in BP_ALL_LIMBS)
@@ -435,7 +421,7 @@ datum/preferences
 		var/name = branches[job.title]
 		if (!name)
 			continue
-		. |= mil_branches.get_branch(name)
+		. |= GLOB.mil_branches.get_branch(name)
 
 /datum/preferences/proc/selected_branches_assoc(priority = JOB_PRIORITY_PICKED)
 	. = list()
@@ -443,7 +429,7 @@ datum/preferences
 		var/name = branches[job.title]
 		if (!name || .[name])
 			continue
-		.[name] = mil_branches.get_branch(name)
+		.[name] = GLOB.mil_branches.get_branch(name)
 
 /datum/preferences/proc/for_each_selected_job(datum/callback/callback, priority = JOB_PRIORITY_LIKELY)
 	. = list()
@@ -451,7 +437,7 @@ datum/preferences
 		priority = selected_jobs_assoc(priority)
 	for (var/title in priority)
 		var/datum/job/job = priority[title]
-		.[title] = callback.Invoke(job)
+		.[title] = invoke(callback, job)
 
 /datum/preferences/proc/for_each_selected_job_multi(list/callbacks, priority = JOB_PRIORITY_LIKELY)
 	. = list()
@@ -466,7 +452,7 @@ datum/preferences
 		priority = selected_branches_assoc(priority)
 	for (var/name in priority)
 		var/datum/mil_branch/branch = priority[name]
-		.[name] = callback.Invoke(branch)
+		.[name] = invoke(callback, branch)
 
 /datum/preferences/proc/for_each_selected_branch_multi(list/callbacks, priority = JOB_PRIORITY_LIKELY)
 	. = list()

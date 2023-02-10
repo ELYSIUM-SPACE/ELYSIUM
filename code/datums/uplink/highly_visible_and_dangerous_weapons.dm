@@ -4,23 +4,17 @@
 /datum/uplink_item/item/visible_weapons
 	category = /datum/uplink_category/visible_weapons
 
-/datum/uplink_item/item/visible_weapons/zipgun
-	name = "Zip Gun"
-	desc = "A pipe attached to crude wooden stock with firing mechanism, holds one round."
-	item_cost = 8
-	path = /obj/item/gun/projectile/pirate
-
 /datum/uplink_item/item/visible_weapons/smallenergy_gun
 	name = "Small Energy Gun"
 	desc = "A pocket-sized energy based sidearm with three different lethality settings."
 	item_cost = 16
 	path = /obj/item/gun/energy/gun/small
 
-/datum/uplink_item/item/visible_weapons/ancient
-	name = "Replica Pistol"
-	desc = "A cheap replica of an earth handgun. To reload, buy another."
-	item_cost = 16
-	path = /obj/item/gun/projectile/pistol/throwback
+/datum/uplink_item/item/visible_weapons/shuriken
+	name = "Box of shurikens"
+	desc = "A small box with six shuriken, notably dangerous."
+	item_cost = 18
+	path = /obj/item/storage/box/syndie_kit/shuriken
 
 /datum/uplink_item/item/visible_weapons/dartgun
 	name = "Dart Gun"
@@ -38,8 +32,14 @@
 /datum/uplink_item/item/visible_weapons/pikecube
 	name = "Pike Cube"
 	desc = "While it looks like a normal monkey cube, the animal produced is, instead, a space pike. \ Note: The space pike does not like you."
-	item_cost = 30
+	item_cost = 44
 	path = /obj/item/reagent_containers/food/snacks/monkeycube/wrapped/pikecube
+
+/datum/uplink_item/item/visible_weapons/katana
+	name = "Katana"
+	desc = "A large sharpened steel blade capable of cutting through anything but the thickest armor."
+	item_cost = 24
+	path = /obj/item/material/sword/katana
 
 /datum/uplink_item/item/visible_weapons/energy_sword
 	name = "Energy Sword"
@@ -54,6 +54,12 @@
 			Attaching the silencer will make it too big to conceal in your pocket."
 	item_cost = 32
 	path = /obj/item/storage/box/syndie_kit/silenced
+
+/datum/uplink_item/item/visible_weapons/broomstick
+	name = "Broomstick Pistol"
+	desc = "An antique pistol stolen from a museum. Be warned, it may be faulty and comes unloaded."
+	item_cost = 40
+	path = /obj/item/gun/projectile/pistol/broomstick
 
 /datum/uplink_item/item/badassery/money_cannon
 	name = "Modified Money Cannon"
@@ -112,7 +118,7 @@
 	name = "Carbine Rifle"
 	desc = "For arming your comrades on the (not so) cheap!"
 	item_cost = 55
-	path = /obj/item/gun/projectile/automatic/semistrip
+	path = /obj/item/gun/projectile/sniper/semistrip
 	antag_roles = list(MODE_REVOLUTIONARY, MODE_MERCENARY)
 
 
@@ -162,12 +168,6 @@
 	item_cost = 52
 	path = /obj/item/gun/projectile/pistol/magnum_pistol
 
-/datum/uplink_item/item/visible_weapons/sigsauer
-	name = "Standard Military Pistol"
-	desc = "A regularly used and reliable weapon that is standard issue in the Navy."
-	item_cost = 40
-	path = /obj/item/gun/projectile/pistol/military/alt
-
 /datum/uplink_item/item/visible_weapons/detective_revolver
 	name = "Small Revolver"
 	desc = "A pocket-sized holdout revolver. Easily concealable.."
@@ -192,7 +192,7 @@
 	name = "Railgun"
 	desc = "An anti-armour magnetic launching system fed by a high-capacity matter cartridge, \
 			capable of firing slugs at intense speeds."
-	item_cost = DEFAULT_TELECRYSTAL_AMOUNT - (DEFAULT_TELECRYSTAL_AMOUNT - (DEFAULT_TELECRYSTAL_AMOUNT % 6)) / 6
+	item_cost = 65
 	antag_roles = list(MODE_MERCENARY)
 	path = /obj/item/gun/magnetic/railgun
 
@@ -201,12 +201,12 @@
 	desc = "A modified prototype of the original railgun implement, this time boring slugs out of steel rods loaded into the chamber, \
 			now with even MORE stopping power."
 	antag_roles = list(MODE_MERCENARY)
-	item_cost = DEFAULT_TELECRYSTAL_AMOUNT
+	item_cost = 75
 	path = /obj/item/gun/magnetic/railgun/tcc
 
 /datum/uplink_item/item/visible_weapons/harpoonbomb
 	name = "Explosive Harpoon"
-	item_cost = 12
+	item_cost = 68
 	path = /obj/item/material/harpoon/bomb
 
 /datum/uplink_item/item/visible_weapons/incendiary_laser

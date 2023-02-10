@@ -7,7 +7,7 @@
 	w_class = ITEM_SIZE_NORMAL
 	base_type = /obj/machinery/portable_atmospherics/powered/pump
 
-	var/direction_out = 0 //0 = siphoning, 1 = releasing
+	var/direction_out = 1 //0 = siphoning, 1 = releasing
 	var/target_pressure = ONE_ATMOSPHERE
 
 	var/pressuremin = 0
@@ -17,7 +17,7 @@
 
 	power_rating = 7500 //7500 W ~ 10 HP
 	power_losses = 150
-	
+
 	machine_name = "portable pump"
 	machine_desc = "Used to equalize the pressure of the atmosphere in a surrounding area with its own contents, or to draw in air from the area around it. Runs on a battery backup; can be connected to atmospherics networks."
 
@@ -33,7 +33,7 @@
 /obj/machinery/portable_atmospherics/powered/pump/on_update_icon()
 	overlays.Cut()
 
-	if((use_power == POWER_USE_ACTIVE) && !(stat & NOPOWER))
+	if((use_power == POWER_USE_ACTIVE) && is_powered())
 		icon_state = "psiphon:1"
 	else
 		icon_state = "psiphon:0"
@@ -45,7 +45,7 @@
 		overlays += "siphon-connector"
 
 /obj/machinery/portable_atmospherics/powered/pump/emp_act(severity)
-	if(stat & (BROKEN|NOPOWER))
+	if(inoperable())
 		..(severity)
 		return
 
@@ -55,7 +55,7 @@
 	if(prob(100/severity))
 		direction_out = !direction_out
 
-	target_pressure = rand(0,1300)
+	target_pressure = rand(0, 10 * ONE_ATMOSPHERE)
 	update_icon()
 
 	..(severity)
@@ -64,7 +64,7 @@
 	..()
 	var/power_draw = -1
 
-	if((use_power == POWER_USE_ACTIVE) && !(stat & NOPOWER))
+	if((use_power == POWER_USE_ACTIVE) && is_powered())
 		var/datum/gas_mixture/environment
 		if(holding)
 			environment = holding.air_contents
@@ -106,7 +106,7 @@
 
 	src.updateDialog()
 
-/obj/machinery/portable_atmospherics/powered/pump/interface_interact(var/mob/user)
+/obj/machinery/portable_atmospherics/powered/pump/interface_interact(mob/user)
 	ui_interact(user)
 	return TRUE
 

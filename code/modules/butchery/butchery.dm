@@ -3,18 +3,16 @@
 #define CARCASS_SKINNED  "skinned"
 #define CARCASS_JOINTED  "jointed"
 
-/mob/living
-	var/meat_type =         /obj/item/reagent_containers/food/snacks/meat
-	var/meat_amount =       3
-	var/skin_material =     MATERIAL_SKIN_GENERIC
-	var/skin_amount =       3
-	var/bone_material =     MATERIAL_BONE_GENERIC
-	var/bone_amount =       3
-	var/skull_type
-	var/butchery_rotation = 90
+/mob/living/var/meat_type =         /obj/item/reagent_containers/food/snacks/meat
+/mob/living/var/meat_amount =       3
+/mob/living/var/skin_material =     MATERIAL_SKIN_GENERIC
+/mob/living/var/skin_amount =       3
+/mob/living/var/bone_material =     MATERIAL_BONE_GENERIC
+/mob/living/var/bone_amount =       3
+/mob/living/var/skull_type
+/mob/living/var/butchery_rotation = 90
 
-/mob/living/carbon/human
-	butchery_rotation = 180
+/mob/living/carbon/human/butchery_rotation = 180
 
 // Harvest an animal's delicious byproducts
 /mob/living/proc/harvest_meat()
@@ -81,7 +79,7 @@
 	icon_state = "improvised"
 	secures_occupant = FALSE
 
-/obj/structure/kitchenspike/attack_hand(var/mob/user)
+/obj/structure/kitchenspike/attack_hand(mob/user)
 
 	if(!occupant)
 		return ..()
@@ -97,10 +95,10 @@
 		to_chat(user, SPAN_WARNING("\The [occupant] is so badly mangled that removing them from \the [src] would be pointless."))
 		return
 
-/obj/structure/kitchenspike/MouseDrop_T(var/mob/target, var/mob/user)
+/obj/structure/kitchenspike/MouseDrop_T(mob/target, mob/user)
 	try_spike(target, user)
 
-/obj/structure/kitchenspike/proc/try_spike(var/mob/living/target, var/mob/living/user)
+/obj/structure/kitchenspike/proc/try_spike(mob/living/target, mob/living/user)
 	if(!istype(target) || !Adjacent(user) || user.incapacitated())
 		return
 
@@ -115,7 +113,7 @@
 	if(suitable_for_butchery(target))
 
 		user.visible_message(SPAN_WARNING("\The [user] begins wrestling \the [target] onto \the [src]."))
-		if(!do_after(user, 3 SECONDS, target) || occupant || !target || QDELETED(target) || target.stat == CONSCIOUS || !target.Adjacent(user))
+		if(!do_after(user, 3 SECONDS, target, DO_PUBLIC_UNIQUE) || occupant || !target || QDELETED(target) || target.stat == CONSCIOUS || !target.Adjacent(user))
 			return
 
 		if(secures_occupant)
@@ -131,7 +129,7 @@
 	else
 		to_chat(user, SPAN_WARNING("You cannot butcher \the [target]."))
 
-/obj/structure/kitchenspike/proc/suitable_for_butchery(var/mob/living/victim)
+/obj/structure/kitchenspike/proc/suitable_for_butchery(mob/living/victim)
 	return istype(victim) && ((victim.meat_type && victim.meat_amount) || (victim.skin_material && victim.skin_amount) || (victim.bone_material && victim.bone_amount))
 
 /obj/structure/kitchenspike/on_update_icon()
@@ -140,16 +138,14 @@
 		occupant.set_dir(SOUTH)
 		var/image/I = image(null)
 		I.appearance = occupant
-		var/matrix/M = matrix()
-		M.Turn(occupant.butchery_rotation)
-		I.transform = M
+		I.SetTransform(rotation = occupant.butchery_rotation)
 		overlays += I
 
 /obj/structure/kitchenspike/mob_breakout(mob/living/escapee)
 	. = ..()
 	if(secures_occupant)
 		escapee.visible_message(SPAN_WARNING("\The [escapee] begins writhing free of \the [src]!"))
-		if(!do_after(escapee, 5 SECONDS, src))
+		if(!do_after(escapee, 5 SECONDS, src, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
 			return FALSE
 	escapee.visible_message(SPAN_DANGER("\The [escapee] escapes from \the [src]!"))
 	escapee.dropInto(loc)
@@ -159,7 +155,7 @@
 		update_icon()
 	return TRUE
 
-/obj/structure/kitchenspike/proc/set_carcass_state(var/_state)
+/obj/structure/kitchenspike/proc/set_carcass_state(_state)
 	occupant_state = _state
 	if(occupant)
 		occupant.adjustBruteLoss(rand(50,60))
@@ -174,7 +170,7 @@
 		QDEL_NULL(occupant)
 	update_icon()
 
-/obj/structure/kitchenspike/proc/do_butchery_step(var/mob/user, var/next_state, var/butchery_string)
+/obj/structure/kitchenspike/proc/do_butchery_step(mob/user, next_state, butchery_string)
 
 	if(QDELETED(occupant))
 		return FALSE
@@ -186,7 +182,7 @@
 	occupant.adjustBruteLoss(rand(50,60))
 	update_icon()
 
-	if(do_after(user, 3 SECONDS, src) && !QDELETED(user) && !QDELETED(last_occupant) && occupant == last_occupant && occupant_state == last_state)
+	if(do_after(user, 3 SECONDS, src, DO_PUBLIC_UNIQUE) && !QDELETED(user) && !QDELETED(last_occupant) && occupant == last_occupant && occupant_state == last_state)
 		user.visible_message(SPAN_NOTICE("\The [user] finishes [butchery_string] \the [occupant]."))
 		switch(next_state)
 			if(CARCASS_SKINNED)
@@ -199,7 +195,7 @@
 		return TRUE
 	return FALSE
 
-/obj/structure/kitchenspike/attackby(var/obj/item/thing, var/mob/user)
+/obj/structure/kitchenspike/attackby(obj/item/thing, mob/user)
 	if(!thing.sharp)
 		return ..()
 	if(!occupant)

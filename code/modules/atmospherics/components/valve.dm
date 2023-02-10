@@ -5,7 +5,7 @@
 	name = "manual valve"
 	desc = "A pipe valve."
 
-	level = 1
+	level = ATOM_LEVEL_UNDER_TILE
 	dir = SOUTH
 	initialize_directions = SOUTH|NORTH
 	layer = ABOVE_CATWALK_LAYER
@@ -42,7 +42,7 @@
 		add_underlay(T, node1, get_dir(src, node1), node1 ? node1.icon_connect_type : "")
 		add_underlay(T, node2, get_dir(src, node2), node2 ? node2.icon_connect_type : "")
 
-/obj/machinery/atmospherics/valve/hide(var/i)
+/obj/machinery/atmospherics/valve/hide(i)
 	update_underlays()
 
 /obj/machinery/atmospherics/valve/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
@@ -55,7 +55,7 @@
 		if(open)
 			network_node1 = new_network
 
-	if(list_find(new_network.normal_members, src))
+	if(new_network.normal_members.Find(src))
 		return 0
 
 	new_network.normal_members += src
@@ -215,21 +215,21 @@
 
 	return null
 
-/obj/machinery/atmospherics/valve/attackby(var/obj/item/W as obj, var/mob/user as mob)
+/obj/machinery/atmospherics/valve/attackby(obj/item/W as obj, mob/user as mob)
 	if (!istype(W, /obj/item/wrench))
 		return ..()
 	var/datum/gas_mixture/int_air = return_air()
 	var/datum/gas_mixture/env_air = loc.return_air()
 	if ((int_air.return_pressure()-env_air.return_pressure()) > 2*ONE_ATMOSPHERE)
-		to_chat(user, "<span class='warning'>You cannot unwrench \the [src], it is too exerted due to internal pressure.</span>")
+		to_chat(user, SPAN_WARNING("You cannot unwrench \the [src], it is too exerted due to internal pressure."))
 		add_fingerprint(user)
 		return 1
 	playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
-	to_chat(user, "<span class='notice'>You begin to unfasten \the [src]...</span>")
-	if (do_after(user, 40, src))
+	to_chat(user, SPAN_NOTICE("You begin to unfasten \the [src]..."))
+	if (do_after(user, 4 SECONDS, src, DO_REPAIR_CONSTRUCT))
 		user.visible_message( \
-			"<span class='notice'>\The [user] unfastens \the [src].</span>", \
-			"<span class='notice'>You have unfastened \the [src].</span>", \
+			SPAN_NOTICE("\The [user] unfastens \the [src]."), \
+			SPAN_NOTICE("You have unfastened \the [src]."), \
 			"You hear a ratchet.")
 		new /obj/item/pipe(loc, src)
 		qdel(src)
@@ -238,27 +238,27 @@
 	. = ..()
 	to_chat(user, "It is [open ? "open" : "closed"].")
 
-/decl/public_access/public_variable/valve_open
+/singleton/public_access/public_variable/valve_open
 	expected_type = /obj/machinery/atmospherics/valve
 	name = "valve open"
 	desc = "Whether or not the valve is open."
 	can_write = FALSE
 	has_updates = FALSE
 
-/decl/public_access/public_variable/valve_open/access_var(obj/machinery/atmospherics/valve/valve)
+/singleton/public_access/public_variable/valve_open/access_var(obj/machinery/atmospherics/valve/valve)
 	return valve.open
 
-/decl/public_access/public_method/open_valve
+/singleton/public_access/public_method/open_valve
 	name = "open valve"
 	desc = "Sets the valve to open."
 	call_proc = /obj/machinery/atmospherics/valve/proc/open
 
-/decl/public_access/public_method/close_valve
+/singleton/public_access/public_method/close_valve
 	name = "open valve"
 	desc = "Sets the valve to open."
 	call_proc = /obj/machinery/atmospherics/valve/proc/close
 
-/decl/public_access/public_method/toggle_valve
+/singleton/public_access/public_method/toggle_valve
 	name = "toggle valve"
 	desc = "Toggles whether the valve is open or closed."
 	call_proc = /obj/machinery/atmospherics/valve/proc/toggle
@@ -271,13 +271,13 @@
 		/obj/item/stock_parts/radio/receiver,
 		/obj/item/stock_parts/power/apc
 	)
-	public_variables = list(/decl/public_access/public_variable/valve_open)
+	public_variables = list(/singleton/public_access/public_variable/valve_open)
 	public_methods = list(
-		/decl/public_access/public_method/open_valve,
-		/decl/public_access/public_method/close_valve,
-		/decl/public_access/public_method/toggle_valve
+		/singleton/public_access/public_method/open_valve,
+		/singleton/public_access/public_method/close_valve,
+		/singleton/public_access/public_method/toggle_valve
 	)
-	stock_part_presets = list(/decl/stock_part_preset/radio/receiver/valve = 1)
+	stock_part_presets = list(/singleton/stock_part_preset/radio/receiver/valve = 1)
 
 	build_icon_state = "dvalve"
 
@@ -299,11 +299,11 @@
 	if(!powered())
 		icon_state = "valve[open]nopower"
 
-/decl/stock_part_preset/radio/receiver/valve
+/singleton/stock_part_preset/radio/receiver/valve
 	frequency = FUEL_FREQ
 	filter = RADIO_ATMOSIA
 	receive_and_call = list(
-		"valve_open" = /decl/public_access/public_method/open_valve,
-		"valve_close" = /decl/public_access/public_method/close_valve,
-		"valve_toggle" = /decl/public_access/public_method/toggle_valve
+		"valve_open" = /singleton/public_access/public_method/open_valve,
+		"valve_close" = /singleton/public_access/public_method/close_valve,
+		"valve_toggle" = /singleton/public_access/public_method/toggle_valve
 	)

@@ -51,15 +51,15 @@
 		if(!user.unEquip(P, src))
 			return
 		add_fingerprint(user)
-		to_chat(user, "<span class='notice'>You put [P] in [src].</span>")
+		to_chat(user, SPAN_NOTICE("You put [P] in [src]."))
 		flick("[initial(icon_state)]-open",src)
 		updateUsrDialog()
 	else
 		..()
 
 /obj/structure/filingcabinet/attack_hand(mob/user as mob)
-	if(contents.len <= 0)
-		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
+	if(length(contents) <= 0)
+		to_chat(user, SPAN_NOTICE("\The [src] is empty."))
 		return
 
 	user.set_machine(src)

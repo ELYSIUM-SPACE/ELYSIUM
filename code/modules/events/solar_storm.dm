@@ -14,7 +14,7 @@
 	command_announcement.Announce("A solar storm has been detected approaching the [location_name()]. Please halt all EVA activites immediately and return inside.", "[location_name()] Sensor Array", zlevels = affecting_z)
 	adjust_solar_output(1.5)
 
-/datum/event/solar_storm/proc/adjust_solar_output(var/mult = 1)
+/datum/event/solar_storm/proc/adjust_solar_output(mult = 1)
 	if(isnull(base_solar_gen_rate)) base_solar_gen_rate = solar_gen_rate
 	solar_gen_rate = mult * base_solar_gen_rate
 
@@ -30,7 +30,7 @@
 
 /datum/event/solar_storm/proc/radiate()
 	// Note: Too complicated to be worth trying to use the radiation system for this.  Its only in space anyway, so we make an exception in this case.
-	for(var/mob/living/L in GLOB.living_mob_list_)
+	for(var/mob/living/L in GLOB.alive_mobs)
 		if(istype(L.loc, /mob/living/exosuit)) //Todo, generalize this further like I did for rads if other things need to block or mitigate heat - CrimsonShrike
 			continue
 		var/turf/T = get_turf(L)

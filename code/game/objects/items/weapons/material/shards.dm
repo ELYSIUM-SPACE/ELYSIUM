@@ -19,7 +19,7 @@
 	drops_debris = 0
 	item_flags = ITEM_FLAG_CAN_HIDE_IN_SHOES
 
-/obj/item/material/shard/set_material(var/new_material)
+/obj/item/material/shard/set_material(new_material)
 	..(new_material)
 	if(!istype(material))
 		return
@@ -74,10 +74,10 @@
 			if( H.shoes || ( H.wear_suit && (H.wear_suit.body_parts_covered & FEET) ) )
 				return
 
-			to_chat(M, "<span class='danger'>You step on \the [src]!</span>")
+			to_chat(M, SPAN_DANGER("You step on \the [src]!"))
 
 			var/list/check = list(BP_L_FOOT, BP_R_FOOT)
-			while(check.len)
+			while(length(check))
 				var/picked = pick(check)
 				var/obj/item/organ/external/affecting = H.get_organ(picked)
 				if(affecting)
@@ -91,11 +91,22 @@
 				check -= picked
 			return
 
-// Preset types - left here for the code that uses them
-/obj/item/material/shard/phoron/New(loc)
-	..(loc, MATERIAL_PHORON_GLASS)
 
-/obj/item/material/shard/shrapnel
-	name = "shrapnel"
-	default_material = MATERIAL_STEEL
-	w_class = ITEM_SIZE_TINY	//it's real small
+/obj/item/material/shard/phoron/default_material = MATERIAL_PHORON_GLASS
+
+
+/obj/item/material/shard/shrapnel/name = "shrapnel"
+/obj/item/material/shard/shrapnel/w_class = ITEM_SIZE_TINY
+/obj/item/material/shard/shrapnel/item_flags = EMPTY_BITFIELD
+
+
+/obj/item/material/shard/shrapnel/steel/default_material = MATERIAL_STEEL
+
+
+/obj/item/material/shard/shrapnel/titanium/default_material = MATERIAL_TITANIUM
+
+
+/obj/item/material/shard/shrapnel/aluminium/default_material = MATERIAL_ALUMINIUM
+
+
+/obj/item/material/shard/shrapnel/copper/default_material = MATERIAL_COPPER

@@ -57,7 +57,7 @@ GLOBAL_LIST_INIT(weighted_minerals_rich, \
 	if(!minerals_rich)   minerals_rich =   GLOB.weighted_minerals_rich
 	..()
 
-/datum/random_map/automata/cave_system/get_appropriate_path(var/value)
+/datum/random_map/automata/cave_system/get_appropriate_path(value)
 	switch(value)
 		if(DOOR_CHAR, EMPTY_CHAR)
 			return mineral_turf
@@ -66,7 +66,7 @@ GLOBAL_LIST_INIT(weighted_minerals_rich, \
 		if(WALL_CHAR)
 			return wall_type
 
-/datum/random_map/automata/cave_system/get_map_char(var/value)
+/datum/random_map/automata/cave_system/get_map_char(value)
 	switch(value)
 		if(DOOR_CHAR)
 			return "x"
@@ -83,11 +83,11 @@ GLOBAL_LIST_INIT(weighted_minerals_rich, \
 			if (CELL_ALIVE(map[tmp_cell]))
 				ore_turfs += tmp_cell
 
-	game_log("ASGEN", "Found [ore_turfs.len] ore turfs.")
-	var/ore_count = round(map.len/20)
+	game_log("ASGEN", "Found [length(ore_turfs)] ore turfs.")
+	var/ore_count = round(length(map)/20)
 	var/door_count = 0
 	var/empty_count = 0
-	while((ore_count>0) && (ore_turfs.len>0))
+	while((ore_count>0) && (length(ore_turfs)>0))
 
 		if(!priority_process)
 			CHECK_TICK

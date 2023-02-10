@@ -79,8 +79,8 @@
 	else if(href_list["item"])
 		if(!allow_items) return
 
-		if(frozen_items.len == 0)
-			to_chat(user, "<span class='notice'>There is nothing to recover from storage.</span>")
+		if(length(frozen_items) == 0)
+			to_chat(user, SPAN_NOTICE("There is nothing to recover from storage."))
 			return TOPIC_HANDLED
 
 		var/obj/item/I = input(user, "Please choose which object to retrieve.","Object recovery",null) as null|anything in frozen_items
@@ -88,10 +88,10 @@
 			return TOPIC_HANDLED
 
 		if(!(I in frozen_items))
-			to_chat(user, "<span class='notice'>\The [I] is no longer in storage.</span>")
+			to_chat(user, SPAN_NOTICE("\The [I] is no longer in storage."))
 			return TOPIC_HANDLED
 
-		visible_message("<span class='notice'>The console beeps happily as it disgorges \the [I].</span>", range = 3)
+		visible_message(SPAN_NOTICE("The console beeps happily as it disgorges \the [I]."), range = 3)
 
 		I.dropInto(loc)
 		frozen_items -= I
@@ -100,11 +100,11 @@
 	else if(href_list["allitems"])
 		if(!allow_items) return TOPIC_HANDLED
 
-		if(frozen_items.len == 0)
-			to_chat(user, "<span class='notice'>There is nothing to recover from storage.</span>")
+		if(length(frozen_items) == 0)
+			to_chat(user, SPAN_NOTICE("There is nothing to recover from storage."))
 			return TOPIC_HANDLED
 
-		visible_message("<span class='notice'>The console beeps happily as it disgorges the desired objects.</span>", range = 3)
+		visible_message(SPAN_NOTICE("The console beeps happily as it disgorges the desired objects."), range = 3)
 
 		for(var/obj/item/I in frozen_items)
 			I.dropInto(loc)
@@ -229,11 +229,11 @@
 				possible_locations |= text2num(level)
 
 	var/newz = GLOB.using_map.get_empty_zlevel()
-	if(possible_locations.len && prob(10))
+	if(length(possible_locations) && prob(10))
 		newz = pick(possible_locations)
 	var/turf/nloc = locate(rand(TRANSITIONEDGE, world.maxx-TRANSITIONEDGE), rand(TRANSITIONEDGE, world.maxy-TRANSITIONEDGE),newz)
 	if(!istype(nloc, /turf/space))
-		explosion(nloc, 1, 2, 3)
+		explosion(nloc, 6)
 	playsound(loc,'sound/effects/rocket.ogg',100)
 	forceMove(nloc)
 
@@ -328,8 +328,10 @@
 // This function can not be undone; do not call this unless you are sure
 // Also make sure there is a valid control computer
 /obj/machinery/cryopod/proc/despawn_occupant()
-	if (!occupant)
-		log_and_message_admins("A mob was deleted while in a cryopod. This may cause errors!")
+	SHOULD_NOT_SLEEP(TRUE) // Sleeping causes the double-despawn bug
+
+	if (QDELETED(occupant))
+		log_and_message_admins("A mob was deleted while in a cryopod, or the cryopod double-processed. This may cause errors!")
 		return
 
 	//Drop all items into the pod.
@@ -337,7 +339,7 @@
 		occupant.drop_from_inventory(W)
 		W.forceMove(src)
 
-		if(W.contents.len) //Make sure we catch anything not handled by qdel() on the items.
+		if(length(W.contents)) //Make sure we catch anything not handled by qdel() on the items.
 			for(var/obj/item/O in W.contents)
 				if(istype(O,/obj/item/storage/internal)) //Stop eating pockets, you fuck!
 					continue
@@ -380,7 +382,7 @@
 		// them win or lose based on cryo is silly so we remove the objective.
 		if(O.target == occupant.mind)
 			if(O.owner && O.owner.current)
-				to_chat(O.owner.current, "<span class='warning'>You get the feeling your target is no longer within your reach...</span>")
+				to_chat(O.owner.current, SPAN_WARNING("You get the feeling your target is no longer within your reach..."))
 			qdel(O)
 
 	//Handle job slot/tater cleanup.
@@ -388,7 +390,7 @@
 		if(occupant.mind.assigned_job)
 			occupant.mind.assigned_job.clear_slot()
 
-		if(occupant.mind.objectives.len)
+		if(LAZYLEN(occupant.mind.objectives))
 			occupant.mind.objectives = null
 			occupant.mind.special_role = null
 
@@ -416,7 +418,7 @@
 	log_and_message_admins("[key_name(occupant)] ([role_alt_title]) entered cryostorage.")
 
 	if(announce_despawn)
-		announce.autosay("[occupant.real_name], [role_alt_title], [on_store_message]", "[on_store_name]")
+		invoke_async(announce, /obj/item/device/radio/proc/autosay, "[occupant.real_name], [role_alt_title], [on_store_message]", "[on_store_name]")
 
 	var/despawnmessage = replacetext(on_store_visible_message, "$occupant$", occupant.real_name)
 	visible_message(SPAN_NOTICE("\The [initial(name)] " + despawnmessage), range = 3)
@@ -450,7 +452,7 @@
 		to_chat(user, SPAN_WARNING("\The [target] isn't close enough."))
 		return
 	add_fingerprint(user)
-	if (!do_after(user, 2 SECONDS, src, do_flags = DO_DEFAULT | DO_TARGET_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
+	if (!do_after(user, 2 SECONDS, src, DO_PUBLIC_UNIQUE))
 		return
 	if (QDELETED(target))
 		return
@@ -463,22 +465,22 @@
 	log_and_message_admins("placed [target == user ? "themself" : key_name_admin(target)] into \a [src]")
 
 //Like grap-put, but for mouse-drop.
-/obj/machinery/cryopod/MouseDrop_T(var/mob/target, var/mob/user)
+/obj/machinery/cryopod/MouseDrop_T(mob/target, mob/user)
 	if(!check_occupant_allowed(target))
 		return
 	if(occupant)
-		to_chat(user, "<span class='notice'>\The [src] is in use.</span>")
+		to_chat(user, SPAN_NOTICE("\The [src] is in use."))
 		return
 
-	user.visible_message("<span class='notice'>\The [user] begins placing \the [target] into \the [src].</span>", "<span class='notice'>You start placing \the [target] into \the [src].</span>")
+	user.visible_message(SPAN_NOTICE("\The [user] begins placing \the [target] into \the [src]."), SPAN_NOTICE("You start placing \the [target] into \the [src]."))
 	attempt_enter(target, user)
 
-/obj/machinery/cryopod/attackby(var/obj/item/G as obj, var/mob/user as mob)
+/obj/machinery/cryopod/attackby(obj/item/G as obj, mob/user as mob)
 
 	if(istype(G, /obj/item/grab))
 		var/obj/item/grab/grab = G
 		if(occupant)
-			to_chat(user, "<span class='notice'>\The [src] is in use.</span>")
+			to_chat(user, SPAN_NOTICE("\The [src] is in use."))
 			return
 
 		if(!ismob(grab.affecting))
@@ -521,7 +523,7 @@
 		return
 
 	if(src.occupant)
-		to_chat(usr, "<span class='notice'><B>\The [src] is in use.</B></span>")
+		to_chat(usr, SPAN_NOTICE("<B>\The [src] is in use.</B>"))
 		return
 
 	for(var/mob/living/carbon/slime/M in range(1,usr))
@@ -531,13 +533,13 @@
 
 	visible_message("\The [usr] starts climbing into \the [src].", range = 3)
 
-	if(do_after(usr, 20, src))
+	if(do_after(usr, 2 SECONDS, src, DO_PUBLIC_UNIQUE))
 
 		if(!usr || !usr.client)
 			return
 
 		if(src.occupant)
-			to_chat(usr, "<span class='notice'><B>\The [src] is in use.</B></span>")
+			to_chat(usr, SPAN_NOTICE("<B>\The [src] is in use.</B>"))
 			return
 
 		set_occupant(usr)
@@ -562,7 +564,7 @@
 
 	return
 
-/obj/machinery/cryopod/proc/set_occupant(var/mob/living/carbon/occupant, var/silent)
+/obj/machinery/cryopod/proc/set_occupant(mob/living/carbon/occupant, silent)
 	src.occupant = occupant
 	if(!occupant)
 		SetName(initial(name))
@@ -571,8 +573,8 @@
 	occupant.stop_pulling()
 	if(occupant.client)
 		if(!silent)
-			to_chat(occupant, "<span class='notice'>[on_enter_occupant_message]</span>")
-			to_chat(occupant, "<span class='notice'><b>If you ghost, log out or close your client now, your character will shortly be permanently removed from the round.</b></span>")
+			to_chat(occupant, SPAN_NOTICE("[on_enter_occupant_message]"))
+			to_chat(occupant, SPAN_NOTICE("<b>If you ghost, log out or close your client now, your character will shortly be permanently removed from the round.</b>"))
 		occupant.client.perspective = EYE_PERSPECTIVE
 		occupant.client.eye = src
 	occupant.forceMove(src)
@@ -581,7 +583,7 @@
 	SetName("[name] ([occupant])")
 	icon_state = occupied_icon_state
 
-/obj/machinery/cryopod/relaymove(var/mob/user)
+/obj/machinery/cryopod/relaymove(mob/user)
 	go_out()
 
 //A prop version for away missions and such
@@ -600,19 +602,19 @@
 /obj/structure/broken_cryo/attack_hand(mob/user)
 	..()
 	if (closed)
-		to_chat(user, "<span class='notice'>You tug at the glass but can't open it with your hands alone.</span>")
+		to_chat(user, SPAN_NOTICE("You tug at the glass but can't open it with your hands alone."))
 	else
-		to_chat(user, "<span class='notice'>The glass is already open.</span>")
+		to_chat(user, SPAN_NOTICE("The glass is already open."))
 
 /obj/structure/broken_cryo/attackby(obj/item/W as obj, mob/user as mob)
 	if (busy)
-		to_chat(user, "<span class='notice'>Someone else is attempting to open this.</span>")
+		to_chat(user, SPAN_NOTICE("Someone else is attempting to open this."))
 		return
 	if (closed)
 		if (isCrowbar(W))
 			busy = 1
 			visible_message("[user] starts to pry the glass cover off of \the [src].")
-			if (!do_after(user, 50, src))
+			if (!do_after(user, 5 SECONDS, src, DO_PUBLIC_UNIQUE))
 				visible_message("[user] stops trying to pry the glass off of \the [src].")
 				busy = 0
 				return
@@ -622,4 +624,4 @@
 			var/obj/dead = new remains_type(loc)
 			dead.dir = src.dir//skeleton is oriented as cryo
 	else
-		to_chat(user, "<span class='notice'>The glass cover is already open.</span>")
+		to_chat(user, SPAN_NOTICE("The glass cover is already open."))

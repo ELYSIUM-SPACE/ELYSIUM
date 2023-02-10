@@ -1,26 +1,26 @@
-/decl/psionic_faculty/redaction
+/singleton/psionic_faculty/redaction
 	id = PSI_REDACTION
 	name = "Redaction"
 	associated_intent = I_HELP
 	armour_types = list("bio", "rad")
 
-/decl/psionic_power/redaction
+/singleton/psionic_power/redaction
 	faculty = PSI_REDACTION
 	admin_log = FALSE
 
-/decl/psionic_power/redaction/proc/check_dead(var/mob/living/target)
+/singleton/psionic_power/redaction/proc/check_dead(mob/living/target)
 	if(!istype(target))
 		return FALSE
 	if(target.stat == DEAD || (target.status_flags & FAKEDEATH))
 		return TRUE
 	return FALSE
 
-/decl/psionic_power/redaction/invoke(var/mob/living/user, var/mob/living/target)
+/singleton/psionic_power/redaction/invoke(mob/living/user, mob/living/target)
 	if(check_dead(target))
 		return FALSE
 	. = ..()
 
-/decl/psionic_power/redaction/skinsight
+/singleton/psionic_power/redaction/skinsight
 	name =            "Skinsight"
 	cost =            3
 	cooldown =        30
@@ -28,7 +28,7 @@
 	min_rank =        PSI_RANK_OPERANT
 	use_description = "Grab a patient, target the chest, then switch to help intent and use the grab on them to perform a check for wounds and damage."
 
-/decl/psionic_power/redaction/skinsight/invoke(var/mob/living/user, var/mob/living/target)
+/singleton/psionic_power/redaction/skinsight/invoke(mob/living/user, mob/living/target)
 	if(user.zone_sel.selecting != BP_CHEST)
 		return FALSE
 	. = ..()
@@ -37,7 +37,7 @@
 		to_chat(user, medical_scan_results(target, TRUE, SKILL_MAX))
 		return TRUE
 
-/decl/psionic_power/redaction/mend
+/singleton/psionic_power/redaction/mend
 	name =            "Mend"
 	cost =            7
 	cooldown =        50
@@ -45,7 +45,7 @@
 	min_rank =        PSI_RANK_OPERANT
 	use_description = "Target a patient while on help intent at melee range to mend a variety of maladies, such as bleeding or broken bones. Higher ranks in this faculty allow you to mend a wider range of problems."
 
-/decl/psionic_power/redaction/mend/invoke(var/mob/living/user, var/mob/living/carbon/human/target)
+/singleton/psionic_power/redaction/mend/invoke(mob/living/user, mob/living/carbon/human/target)
 	if(!istype(user) || !istype(target))
 		return FALSE
 	. = ..()
@@ -66,7 +66,7 @@
 		var/redaction_rank = user.psi.get_rank(PSI_REDACTION)
 		var/pk_rank = user.psi.get_rank(PSI_PSYCHOKINESIS)
 		if(pk_rank >= PSI_RANK_LATENT && redaction_rank >= PSI_RANK_MASTER)
-			var/removal_size = Clamp(5-pk_rank, 0, 5)
+			var/removal_size = clamp(5-pk_rank, 0, 5)
 			var/valid_objects = list()
 			for(var/thing in E.implants)
 				var/obj/imp = thing
@@ -119,7 +119,7 @@
 		to_chat(user, SPAN_NOTICE("You can find nothing within \the [target]'s [E.name] to mend."))
 		return FALSE
 
-/decl/psionic_power/redaction/cleanse
+/singleton/psionic_power/redaction/cleanse
 	name =            "Cleanse"
 	cost =            9
 	cooldown =        60
@@ -127,7 +127,7 @@
 	min_rank =        PSI_RANK_GRANDMASTER
 	use_description = "Target a patient while on help intent at melee range to cleanse radiation and genetic damage from a patient."
 
-/decl/psionic_power/redaction/cleanse/invoke(var/mob/living/user, var/mob/living/carbon/human/target)
+/singleton/psionic_power/redaction/cleanse/invoke(mob/living/user, mob/living/carbon/human/target)
 	if(!istype(user) || !istype(target))
 		return FALSE
 	. = ..()
@@ -151,7 +151,7 @@
 		to_chat(user, SPAN_NOTICE("You can find no genetic damage or radiation to heal within \the [target]."))
 		return TRUE
 
-/decl/psionic_power/revive
+/singleton/psionic_power/revive
 	name =            "Revive"
 	cost =            25
 	cooldown =        80
@@ -161,7 +161,7 @@
 	use_description = "Obtain a grab on a dead target, target the head, then select help intent and use the grab against them to attempt to bring them back to life. The process is lengthy and failure is punished harshly."
 	admin_log = FALSE
 
-/decl/psionic_power/revive/invoke(var/mob/living/user, var/mob/living/target)
+/singleton/psionic_power/revive/invoke(mob/living/user, mob/living/target)
 	if(!isliving(target) || !istype(target) || user.zone_sel.selecting != BP_HEAD)
 		return FALSE
 	. = ..()
@@ -175,15 +175,15 @@
 			return TRUE
 
 		user.visible_message(SPAN_NOTICE("<i>\The [user] splays out their hands over \the [target]'s body...</i>"))
-		if(!do_after(user, 100, target))
+		if(!do_after(user, 10 SECONDS, target, DO_DEFAULT | DO_USER_UNIQUE_ACT))
 			user.psi.backblast(rand(10,25))
 			return TRUE
 
-		for(var/mob/observer/G in GLOB.dead_mob_list_)
+		for(var/mob/observer/G in GLOB.dead_mobs)
 			if(G.mind && G.mind.current == target && G.client)
-				to_chat(G, SPAN_NOTICE("<font size = 3><b>Your body has been revived, <b>Re-Enter Corpse</b> to return to it.</b></font>"))
+				to_chat(G, SPAN_NOTICE(FONT_LARGE("<b>Your body has been revived, <b>Re-Enter Corpse</b> to return to it.</b>")))
 				break
-		to_chat(target, SPAN_NOTICE("<font size = 3><b>Life floods back into your body!</b></font>"))
+		to_chat(target, SPAN_NOTICE(FONT_LARGE("<b>Life floods back into your body!</b>")))
 		target.visible_message(SPAN_NOTICE("\The [target] shudders violently!"))
 		target.adjustOxyLoss(-rand(15,20))
 		target.basic_revival()

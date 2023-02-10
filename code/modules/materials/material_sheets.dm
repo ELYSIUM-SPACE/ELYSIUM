@@ -17,7 +17,7 @@
 	var/material_flags = USE_MATERIAL_COLOR|USE_MATERIAL_SINGULAR_NAME|USE_MATERIAL_PLURAL_NAME
 	var/matter_multiplier = 1
 
-/obj/item/stack/material/Initialize(mapload, var/amount, var/_material, var/_reinf_material)
+/obj/item/stack/material/Initialize(mapload, amount, _material, _reinf_material)
 	. = ..()
 	if(_material)
 		default_type = _material
@@ -29,7 +29,7 @@
 	if(default_reinf_type)
 		reinf_material = SSmaterials.get_material_by_name(default_reinf_type)
 	base_state = icon_state
-	
+
 	if(!stacktype)
 		stacktype = material.stack_type
 	if(islist(material.stack_origin_tech))
@@ -47,12 +47,12 @@
 	if(!material)
 		return
 	recipes = material.get_recipes(reinf_material && reinf_material.name)
-	..() 
+	..()
 
 /obj/item/stack/material/get_codex_value()
 	return (material && !material.hidden_from_codex) ? "[lowertext(material.display_name)] (material)" : ..()
 
-/obj/item/stack/material/proc/set_amount(var/_amount)
+/obj/item/stack/material/proc/set_amount(_amount)
 	amount = max(1, min(_amount, max_amount))
 	update_strings()
 
@@ -75,7 +75,7 @@
 
 	if(material_flags & USE_MATERIAL_PLURAL_NAME)
 		plural_name = material.sheet_plural_name
-	
+
 	if(amount>1)
 		SetName("[material.use_name] [plural_name]")
 		desc = "A stack of [material.use_name] [plural_name]."
@@ -88,7 +88,7 @@
 		SetName("reinforced [name]")
 		desc = "[desc]\nIt is reinforced with the [reinf_material.use_name] lattice."
 
-/obj/item/stack/material/use(var/used)
+/obj/item/stack/material/use(used)
 	. = ..()
 	update_strings()
 	return
@@ -104,7 +104,7 @@
 		return FALSE
 	return TRUE
 
-/obj/item/stack/material/transfer_to(obj/item/stack/material/M, var/tamount=null, var/type_verified)
+/obj/item/stack/material/transfer_to(obj/item/stack/material/M, tamount=null, type_verified)
 	if(!is_same(M))
 		return 0
 	var/transfer = ..(M,tamount,1)
@@ -114,7 +114,7 @@
 		M.update_strings()
 	return transfer
 
-/obj/item/stack/material/copy_from(var/obj/item/stack/material/other)
+/obj/item/stack/material/copy_from(obj/item/stack/material/other)
 	..()
 	if(istype(other))
 		material = other.material
@@ -122,7 +122,7 @@
 		update_strings()
 		update_icon()
 
-/obj/item/stack/material/attackby(var/obj/item/W, var/mob/user)
+/obj/item/stack/material/attackby(obj/item/W, mob/user)
 	if(isCoil(W))
 		material.build_wired_product(user, W, src)
 		return
@@ -136,7 +136,7 @@
 		var/obj/item/weldingtool/WT = W
 		if(WT.isOn() && WT.get_fuel() > 2 && use(2))
 			WT.remove_fuel(2, user)
-			to_chat(user,"<span class='notice'>You recover some [reinf_material.use_name] from the [src].</span>")
+			to_chat(user,SPAN_NOTICE("You recover some [reinf_material.use_name] from the [src]."))
 			reinf_material.place_sheet(get_turf(user), 1)
 			return
 	return ..()
@@ -200,6 +200,10 @@
 /obj/item/stack/material/uranium/ten
 	amount = 10
 
+
+/obj/item/stack/material/uranium/fifty
+	amount = 50
+
 /obj/item/stack/material/phoron
 	name = "solid phoron"
 	icon_state = "sheet-phoron"
@@ -245,6 +249,16 @@
 	default_type = MATERIAL_SILVER
 
 /obj/item/stack/material/silver/ten
+	amount = 10
+
+/obj/item/stack/material/electrum
+	name = "electrum"
+	icon_state = "ingot"
+	plural_icon_state = "ingot-mult"
+	max_icon_state = "ingot-max"
+	default_type = MATERIAL_ELECTRUM
+
+/obj/item/stack/material/electrum/ten
 	amount = 10
 
 //Valuable resource, cargo can sell it.
@@ -443,6 +457,12 @@
 /obj/item/stack/material/wood/yew/twentyfive
 	amount = 25
 
+/obj/item/stack/material/wood/vox
+	icon_state = "vox"
+	plural_icon_state = "vox-mult"
+	max_icon_state = "vox-max"
+	default_type = MATERIAL_VOXRES
+
 /obj/item/stack/material/cloth
 	name = "cloth"
 	icon_state = "sheet-cloth"
@@ -477,7 +497,7 @@
 	default_type = MATERIAL_GLASS
 
 /obj/item/stack/material/glass/on_update_icon()
-	if(reinf_material) 
+	if(reinf_material)
 		icon_state = "sheet-glass-reinf"
 		base_state = icon_state
 		plural_icon_state = "sheet-glass-reinf-mult"

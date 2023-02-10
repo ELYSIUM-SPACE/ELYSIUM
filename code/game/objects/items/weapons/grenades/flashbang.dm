@@ -6,7 +6,7 @@
 	origin_tech = list(TECH_MATERIAL = 2, TECH_COMBAT = 1)
 	var/banglet = 0
 
-/obj/item/grenade/flashbang/detonate()
+/obj/item/grenade/flashbang/detonate(mob/living/user)
 	..()
 	var/list/victims = list()
 	var/list/objs = list()
@@ -17,14 +17,14 @@
 
 	for(var/obj/effect/blob/B in objs)       		//Blob damage here
 		var/damage = round(30/(get_dist(B,T)+1))
-		B.take_damage(damage)
+		B.damage_health(damage, DAMAGE_SHOCK)
 
 	new/obj/effect/sparks(src.loc)
 	new/obj/effect/effect/smoke/illumination(src.loc, 5, range=30, power=1, color="#ffffff")
 	qdel(src)
 
-/obj/item/grenade/flashbang/proc/bang(var/turf/T , var/mob/living/carbon/M)					// Added a new proc called 'bang' that takes a location and a person to be banged.
-	to_chat(M, "<span class='danger'>BANG</span>")// Called during the loop that bangs people in lockers/containers and when banging
+/obj/item/grenade/flashbang/proc/bang(turf/T , mob/living/carbon/M)					// Added a new proc called 'bang' that takes a location and a person to be banged.
+	to_chat(M, SPAN_DANGER("BANG"))// Called during the loop that bangs people in lockers/containers and when banging
 	playsound(src.loc, 'sound/effects/bang.ogg', 50, 1, 30)		// people in normal view.  Could theroetically be called during other explosions.
 																// -- Polymorph
 
@@ -74,14 +74,11 @@
 
 	//This really should be in mob not every check
 	if (M.ear_damage >= 15)
-		to_chat(M, "<span class='danger'>Your ears start to ring badly!</span>")
+		to_chat(M, SPAN_DANGER("Your ears start to ring badly!"))
 	else
 		if (M.ear_damage >= 5)
-			to_chat(M, "<span class='danger'>Your ears start to ring!</span>")
+			to_chat(M, SPAN_DANGER("Your ears start to ring!"))
 
-/obj/item/grenade/flashbang/Destroy()
-	walk(src, 0) // Because we might have called walk_away, we must stop the walk loop or BYOND keeps an internal reference to us forever.
-	return ..()
 
 /obj/item/grenade/flashbang/instant/Initialize()
 	. = ..()
@@ -96,7 +93,7 @@
 	icon = 'icons/obj/grenade.dmi'
 	icon_state = "clusterbang"
 
-/obj/item/grenade/flashbang/clusterbang/detonate()
+/obj/item/grenade/flashbang/clusterbang/detonate(mob/living/user)
 	var/numspawned = rand(4,8)
 	var/again = 0
 	for(var/more = numspawned,more > 0,more--)
@@ -105,14 +102,12 @@
 			numspawned --
 
 	for(,numspawned > 0, numspawned--)
-		spawn(0)
-			new /obj/item/grenade/flashbang/cluster(src.loc)//Launches flashbangs
-			playsound(src.loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
+		new /obj/item/grenade/flashbang/cluster(src.loc)//Launches flashbangs
+		playsound(src.loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 
 	for(,again > 0, again--)
-		spawn(0)
-			new /obj/item/grenade/flashbang/clusterbang/segment(src.loc)//Creates a 'segment' that launches a few more flashbangs
-			playsound(src.loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
+		new /obj/item/grenade/flashbang/clusterbang/segment(src.loc)//Creates a 'segment' that launches a few more flashbangs
+		playsound(src.loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 	qdel(src)
 	return
 
@@ -134,28 +129,26 @@
 		detonate()
 	..()
 
-/obj/item/grenade/flashbang/clusterbang/segment/detonate()
+/obj/item/grenade/flashbang/clusterbang/segment/detonate(mob/living/user)
 	var/numspawned = rand(4,8)
 	for(var/more = numspawned,more > 0,more--)
 		if(prob(35))
 			numspawned --
 
 	for(,numspawned > 0, numspawned--)
-		spawn(0)
-			new /obj/item/grenade/flashbang/cluster(src.loc)
-			playsound(src.loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
+		new /obj/item/grenade/flashbang/cluster(src.loc)
+		playsound(src.loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 	qdel(src)
 	return
 
 /obj/item/grenade/flashbang/cluster/New()//Same concept as the segments, so that all of the parts don't become reliant on the clusterbang
-	spawn(0)
-		icon_state = "flashbang_active"
-		active = 1
-		banglet = 1
-		var/stepdist = rand(1,3)
-		var/temploc = src.loc
-		walk_away(src,temploc,stepdist)
-		var/dettime = rand(15,60)
-		spawn(dettime)
+	icon_state = "flashbang_active"
+	active = 1
+	banglet = 1
+	var/stepdist = rand(1,3)
+	var/temploc = src.loc
+	walk_away(src,temploc,stepdist)
+	var/dettime = rand(15,60)
+	spawn(dettime)
 		detonate()
 	..()

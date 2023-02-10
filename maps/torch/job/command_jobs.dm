@@ -5,7 +5,7 @@
 	economic_power = 16
 	minimum_character_age = list(SPECIES_HUMAN = 40)
 	ideal_character_age = 50
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/command/CO
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/command/CO
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps
 	)
@@ -28,7 +28,7 @@
 /datum/job/captain/get_description_blurb()
 	return "You are the Commanding Officer. You are the top dog. You are an experienced professional officer in control of an entire ship, and ultimately responsible for all that happens onboard. Your job is to make sure [GLOB.using_map.full_name] fulfils its space exploration mission. Delegate to your Executive Officer, your department heads, and your Senior Enlisted Advisor to effectively manage the ship, and listen to and trust their expertise."
 
-/datum/job/captain/post_equip_rank(var/mob/person, var/alt_title)
+/datum/job/captain/post_equip_rank(mob/person, alt_title)
 	var/sound/announce_sound = (GAME_STATE <= RUNLEVEL_SETUP)? null : sound('sound/misc/boatswain.ogg', volume=20)
 	captain_announcement.Announce("All hands, [alt_title || title] [person.real_name] on deck!", new_sound = announce_sound)
 	..()
@@ -42,10 +42,10 @@
 	economic_power = 14
 	minimum_character_age = list(SPECIES_HUMAN = 35)
 	ideal_character_age = 45
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/command/XO
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/command/XO
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps,
-		/datum/mil_branch/fleet = /decl/hierarchy/outfit/job/torch/crew/command/XO/fleet
+		/datum/mil_branch/fleet = /singleton/hierarchy/outfit/job/torch/crew/command/XO/fleet
 	)
 	allowed_ranks = list(
 		/datum/mil_rank/ec/o5,
@@ -64,32 +64,16 @@
 		access_security, access_brig, access_armory, access_forensics_lockers, access_heads, access_medical, access_morgue, access_tox, access_tox_storage,
 		access_engine, access_engine_equip, access_maint_tunnels, access_external_airlocks, access_emergency_storage, access_change_ids,
 		access_ai_upload, access_teleporter, access_eva, access_bridge, access_all_personal_lockers, access_chapel_office, access_tech_storage,
-		access_atmospherics, access_bar, access_janitor, access_crematorium, access_kitchen, access_robotics, access_cargo, access_construction,
+		access_atmospherics, access_janitor, access_crematorium, access_kitchen, access_robotics, access_cargo, access_construction,
 		access_chemistry, access_cargo_bot, access_hydroponics, access_manufacturing, access_library, access_lawyer, access_virology, access_cmo,
-		access_qm, access_network, access_surgery, access_research, access_mining, access_mining_office, access_mailsorting, access_heads_vault,
+		access_qm, access_network, access_network_admin, access_surgery, access_research, access_mining, access_mining_office, access_mailsorting, access_heads_vault,
 		access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce, access_keycard_auth, access_tcomsat,
 		access_gateway, access_sec_doors, access_psychiatrist, access_xenoarch, access_medical_equip, access_heads, access_hangar, access_guppy_helm,
-		access_expedition_shuttle_helm, access_aquila, access_aquila_helm, access_solgov_crew, access_nanotrasen,
+		access_expedition_shuttle_helm, access_aquila, access_aquila_helm, access_solgov_crew, access_nanotrasen, access_chief_steward,
 		access_emergency_armory, access_sec_guard, access_gun, access_expedition_shuttle, access_guppy, access_seneng, access_senmed, access_senadv,
 		access_explorer, access_pathfinder, access_pilot, access_commissary, access_petrov, access_petrov_helm, access_petrov_analysis, access_petrov_phoron,
-		access_petrov_toxins, access_petrov_chemistry, access_petrov_security, access_petrov_maint, access_rd, access_petrov_rd, access_torch_fax, access_torch_helm,
-		access_radio_comm, access_radio_eng, access_radio_med, access_radio_sec, access_radio_sup, access_radio_serv, access_radio_exp, access_radio_sci
-	)
-
-	minimal_access = list(
-		access_security, access_brig, access_armory, access_forensics_lockers, access_heads, access_medical, access_morgue, access_tox, access_tox_storage,
-		access_engine, access_engine_equip, access_maint_tunnels, access_external_airlocks, access_emergency_storage, access_change_ids,
-		access_ai_upload, access_teleporter, access_eva, access_bridge, access_all_personal_lockers, access_chapel_office, access_tech_storage,
-		access_atmospherics, access_bar, access_janitor, access_crematorium, access_kitchen, access_robotics, access_cargo, access_construction,
-		access_chemistry, access_cargo_bot, access_hydroponics, access_manufacturing, access_library, access_lawyer, access_virology, access_cmo,
-		access_qm, access_network, access_surgery, access_research, access_mining, access_mining_office, access_mailsorting, access_heads_vault,
-		access_mining_station, access_xenobiology, access_ce, access_hop, access_hos, access_RC_announce, access_keycard_auth, access_tcomsat,
-		access_gateway, access_sec_doors, access_psychiatrist, access_xenoarch, access_medical_equip, access_heads, access_hangar, access_guppy_helm,
-		access_expedition_shuttle_helm, access_aquila, access_aquila_helm, access_solgov_crew, access_nanotrasen,
-		access_emergency_armory, access_sec_guard, access_gun, access_expedition_shuttle, access_guppy, access_seneng, access_senmed, access_senadv,
-		access_explorer, access_pathfinder, access_pilot, access_commissary, access_petrov, access_petrov_helm, access_petrov_analysis, access_petrov_phoron,
-		access_petrov_toxins, access_petrov_chemistry, access_petrov_security, access_petrov_maint, access_rd, access_petrov_rd, access_torch_fax, access_torch_helm,
-		access_radio_comm, access_radio_eng, access_radio_med, access_radio_sec, access_radio_sup, access_radio_serv, access_radio_exp, access_radio_sci
+		access_petrov_toxins, access_petrov_chemistry, access_petrov_control, access_petrov_maint, access_rd, access_petrov_rd, access_torch_fax, access_torch_helm,
+		access_radio_comm, access_radio_eng, access_radio_med, access_radio_sec, access_radio_sup, access_radio_serv, access_radio_exp, access_radio_sci, access_research_storage
 	)
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
@@ -107,7 +91,7 @@
 	minimal_player_age = 14
 	minimum_character_age = list(SPECIES_HUMAN = 35)
 	ideal_character_age = 60
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/research/cso
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/research/cso
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps
 	)
@@ -134,12 +118,10 @@
 		access_RC_announce, access_keycard_auth, access_xenoarch, access_nanotrasen, access_sec_guard, access_heads,
 		access_expedition_shuttle, access_guppy, access_hangar, access_petrov, access_petrov_helm, access_guppy_helm,
 		access_petrov_analysis, access_petrov_phoron, access_petrov_toxins, access_petrov_chemistry, access_petrov_rd,
-		access_petrov_security, access_petrov_maint, access_pathfinder, access_explorer, access_eva, access_solgov_crew,
+		access_petrov_control, access_petrov_maint, access_pathfinder, access_explorer, access_eva, access_solgov_crew,
 		access_expedition_shuttle, access_expedition_shuttle_helm, access_maint_tunnels, access_torch_fax, access_radio_comm,
-		access_radio_sci, access_radio_exp
+		access_radio_sci, access_radio_exp, access_research_storage
 	)
-
-	minimal_access = list()
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
 							 /datum/computer_file/program/aidiag,
@@ -156,10 +138,10 @@
 	minimal_player_age = 14
 	minimum_character_age = list(SPECIES_HUMAN = 35)
 	ideal_character_age = 48
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/command/cmo
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/command/cmo
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps,
-		/datum/mil_branch/fleet = /decl/hierarchy/outfit/job/torch/crew/command/cmo/fleet
+		/datum/mil_branch/fleet = /singleton/hierarchy/outfit/job/torch/crew/command/cmo/fleet
 	)
 	allowed_ranks = list(
 		/datum/mil_rank/fleet/o3,
@@ -186,8 +168,6 @@
 		access_radio_med
 	)
 
-	minimal_access = list()
-
 	software_on_spawn = list(/datum/computer_file/program/comm,
 							 /datum/computer_file/program/suit_sensors,
 							 /datum/computer_file/program/camera_monitor,
@@ -203,10 +183,10 @@
 	minimum_character_age = list(SPECIES_HUMAN = 27)
 	ideal_character_age = 40
 	minimal_player_age = 14
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/command/chief_engineer
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/command/chief_engineer
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps,
-		/datum/mil_branch/fleet = /decl/hierarchy/outfit/job/torch/crew/command/chief_engineer/fleet
+		/datum/mil_branch/fleet = /singleton/hierarchy/outfit/job/torch/crew/command/chief_engineer/fleet
 	)
 	allowed_ranks = list(
 		/datum/mil_rank/ec/o3,
@@ -231,20 +211,10 @@
 		access_engine, access_engine_equip, access_maint_tunnels, access_external_airlocks, access_emergency_storage,
 		access_ai_upload, access_teleporter, access_eva, access_bridge, access_heads,
 		access_tech_storage, access_robotics, access_atmospherics, access_janitor, access_construction,
-		access_network, access_ce, access_RC_announce, access_keycard_auth, access_tcomsat,
+		access_network, access_network_admin, access_ce, access_RC_announce, access_keycard_auth, access_tcomsat,
 		access_solgov_crew, access_aquila, access_seneng, access_hangar, access_torch_fax, access_torch_helm, access_radio_comm,
 		access_radio_eng
 		)
-
-
-	minimal_access = list(
-		access_engine, access_engine_equip, access_maint_tunnels, access_external_airlocks, access_emergency_storage,
-		access_ai_upload, access_teleporter, access_eva, access_bridge, access_heads,
-		access_tech_storage, access_atmospherics, access_janitor, access_construction,
-		access_network, access_ce, access_RC_announce, access_keycard_auth, access_tcomsat,
-		access_solgov_crew, access_seneng, access_hangar, access_robotics, access_torch_fax, access_torch_helm, access_radio_comm,
-		access_radio_eng
-	)
 
 	software_on_spawn = list(/datum/computer_file/program/comm,
 							 /datum/computer_file/program/ntnetmonitor,
@@ -267,10 +237,10 @@
 	minimal_player_age = 14
 	minimum_character_age = list(SPECIES_HUMAN = 25)
 	ideal_character_age = 35
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/command/cos
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/command/cos
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps,
-		/datum/mil_branch/fleet = /decl/hierarchy/outfit/job/torch/crew/command/cos/fleet
+		/datum/mil_branch/fleet = /singleton/hierarchy/outfit/job/torch/crew/command/cos/fleet
 	)
 	allowed_ranks = list(
 		/datum/mil_rank/ec/o3,
@@ -297,8 +267,6 @@
 		access_radio_comm, access_radio_sec
 	)
 
-	minimal_access = list()
-
 	software_on_spawn = list(/datum/computer_file/program/comm,
 							 /datum/computer_file/program/digitalwarrant,
 							 /datum/computer_file/program/camera_monitor,
@@ -317,7 +285,7 @@
 	selection_color = "#2f2f7f"
 	economic_power = 16
 	minimal_player_age = 0
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/representative
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/representative
 	allowed_branches = list(/datum/mil_branch/solgov)
 	allowed_ranks = list(/datum/mil_rank/sol/gov)
 	min_skill = list(   SKILL_BUREAUCRACY = SKILL_EXPERT,
@@ -348,7 +316,7 @@
 	economic_power = 11
 	minimum_character_age = list(SPECIES_HUMAN = 35)
 	ideal_character_age = 45
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/command/sea/fleet
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/command/sea/fleet
 	allowed_branches = list(
 		/datum/mil_branch/fleet
 	)
@@ -397,10 +365,10 @@
 	economic_power = 8
 	minimum_character_age = list(SPECIES_HUMAN = 22)
 	ideal_character_age = 24
-	outfit_type = /decl/hierarchy/outfit/job/torch/crew/command/bridgeofficer
+	outfit_type = /singleton/hierarchy/outfit/job/torch/crew/command/bridgeofficer
 	allowed_branches = list(
 		/datum/mil_branch/expeditionary_corps,
-		/datum/mil_branch/fleet = /decl/hierarchy/outfit/job/torch/crew/command/bridgeofficer/fleet
+		/datum/mil_branch/fleet = /singleton/hierarchy/outfit/job/torch/crew/command/bridgeofficer/fleet
 	)
 	allowed_ranks = list(
 		/datum/mil_rank/ec/o1,

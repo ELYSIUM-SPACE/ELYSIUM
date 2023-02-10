@@ -18,7 +18,7 @@
 	var/active =    0          // Is our owner intending to take hostages?
 	var/target_permissions = TARGET_CAN_MOVE | TARGET_CAN_CLICK | TARGET_CAN_RADIO	// Permission bitflags.
 
-/obj/aiming_overlay/New(var/newowner)
+/obj/aiming_overlay/New(newowner)
 	..()
 	owner = newowner
 	loc = null
@@ -76,10 +76,10 @@
 			return
 
 	if (aiming_at && aiming_at != owner)
-		to_chat(owner, "<span class='[use_span]'>\The [aiming_at] is [message].</span>")
-		to_chat(aiming_at, "<span class='[use_span]'>You are [message].</span>")
+		to_chat(owner, SPAN_CLASS("[use_span]", "\The [aiming_at] is [message]."))
+		to_chat(aiming_at, SPAN_CLASS("[use_span]", "You are [message]."))
 	else
-		to_chat(owner, "<span class='[use_span]'>Your targets are [message].</span>")
+		to_chat(owner, SPAN_CLASS("[use_span]", "Your targets are [message]."))
 
 /obj/aiming_overlay/Process()
 	if(!owner)
@@ -93,7 +93,7 @@
 	owner = null
 	return ..()
 
-obj/aiming_overlay/proc/update_aiming_deferred()
+/obj/aiming_overlay/proc/update_aiming_deferred()
 	set waitfor = 0
 	sleep(0)
 	update_aiming()
@@ -114,18 +114,18 @@ obj/aiming_overlay/proc/update_aiming_deferred()
 
 	var/cancel_aim = 1
 
-	if(!(aiming_with in owner) || (istype(owner, /mob/living/carbon/human) && (owner.l_hand != aiming_with && owner.r_hand != aiming_with)))
-		to_chat(owner, "<span class='warning'>You must keep hold of your weapon!</span>")
+	if(!(aiming_with in owner) || (istype(owner, /mob/living/carbon/human) && !owner.IsHolding(aiming_with)))
+		to_chat(owner, SPAN_WARNING("You must keep hold of your weapon!"))
 	else if(owner.eye_blind)
-		to_chat(owner, "<span class='warning'>You are blind and cannot see your target!</span>")
+		to_chat(owner, SPAN_WARNING("You are blind and cannot see your target!"))
 	else if(!aiming_at || !istype(aiming_at.loc, /turf))
-		to_chat(owner, "<span class='warning'>You have lost sight of your target!</span>")
+		to_chat(owner, SPAN_WARNING("You have lost sight of your target!"))
 	else if(owner.incapacitated() || owner.lying || owner.restrained())
-		to_chat(owner, "<span class='warning'>You must be conscious and standing to keep track of your target!</span>")
+		to_chat(owner, SPAN_WARNING("You must be conscious and standing to keep track of your target!"))
 	else if(aiming_at.is_invisible_to(owner))
-		to_chat(owner, "<span class='warning'>Your target has become invisible!</span>")
+		to_chat(owner, SPAN_WARNING("Your target has become invisible!"))
 	else if(!(aiming_at in view(owner)))
-		to_chat(owner, "<span class='warning'>Your target is too far away to track!</span>")
+		to_chat(owner, SPAN_WARNING("Your target is too far away to track!"))
 	else
 		cancel_aim = 0
 
@@ -139,7 +139,7 @@ obj/aiming_overlay/proc/update_aiming_deferred()
 		spawn(0)
 			owner.set_dir(get_dir(get_turf(owner), get_turf(src)))
 
-/obj/aiming_overlay/proc/aim_at(var/mob/target, var/obj/thing, var/no_target_change)
+/obj/aiming_overlay/proc/aim_at(mob/target, obj/thing, no_target_change)
 
 	if (!owner || !isliving(target))
 		return
@@ -160,7 +160,7 @@ obj/aiming_overlay/proc/update_aiming_deferred()
 
 	if (istype(user))
 		if (user.zone_sel.selecting == BP_MOUTH)
-			admin_attacker_log(user, "is getting ready to suicide with \a [src]")
+			admin_attacker_log(user, "is getting ready to suicide with \a [thing]")
 			if (user.check_has_mouth() && !(user.check_mouth_coverage()))
 				gunpointedself = SPAN_DANGER("\The [owner] puts the barrel of \the [thing] in their mouth, ready to pull the trigger...")
 			else
@@ -214,7 +214,7 @@ obj/aiming_overlay/proc/update_aiming_deferred()
 	else
 		icon_state = "locking"
 
-/obj/aiming_overlay/proc/toggle_active(var/force_state = null, var/no_message = FALSE)
+/obj/aiming_overlay/proc/toggle_active(force_state = null, no_message = FALSE)
 	if(!isnull(force_state))
 		if(active == force_state)
 			return
@@ -228,19 +228,19 @@ obj/aiming_overlay/proc/update_aiming_deferred()
 	if(owner.client)
 		if(active)
 			if(!no_message)
-				to_chat(owner, "<span class='notice'>You will now aim rather than fire.</span>")
+				to_chat(owner, SPAN_NOTICE("You will now aim rather than fire."))
 			owner.client.add_gun_icons()
 		else
 			if(!no_message)
-				to_chat(owner, "<span class='notice'>You will no longer aim rather than fire.</span>")
+				to_chat(owner, SPAN_NOTICE("You will no longer aim rather than fire."))
 			owner.client.remove_gun_icons()
 		owner.gun_setting_icon.icon_state = "gun[active]"
 
-/obj/aiming_overlay/proc/cancel_aiming(var/no_message = 0)
+/obj/aiming_overlay/proc/cancel_aiming(no_message = 0)
 	if(!aiming_with || !aiming_at)
 		return
 	if(!no_message)
-		owner.visible_message("<span class='notice'>\The [owner] lowers \the [aiming_with].</span>")
+		owner.visible_message(SPAN_NOTICE("\The [owner] lowers \the [aiming_with]."))
 		if(istype(aiming_with, /obj/item/gun))
 			sound_to(aiming_at, sound('sound/weapons/TargetOff.ogg'))
 			sound_to(owner, sound('sound/weapons/TargetOff.ogg'))

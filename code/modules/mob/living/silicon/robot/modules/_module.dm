@@ -10,21 +10,22 @@
 	var/channels = list()
 	var/networks = list()
 	var/languages = list(
-		LANGUAGE_HUMAN_EURO = TRUE,
-		LANGUAGE_HUMAN_CHINESE = TRUE,
-		LANGUAGE_HUMAN_ARABIC = TRUE,
-		LANGUAGE_HUMAN_INDIAN = TRUE,
-		LANGUAGE_HUMAN_IBERIAN = TRUE,
-		LANGUAGE_HUMAN_RUSSIAN = TRUE,
+		LANGUAGE_HUMAN_EURO     = TRUE,
+		LANGUAGE_HUMAN_CHINESE  = TRUE,
+		LANGUAGE_HUMAN_ARABIC   = TRUE,
+		LANGUAGE_HUMAN_INDIAN   = TRUE,
+		LANGUAGE_HUMAN_IBERIAN  = TRUE,
+		LANGUAGE_HUMAN_RUSSIAN  = TRUE,
 		LANGUAGE_HUMAN_SELENIAN = TRUE,
-		LANGUAGE_GUTTER = TRUE,
-		LANGUAGE_SPACER = TRUE,
-		LANGUAGE_EAL = TRUE,
-
-		LANGUAGE_UNATHI_SINTA = FALSE,
-		LANGUAGE_SKRELLIAN = FALSE,
-		LANGUAGE_SIGN = FALSE
-		)
+		LANGUAGE_GUTTER         = TRUE,
+		LANGUAGE_SPACER         = TRUE,
+		LANGUAGE_EAL            = TRUE,
+		LANGUAGE_UNATHI_SINTA   = TRUE,
+		LANGUAGE_UNATHI_YEOSA   = TRUE,
+		LANGUAGE_SKRELLIAN      = TRUE,
+		LANGUAGE_NABBER         = FALSE,
+		LANGUAGE_SIGN           = FALSE
+	)
 	var/sprites = list()
 	var/can_be_pushed = 1
 	var/no_slip = 0
@@ -60,7 +61,6 @@
 	R.module = src
 
 	grant_skills(R)
-	add_camera_networks(R)
 	add_languages(R)
 	add_subsystems(R)
 	apply_status_flags(R)
@@ -77,7 +77,7 @@
 	finalize_synths(R)
 
 	R.set_module_sprites(sprites)
-	R.choose_icon(R.module_sprites.len + 1, R.module_sprites)
+	R.choose_icon(length(R.module_sprites) + 1, R.module_sprites)
 
 /obj/item/robot_module/proc/build_equipment()
 	var/list/created_equipment = list()
@@ -124,8 +124,7 @@
 		log_debug("Invalid var type in [type] emag creation - [emag]")
 		emag = null
 
-/obj/item/robot_module/proc/Reset(var/mob/living/silicon/robot/R)
-	remove_camera_networks(R)
+/obj/item/robot_module/proc/Reset(mob/living/silicon/robot/R)
 	remove_languages(R)
 	remove_subsystems(R)
 	remove_status_flags(R)
@@ -156,7 +155,7 @@
 			S.emp_act(severity)
 	..()
 
-/obj/item/robot_module/proc/respawn_consumable(var/mob/living/silicon/robot/R, var/rate)
+/obj/item/robot_module/proc/respawn_consumable(mob/living/silicon/robot/R, rate)
 	var/obj/item/device/flash/F = locate() in equipment
 	if(F)
 		if(F.broken)
@@ -165,12 +164,12 @@
 			F.icon_state = "flash"
 		else if(F.times_used)
 			F.times_used--
-	if(!synths || !synths.len)
+	if(!synths || !length(synths))
 		return
 	for(var/datum/matter_synth/T in synths)
 		T.add_charge(T.recharge_rate * rate)
 
-/obj/item/robot_module/proc/add_languages(var/mob/living/silicon/robot/R)
+/obj/item/robot_module/proc/add_languages(mob/living/silicon/robot/R)
 	// Stores the languages as they were before receiving the module, and whether they could be synthezized.
 	for(var/datum/language/language_datum in R.languages)
 		original_languages[language_datum] = (language_datum in R.speech_synthesizer_langs)
@@ -178,7 +177,7 @@
 	for(var/language in languages)
 		R.add_language(language, languages[language])
 
-/obj/item/robot_module/proc/remove_languages(var/mob/living/silicon/robot/R)
+/obj/item/robot_module/proc/remove_languages(mob/living/silicon/robot/R)
 	// Clear all added languages, whether or not we originally had them.
 	for(var/language in languages)
 		R.remove_language(language)
@@ -189,44 +188,32 @@
 		R.add_language(language_datum.name, original_languages[original_language])
 	original_languages.Cut()
 
-/obj/item/robot_module/proc/add_camera_networks(var/mob/living/silicon/robot/R)
-	if(R.camera && (NETWORK_ROBOTS in R.camera.network))
-		for(var/network in networks)
-			if(!(network in R.camera.network))
-				R.camera.add_network(network)
-				added_networks |= network
-
-/obj/item/robot_module/proc/remove_camera_networks(var/mob/living/silicon/robot/R)
-	if(R.camera)
-		R.camera.remove_networks(added_networks)
-	added_networks.Cut()
-
-/obj/item/robot_module/proc/add_subsystems(var/mob/living/silicon/robot/R)
+/obj/item/robot_module/proc/add_subsystems(mob/living/silicon/robot/R)
 	for(var/subsystem_type in subsystems)
 		R.init_subsystem(subsystem_type)
 
-/obj/item/robot_module/proc/remove_subsystems(var/mob/living/silicon/robot/R)
+/obj/item/robot_module/proc/remove_subsystems(mob/living/silicon/robot/R)
 	for(var/subsystem_type in subsystems)
 		R.remove_subsystem(subsystem_type)
 
-/obj/item/robot_module/proc/apply_status_flags(var/mob/living/silicon/robot/R)
+/obj/item/robot_module/proc/apply_status_flags(mob/living/silicon/robot/R)
 	if(!can_be_pushed)
 		R.status_flags &= ~CANPUSH
 
-/obj/item/robot_module/proc/remove_status_flags(var/mob/living/silicon/robot/R)
+/obj/item/robot_module/proc/remove_status_flags(mob/living/silicon/robot/R)
 	if(!can_be_pushed)
 		R.status_flags |= CANPUSH
 
 /obj/item/robot_module/proc/handle_emagged()
 	return
 
-/obj/item/robot_module/proc/grant_skills(var/mob/living/silicon/robot/R)
+/obj/item/robot_module/proc/grant_skills(mob/living/silicon/robot/R)
 	reset_skills(R) // for safety
 	var/list/skill_mod = list()
 	for(var/skill_type in skills)
 		skill_mod[skill_type] = skills[skill_type] - SKILL_MIN // the buff is additive, so normalize accordingly
 	R.buff_skill(skill_mod, buff_type = /datum/skill_buff/robot)
 
-/obj/item/robot_module/proc/reset_skills(var/mob/living/silicon/robot/R)
+/obj/item/robot_module/proc/reset_skills(mob/living/silicon/robot/R)
 	for(var/datum/skill_buff/buff in R.fetch_buffs_of_type(/datum/skill_buff/robot))
 		buff.remove()

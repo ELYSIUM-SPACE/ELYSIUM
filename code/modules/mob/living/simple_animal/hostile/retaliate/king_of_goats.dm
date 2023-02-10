@@ -27,14 +27,14 @@
 	break_stuff_probability = 35
 	flash_vulnerability = 0
 	natural_weapon = /obj/item/natural_weapon/goatking
-	var/current_damtype = BRUTE
+	var/current_damtype = DAMAGE_BRUTE
 	var/list/elemental_weapons = list(
 		BURN = /obj/item/natural_weapon/goatking/fire,
 		ELECTROCUTE = /obj/item/natural_weapon/goatking/lightning
 	)
 	var/stun_chance = 5 //chance per attack to Weaken target
 
-	ai_holder_type = /datum/ai_holder/simple_animal/goat/king
+	ai_holder = /datum/ai_holder/simple_animal/goat/king
 	say_list = /datum/say_list/goat/king
 
 /datum/ai_holder/simple_animal/goat/king
@@ -59,7 +59,7 @@
 	. = ..()
 
 	var/mob/living/simple_animal/hostile/retaliate/goat/king/phase2/G = holder
-	if(G.current_damtype != BRUTE)
+	if (G.current_damtype != DAMAGE_BRUTE)
 		G.special_attacks++
 
 /datum/ai_holder/simple_animal/goat/king/phase2/react_to_attack(atom/movable/attacker)
@@ -88,24 +88,24 @@
 			G.visible_message(SPAN_MFAUNA("\The [G] disrupts nearby electrical equipment!"))
 			empulse(get_turf(G), 5, 2, 0)
 
-		else if(prob(5) && G.current_damtype == BRUTE && !G.special_attacks) //elemental attacks
+		else if (prob(5) && G.current_damtype == DAMAGE_BRUTE && !G.special_attacks) //elemental attacks
 			G.spellscast++
 			if(prob(50))
 				G.visible_message(SPAN_MFAUNA("\The [G]' horns flicker with holy white flame!"))
-				G.current_damtype = BURN
+				G.current_damtype = DAMAGE_BURN
 			else
 				G.visible_message(SPAN_MFAUNA("\The [G]' horns glimmer, electricity arcing between them!"))
-				G.current_damtype = ELECTROCUTE
+				G.current_damtype = DAMAGE_SHOCK
 
 		else if(prob(5)) //earthquake spell
-			G.visible_message("<span class='cultannounce'>\The [G]' eyes begin to glow ominously as dust and debris in the area is kicked up in a light breeze.</span>")
+			G.visible_message(SPAN_CLASS("cultannounce", "\The [G]' eyes begin to glow ominously as dust and debris in the area is kicked up in a light breeze."))
 			set_busy(TRUE)
-			if(do_after(G, 6 SECONDS))
+			if(do_after(G, 6 SECONDS, do_flags = DO_DEFAULT | DO_USER_UNIQUE_ACT))
 				var/health_holder = G.health
 				G.visible_message(SPAN_MFAUNA("\The [G] raises its fore-hooves and stomps them into the ground with incredible force!"))
-				explosion(get_step(G,pick(GLOB.cardinal)), -1, 2, 2, 3, 6)
-				explosion(get_step(G,pick(GLOB.cardinal)), -1, 1, 4, 4, 6)
-				explosion(get_step(G,pick(GLOB.cardinal)), -1, 3, 4, 3, 6)
+				explosion(get_step(G,pick(GLOB.cardinal)), 4, EX_ACT_HEAVY)
+				explosion(get_step(G,pick(GLOB.cardinal)), 5, EX_ACT_HEAVY)
+				explosion(get_step(G,pick(GLOB.cardinal)), 7, EX_ACT_HEAVY)
 				set_busy(FALSE)
 				G.spellscast += 2
 				if(!G.health < health_holder)
@@ -133,11 +133,11 @@
 
 /obj/item/natural_weapon/goatking/fire
 	name = "burning horns"
-	damtype = BURN
+	damtype = DAMAGE_BURN
 
 /obj/item/natural_weapon/goatking/lightning
 	name = "lightning horns"
-	damtype = ELECTROCUTE
+	damtype = DAMAGE_SHOCK
 
 /mob/living/simple_animal/hostile/retaliate/goat/king/phase2
 	name = "emperor of goats"
@@ -156,7 +156,7 @@
 	break_stuff_probability = 40
 	stun_chance = 7
 
-	ai_holder_type = /datum/ai_holder/simple_animal/goat/king/phase2
+	ai_holder = /datum/ai_holder/simple_animal/goat/king/phase2
 
 	var/spellscast = 0
 	var/phase3 = FALSE
@@ -215,32 +215,28 @@
 	boss_theme = GLOB.sound_player.PlayLoopingSound(src, sound_id, 'sound/music/Visager-Miniboss_Fight.ogg', volume = 10, range = 8, falloff = 4, prefer_mute = TRUE)
 	stun_chance = 10
 	update_icon()
-	visible_message("<span class='cultannounce'>\The [src]' wounds close with a flash, and when he emerges, he's even larger than before!</span>")
+	visible_message(SPAN_CLASS("cultannounce", "\The [src]' wounds close with a flash, and when he emerges, he's even larger than before!"))
 
 /mob/living/simple_animal/hostile/retaliate/goat/king/phase2/on_update_icon()
-	var/matrix/M = new
-	if(phase3)
+	SetTransform(scale = phase3 ? 1.5 : 1.25)
+	if (phase3)
 		icon_state = "king_goat3"
 		icon_living = "king_goat3"
-		M.Scale(1.5)
-	else
-		M.Scale(1.25)
-	transform = M
 	default_pixel_y = 10
 
 /mob/living/simple_animal/hostile/retaliate/goat/king/phase2/Life()
 	. = ..()
 	if(!.)
 		return FALSE
-	if(special_attacks >= 6 && current_damtype != BRUTE)
+	if(special_attacks >= 6 && current_damtype != DAMAGE_BRUTE)
 		visible_message(SPAN_MFAUNA("The energy surrounding \the [src]'s horns dissipates."))
-		current_damtype = BRUTE
+		current_damtype = DAMAGE_BRUTE
 
 	if(health <= 150 && !phase3 && spellscast == 5) //begin phase 3, reset spell limit and heal
 		phase3_transition()
 
 /mob/living/simple_animal/hostile/retaliate/goat/king/proc/OnDeath()
-	visible_message("<span class='cultannounce'>\The [src] lets loose a terrific wail as its wounds close shut with a flash of light, and its eyes glow even brighter than before!</span>")
+	visible_message(SPAN_CLASS("cultannounce", "\The [src] lets loose a terrific wail as its wounds close shut with a flash of light, and its eyes glow even brighter than before!"))
 	new /mob/living/simple_animal/hostile/retaliate/goat/king/phase2(src.loc)
 	qdel(src)
 

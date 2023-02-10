@@ -27,10 +27,10 @@
 
 	if(stat == DEAD) return
 
-	BITSET(hud_updateflag, HEALTH_HUD)
-	BITSET(hud_updateflag, STATUS_HUD)
-	BITSET(hud_updateflag, LIFE_HUD)
-	
+	SET_BIT(hud_updateflag, HEALTH_HUD)
+	SET_BIT(hud_updateflag, STATUS_HUD)
+	SET_BIT(hud_updateflag, LIFE_HUD)
+
 	//Handle species-specific deaths.
 	species.handle_death(src)
 
@@ -62,7 +62,7 @@
 		SSticker.mode.check_win()
 
 	if(wearing_rig)
-		wearing_rig.notify_ai("<span class='danger'>Warning: user death event. Mobility control passed to integrated intelligence system.</span>")
+		wearing_rig.notify_ai(SPAN_DANGER("Warning: user death event. Mobility control passed to integrated intelligence system."))
 
 	. = ..(gibbed,"no message")
 	if(!gibbed)
@@ -75,10 +75,10 @@
 	if(MUTATION_HUSK in mutations)	return
 
 	if(species.name in HUMAN_SPECIES) //Only change hair, and not say, tentacles
-		if(f_style)
-			f_style = "Shaved"		//we only change the icon_state of the hair datum, so it doesn't mess up their UI/UE
-		if(h_style)
-			h_style = "Bald"
+		if(facial_hair_style)
+			facial_hair_style = "Shaved"		//we only change the icon_state of the hair datum, so it doesn't mess up their UI/UE
+		if(head_hair_style)
+			head_hair_style = "Bald"
 		update_hair(0)
 
 	mutations.Add(MUTATION_HUSK)
@@ -95,14 +95,15 @@
 /mob/living/carbon/human/proc/ChangeToSkeleton()
 	if(MUTATION_SKELETON in src.mutations)	return
 
-	if(f_style)
-		f_style = "Shaved"
-	if(h_style)
-		h_style = "Bald"
+	if(facial_hair_style)
+		facial_hair_style = "Shaved"
+	if(head_hair_style)
+		head_hair_style = "Bald"
 	update_hair(0)
 
 	mutations.Add(MUTATION_SKELETON)
 	for(var/obj/item/organ/external/E in organs)
 		E.status |= ORGAN_DISFIGURED
 	update_body(1)
+	playsound(src.loc, 'sound/effects/bonerattle.ogg', 50, 1)
 	return

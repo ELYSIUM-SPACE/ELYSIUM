@@ -13,7 +13,7 @@
 	icon_state = "wm_00"
 	density = TRUE
 	anchored = TRUE
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	uncreated_component_parts = null
 	stat_immune = 0
 	var/state = 0
@@ -58,7 +58,7 @@
 		to_chat(usr, "You must first close the machine.")
 		return
 
-	if(stat & NOPOWER)
+	if(!is_powered())
 		to_chat(usr, SPAN_WARNING("\The [src] is unpowered."))
 		return
 
@@ -68,7 +68,7 @@
 
 	update_use_power(POWER_USE_ACTIVE)
 	update_icon()
-	addtimer(CALLBACK(src, /obj/machinery/washing_machine/proc/wash), 20 SECONDS)
+	addtimer(new Callback(src, /obj/machinery/washing_machine/proc/wash), 20 SECONDS)
 
 /obj/machinery/washing_machine/proc/wash()
 	for(var/atom/A in (contents - component_parts))
@@ -86,7 +86,7 @@
 				C.ironed_state = WRINKLES_WRINKLY
 				if(detergent)
 					C.change_smell(SMELL_CLEAN)
-					addtimer(CALLBACK(C, /obj/item/clothing/proc/change_smell), detergent.smell_clean_time, TIMER_UNIQUE | TIMER_OVERRIDE)
+					addtimer(new Callback(C, /obj/item/clothing/proc/change_smell), detergent.smell_clean_time, TIMER_UNIQUE | TIMER_OVERRIDE)
 	QDEL_NULL(detergent)
 
 	//Tanning!
@@ -111,7 +111,7 @@
 	if(state & WASHER_STATE_CLOSED)
 		to_chat(usr, SPAN_WARNING("\The [src] is closed."))
 		return
-	if(!do_after(usr, 2 SECONDS, src))
+	if(!do_after(usr, 2 SECONDS, src, DO_DEFAULT | DO_USER_UNIQUE_ACT | DO_PUBLIC_PROGRESS))
 		return
 	if(!(state & WASHER_STATE_CLOSED))
 		usr.dropInto(loc)
@@ -159,7 +159,7 @@
 		return
 
 	else
-		if (contents.len < 5)
+		if (length(contents) < 5)
 			if (!(state & WASHER_STATE_CLOSED))
 				if (!user.unEquip(W, src))
 					return

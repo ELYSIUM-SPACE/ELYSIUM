@@ -24,26 +24,26 @@
  *
  */
 
-var/all_unit_tests_passed = 1
-var/failed_unit_tests = 0
-var/skipped_unit_tests = 0
-var/total_unit_tests = 0
+var/global/all_unit_tests_passed = 1
+var/global/failed_unit_tests = 0
+var/global/skipped_unit_tests = 0
+var/global/total_unit_tests = 0
 
 // For console out put in Linux/Bash makes the output green or red.
 // Should probably only be used for unit tests since some special folks use winders to host servers.
 // if you want plain output, use dm.sh -DUNIT_TEST -DUNIT_TEST_PLAIN baystation12.dme
 #ifdef UNIT_TEST_PLAIN
-var/ascii_esc = ""
-var/ascii_red = ""
-var/ascii_green = ""
-var/ascii_yellow = ""
-var/ascii_reset = ""
+var/global/ascii_esc = ""
+var/global/ascii_red = ""
+var/global/ascii_green = ""
+var/global/ascii_yellow = ""
+var/global/ascii_reset = ""
 #else
-var/ascii_esc = ascii2text(27)
-var/ascii_red = "[ascii_esc]\[31m"
-var/ascii_green = "[ascii_esc]\[32m"
-var/ascii_yellow = "[ascii_esc]\[33m"
-var/ascii_reset = "[ascii_esc]\[0m"
+var/global/ascii_esc = ascii2text(27)
+var/global/ascii_red = "[ascii_esc]\[31m"
+var/global/ascii_green = "[ascii_esc]\[32m"
+var/global/ascii_yellow = "[ascii_esc]\[33m"
+var/global/ascii_reset = "[ascii_esc]\[0m"
 #endif
 
 
@@ -61,23 +61,23 @@ var/ascii_reset = "[ascii_esc]\[0m"
 	var/safe_landmark
 	var/space_landmark
 
-/datum/unit_test/proc/log_debug(var/message)
+/datum/unit_test/proc/log_debug(message)
 	log_unit_test("[ascii_yellow]---  DEBUG  --- \[[name]\]: [message][ascii_reset]")
 
-/datum/unit_test/proc/log_bad(var/message)
+/datum/unit_test/proc/log_bad(message)
 	log_unit_test("[ascii_red]\[[name]\]: [message][ascii_reset]")
 
-/datum/unit_test/proc/fail(var/message)
+/datum/unit_test/proc/fail(message)
 	all_unit_tests_passed = 0
 	failed_unit_tests++
 	reported = 1
 	log_unit_test("[ascii_red]!!! FAILURE !!! \[[name]\]: [message][ascii_reset]")
 
-/datum/unit_test/proc/pass(var/message)
+/datum/unit_test/proc/pass(message)
 	reported = 1
 	log_unit_test("[ascii_green]*** SUCCESS *** \[[name]\]: [message][ascii_reset]")
 
-/datum/unit_test/proc/skip(var/message)
+/datum/unit_test/proc/skip(message)
 	skipped_unit_tests++
 	reported = 1
 	log_unit_test("[ascii_yellow]--- SKIPPED --- \[[name]\]: [message][ascii_reset]")
@@ -157,7 +157,7 @@ var/ascii_reset = "[ascii_esc]\[0m"
 	else
 		log_unit_test("[ascii_red]**** \[[failed_unit_tests]\\[total_unit_tests]\] Unit Tests Failed [skipped_message]****[ascii_reset]")
 
-/datum/admins/proc/run_unit_test(var/datum/unit_test/unit_test_type in get_test_datums())
+/datum/admins/proc/run_unit_test(datum/unit_test/unit_test_type in get_test_datums())
 	set name = "Run Unit Test"
 	set desc = "Runs the selected unit test - Remember to enable Debug Log Messages"
 	set category = "Debug"

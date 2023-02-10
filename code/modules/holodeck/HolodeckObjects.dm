@@ -7,7 +7,7 @@
 	thermal_conductivity = 0
 
 // the new Diona Death Prevention Feature: gives an average amount of lumination
-/turf/simulated/floor/holofloor/get_lumcount(var/minlum = 0, var/maxlum = 1)
+/turf/simulated/floor/holofloor/get_lumcount(minlum = 0, maxlum = 1)
 	return 0.8
 
 /turf/simulated/floor/holofloor/attackby(obj/item/W as obj, mob/user as mob)
@@ -21,13 +21,13 @@
 	name = "brown carpet"
 	icon = 'icons/turf/flooring/carpet.dmi'
 	icon_state = "brown"
-	initial_flooring = /decl/flooring/carpet
+	initial_flooring = /singleton/flooring/carpet
 
 /turf/simulated/floor/holofloor/concrete
 	name = "brown carpet"
 	icon = 'icons/turf/flooring/carpet.dmi'
 	icon_state = "brown"
-	initial_flooring = /decl/flooring/carpet
+	initial_flooring = /singleton/flooring/carpet
 
 /turf/simulated/floor/holofloor/concrete
 	name = "floor"
@@ -39,36 +39,36 @@
 	name = "floor"
 	icon = 'icons/turf/flooring/tiles.dmi'
 	icon_state = "steel"
-	initial_flooring = /decl/flooring/tiling
+	initial_flooring = /singleton/flooring/tiling
 
 /turf/simulated/floor/holofloor/tiled/dark
 	name = "dark floor"
 	icon_state = "dark"
-	initial_flooring = /decl/flooring/tiling/dark
+	initial_flooring = /singleton/flooring/tiling/dark
 
 /turf/simulated/floor/holofloor/tiled/stone
 	name = "stone floor"
 	icon_state = "stone"
-	initial_flooring = /decl/flooring/tiling/stone
+	initial_flooring = /singleton/flooring/tiling/stone
 
 /turf/simulated/floor/holofloor/lino
 	name = "lino"
 	icon = 'icons/turf/flooring/linoleum.dmi'
 	icon_state = "lino"
-	initial_flooring = /decl/flooring/linoleum
+	initial_flooring = /singleton/flooring/linoleum
 
 /turf/simulated/floor/holofloor/wood
 	name = "wooden floor"
 	icon = 'icons/turf/flooring/wood.dmi'
 	icon_state = "wood"
 	color = WOOD_COLOR_CHOCOLATE
-	initial_flooring = /decl/flooring/wood
+	initial_flooring = /singleton/flooring/wood
 
 /turf/simulated/floor/holofloor/grass
 	name = "lush grass"
 	icon = 'icons/turf/flooring/grass.dmi'
 	icon_state = "grass0"
-	initial_flooring = /decl/flooring/grass
+	initial_flooring = /singleton/flooring/grass
 
 /turf/simulated/floor/holofloor/snow
 	name = "snow"
@@ -85,11 +85,12 @@
 
 /turf/simulated/floor/holofloor/reinforced
 	icon = 'icons/turf/flooring/tiles.dmi'
-	initial_flooring = /decl/flooring/reinforced
+	initial_flooring = /singleton/flooring/reinforced
 	name = "reinforced holofloor"
 	icon_state = "reinforced"
 
-/turf/simulated/floor/holofloor/space/New()
+/turf/simulated/floor/holofloor/space/Initialize()
+	. = ..()
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
 
 /turf/simulated/floor/holofloor/beach
@@ -159,16 +160,16 @@
 	if(!istype(W) || W.item_flags & ITEM_FLAG_NO_BLUDGEON) return
 
 	if(isScrewdriver(W) || isCrowbar(W) || isWrench(W))
-		to_chat(user, ("<span class='notice'>It's a holowindow, you can't dismantle it!</span>"))
+		to_chat(user, (SPAN_NOTICE("It's a holowindow, you can't dismantle it!")))
 	else
-		if(W.damtype == BRUTE || W.damtype == BURN)
+		if (W.damtype == DAMAGE_BRUTE || W.damtype == DAMAGE_BURN)
 			hit(W.force, user, W)
 		else
 			playsound(loc, 'sound/effects/Glasshit.ogg', 75, 1)
 		..()
 	return
 
-/obj/structure/window/reinforced/holowindow/shatter(var/display_message = 1)
+/obj/structure/window/reinforced/holowindow/shatter(display_message = 1)
 	playsound(src, "shatter", 70, 1)
 	if(display_message)
 		visible_message("[src] fades away as it shatters!")
@@ -183,11 +184,11 @@
 
 /obj/machinery/door/window/holowindoor/attackby(obj/item/I as obj, mob/user as mob)
 
-	if (src.operating == 1)
+	if (operating == DOOR_OPERATING_YES)
 		return
 
-	if (check_force(I, user))
-		return
+	if (user.a_intent == I_HURT)
+		return ..()
 
 	src.add_fingerprint(user)
 	if (!src.requiresID())
@@ -204,7 +205,7 @@
 
 	return
 
-/obj/machinery/door/window/holowindoor/shatter(var/display_message = 1)
+/obj/machinery/door/window/holowindoor/shatter(display_message = 1)
 	src.set_density(0)
 	playsound(src, "shatter", 70, 1)
 	if(display_message)
@@ -216,11 +217,11 @@
 
 /obj/structure/bed/chair/holochair/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/wrench))
-		to_chat(user, ("<span class='notice'>It's a holochair, you can't dismantle it!</span>"))
+		to_chat(user, (SPAN_NOTICE("It's a holochair, you can't dismantle it!")))
 	return
 
 /obj/item/holo
-	damtype = PAIN
+	damtype = DAMAGE_PAIN
 	no_attack_log = TRUE
 
 /obj/item/holo/esword
@@ -239,14 +240,12 @@
 	var/item_color
 
 /obj/item/holo/esword/green
-	New()
-		item_color = "green"
+	item_color = "green"
 
 /obj/item/holo/esword/red
-	New()
-		item_color = "red"
+	item_color = "red"
 
-/obj/item/holo/esword/handle_shield(mob/user, var/damage, atom/damage_source = null, mob/attacker = null, var/def_zone = null, var/attack_text = "the attack")
+/obj/item/holo/esword/handle_shield(mob/user, damage, atom/damage_source = null, mob/attacker = null, def_zone = null, attack_text = "the attack")
 	. = ..()
 	if(.)
 		var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
@@ -257,7 +256,8 @@
 /obj/item/holo/esword/get_parry_chance(mob/user)
 	return active ? ..() : 0
 
-/obj/item/holo/esword/New()
+/obj/item/holo/esword/Initialize()
+	. = ..()
 	item_color = pick("red","blue","green","purple")
 
 /obj/item/holo/esword/attack_self(mob/living/user as mob)
@@ -267,13 +267,13 @@
 		icon_state = "sword[item_color]"
 		w_class = ITEM_SIZE_HUGE
 		playsound(user, 'sound/weapons/saberon.ogg', 50, 1)
-		to_chat(user, "<span class='notice'>[src] is now active.</span>")
+		to_chat(user, SPAN_NOTICE("[src] is now active."))
 	else
 		force = 3
 		icon_state = "sword0"
 		w_class = ITEM_SIZE_SMALL
 		playsound(user, 'sound/weapons/saberoff.ogg', 50, 1)
-		to_chat(user, "<span class='notice'>[src] can now be concealed.</span>")
+		to_chat(user, SPAN_NOTICE("[src] can now be concealed."))
 
 	update_held_icon()
 
@@ -306,9 +306,9 @@
 			return
 		if(prob(50))
 			I.dropInto(loc)
-			visible_message("<span class='notice'>Swish! \the [I] lands in \the [src].</span>", range = 3)
+			visible_message(SPAN_NOTICE("Swish! \the [I] lands in \the [src]."), range = 3)
 		else
-			visible_message("<span class='warning'>\The [I] bounces off of \the [src]'s rim!</span>", range = 3)
+			visible_message(SPAN_WARNING("\The [I] bounces off of \the [src]'s rim!"), range = 3)
 		return 0
 	else
 		return ..(mover, target, height, air_group)
@@ -344,7 +344,7 @@
 			return
 		if(prob(10))
 			I.dropInto(loc)
-			visible_message("<span class='notice'>Swish! \the [I] gets caught in \the [src].</span>", range = 3)
+			visible_message(SPAN_NOTICE("Swish! \the [I] gets caught in \the [src]."), range = 3)
 			return 0
 		else
 			return 1
@@ -439,7 +439,7 @@
 	..()
 	set_light(0.5, 0.1, 2) //hologram lighting
 
-/mob/living/simple_animal/hostile/carp/holodeck/proc/set_safety(var/safe)
+/mob/living/simple_animal/hostile/carp/holodeck/proc/set_safety(safe)
 	var/obj/item/NW = get_natural_weapon()
 	if (safe)
 		faction = MOB_FACTION_NEUTRAL

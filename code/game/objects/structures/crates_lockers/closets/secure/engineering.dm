@@ -1,6 +1,6 @@
 /obj/structure/closet/secure_closet/engineering_chief
 	name = "chief engineer's locker"
-	closet_appearance = /decl/closet_appearance/secure_closet/engineering/ce
+	closet_appearance = /singleton/closet_appearance/secure_closet/engineering/ce
 	req_access = list(access_ce)
 
 /obj/structure/closet/secure_closet/engineering_chief/WillContain()
@@ -21,13 +21,13 @@
 		/obj/item/device/multitool,
 		/obj/item/device/flash,
 		/obj/item/taperoll/engineering,
-		/obj/item/crowbar/brace_jack
+		/obj/item/material/twohanded/jack
 	)
 
 /obj/structure/closet/secure_closet/engineering_electrical
 	name = "electrical supplies"
 	req_access = list(access_engine_equip)
-	closet_appearance = /decl/closet_appearance/secure_closet/engineering/electrical
+	closet_appearance = /singleton/closet_appearance/secure_closet/engineering/electrical
 
 /obj/structure/closet/secure_closet/engineering_electrical/WillContain()
 	return list(
@@ -41,13 +41,13 @@
 /obj/structure/closet/secure_closet/engineering_welding
 	name = "welding supplies"
 	req_access = list(access_construction)
-	closet_appearance = /decl/closet_appearance/secure_closet/engineering/welding
+	closet_appearance = /singleton/closet_appearance/secure_closet/engineering/welding
 
 /obj/structure/closet/secure_closet/engineering_welding/WillContain()
 	return list(
 		/obj/item/clothing/head/welding = 3,
 		/obj/item/weldingtool/largetank = 3,
-		/obj/item/weldpack = 3,
+		/obj/item/storage/backpack/weldpack = 3,
 		/obj/item/clothing/glasses/welding = 3,
 		/obj/item/welder_tank = 6
 	)
@@ -55,7 +55,7 @@
 /obj/structure/closet/secure_closet/engineering_personal
 	name = "engineer's locker"
 	req_access = list(access_engine_equip)
-	closet_appearance = /decl/closet_appearance/secure_closet/engineering
+	closet_appearance = /singleton/closet_appearance/secure_closet/engineering
 
 /obj/structure/closet/secure_closet/engineering_personal/WillContain()
 	return list(
@@ -73,7 +73,7 @@
 /obj/structure/closet/secure_closet/atmos_personal
 	name = "technician's locker"
 	req_access = list(access_atmospherics)
-	closet_appearance = /decl/closet_appearance/secure_closet/engineering/atmos
+	closet_appearance = /singleton/closet_appearance/secure_closet/engineering/atmos
 
 /obj/structure/closet/secure_closet/atmos_personal/WillContain()
 	return list(

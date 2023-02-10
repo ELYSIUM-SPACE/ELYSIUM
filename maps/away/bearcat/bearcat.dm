@@ -5,9 +5,9 @@
 
 /obj/effect/submap_landmark/joinable_submap/bearcat
 	name = "FTV Bearcat"
-	archetype = /decl/submap_archetype/derelict/bearcat
+	archetype = /singleton/submap_archetype/derelict/bearcat
 
-/decl/submap_archetype/derelict/bearcat
+/singleton/submap_archetype/derelict/bearcat
 	descriptor = "derelict cargo vessel"
 	map = "Bearcat Wreck"
 	crew_jobs = list(
@@ -99,31 +99,34 @@
 
 /obj/effect/landmark/deadcap
 	name = "Dead Captain"
-	delete_me = 1
 
 /obj/effect/landmark/deadcap/Initialize()
+	..()
+	return INITIALIZE_HINT_LATELOAD
+
+/obj/effect/landmark/deadcap/LateInitialize()
 	var/turf/T = get_turf(src)
 	var/mob/living/carbon/human/corpse = new(T)
-	scramble(1,corpse,100)
+	scramble(1, corpse, 100)
 	corpse.real_name = "Captain"
 	corpse.name = "Captain"
-	var/decl/hierarchy/outfit/outfit = outfit_by_type(/decl/hierarchy/outfit/deadcap)
+	var/singleton/hierarchy/outfit/outfit = outfit_by_type(/singleton/hierarchy/outfit/deadcap)
 	outfit.equip(corpse)
 	corpse.adjustOxyLoss(corpse.maxHealth)
 	corpse.setBrainLoss(corpse.maxHealth)
 	var/obj/structure/bed/chair/C = locate() in T
-	if(C)
+	if (C)
 		C.buckle_mob(corpse)
-	. = ..()
+	qdel(src)
 
-/decl/hierarchy/outfit/deadcap
+/singleton/hierarchy/outfit/deadcap
 	name = "Derelict Captain"
 	uniform = /obj/item/clothing/under/casual_pants/classicjeans
 	suit = /obj/item/clothing/suit/storage/hooded/wintercoat
 	shoes = /obj/item/clothing/shoes/black
 	r_pocket = /obj/item/device/radio/map_preset/bearcat
 
-/decl/hierarchy/outfit/deadcap/post_equip(mob/living/carbon/human/H)
+/singleton/hierarchy/outfit/deadcap/post_equip(mob/living/carbon/human/H)
 	..()
 	var/obj/item/clothing/uniform = H.w_uniform
 	if(uniform)

@@ -7,6 +7,7 @@
 /obj/item/device/scanner/mining
 	name = "ore detector"
 	desc = "A complex device used to locate ore deep underground."
+	icon = 'icons/obj/ore_analyzer.dmi'
 	icon_state = "ore"
 	origin_tech = list(TECH_MAGNET = 1, TECH_ENGINEERING = 1)
 	use_delay = 50
@@ -29,19 +30,19 @@
 		scan_data = scan_results[1]
 	else
 		scan_data += "<hr>[scan_results[1]]"
-	to_chat(user, "[icon2html(src, user)] <span class='notice'>\The [src] displays a readout.</span>")
+	to_chat(user, "[icon2html(src, user)] [SPAN_NOTICE("\The [src] displays a readout.")]")
 	to_chat(user, scan_results[1])
 
 	if(scan_results[2])
 		survey_data += scan_results[2]
 		playsound(loc, 'sound/machines/ping.ogg', 40, 1)
-		to_chat(user,"<span class='notice'>New survey data stored - [scan_results[2]] GEP.</span>")
+		to_chat(user,SPAN_NOTICE("New survey data stored - [scan_results[2]] GEP."))
 
-/obj/item/device/scanner/mining/proc/put_disk_in_hand(var/mob/M)
+/obj/item/device/scanner/mining/proc/put_disk_in_hand(mob/M)
 	if(!survey_data)
-		to_chat(M,"<span class='warning'>There is no survey data stored on the [src].</span>")
+		to_chat(M,SPAN_WARNING("There is no survey data stored on the [src]."))
 		return 0
-	visible_message("<span class='notice'>The [src] spits out a disk containing [survey_data] GEP.</span>")
+	visible_message(SPAN_NOTICE("The [src] spits out a disk containing [survey_data] GEP."))
 	var/obj/item/disk/survey/D = new(get_turf(src))
 	D.data = survey_data
 	survey_data = 0
@@ -126,7 +127,7 @@
 			if(76 to INFINITY) result = "huge quantities"
 
 		scandata += "- [result] of [ore_type]."
-	
+
 	return list(jointext(scandata, "<br>"), new_data)
 
 #undef  ORE_SURFACE

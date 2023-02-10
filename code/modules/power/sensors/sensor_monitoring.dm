@@ -30,10 +30,10 @@
 
 // Updates icon of this computer according to current status.
 /obj/machinery/computer/power_monitor/on_update_icon()
-	if(stat & BROKEN)
+	if(MACHINE_IS_BROKEN(src))
 		icon_state = "powerb"
 		return
-	if(stat & NOPOWER)
+	if(!is_powered())
 		icon_state = "power0"
 		return
 	if(alerting)
@@ -52,7 +52,7 @@
 	return TRUE
 
 // Uses dark magic to operate the NanoUI of this computer.
-/obj/machinery/computer/power_monitor/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/computer/power_monitor/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 	power_monitor.ui_interact(user, ui_key, ui, force_open)
 
 

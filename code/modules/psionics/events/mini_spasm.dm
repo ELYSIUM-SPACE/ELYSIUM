@@ -30,15 +30,15 @@
 		var/obj/item/device/radio/source = victims[victim]
 		do_spasm(victim, source)
 
-/datum/event/minispasm/proc/do_spasm(var/mob/living/victim, var/obj/item/device/radio/source)
+/datum/event/minispasm/proc/do_spasm(mob/living/victim, obj/item/device/radio/source)
 	set waitfor = 0
 
 	if(iscarbon(victim) && !victim.isSynthetic())
-		var/list/disabilities = list(NEARSIGHTED, EPILEPSY, TOURETTES, NERVOUS)
+		var/list/disabilities = list(NEARSIGHTED, EPILEPSY, NERVOUS)
 		for(var/disability in disabilities)
 			if(victim.disabilities & disability)
 				disabilities -= disability
-		if(disabilities.len)
+		if(length(disabilities))
 			victim.disabilities |= pick(disabilities)
 
 	if(victim.psi)
@@ -52,7 +52,7 @@
 		var/new_latencies = rand(2,4)
 		var/list/faculties = list(PSI_COERCION, PSI_REDACTION, PSI_ENERGISTICS, PSI_PSYCHOKINESIS)
 		for(var/i = 1 to new_latencies)
-			to_chat(victim, SPAN_DANGER("<font size = 3>[pick(psi_operancy_messages)]</font>"))
+			to_chat(victim, SPAN_DANGER(FONT_LARGE(pick(psi_operancy_messages))))
 			victim.adjustBrainLoss(rand(10,20))
 			victim.set_psi_rank(pick_n_take(faculties), 1)
 			sleep(30)

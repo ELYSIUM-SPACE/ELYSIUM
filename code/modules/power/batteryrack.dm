@@ -17,7 +17,7 @@
 	should_be_mapped = 1
 	base_type = /obj/machinery/power/smes/batteryrack
 	maximum_component_parts = list(/obj/item/stock_parts = 15)
-	
+
 	machine_name = "battery rack PSU"
 	machine_desc = "A very simple power storage solution: several power cells on a rack. About as basic as you can get."
 
@@ -31,7 +31,7 @@
 	var/ui_tick = 0
 
 /obj/machinery/power/smes/batteryrack/RefreshParts()
-	var/capacitor_efficiency = Clamp(total_component_rating_of_type(/obj/item/stock_parts/capacitor), 0, 10)
+	var/capacitor_efficiency = clamp(total_component_rating_of_type(/obj/item/stock_parts/capacitor), 0, 10)
 	var/maxcells = 3 * total_component_rating_of_type(/obj/item/stock_parts/matter_bin)
 
 	max_transfer_rate = 10000 * capacitor_efficiency // 30kw - 90kw depending on used capacitors.
@@ -51,18 +51,23 @@
 	icon_update = 0
 
 	var/cellcount = 0
-	var/charge_level = between(0, round(Percentage() / 12), 7)
+	var/charge_level = clamp(round(Percentage() / 12), 0, 7)
 
 
 	overlays += "charge[charge_level]"
 
-	for(var/obj/item/cell/C in internal_cells)
-		cellcount++
-		overlays += "cell[cellcount]"
-		if(C.fully_charged())
-			overlays += "cell[cellcount]f"
-		else if(!C.charge)
-			overlays += "cell[cellcount]e"
+	if(!panel_open)
+		icon_state = "rack-closed"
+	else
+		icon_state = "rack"
+		for(var/obj/item/cell/C as anything in internal_cells)
+			if (++cellcount > max_cells)
+				break
+			overlays += "cell[cellcount]"
+			if(C.fully_charged())
+				overlays += "cell[cellcount]f"
+			else if(!C.charge)
+				overlays += "cell[cellcount]e"
 
 // Recalculate maxcharge and similar variables.
 /obj/machinery/power/smes/batteryrack/proc/update_maxcharge()
@@ -71,11 +76,11 @@
 		newmaxcharge += C.maxcharge
 
 	capacity = newmaxcharge
-	charge = between(0, charge, newmaxcharge)
+	charge = clamp(charge, 0, newmaxcharge)
 
 
 // Sets input/output depending on our "mode" var.
-/obj/machinery/power/smes/batteryrack/proc/update_io(var/newmode)
+/obj/machinery/power/smes/batteryrack/proc/update_io(newmode)
 	mode = newmode
 	switch(mode)
 		if(PSU_OFFLINE)
@@ -92,7 +97,7 @@
 			output_attempt = 1
 
 // Store charge in the power cells, instead of using the charge var. Amount is in joules.
-/obj/machinery/power/smes/batteryrack/add_charge(var/amount)
+/obj/machinery/power/smes/batteryrack/add_charge(amount)
 	amount *= CELLRATE // Convert to CELLRATE first.
 	if(equalise)
 		// Now try to get least charged cell and use the power from it.
@@ -110,7 +115,7 @@
 			return
 
 
-/obj/machinery/power/smes/batteryrack/remove_charge(var/amount)
+/obj/machinery/power/smes/batteryrack/remove_charge(amount)
 	amount *= CELLRATE // Convert to CELLRATE first.
 	if(equalise)
 		// Now try to get most charged cell and use the power from it.
@@ -143,11 +148,11 @@
 			CL = C
 	return CL
 
-/obj/machinery/power/smes/batteryrack/proc/insert_cell(var/obj/item/cell/C, var/mob/user)
+/obj/machinery/power/smes/batteryrack/proc/insert_cell(obj/item/cell/C, mob/user)
 	if(!istype(C))
 		return 0
 
-	if(internal_cells.len >= max_cells)
+	if(length(internal_cells) >= max_cells)
 		return 0
 	if(user && !user.unEquip(C))
 		return 0
@@ -186,12 +191,12 @@
 			celldiff = (least.maxcharge / 100) * percentdiff
 		else
 			celldiff = (most.maxcharge / 100) * percentdiff
-		celldiff = between(0, celldiff, max_transfer_rate * CELLRATE)
+		celldiff = clamp(celldiff, 0, max_transfer_rate * CELLRATE)
 		// Ensure we don't transfer more energy than the most charged cell has, and that the least charged cell can input.
 		celldiff = min(min(celldiff, most.charge), least.maxcharge - least.charge)
 		least.give(most.use(celldiff))
 
-/obj/machinery/power/smes/batteryrack/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+/obj/machinery/power/smes/batteryrack/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
 	var/data[0]
 
 	data["mode"] = mode
@@ -201,7 +206,7 @@
 	data["equalise"] = equalise
 	data["blink_tick"] = ui_tick
 	data["cells_max"] = max_cells
-	data["cells_cur"] = internal_cells.len
+	data["cells_cur"] = length(internal_cells)
 	var/list/cells = list()
 	var/cell_index = 1
 	for(var/obj/item/cell/C in internal_cells)
@@ -232,7 +237,7 @@
 		internal_cells -= C
 	return ..()
 
-/obj/machinery/power/smes/batteryrack/attackby(var/obj/item/W as obj, var/mob/user as mob)
+/obj/machinery/power/smes/batteryrack/attackby(obj/item/W as obj, mob/user as mob)
 	if(..())
 		return TRUE
 	if(istype(W, /obj/item/cell)) // ID Card, try to insert it.
@@ -241,7 +246,7 @@
 		else
 			to_chat(user, "\The [src] has no empty slot for \the [W]")
 
-/obj/machinery/power/smes/batteryrack/interface_interact(var/mob/user)
+/obj/machinery/power/smes/batteryrack/interface_interact(mob/user)
 	ui_interact(user)
 	return TRUE
 
@@ -264,7 +269,7 @@
 		update_io(0)
 		return 1
 	else if( href_list["enable"] )
-		update_io(between(1, text2num(href_list["enable"]), 3))
+		update_io(clamp(text2num(href_list["enable"]), 1, 3))
 		return 1
 	else if( href_list["equaliseon"] )
 		equalise = 1
@@ -274,7 +279,7 @@
 		return 1
 	else if( href_list["ejectcell"] )
 		var/slot_number = text2num(href_list["ejectcell"])
-		if(slot_number != Clamp(round(slot_number), 1, length(internal_cells)))
+		if(slot_number != clamp(round(slot_number), 1, length(internal_cells)))
 			return 1
 		var/obj/item/cell/C = internal_cells[slot_number]
 

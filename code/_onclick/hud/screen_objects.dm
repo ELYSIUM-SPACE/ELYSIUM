@@ -168,7 +168,7 @@
 	screen_loc = ui_acti
 	var/intent = I_HELP
 
-/obj/screen/intent/Click(var/location, var/control, var/params)
+/obj/screen/intent/Click(location, control, params)
 	var/list/P = params2list(params)
 	var/icon_x = text2num(P["icon-x"])
 	var/icon_y = text2num(P["icon-y"])
@@ -226,7 +226,7 @@
 								no_mask = 1
 
 						if(no_mask)
-							to_chat(C, "<span class='notice'>You are not wearing a suitable mask or helmet.</span>")
+							to_chat(C, SPAN_NOTICE("You are not wearing a suitable mask or helmet."))
 							return 1
 						else
 							var/list/nicename = null
@@ -252,7 +252,7 @@
 									nicename |= "hardsuit"
 									tankcheck |= rig.air_supply
 
-							for(var/i=1, i<tankcheck.len+1, ++i)
+							for(var/i=1, i<length(tankcheck)+1, ++i)
 								if(istype(tankcheck[i], /obj/item/tank))
 									var/obj/item/tank/t = tankcheck[i]
 									if (!isnull(t.manipulated_by) && t.manipulated_by != C.real_name && findtext(t.desc,breathes))
@@ -270,7 +270,7 @@
 
 							var/best = 0
 							var/bestcontents = 0
-							for(var/i=1, i <  contents.len + 1 , ++i)
+							for(var/i=1, i <  length(contents) + 1 , ++i)
 								if(!contents[i])
 									continue
 								if(contents[i] > bestcontents)

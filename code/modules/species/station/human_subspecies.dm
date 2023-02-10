@@ -23,13 +23,13 @@
 		/datum/mob_descriptor/build = 1
 		)
 
-	appearance_flags = HAS_HAIR_COLOR | HAS_SKIN_TONE_GRAV | HAS_LIPS | HAS_UNDERWEAR | HAS_EYE_COLOR
+	appearance_flags = SPECIES_APPEARANCE_HAS_HAIR_COLOR | SPECIES_APPEARANCE_HAS_SKIN_TONE_GRAV | SPECIES_APPEARANCE_HAS_LIPS | SPECIES_APPEARANCE_HAS_UNDERWEAR | SPECIES_APPEARANCE_HAS_EYE_COLOR
 
 /datum/species/human/gravworlder/can_float(mob/living/carbon/human/H)
 	. = ..()
 	if(.)
 		return H.skill_check(SKILL_HAULING, SKILL_EXPERT) //Hard for them to swim
-	
+
 /datum/species/human/spacer
 	name = SPECIES_SPACER
 	name_plural = "Space-Adapted Humans"
@@ -53,7 +53,7 @@
 		/datum/mob_descriptor/build = -1
 		)
 
-	appearance_flags = HAS_HAIR_COLOR | HAS_SKIN_TONE_SPCR | HAS_LIPS | HAS_UNDERWEAR | HAS_EYE_COLOR
+	appearance_flags = SPECIES_APPEARANCE_HAS_HAIR_COLOR | SPECIES_APPEARANCE_HAS_SKIN_TONE_SPCR | SPECIES_APPEARANCE_HAS_LIPS | SPECIES_APPEARANCE_HAS_UNDERWEAR | SPECIES_APPEARANCE_HAS_EYE_COLOR
 	species_flags = SPECIES_FLAG_LOW_GRAV_ADAPTED
 
 	hazard_high_pressure = HAZARD_HIGH_PRESSURE * 0.8            // Dangerously high pressure.
@@ -137,7 +137,7 @@
 		/datum/mob_descriptor/build = 1
 		)
 
-	appearance_flags = HAS_HAIR_COLOR | HAS_SKIN_TONE_TRITON | HAS_LIPS | HAS_UNDERWEAR | HAS_EYE_COLOR
+	appearance_flags = SPECIES_APPEARANCE_HAS_HAIR_COLOR | SPECIES_APPEARANCE_HAS_SKIN_TONE_TRITON | SPECIES_APPEARANCE_HAS_LIPS | SPECIES_APPEARANCE_HAS_UNDERWEAR | SPECIES_APPEARANCE_HAS_EYE_COLOR
 
 /datum/species/human/tritonian/can_float(mob/living/carbon/human/H)
 	if(!H.is_physically_disabled())
@@ -166,7 +166,7 @@
 	min_age =       18
 	max_age =       45
 
-/datum/species/human/mule/handle_post_spawn(var/mob/living/carbon/human/H)
+/datum/species/human/mule/handle_post_spawn(mob/living/carbon/human/H)
 	if(!H.psi)
 		H.psi = new(H)
 		var/list/faculties = list("[PSI_COERCION]", "[PSI_REDACTION]", "[PSI_ENERGISTICS]", "[PSI_PSYCHOKINESIS]")

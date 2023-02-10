@@ -1,6 +1,6 @@
 /obj/item/gun/projectile/revolver
 	name = "revolver"
-	desc = "The al-Maliki & Mosley Magnum Double Action is a choice revolver for when you absolutely, positively need to put a hole in the other guy."
+	desc = "The al-Maliki & Mosley Magnum Double Action is a choice revolver for when you absolutely, positively need to put a hole in the other guy. You feelin' lucky punk?"
 	icon = 'icons/obj/guns/revolvers.dmi'
 	icon_state = "revolver"
 	item_state = "revolver"
@@ -28,12 +28,12 @@
 	set category = "Object"
 
 	chamber_offset = 0
-	visible_message("<span class='warning'>\The [usr] spins the cylinder of \the [src]!</span>", \
-	"<span class='notice'>You hear something metallic spin and click.</span>")
+	visible_message(SPAN_WARNING("\The [usr] spins the cylinder of \the [src]!"), \
+	SPAN_NOTICE("You hear something metallic spin and click."))
 	playsound(src.loc, 'sound/weapons/revolver_spin.ogg', 100, 1)
 	loaded = shuffle(loaded)
-	if(rand(1,max_shells) > loaded.len)
-		chamber_offset = rand(0,max_shells - loaded.len)
+	if(rand(1,max_shells) > length(loaded))
+		chamber_offset = rand(0,max_shells - length(loaded))
 
 /obj/item/gun/projectile/revolver/consume_next_projectile()
 	if(chamber_offset)
@@ -41,7 +41,7 @@
 		return
 	return ..()
 
-/obj/item/gun/projectile/revolver/load_ammo(var/obj/item/A, mob/user)
+/obj/item/gun/projectile/revolver/load_ammo(obj/item/A, mob/user)
 	chamber_offset = 0
 	return ..()
 
@@ -80,8 +80,8 @@
 /obj/item/gun/projectile/revolver/capgun/attackby(obj/item/wirecutters/W, mob/user)
 	if(!istype(W) || icon_state == "revolver")
 		return ..()
-	to_chat(user, "<span class='notice'>You snip off the toy markings off the [src].</span>")
+	to_chat(user, SPAN_NOTICE("You snip off the toy markings off the [src]."))
 	name = "revolver"
 	icon_state = "revolver"
-	desc += " Someone snipped off the barrel's toy mark. How dastardly."
+	desc += " Someone snipped off the barrel's toy mark. How dastardly, this could get someone shot."
 	return 1

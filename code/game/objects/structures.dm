@@ -8,31 +8,21 @@
 	var/list/connections = list("0", "0", "0", "0")
 	var/list/other_connections = list("0", "0", "0", "0")
 	var/list/blend_objects = newlist() // Objects which to blend with
-	var/list/noblend_objects = newlist() //Objects to avoid blending with (such as children of listed blend objects.
+	var/list/noblend_objects = newlist() //Objects to avoid blending with (such as children of listed blend objects.)
 	var/material/material = null
 	var/footstep_type
 	var/mob_offset = 0 //used for on_structure_offset mob animation
 
-/obj/structure/attack_generic(var/mob/user, var/damage, var/attack_verb, var/wallbreaker)
-	if(wallbreaker && damage && breakable)
-		visible_message("<span class='danger'>\The [user] smashes the \[src] to pieces!</span>")
-		attack_animation(user)
-		qdel(src)
-		return 1
-	visible_message("<span class='danger'>\The [user] [attack_verb] \the [src]!</span>")
-	attack_animation(user)
-	take_damage(damage)
-	return 1
+/obj/structure/damage_health(damage, damage_type, damage_flags, severity, skip_can_damage_check)
+	if (damage && HAS_FLAGS(damage_flags, DAMAGE_FLAG_TURF_BREAKER))
+		if (breakable)
+			return kill_health()
+		damage = max(damage, 10)
+	..()
 
-/obj/structure/proc/mob_breakout(var/mob/living/escapee)
+/obj/structure/proc/mob_breakout(mob/living/escapee)
 	set waitfor = FALSE
 	return FALSE
-
-/obj/structure/proc/take_damage(var/damage)
-	return
-
-/obj/structure/proc/repair_damage(amount)
-	return
 
 /obj/structure/Destroy()
 	reset_mobs_offset()
@@ -88,42 +78,67 @@
 				attack_generic(user,1,"slices")
 	return ..()
 
-/obj/structure/grab_attack(var/obj/item/grab/G)
-	if (!G.force_danger())
-		to_chat(G.assailant, "<span class='danger'>You need a better grip to do that!</span>")
-		return TRUE
-	if (G.assailant.a_intent == I_HURT)
-		// Slam their face against the table.
-		var/blocked = G.affecting.get_blocked_ratio(BP_HEAD, BRUTE, damage = 8)
+
+/obj/structure/get_interactions_info()
+	. = ..()
+	.[CODEX_INTERACTION_GRAB_AGGRESSIVE] = "<p>On harm intent, slams the victim against \the [initial(name)], causing damage to both the victim and object.</p>"
+	if (HAS_FLAGS(initial(atom_flags), ATOM_FLAG_CLIMBABLE))
+		.[CODEX_INTERACTION_GRAB_AGGRESSIVE] += "<p>On non-harm intent, places the victim on \the [initial(name)] after a 3 second timer.</p>"
+
+
+/obj/structure/use_grab(obj/item/grab/grab, list/click_params)
+	// Harm intent - Slam face against the structure
+	if (grab.assailant == I_HURT)
+		if (!grab.force_danger())
+			to_chat(grab.assailant, SPAN_WARNING("You need a better grip to slam \the [grab.affecting]'s face on \the [src]."))
+			return TRUE
+		var/blocked = grab.affecting.get_blocked_ratio(BP_HEAD, DAMAGE_BRUTE, damage = 8)
 		if (prob(30 * (1 - blocked)))
-			G.affecting.Weaken(5)
-		G.affecting.apply_damage(8, BRUTE, BP_HEAD)
-		visible_message("<span class='danger'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
+			grab.affecting.Weaken(5)
+		grab.affecting.apply_damage(8, DAMAGE_BRUTE, BP_HEAD)
+		visible_message(
+			SPAN_DANGER("\The [grab.assailant] slams \the [grab.affecting]'s face against \the [src]!"),
+			SPAN_DANGER("You slam \the [grab.affecting]'s face against \the [src]!")
+		)
 		if (material)
-			playsound(loc, material.tableslam_noise, 50, 1)
+			playsound(src, material.tableslam_noise, 50, 1)
 		else
-			playsound(loc, 'sound/weapons/tablehit1.ogg', 50, 1)
-		var/list/L = take_damage(rand(1,5))
-		for(var/obj/item/material/shard/S in L)
-			if(S.sharp && prob(50))
-				G.affecting.visible_message("<span class='danger'>\The [S] slices into [G.affecting]'s face!</span>", "<span class='danger'>\The [S] slices into your face!</span>")
-				G.affecting.standard_weapon_hit_effects(S, G.assailant, S.force*2, BP_HEAD)
-		qdel(G)
-	else if(atom_flags & ATOM_FLAG_CLIMBABLE)
+			playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
+		damage_health(rand(1, 5), DAMAGE_BRUTE)
+		qdel(grab)
+		return TRUE
+
+	// Climbable structure - Put victim on it
+	if (HAS_FLAGS(atom_flags, ATOM_FLAG_CLIMBABLE))
+		if (!grab.force_danger())
+			to_chat(grab.assailant, SPAN_WARNING("You need a better grip to put \the [grab.affecting] on \the [src]."))
+			return TRUE
 		var/obj/occupied = turf_is_crowded()
 		if (occupied)
-			to_chat(G.assailant, "<span class='danger'>There's \a [occupied] in the way.</span>")
+			to_chat(grab.assailant, SPAN_DANGER("There's \a [occupied] blocking \the [src]."))
 			return TRUE
-		G.affecting.forceMove(src.loc)
-		G.affecting.Weaken(rand(2,5))
-		visible_message("<span class='danger'>[G.assailant] puts [G.affecting] on \the [src].</span>")
-		qdel(G)
+		if (!do_after(grab.assailant, 3 SECONDS, grab.affecting, DO_PUBLIC_UNIQUE))
+			return TRUE
+		occupied = turf_is_crowded()
+		if (occupied)
+			to_chat(grab.assailant, SPAN_DANGER("There's \a [occupied] blocking \the [src]."))
+			return TRUE
+		grab.affecting.forceMove(loc)
+		grab.affecting.Weaken(rand(2,5))
+		visible_message(
+			SPAN_WARNING("\The [grab.assailant] puts \the [grab.affecting] on \the [src]."),
+			SPAN_WARNING("You put \the [grab.affecting] on \the [src].")
+		)
+		qdel(grab)
 		return TRUE
+
+	return ..()
+
 
 /obj/structure/proc/can_visually_connect()
 	return anchored
 
-/obj/structure/proc/can_visually_connect_to(var/obj/structure/S)
+/obj/structure/proc/can_visually_connect_to(obj/structure/S)
 	return istype(S, src)
 
 /obj/structure/proc/refresh_neighbors()

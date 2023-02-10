@@ -11,7 +11,7 @@ var/global/list/all_objectives = list()
 	//If they are focused on a particular number. Steal objectives have their own counter.
 	var/target_amount = 0
 
-/datum/objective/New(var/text)
+/datum/objective/New(text)
 	all_objectives |= src
 	if(text)
 		explanation_text = text
@@ -26,7 +26,7 @@ var/global/list/all_objectives = list()
 	for(var/datum/mind/possible_target in SSticker.minds)
 		if(possible_target != owner && ishuman(possible_target.current) && (possible_target.current.stat != DEAD))
 			possible_targets += possible_target
-	if(possible_targets.len > 0)
+	if(length(possible_targets) > 0)
 		target = pick(possible_targets)
 
 
@@ -218,7 +218,7 @@ var/global/list/all_objectives = list()
 	var/obj/item/steal_target
 	var/target_name
 
-	var/global/possible_items[] = list(
+	var/static/possible_items[] = list(
 		"the captain's antique laser gun" = /obj/item/gun/energy/captain,
 		"a bluespace rift generator" = /obj/item/integrated_circuit/manipulation/bluespace_rift,
 		"an RCD" = /obj/item/rcd,
@@ -241,7 +241,7 @@ var/global/list/all_objectives = list()
 		"an ablative armor vest" = /obj/item/clothing/suit/armor/laserproof,
 	)
 
-	var/global/possible_items_special[] = list(
+	var/static/possible_items_special[] = list(
 		/*"nuclear authentication disk" = /obj/item/disk/nuclear,*///Broken with the change to nuke disk making it respawn on z level change.
 		"nuclear gun" = /obj/item/gun/energy/gun/nuclear,
 		"diamond drill" = /obj/item/pickaxe/diamonddrill,
@@ -286,11 +286,10 @@ var/global/list/all_objectives = list()
 
 // RnD progress download //
 
-/datum/objective/download
-	proc/gen_amount_goal()
-		target_amount = rand(10,20)
-		explanation_text = "Download [target_amount] research levels."
-		return target_amount
+/datum/objective/download/proc/gen_amount_goal()
+	target_amount = rand(10,20)
+	explanation_text = "Download [target_amount] research levels."
+	return target_amount
 
 // Capture //
 
@@ -303,7 +302,7 @@ var/global/list/all_objectives = list()
 
 // Changeling Absorb //
 
-/datum/objective/absorb/proc/gen_amount_goal(var/lowbound = 4, var/highbound = 6)
+/datum/objective/absorb/proc/gen_amount_goal(lowbound = 4, highbound = 6)
 	target_amount = rand (lowbound,highbound)
 	var/n_p = 1 //autowin
 	if (GAME_STATE == RUNLEVEL_SETUP)
@@ -339,9 +338,9 @@ var/global/list/all_objectives = list()
 					priority_targets += possible_target
 					continue
 
-	if(priority_targets.len > 0)
+	if(length(priority_targets) > 0)
 		target = pick(priority_targets)
-	else if(possible_targets.len > 0)
+	else if(length(possible_targets) > 0)
 		target = pick(possible_targets)
 
 	if(target && target.current)
@@ -446,11 +445,11 @@ var/global/list/all_objectives = list()
 
 /datum/objective/cult/sacrifice/find_target()
 	var/list/possible_targets = list()
-	if(!possible_targets.len)
+	if(!length(possible_targets))
 		for(var/mob/living/carbon/human/player in GLOB.player_list)
 			if(player.mind && !(player.mind in GLOB.cult.current_antagonists))
 				possible_targets += player.mind
-	if(possible_targets.len > 0)
+	if(length(possible_targets) > 0)
 		target = pick(possible_targets)
 	if(target) explanation_text = "Sacrifice [target.name], the [target.assigned_role]. You will need the sacrifice rune (Hell blood join) and three acolytes to do so."
 

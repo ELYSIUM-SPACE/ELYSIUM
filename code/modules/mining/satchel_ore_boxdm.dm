@@ -19,7 +19,7 @@
 		for(var/obj/item/ore/O in S.contents)
 			S.remove_from_storage(O, src, 1) //This will move the item to this item's contents
 		S.finish_bulk_removal()
-		to_chat(user, "<span class='notice'>You empty the satchel into the box.</span>")
+		to_chat(user, SPAN_NOTICE("You empty the satchel into the box."))
 
 	update_ore_count()
 
@@ -46,7 +46,7 @@
 
 	add_fingerprint(user)
 
-	if(!contents.len)
+	if(!length(contents))
 		to_chat(user, "It is empty.")
 		return
 
@@ -66,7 +66,7 @@
 	set src in view(1)
 
 	if(!istype(usr, /mob/living/carbon/human)) //Only living, intelligent creatures with hands can empty ore boxes.
-		to_chat(usr, "<span class='warning'>You are physically incapable of emptying the ore box.</span>")
+		to_chat(usr, SPAN_WARNING("You are physically incapable of emptying the ore box."))
 		return
 
 	if( usr.stat || usr.restrained() )
@@ -78,16 +78,16 @@
 
 	add_fingerprint(usr)
 
-	if(contents.len < 1)
-		to_chat(usr, "<span class='warning'>The ore box is empty</span>")
+	if(length(contents) < 1)
+		to_chat(usr, SPAN_WARNING("The ore box is empty"))
 		return
 
 	for (var/obj/item/ore/O in contents)
 		O.dropInto(loc)
-	to_chat(usr, "<span class='notice'>You empty the ore box</span>")
+	to_chat(usr, SPAN_NOTICE("You empty the ore box"))
 
 /obj/structure/ore_box/ex_act(severity)
-	if(severity == 1.0 || (severity < 3.0 && prob(50)))
+	if(severity == EX_ACT_DEVASTATING || (severity < EX_ACT_LIGHT && prob(50)))
 		for (var/obj/item/ore/O in contents)
 			O.dropInto(loc)
 			O.ex_act(severity++)

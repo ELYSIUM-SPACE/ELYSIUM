@@ -27,11 +27,11 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 /spell/aoe_turf/conjure/cast(list/targets, mob/user)
 
 	for(var/i=1,i <= summon_amt,i++)
-		if(!targets.len)
+		if(!length(targets))
 			break
 		var/summoned_object_type
 		if(summon_exclusive)
-			if(!summon_type.len)
+			if(!length(summon_type))
 				break
 			summoned_object_type = summon_type[1]
 			summon_type -= summoned_object_type
@@ -44,7 +44,7 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 		var/atom/summoned_object
 		if(ispath(summoned_object_type,/turf))
 			if(istype(get_turf(user),/turf/simulated/shuttle) || istype(spawn_place, /turf/simulated/shuttle))
-				to_chat(user, "<span class='warning'>You can't build things on shuttles!</span>")
+				to_chat(user, SPAN_WARNING("You can't build things on shuttles!"))
 				continue
 			spawn_place.ChangeTurf(summoned_object_type)
 			summoned_object = spawn_place
@@ -70,5 +70,5 @@ How they spawn stuff is decided by behaviour vars, which are explained below
 		conjure_animation(animation, spawn_place)
 	return
 
-/spell/aoe_turf/conjure/proc/conjure_animation(var/atom/movable/overlay/animation, var/turf/target)
+/spell/aoe_turf/conjure/proc/conjure_animation(atom/movable/overlay/animation, turf/target)
 	qdel(animation)

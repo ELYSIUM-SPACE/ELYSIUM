@@ -34,7 +34,7 @@
 	var/nullblock = 0
 	var/list/construct_spells = list()
 
-	ai_holder_type = /datum/ai_holder/simple_animal/melee
+	ai_holder = /datum/ai_holder/simple_animal/melee
 	say_list = /datum/say_list/construct
 
 /mob/living/simple_animal/construct/cultify()
@@ -113,13 +113,15 @@
 	if ((. = ..()))
 		return
 
-/mob/living/simple_animal/construct/armoured/bullet_act(var/obj/item/projectile/P)
+/mob/living/simple_animal/construct/armoured/bullet_act(obj/item/projectile/P)
+	if (status_flags & GODMODE)
+		return PROJECTILE_FORCE_MISS
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam))
 		var/reflectchance = 80 - round(P.damage/3)
 		if(prob(reflectchance))
 			adjustBruteLoss(P.damage * 0.5)
-			visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s shell!</span>", \
-							"<span class='userdanger'>The [P.name] gets reflected by [src]'s shell!</span>")
+			visible_message(SPAN_DANGER("The [P.name] gets reflected by [src]'s shell!"), \
+							SPAN_CLASS("userdanger", "The [P.name] gets reflected by [src]'s shell!"))
 
 			// Find a turf near or on the original location to bounce to
 			if(P.starting)
@@ -277,6 +279,7 @@
 	overlays += eye_glow
 	set_light(-2, 0.1, 1.5, l_color = "#ffffff")
 
+	z_flags |= ZMM_MANGLE_PLANES
 ////////////////HUD//////////////////////
 
 /mob/living/simple_animal/construct/Life()

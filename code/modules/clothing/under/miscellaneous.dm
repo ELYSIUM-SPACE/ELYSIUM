@@ -391,7 +391,7 @@
 	worn_state = "plaid_purple"
 
 //wedding stuff
-/obj/item/clothing/under/wedding/
+/obj/item/clothing/under/wedding
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS
 
 /obj/item/clothing/under/wedding/bride_orange
@@ -743,9 +743,9 @@
 /obj/item/clothing/under/sterile/emrs
 	name = "medical uniform"
 	desc = "An uniform worn in emergency medical and reanimation services across human space."
-	icon_state = "medical_Uniform"
-	item_state = "medical_Uniform"
-	worn_state = "medical_Uniform"
+	icon_state = "medical_uniform"
+	item_state = "medical_uniform"
+	worn_state = "medical_uniform"
 
 /obj/item/clothing/under/kimono
 	desc = "A traditional robe with remarkably long sleeves, mostly worn by women. <i>Sugoi.</i>"

@@ -1,6 +1,6 @@
 
-/obj/structure/table/proc/straight_table_check(var/direction)
-	if(health > 100)
+/obj/structure/table/proc/straight_table_check(direction)
+	if(get_current_health() > 100)
 		return 0
 	var/obj/structure/table/T
 	for(var/angle in list(-90,90))
@@ -22,17 +22,17 @@
 		return
 
 	if(reinforced || flipped < 0 || !flip(get_cardinal_dir(usr,src)))
-		to_chat(usr, "<span class='notice'>It won't budge.</span>")
+		to_chat(usr, SPAN_NOTICE("It won't budge."))
 		return
 
-	usr.visible_message("<span class='warning'>[usr] flips \the [src]!</span>")
+	usr.visible_message(SPAN_WARNING("[usr] flips \the [src]!"))
 
 	if(atom_flags & ATOM_FLAG_CLIMBABLE)
 		object_shaken()
 
 	return
 
-/obj/structure/table/proc/unflipping_check(var/direction)
+/obj/structure/table/proc/unflipping_check(direction)
 
 	for(var/mob/M in oview(src,0))
 		return 0
@@ -65,15 +65,15 @@
 		return
 
 	if (!unflipping_check())
-		to_chat(usr, "<span class='notice'>It won't budge.</span>")
+		to_chat(usr, SPAN_NOTICE("It won't budge."))
 		return
 	unflip()
 
-/obj/structure/table/proc/flip(var/direction)
+/obj/structure/table/proc/flip(direction)
 	if( !straight_table_check(turn(direction,90)) || !straight_table_check(turn(direction,-90)) )
 		return FALSE
 
-	if(!do_after(usr, 1 SECOND, src))
+	if(!do_after(usr, 1 SECOND, src, DO_PUBLIC_UNIQUE))
 		return FALSE
 	verbs -=/obj/structure/table/verb/do_flip
 	verbs +=/obj/structure/table/proc/do_put
@@ -94,14 +94,14 @@
 		var/obj/structure/table/T = locate() in get_step(src,D)
 		if(T && T.can_connect() && T.flipped == 0 && material && T.material && T.material.name == material.name)
 			T.flip(direction)
-	take_damage(rand(5, 10))
+	damage_health(rand(5, 10), DAMAGE_BRUTE)
 	update_connections(1)
 	update_icon()
 
 	return TRUE
 
 /obj/structure/table/proc/unflip()
-	if(!do_after(usr, 1 SECOND, src))
+	if(!do_after(usr, 1 SECOND, src, DO_PUBLIC_UNIQUE))
 		return FALSE
 	verbs -=/obj/structure/table/proc/do_put
 	verbs +=/obj/structure/table/verb/do_flip

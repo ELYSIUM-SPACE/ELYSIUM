@@ -21,9 +21,9 @@
 
 /obj/effect/landmark/corpse/zombiescience
 	name = "Dead Scientist"
-	corpse_outfits = list(/decl/hierarchy/outfit/zombie_science)
+	corpse_outfits = list(/singleton/hierarchy/outfit/zombie_science)
 
-/decl/hierarchy/outfit/zombie_science
+/singleton/hierarchy/outfit/zombie_science
 	name = OUTFIT_JOB_NAME("Dead Scientist")
 	uniform = /obj/item/clothing/under/rank/scientist
 	suit = /obj/item/clothing/suit/bio_suit/anomaly
@@ -41,7 +41,7 @@
 /obj/item/reagent_containers/glass/beaker/vial/random_podchem/Initialize()
 	. = ..()
 	desc += "Label is smudged, and there's crusted blood fingerprints on it."
-	var/reagent_type = pick(/datum/reagent/random, /datum/reagent/zombie/science, /datum/reagent/rezadone, /datum/reagent/three_eye)
+	var/reagent_type = pick(/datum/reagent/random, /datum/reagent/rezadone, /datum/reagent/drugs/three_eye)
 	reagents.add_reagent(pick(reagent_type), 5)
 
 /obj/structure/backup_server
@@ -51,7 +51,7 @@
 	desc = "Impact resistant server rack. You might be able to pry a disk out."
 	var/obj/item/stock_parts/computer/hard_drive/cluster/drive = new /obj/item/stock_parts/computer/hard_drive/cluster
 
-/obj/structure/backup_server/attackby(obj/item/W, mob/user, var/click_params)
+/obj/structure/backup_server/attackby(obj/item/W, mob/user, click_params)
 	if(isCrowbar(W))
 		if (!drive)
 			to_chat(user, SPAN_WARNING("There is nothing else to take from \the [src]."))

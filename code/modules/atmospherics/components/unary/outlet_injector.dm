@@ -22,7 +22,7 @@
 	var/datum/radio_frequency/radio_connection
 
 
-	level = 1
+	level = ATOM_LEVEL_UNDER_TILE
 
 	connect_types = CONNECT_TYPE_REGULAR|CONNECT_TYPE_FUEL
 
@@ -47,7 +47,7 @@
 	if (!node)
 		update_use_power(POWER_USE_OFF)
 
-	if(stat & NOPOWER)
+	if(!is_powered())
 		icon_state = "off"
 	else
 		icon_state = "[use_power ? "on" : "off"]"
@@ -58,7 +58,7 @@
 		var/turf/T = get_turf(src)
 		if(!istype(T))
 			return
-		if(!T.is_plating() && node && node.level == 1 && istype(node, /obj/machinery/atmospherics/pipe))
+		if(!T.is_plating() && node && node.level == ATOM_LEVEL_UNDER_TILE && istype(node, /obj/machinery/atmospherics/pipe))
 			return
 		else
 			if(node)
@@ -70,7 +70,7 @@
 	. = list()
 	. += "<table>"
 	. += "<tr><td><b>Name:</b></td><td>[name]</td>"
-	. += "<tr><td><b>Power:</b></td><td>[use_power?("<font color = 'green'>Injecting</font>"):("<font color = 'red'>Offline</font>")]</td><td><a href='?src=\ref[src];toggle_power=\ref[src]'>Toggle</a></td></tr>"
+	. += "<tr><td><b>Power:</b></td><td>[use_power ? SPAN_COLOR("green", "Injecting") : SPAN_COLOR("red", "Offline")]</td><td><a href='?src=\ref[src];toggle_power=\ref[src]'>Toggle</a></td></tr>"
 	. += "<tr><td><b>ID Tag:</b></td><td>[id]</td><td><a href='?src=\ref[src];settag=\ref[id]'>Set ID Tag</a></td></td></tr>"
 	if(frequency%10)
 		. += "<tr><td><b>Frequency:</b></td><td>[frequency/10]</td><td><a href='?src=\ref[src];setfreq=\ref[frequency]'>Set Frequency</a></td></td></tr>"
@@ -85,20 +85,20 @@
 	if(href_list["toggle_power"])
 		update_use_power(!use_power)
 		queue_icon_update()
-		to_chat(user, "<span class='notice'>The multitool emits a short beep confirming the change.</span>")
+		to_chat(user, SPAN_NOTICE("The multitool emits a short beep confirming the change."))
 		return TOPIC_REFRESH
 	if(href_list["settag"])
 		var/t = sanitizeSafe(input(user, "Enter the ID tag for [src.name]", src.name, id), MAX_NAME_LEN)
 		if(t && CanInteract(user, state))
 			id = t
-			to_chat(user, "<span class='notice'>The multitool emits a short beep confirming the change.</span>")
+			to_chat(user, SPAN_NOTICE("The multitool emits a short beep confirming the change."))
 			return TOPIC_REFRESH
 		return TOPIC_HANDLED
 	if(href_list["setfreq"])
 		var/freq = input(user, "Enter the Frequency for [src.name]. Decimal will automatically be inserted", src.name, frequency) as num|null
 		if(CanInteract(user, state))
 			set_frequency(freq)
-			to_chat(user, "<span class='notice'>The multitool emits a short beep confirming the change.</span>")
+			to_chat(user, SPAN_NOTICE("The multitool emits a short beep confirming the change."))
 			return TOPIC_REFRESH
 		return TOPIC_HANDLED
 
@@ -108,7 +108,7 @@
 	last_power_draw = 0
 	last_flow_rate = 0
 
-	if((stat & (NOPOWER|BROKEN)) || !use_power)
+	if((inoperable()) || !use_power)
 		return
 
 	var/power_draw = -1
@@ -130,7 +130,7 @@
 /obj/machinery/atmospherics/unary/outlet_injector/proc/inject()
 	set waitfor = 0
 
-	if(injecting || (stat & NOPOWER))
+	if(injecting || (!is_powered()))
 		return 0
 
 	var/datum/gas_mixture/environment = loc.return_air()
@@ -192,18 +192,18 @@
 
 	if(signal.data["set_volume_rate"])
 		var/number = text2num(signal.data["set_volume_rate"])
-		volume_rate = between(0, number, air_contents.volume)
+		volume_rate = clamp(number, 0, air_contents.volume)
 
 	if(signal.data["status"])
-		addtimer(CALLBACK(src, .proc/broadcast_status), 2, TIMER_UNIQUE)
+		addtimer(new Callback(src, .proc/broadcast_status), 2, TIMER_UNIQUE)
 		return
 
-	addtimer(CALLBACK(src, .proc/broadcast_status), 2, TIMER_UNIQUE)
+	addtimer(new Callback(src, .proc/broadcast_status), 2, TIMER_UNIQUE)
 
-/obj/machinery/atmospherics/unary/outlet_injector/hide(var/i)
+/obj/machinery/atmospherics/unary/outlet_injector/hide(i)
 	update_underlays()
 
-/obj/machinery/atmospherics/unary/outlet_injector/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/machinery/atmospherics/unary/outlet_injector/attackby(obj/item/O as obj, mob/user as mob)
 	if(isMultitool(O))
 		var/datum/browser/popup = new (user, "Vent Configuration Utility", "[src] Configuration Panel", 600, 200)
 		popup.set_content(jointext(get_console_data(),"<br>"))

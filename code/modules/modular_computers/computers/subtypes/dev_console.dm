@@ -18,7 +18,7 @@
 	. = ..()
 
 /obj/machinery/computer/modular/Process()
-	if(stat & NOPOWER)
+	if(!is_powered())
 		return
 	var/datum/extension/interactive/ntos/os = get_extension(src, /datum/extension/interactive/ntos)
 	if(os)
@@ -26,7 +26,7 @@
 
 /obj/machinery/computer/modular/power_change()
 	. = ..()
-	if(. && (stat & NOPOWER))
+	if(. && (!is_powered()))
 		var/datum/extension/interactive/ntos/os = get_extension(src, /datum/extension/interactive/ntos)
 		if(os)
 			os.event_powerfailure()
@@ -62,11 +62,11 @@
 	if(os)
 		return os.get_keyboard_overlay()
 
-/obj/machinery/computer/modular/emag_act(var/remaining_charges, var/mob/user)
+/obj/machinery/computer/modular/emag_act(remaining_charges, mob/user)
 	var/obj/item/stock_parts/circuitboard/modular_computer/MB = get_component_of_type(/obj/item/stock_parts/circuitboard/modular_computer)
 	return MB && MB.emag_act(remaining_charges, user)
 
-/obj/machinery/computer/modular/components_are_accessible(var/path)
+/obj/machinery/computer/modular/components_are_accessible(path)
 	. = ..()
 	if(.)
 		return
@@ -93,7 +93,7 @@
 	set src in view(1)
 
 	if(!CanPhysicallyInteract(usr))
-		to_chat(usr, "<span class='warning'>You can't reach it.</span>")
+		to_chat(usr, SPAN_WARNING("You can't reach it."))
 		return
 
 	if(ismob(usr))
@@ -105,7 +105,7 @@
 	portable_drive = null
 	verbs -= /obj/machinery/computer/modular/proc/eject_usb
 
-/obj/machinery/computer/modular/CouldUseTopic(var/mob/user)
+/obj/machinery/computer/modular/CouldUseTopic(mob/user)
 	..()
 	if(LAZYLEN(interact_sounds) && CanPhysicallyInteract(user))
 		playsound(src, pick(interact_sounds), 40)

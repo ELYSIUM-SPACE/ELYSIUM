@@ -1,5 +1,5 @@
 // Generates a simple HTML crew manifest for use in various places
-/proc/html_crew_manifest(var/monochrome, var/OOC)
+/proc/html_crew_manifest(monochrome, OOC)
 	var/list/dept_data = list(
 		list("names" = list(), "header" = "Heads of Staff", "flag" = COM),
 		list("names" = list(), "header" = "Command Support", "flag" = SPT),
@@ -43,8 +43,8 @@
 		mil_ranks[name] = ""
 
 		if(GLOB.using_map.flags & MAP_HAS_RANK)
-			var/datum/mil_branch/branch_obj = mil_branches.get_branch(CR.get_branch())
-			var/datum/mil_rank/rank_obj = mil_branches.get_rank(CR.get_branch(), CR.get_rank())
+			var/datum/mil_branch/branch_obj = GLOB.mil_branches.get_branch(CR.get_branch())
+			var/datum/mil_rank/rank_obj = GLOB.mil_branches.get_rank(CR.get_branch(), CR.get_rank())
 
 			if(branch_obj && rank_obj)
 				mil_ranks[name] = "<abbr title=\"[rank_obj.name], [branch_obj.name]\">[rank_obj.name_short]</abbr> "
@@ -84,7 +84,7 @@
 
 	for(var/list/department in dept_data)
 		var/list/names = department["names"]
-		if(names.len > 0)
+		if(length(names) > 0)
 			dat += "<tr><th colspan=3>[department["header"]]</th></tr>"
 			for(var/name in names)
 				dat += "<tr class='candystripe'><td>[mil_ranks[name]][name]</td><td>[names[name]]</td><td>[isactive[name]]</td></tr>"
@@ -94,7 +94,7 @@
 	dat = replacetext(dat, "\t", "")
 	return dat
 
-/proc/silicon_nano_crew_manifest(var/list/filter)
+/proc/silicon_nano_crew_manifest(list/filter)
 	var/list/filtered_entries = list()
 
 	for(var/mob/living/silicon/ai/ai in SSmobs.mob_list)
@@ -113,7 +113,7 @@
 		)))
 	return filtered_entries
 
-/proc/filtered_nano_crew_manifest(var/list/filter, var/blacklist = FALSE)
+/proc/filtered_nano_crew_manifest(list/filter, blacklist = FALSE)
 	var/list/filtered_entries = list()
 	for(var/datum/computer_file/report/crew_record/CR in department_crew_manifest(filter, blacklist))
 		filtered_entries.Add(list(list(

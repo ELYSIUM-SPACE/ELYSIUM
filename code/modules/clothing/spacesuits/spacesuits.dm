@@ -17,6 +17,7 @@
 		bio = ARMOR_BIO_SHIELDED,
 		rad = ARMOR_RAD_SMALL
 		)
+	valid_accessory_slots = null
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|BLOCKHAIR
 	body_parts_covered = HEAD|FACE|EYES
 	cold_protection = HEAD
@@ -24,7 +25,6 @@
 	min_pressure_protection = 0
 	max_pressure_protection = SPACE_SUIT_MAX_PRESSURE
 	siemens_coefficient = 0.9
-	center_of_mass = null
 	randpixel = 0
 	species_restricted = list("exclude", SPECIES_NABBER, SPECIES_DIONA)
 	flash_protection = FLASH_PROTECTION_MAJOR
@@ -65,9 +65,9 @@
 		camera.set_status(!camera.status)
 		if(camera.status)
 			camera.c_tag = FindNameFromID(usr)
-			to_chat(usr, "<span class='notice'>User scanned as [camera.c_tag]. Camera activated.</span>")
+			to_chat(usr, SPAN_NOTICE("User scanned as [camera.c_tag]. Camera activated."))
 		else
-			to_chat(usr, "<span class='notice'>Camera deactivated.</span>")
+			to_chat(usr, SPAN_NOTICE("Camera deactivated."))
 
 /obj/item/clothing/head/helmet/space/examine(mob/user, distance)
 	. = ..()
@@ -120,7 +120,13 @@
 	permeability_coefficient = 0
 	item_flags = ITEM_FLAG_THICKMATERIAL
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET|ARMS|HANDS
-	allowed = list(/obj/item/device/flashlight,/obj/item/tank/emergency,/obj/item/device/suit_cooling_unit)
+	allowed = list(
+		/obj/item/device/flashlight,
+		/obj/item/tank/oxygen_emergency,
+		/obj/item/tank/oxygen_emergency_extended,
+		/obj/item/tank/nitrogen_emergency,
+		/obj/item/device/suit_cooling_unit
+	)
 	armor = list(
 		bio = ARMOR_BIO_SHIELDED,
 		rad = ARMOR_RAD_SMALL
@@ -131,11 +137,30 @@
 	min_pressure_protection = 0
 	max_pressure_protection = SPACE_SUIT_MAX_PRESSURE
 	siemens_coefficient = 0.9
-	center_of_mass = null
 	randpixel = 0
 	species_restricted = list("exclude", SPECIES_NABBER, SPECIES_DIONA)
 	valid_accessory_slots = list(ACCESSORY_SLOT_INSIGNIA)
+	equip_delay = 5 SECONDS
 
-/obj/item/clothing/suit/space/New()
-	..()
-	slowdown_per_slot[slot_wear_suit] = 1
+
+/obj/item/clothing/suit/space/equip_delay_before(mob/user, slot, equip_flags)
+	user.setClickCooldown(1 SECOND)
+	user.visible_message(
+		SPAN_ITALIC("\The [user] begins to struggle into \the [src]."),
+		SPAN_ITALIC("You begin to struggle into \the [src]."),
+		SPAN_ITALIC("You can hear metal clicking and fabric rustling."),
+		range = 5
+	)
+
+
+/obj/item/clothing/suit/space/equip_delay_after(mob/user, slot, equip_flags)
+	user.visible_message(
+		SPAN_ITALIC("\The [user] finishes putting on \the [src]."),
+		SPAN_NOTICE("You finish putting on \the [src]."),
+		range = 5
+	)
+
+
+/obj/item/clothing/suit/space/Initialize()
+	. = ..()
+	slowdown_per_slot[slot_wear_suit] = 0.5

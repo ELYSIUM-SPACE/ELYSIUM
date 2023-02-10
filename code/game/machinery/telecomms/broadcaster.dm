@@ -7,8 +7,8 @@
 	They receive their message from a server after the message has been logged.
 */
 
-var/list/recentmessages = list() // global list of recent messages broadcasted : used to circumvent massive radio spam
-var/message_delay = 0 // To make sure restarting the recentmessages list is kept in sync
+var/global/list/recentmessages = list() // global list of recent messages broadcasted : used to circumvent massive radio spam
+var/global/message_delay = 0 // To make sure restarting the recentmessages list is kept in sync
 
 /obj/machinery/telecomms/broadcaster
 	name = "Subspace Broadcaster"
@@ -125,7 +125,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	machinetype = 6
 	produces_heat = 0
 	circuitboard = /obj/item/stock_parts/circuitboard/telecomms/allinone
-	construct_state = /decl/machine_construction/tcomms/panel_closed/cannot_print
+	construct_state = /singleton/machine_construction/tcomms/panel_closed/cannot_print
 	machine_name = "telecommunications mainframe"
 	machine_desc = "An awkward, clunky machine that serves as an all-in-one telecommunications hub. Provides peer-to-peer communication, and not much else."
 	var/listening_freqs
@@ -145,7 +145,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 	if(is_freq_listening(signal)) // detect subspace signals
 
-		if(freq_listening.len) //If we are actively listening to this frequency, go ahead and use the real signal
+		if(length(freq_listening)) //If we are actively listening to this frequency, go ahead and use the real signal
 			signal.data["done"] = 1 // mark the signal as being broadcasted
 			signal.data["compression"] = 0
 
@@ -273,7 +273,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 **/
 
-/proc/Broadcast_Message(var/datum/radio_frequency/connection, var/mob/M,
+/proc/Broadcast_Message(datum/radio_frequency/connection, mob/M,
 						var/vmask, var/vmessage, var/obj/item/device/radio/radio,
 						var/message, var/name, var/job, var/realname, var/vname,
 						var/data, var/compression, var/list/level, var/freq, var/verbage = "says", var/datum/language/speaking = null,
@@ -438,7 +438,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 	return 1
 
-/proc/Broadcast_SimpleMessage(var/source, var/frequency, var/text, var/data, var/mob/M, var/compression, var/level, var/channel_tag, var/channel_color)
+/proc/Broadcast_SimpleMessage(source, frequency, text, data, mob/M, compression, level, channel_tag, channel_color)
 
   /* ###### Prepare the radio connection ###### */
 
@@ -587,7 +587,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	var/turf/position = get_turf(src)
 	return (position.z in signal.data["level"] && signal.data["done"])
 
-/atom/proc/telecomms_process(var/do_sleep = 1)
+/atom/proc/telecomms_process(do_sleep = 1)
 
 	// First, we want to generate a new radio signal
 	var/datum/signal/signal = new
@@ -617,4 +617,3 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	//to_world_log("Level: [signal.data["level"]] - Done: [signal.data["done"]]")
 
 	return signal
-

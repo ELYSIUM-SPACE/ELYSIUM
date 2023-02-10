@@ -1,10 +1,11 @@
-/mob/living/carbon/human/proc/get_raw_medical_data(var/tag = FALSE)
+/mob/living/carbon/human/proc/get_raw_medical_data(tag = FALSE)
 	var/mob/living/carbon/human/H = src
 	var/list/scan = list()
 
 	scan["name"] = H.name
 	if(H.fake_name)
 		scan["name"] = H.real_name
+	scan["age"] = H.age + H.changed_age
 	scan["time"] = stationtime2text()
 	var/brain_result
 	if(H.should_have_organ(BP_BRAIN))
@@ -80,7 +81,7 @@
 	for(var/obj/item/organ/internal/I in H.internal_organs)
 		if (istype(I, /obj/item/organ/internal/augment))
 			var/obj/item/organ/internal/augment/A = I
-			if (!A.known) // Hidden augments don't appear on scans
+			if (~A.augment_flags & AUGMENT_SCANNABLE)
 				continue
 		var/list/O = list()
 		O["name"] = I.name
@@ -105,12 +106,12 @@
 		scan["nearsight"] = TRUE
 	return scan
 
-/proc/display_medical_data_header(var/list/scan, skill_level = SKILL_DEFAULT)
+/proc/display_medical_data_header(list/scan, skill_level = SKILL_DEFAULT)
 	//In case of problems, abort.
 	var/dat = list()
 
 	if(!scan["name"])
-		return "<center><span class='bad'><strong>SCAN READOUT ERROR.</strong></span></center>"
+		return "<center>[SPAN_BAD("<strong>SCAN READOUT ERROR.</strong>")]</center>"
 
 	//Table definition and starting data block.
 	/*
@@ -126,13 +127,15 @@
 	dat = JOINTEXT(dat)
 	return dat
 
-/proc/display_medical_data_health(var/list/scan, skill_level = SKILL_DEFAULT)
+/proc/display_medical_data_health(list/scan, skill_level = SKILL_DEFAULT)
 	//In case of problems, abort.
 	if(!scan["name"])
-		return "<center><span class='bad'><strong>SCAN READOUT ERROR.</strong></span></center>"
+		return "<center>[SPAN_BAD("<strong>SCAN READOUT ERROR.</strong>")]</center>"
 
 	var/list/subdat = list()
 	var/dat = list()
+
+	dat += "<tr><td><strong>Apparent Age:</strong></td><td>[scan["age"]]</td></tr>"
 
 	//Brain activity
 	/*
@@ -141,15 +144,15 @@
 	dat += "<tr><td><strong>Brain activity:</strong></td>"
 	switch(scan["brain_activity"])
 		if(0)
-			dat += "<td><span class='bad'>none, patient is braindead</span></td></tr>"
+			dat += "<td>[SPAN_BAD("none, patient is braindead")]</td></tr>"
 		if(-1)
-			dat += "<td><span class='average'>ERROR - Nonstandard biology</span></td></tr>"
+			dat += "<td>[SPAN_CLASS("average", "ERROR - Nonstandard biology")]</td></tr>"
 		else
 			if(skill_level >= SKILL_BASIC)
 				if(scan["brain_activity"] <= 50)
-					dat += "<td><span class='bad'>[scan["brain_activity"]]%</span></td></tr>"
+					dat += "<td>[SPAN_BAD("[scan["brain_activity"]]%")]</td></tr>"
 				else if(scan["brain_activity"] <= 80)
-					dat += "<td><span class='average'>[scan["brain_activity"]]%</span></td></tr>"
+					dat += "<td>[SPAN_CLASS("average", "[scan["brain_activity"]]%")]</td></tr>"
 				else
 					dat += "<td>[scan["brain_activity"]]%</td></tr>"
 			else
@@ -161,45 +164,45 @@
 	//Circulatory System
 	/*
 		<tr><td><strong>Pulse Rate:</strong></td><td>75bpm</td></tr>
-		<tr><td colspan='2'><span class='average'>Patient is tachycardic.</span></td></tr>
+		<tr><td colspan='2'>[SPAN_CLASS("average", "Patient is tachycardic.")]</td></tr>
 		<tr><td><strong>Blood Pressure:</strong></td><td>120/80 (100% oxygenation)</td></tr>
 		<tr><td><strong>Blood Volume:</strong></td><td>560u/560u</td></tr>
-		<tr><td colspan="2" align="center"><span class='bad'>Patient in Hypovolemic Shock. Transfusion highly recommended.</span></td></tr>
+		<tr><td colspan="2" align="center">[SPAN_BAD("Patient in Hypovolemic Shock. Transfusion highly recommended.")]</td></tr>
 	*/
 	dat += "<tr><td><strong>Pulse rate:</strong></td>"
 	if(scan["pulse"] == -1)
-		dat += "<td><span class='average'>ERROR - Nonstandard biology</span></td></tr>"
+		dat += "<td>[SPAN_CLASS("average", "ERROR - Nonstandard biology")]</td></tr>"
 	else if(scan["pulse"] == -2)
 		dat += "<td>N/A</td></tr>"
 	else if(scan["pulse"] == -3)
-		dat += "<td><span class='bad'>250+bpm</span></td></tr>"
+		dat += "<td>[SPAN_BAD("250+bpm")]</td></tr>"
 	else if(scan["pulse"] == 0)
-		dat += "<td><span class='bad'>[scan["pulse"]]bpm</span></td></tr>"
+		dat += "<td>[SPAN_BAD("[scan["pulse"]]bpm")]</td></tr>"
 	else if(scan["pulse"] >= 140)
-		dat += "<td><span class='bad'>[scan["pulse"]]bpm</span></td></tr>"
+		dat += "<td>[SPAN_BAD("[scan["pulse"]]bpm")]</td></tr>"
 	else if(scan["pulse"] >= 120)
-		dat += "<td><span class='average'>[scan["pulse"]]bpm</span></td></tr>"
+		dat += "<td>[SPAN_CLASS("average", "[scan["pulse"]]bpm")]</td></tr>"
 	else
 		dat += "<td>[scan["pulse"]]bpm</td></tr>"
 	if(skill_level >= SKILL_ADEPT)
 		if((scan["pulse"] >= 140) || (scan["pulse"] == -3))
-			dat+= "<tr><td colspan='2'><span class='bad'>Patient is tachycardic.</span></td></tr>"
+			dat+= "<tr><td colspan='2'>[SPAN_BAD("Patient is tachycardic.")]</td></tr>"
 		else if(scan["pulse"] >= 120)
-			dat += "<tr><td colspan='2'><span class='average'>Patient is tachycardic.</span></td></tr>"
+			dat += "<tr><td colspan='2'>[SPAN_CLASS("average", "Patient is tachycardic.")]</td></tr>"
 		else if(scan["pulse"] == 0)
-			dat+= "<tr><td colspan='2'><span class='bad'>Patient's heart is stopped.</span></td></tr>"
+			dat+= "<tr><td colspan='2'>[SPAN_BAD("Patient's heart is stopped.")]</td></tr>"
 		else if((scan["pulse"] > 0) && (scan["pulse"] <= 40))
-			dat+= "<tr><td colspan='2'><span class='average'>Patient is bradycardic.</span></td></tr>"
+			dat+= "<tr><td colspan='2'>[SPAN_CLASS("average", "Patient is bradycardic.")]</td></tr>"
 
 
 	var/ratio = scan["blood_volume"]/scan["blood_volume_max"]
 	dat += "<tr><td><strong>Blood pressure:</strong></td><td>[scan["blood_pressure"]] "
 	if(scan["blood_o2"] <= 70)
-		dat += "(<span class='bad'>[scan["blood_o2"]]% blood oxygenation</span>)</td></tr>"
+		dat += "([SPAN_BAD("[scan["blood_o2"]]% blood oxygenation")])</td></tr>"
 	else if(scan["blood_o2"] <= 85)
-		dat += "(<span class='average'>[scan["blood_o2"]]% blood oxygenation</span>)</td></tr>"
+		dat += "([SPAN_CLASS("average", "[scan["blood_o2"]]% blood oxygenation")])</td></tr>"
 	else if(scan["blood_o2"] <= 90)
-		dat += "(<span class='oxyloss'>[scan["blood_o2"]]% blood oxygenation</span>)</td></tr>"
+		dat += "([SPAN_CLASS("oxyloss", "[scan["blood_o2"]]% blood oxygenation")])</td></tr>"
 	else
 		dat += "([scan["blood_o2"]]% blood oxygenation)</td></tr>"
 
@@ -207,7 +210,7 @@
 
 	if(skill_level >= SKILL_ADEPT)
 		if(ratio <= 0.70)
-			dat += "<tr><td colspan='2'><span class='bad'>Patient is in hypovolemic shock. Transfusion highly recommended.</span></td></tr>"
+			dat += "<tr><td colspan='2'>[SPAN_BAD("Patient is in hypovolemic shock. Transfusion highly recommended.")]</td></tr>"
 
 	// Body temperature.
 	/*
@@ -242,13 +245,13 @@
 		//Immune System
 		/*
 			<tr><td colspan='2'><center>Antibody levels and immune system performance are at 100% of baseline.</center></td></tr>
-			<tr><td colspan='2'><span class='bad'><center>Viral Pathogen detected in blood stream.</center></span></td></tr>
-			<tr><td colspan='2'><span class='bad'><center>Large growth detected in frontal lobe, possibly cancerous.</center></span></td></tr>
+			<tr><td colspan='2'>[SPAN_BAD("<center>Viral Pathogen detected in blood stream.</center>")]</td></tr>
+			<tr><td colspan='2'>[SPAN_BAD("<center>Large growth detected in frontal lobe, possibly cancerous.</center>")]</td></tr>
 		*/
 		dat += "<tr><td colspan = '2'>Antibody levels and immune system perfomance are at [scan["immune_system"]*100]% of baseline.</td></tr>"
 
 		if(scan["worms"])
-			dat += "<tr><td colspan='2'><span class='bad'><center>Large growth detected in frontal lobe, possibly cancerous.</center></span></td></tr>"
+			dat += "<tr><td colspan='2'>[SPAN_BAD("<center>Large growth detected in frontal lobe, possibly cancerous.</center>")]</td></tr>"
 
 		//Reagent scan
 		/*
@@ -266,7 +269,7 @@
 			dat += "<tr><td colspan='2'>Beneficial reagents detected in subject's bloodstream:</td></tr>"
 			dat += subdat
 		if(other_reagent)
-			dat += "<tr><td colspan='2'><span class='average'>Warning: Unknown substance detected in subject's blood.</span></td></tr>"
+			dat += "<tr><td colspan='2'>[SPAN_CLASS("average", "Warning: Unknown substance detected in subject's blood.")]</td></tr>"
 
 	//summary for the medically disinclined.
 	/*
@@ -279,10 +282,10 @@
 
 	return dat
 
-/proc/display_medical_data_body(var/list/scan, skill_level = SKILL_DEFAULT)
+/proc/display_medical_data_body(list/scan, skill_level = SKILL_DEFAULT)
 	//In case of problems, abort.
 	if(!scan["name"])
-		return "<center><span class='bad'><strong>SCAN READOUT ERROR.</strong></span></center>"
+		return "<center>[SPAN_BAD("<strong>SCAN READOUT ERROR.</strong>")]</center>"
 
 	var/list/subdat = list()
 	var/dat = list()
@@ -292,9 +295,9 @@
 				<table class='block' border='1' width='95%'>
 					<tr><th colspan='3'>Body Status</th></tr>
 					<tr><th>Organ</th><th>Damage</th><th>Status</th></tr>
-					<tr><td>head</td><td><span class='brute'>Severe physical trauma</span><br><span class='burn'>Severe burns</span></td><td><span class='bad'>Bleeding</span></td></td>
+					<tr><td>head</td><td>[SPAN_CLASS("brute", "Severe physical trauma")]<br>[SPAN_CLASS("burn", "Severe burns")]</td><td>[SPAN_BAD("Bleeding")]</td></td>
 					<tr><td>upper body</td><td>None</td><td></td></tr>
-					<tr><td>right arm</td><td>N/A</td><td><span class='bad'>Missing</span></td></tr>
+					<tr><td>right arm</td><td>N/A</td><td>[SPAN_BAD("Missing")]</td></tr>
 	*/
 
 	dat += "<tr><td colspan='2'><center><table class='block' border='1' width='95%'><tr><th colspan='3'>Body Status</th></tr>"
@@ -307,9 +310,9 @@
 		var/row = list()
 		row += "<tr><td>[E["name"]]</td>"
 		if(E["is_stump"])
-			row += "<td><span class='bad'>Missing</span></td>"
+			row += "<td><span style='font-weight: bold; color: [COLOR_MEDICAL_MISSING]'>Missing</span></td>"
 			if(skill_level >= SKILL_ADEPT)
-				row += "<td><span class='bad'>[english_list(E["scan_results"], nothing_text = "&nbsp;")]</span></td>"
+				row += "<td><span>[english_list(E["scan_results"], nothing_text = "&nbsp;")]</span></td>"
 			else
 				row += "<td>&nbsp;</td>"
 		else
@@ -318,17 +321,17 @@
 				row += "None</td>"
 			if(skill_level < SKILL_ADEPT)
 				if(E["brute_dam"])
-					row += "<span class='bad'>Damaged</span><br>"
+					row += "<span style='font-weight: bold; color: [COLOR_MEDICAL_BRUTE]'>Damaged</span><br>"
 				if(E["burn_dam"])
-					row += "<span class='average'>Burned</span></td>"
+					row += "<span style='font-weight: bold; color: [COLOR_MEDICAL_BURN]'>Burned</span></td>"
 			else
 				if(E["brute_dam"])
-					row += "<span class='bad'>[capitalize(get_wound_severity(E["brute_ratio"], (E["limb_flags"] & ORGAN_FLAG_HEALS_OVERKILL)))] physical trauma</span><br>"
+					row += "<span style='font-weight: bold; color: [COLOR_MEDICAL_BRUTE]'>[capitalize(get_wound_severity(E["brute_ratio"], (E["limb_flags"] & ORGAN_FLAG_HEALS_OVERKILL)))] physical trauma</span><br>"
 				if(E["burn_dam"])
-					row += "<span class='average'>[capitalize(get_wound_severity(E["burn_ratio"], (E["limb_flags"] & ORGAN_FLAG_HEALS_OVERKILL)))] burns</span></td>"
+					row += "<span style='font-weight: bold; color: [COLOR_MEDICAL_BURN]'>[capitalize(get_wound_severity(E["burn_ratio"], (E["limb_flags"] & ORGAN_FLAG_HEALS_OVERKILL)))] burns</span></td>"
 			if(skill_level >= SKILL_ADEPT)
 				row += "<td>"
-				row += "<span class='bad'>[english_list(E["scan_results"], nothing_text="&nbsp;")]</span>"
+				row += "<span>[english_list(E["scan_results"], nothing_text="&nbsp;")]</span>"
 				row += "</td>"
 			else
 				row += "<td>&nbsp;</td>"
@@ -342,11 +345,11 @@
 	/*
 					<tr><th colspan='3'><center>Internal Organs</center></th></tr>
 					<tr><td>heart</td<td>None</td><td></td>
-					<tr><td>lungs</td><td><span class='bad'>Severe</td><td>Decaying</span></td>
-					<tr><td colspan='3'><span class='bad'>No liver detected.</span></td></tr>
+					<tr><td>lungs</td><td>[SPAN_BAD(Severe")]</td><td>[SPAN_BAD("Decaying")]</td>
+					<tr><td colspan='3'>[SPAN_BAD("No liver detected.")]</td></tr>
 					<tr><td colspan='3'>No appendix detected.</td></tr>
-					<tr><td colspan='3'><span class='bad'>Cateracts detected.</span></td></tr>
-					<tr><td colspan='3'><span class='average'>Retinal misalignment detected.</span></td></tr>
+					<tr><td colspan='3'>[SPAN_BAD("Cateracts detected.")]</td></tr>
+					<tr><td colspan='3'>[SPAN_CLASS("average", "Retinal misalignment detected.")]</td></tr>
 				</table>
 			</center></td></tr>
 	*/
@@ -357,15 +360,15 @@
 			var/inflamed = I["inflamed"] || FALSE
 			row += "<tr><td><span[inflamed ? " class='bad'" : ""]>[I["name"]]</span></td>"
 			if(I["is_broken"])
-				row += "<td><span class='bad'>Severe</span></td>"
+				row += "<td>[SPAN_BAD("Severe")]</td>"
 			else if(I["is_bruised"])
-				row += "<td><span class='average'>Moderate</span></td>"
+				row += "<td>[SPAN_CLASS("average", "Moderate")]</td>"
 			else if(I["is_damaged"])
-				row += "<td><span class='mild'>Minor</span></td>"
+				row += "<td>[SPAN_CLASS("mild", "Minor")]</td>"
 			else
 				row += "<td>None</td>"
 			row += "<td>"
-			row += "<span class='bad'>[english_list(I["scan_results"], nothing_text="&nbsp;")]</span>"
+			row += "[SPAN_BAD("[english_list(I["scan_results"], nothing_text="&nbsp;")]")]"
 			row += "</td></tr>"
 			subdat += jointext(row, null)
 
@@ -375,23 +378,23 @@
 		dat += subdat
 	for(var/organ_name in scan["missing_organs"])
 		if(organ_name != "appendix")
-			dat += "<tr><td colspan='3'><span class='bad'>No [organ_name] detected.</span></td></tr>"
+			dat += "<tr><td colspan='3'>[SPAN_BAD("No [organ_name] detected.")]</td></tr>"
 		else
 			dat += "<tr><td colspan='3'>No [organ_name] detected.</td></tr>"
 
 	if(scan["blind"])
-		dat += "<tr><td colspan='3'><span class='bad'>Cataracts detected.</span></td></tr>"
+		dat += "<tr><td colspan='3'>[SPAN_BAD("Cataracts detected.")]</td></tr>"
 	else if(scan["nearsight"])
-		dat += "<tr><td colspan='3'><span class='average'>Retinal misalignment detected.</span></td></tr>"
+		dat += "<tr><td colspan='3'>[SPAN_CLASS("average", "Retinal misalignment detected.")]</td></tr>"
 	dat += "</table></center></td></tr>"
 
 	dat = JOINTEXT(dat)
 	return dat
 
-/proc/display_medical_data(var/list/scan, skill_level = SKILL_DEFAULT, var/TT = FALSE)
+/proc/display_medical_data(list/scan, skill_level = SKILL_DEFAULT, TT = FALSE)
 	//In case of problems, abort.
 	if(!scan["name"])
-		return "<center><span class='bad'><strong>SCAN READOUT ERROR.</strong></span></center>"
+		return "<center>[SPAN_BAD("<strong>SCAN READOUT ERROR.</strong>")]</center>"
 
 	var/dat = list()
 
@@ -413,27 +416,27 @@
 	dat = JOINTEXT(dat)
 	return dat
 
-/proc/get_severity(amount, var/tag = FALSE)
+/proc/get_severity(amount, tag = FALSE)
 	if(!amount)
 		return "none"
 
 	if(amount > 50)
 		if(tag)
-			. = "<span class='bad'>severe</span>"
+			. = SPAN_BAD("severe")
 		else
 			. = "severe"
 	else if(amount > 25)
 		if(tag)
-			. = "<span class='bad'>significant</span>"
+			. = SPAN_BAD("significant")
 		else
 			. = "significant"
 	else if(amount > 10)
 		if(tag)
-			. = "<span class='average'>moderate</span>"
+			. = SPAN_CLASS("average", "moderate")
 		else
 			. = "moderate"
 	else
 		if (tag)
-			. = "<span class='mild'>minor</span>"
+			. = SPAN_CLASS("mild", "minor")
 		else
 			. = "minor"

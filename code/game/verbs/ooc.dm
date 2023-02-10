@@ -2,14 +2,14 @@
 	set name = "OOC"
 	set category = "OOC"
 
-	sanitize_and_communicate(/decl/communication_channel/ooc, src, message)
+	sanitize_and_communicate(/singleton/communication_channel/ooc, src, message)
 
 /client/verb/looc(message as text)
 	set name = "LOOC"
 	set desc = "Local OOC, seen only by those in view. Remember: Just because you see someone that doesn't mean they see you."
 	set category = "OOC"
 
-	sanitize_and_communicate(/decl/communication_channel/ooc/looc, src, message)
+	sanitize_and_communicate(/singleton/communication_channel/ooc/looc, src, message)
 
 /client/verb/fix_chat()
 	set name = "Fix Chat"
@@ -18,7 +18,7 @@
 		var/action = alert(src, "Invalid Chat Output data found!\nRecreate data?", "Wot?", "Recreate Chat Output data", "Cancel")
 		if (action != "Recreate Chat Output data")
 			return
-		chatOutput = new /datum/chatOutput(src)
+		chatOutput = new /datum/chatOutput (src)
 		chatOutput.start()
 		action = alert(src, "Goon chat reloading, wait a bit and tell me if it's fixed", "", "Fixed", "Nope")
 		if (action == "Fixed")

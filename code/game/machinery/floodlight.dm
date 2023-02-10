@@ -6,13 +6,13 @@
 	icon_state = "flood00"
 	density = TRUE
 	obj_flags = OBJ_FLAG_ROTATABLE
-	construct_state = /decl/machine_construction/default/panel_closed
+	construct_state = /singleton/machine_construction/default/panel_closed
 	uncreated_component_parts = null
 
 	active_power_usage = 200
 	power_channel = LIGHT
 	use_power = POWER_USE_OFF
-	
+
 	machine_name = "emergency floodlight"
 	machine_desc = "A portable, battery-powered LED flood lamp used to illuminate large areas."
 
@@ -28,7 +28,7 @@
 	. = ..()
 	if(!. || !use_power) return
 
-	if(stat & NOPOWER)
+	if(!is_powered())
 		turn_off(1)
 		return
 
@@ -40,8 +40,8 @@
 				set_light(l_max_bright, l_inner_range, l_outer_range)
 
 // Returns 0 on failure and 1 on success
-/obj/machinery/floodlight/proc/turn_on(var/loud = 0)
-	if(stat & NOPOWER)
+/obj/machinery/floodlight/proc/turn_on(loud = 0)
+	if(!is_powered())
 		return 0
 
 	set_light(l_max_bright, l_inner_range, l_outer_range)
@@ -53,7 +53,7 @@
 		playsound(src.loc, 'sound/effects/flashlight.ogg', 50, 0)
 	return 1
 
-/obj/machinery/floodlight/proc/turn_off(var/loud = 0)
+/obj/machinery/floodlight/proc/turn_off(loud = 0)
 	set_light(0, 0)
 	update_use_power(POWER_USE_OFF)
 	update_icon()
@@ -76,7 +76,7 @@
 
 /obj/machinery/floodlight/RefreshParts()//if they're insane enough to modify a floodlight, let them
 	..()
-	var/light_mod = Clamp(total_component_rating_of_type(/obj/item/stock_parts/capacitor), 0, 10)
+	var/light_mod = clamp(total_component_rating_of_type(/obj/item/stock_parts/capacitor), 0, 10)
 	l_max_bright = light_mod? light_mod*0.01 + initial(l_max_bright) : initial(l_max_bright)/2 //gives us between 0.8-0.9 with capacitor, or 0.4 without one
 	l_inner_range = light_mod     + initial(l_inner_range)
 	l_outer_range = light_mod*1.5 + initial(l_outer_range)

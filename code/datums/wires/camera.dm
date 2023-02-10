@@ -21,18 +21,18 @@
 	. += "<br>\n[(C.alarm_on ? "The alarm light is on." : "The alarm light is off.")]"
 	return .
 
-/datum/wires/camera/CanUse(var/mob/living/L)
+/datum/wires/camera/CanUse(mob/living/L)
 	var/obj/machinery/camera/C = holder
 	return C.panel_open
 
-var/const/CAMERA_WIRE_FOCUS = 1
-var/const/CAMERA_WIRE_POWER = 2
-var/const/CAMERA_WIRE_LIGHT = 4
-var/const/CAMERA_WIRE_ALARM = 8
-var/const/CAMERA_WIRE_NOTHING1 = 16
-var/const/CAMERA_WIRE_NOTHING2 = 32
+var/global/const/CAMERA_WIRE_FOCUS = 1
+var/global/const/CAMERA_WIRE_POWER = 2
+var/global/const/CAMERA_WIRE_LIGHT = 4
+var/global/const/CAMERA_WIRE_ALARM = 8
+var/global/const/CAMERA_WIRE_NOTHING1 = 16
+var/global/const/CAMERA_WIRE_NOTHING2 = 32
 
-/datum/wires/camera/UpdateCut(var/index, var/mended)
+/datum/wires/camera/UpdateCut(index, mended)
 	var/obj/machinery/camera/C = holder
 
 	switch(index)
@@ -54,7 +54,7 @@ var/const/CAMERA_WIRE_NOTHING2 = 32
 				C.cancelCameraAlarm()
 	return
 
-/datum/wires/camera/UpdatePulsed(var/index)
+/datum/wires/camera/UpdatePulsed(index)
 	var/obj/machinery/camera/C = holder
 	if(IsIndexCut(index))
 		return

@@ -27,7 +27,7 @@ GLOBAL_DATUM_INIT(foundation_agents, /datum/antagonist/foundation, new)
 	faction = "foundation"
 	id_type = /obj/item/card/id/foundation
 
-/datum/antagonist/foundation/equip(var/mob/living/carbon/human/player)
+/datum/antagonist/foundation/equip(mob/living/carbon/human/player)
 
 	if(!..())
 		return 0
@@ -38,7 +38,7 @@ GLOBAL_DATUM_INIT(foundation_agents, /datum/antagonist/foundation, new)
 	player.set_psi_rank(PSI_ENERGISTICS,   3, defer_update = TRUE)
 	player.psi.update(TRUE)
 
-	var/decl/hierarchy/outfit/foundation = outfit_by_type(/decl/hierarchy/outfit/foundation)
+	var/singleton/hierarchy/outfit/foundation = outfit_by_type(/singleton/hierarchy/outfit/foundation)
 	foundation.equip(player)
 
 	create_id("Foundation Agent", player)

@@ -32,7 +32,7 @@
 		)
 	var/shackle = 0
 
-/obj/item/organ/internal/posibrain/New(var/mob/living/carbon/H)
+/obj/item/organ/internal/posibrain/New(mob/living/carbon/H)
 	..()
 	if(!brainmob && H)
 		init(H)
@@ -42,7 +42,7 @@
 	if (!is_processing)
 		START_PROCESSING(SSobj, src)
 
-/obj/item/organ/internal/posibrain/proc/init(var/mob/living/carbon/H)
+/obj/item/organ/internal/posibrain/proc/init(mob/living/carbon/H)
 	brainmob = new(src)
 
 	if(istype(H))
@@ -98,7 +98,7 @@
 	if (!protected)
 		var/datum/ghosttrap/T = get_ghost_trap("positronic brain")
 		T.request_player(brainmob, "Someone is requesting a personality for a positronic brain.", 60 SECONDS)
-	searching = addtimer(CALLBACK(src, .proc/cancel_search), 60 SECONDS, TIMER_UNIQUE | TIMER_STOPPABLE)
+	searching = addtimer(new Callback(src, .proc/cancel_search), 60 SECONDS, TIMER_UNIQUE | TIMER_STOPPABLE)
 	icon_state = "posibrain-searching"
 
 /obj/item/organ/internal/posibrain/proc/cancel_search()
@@ -112,7 +112,7 @@
 			if (sneaky)
 				brainmob.real_name = sneaky
 				brainmob.SetName(brainmob.real_name)
-				UpdateNames() 
+				UpdateNames()
 		else
 			to_chat(brainmob, SPAN_NOTICE("You're safe! Your brain didn't manage to replace you. This time."))
 	else
@@ -190,7 +190,7 @@
 	src.brainmob.SetName("[pick(list("PBU","HIU","SINA","ARMA","OSI"))]-[random_id(type,100,999)]")
 	src.brainmob.real_name = src.brainmob.name
 
-/obj/item/organ/internal/posibrain/proc/shackle(var/given_lawset)
+/obj/item/organ/internal/posibrain/proc/shackle(given_lawset)
 	if(given_lawset)
 		brainmob.laws = given_lawset
 	shackle = 1
@@ -213,7 +213,7 @@
 	if(shackle)
 		overlays |= image('icons/obj/assemblies.dmi', "posibrain-shackles")
 
-/obj/item/organ/internal/posibrain/proc/transfer_identity(var/mob/living/carbon/H)
+/obj/item/organ/internal/posibrain/proc/transfer_identity(mob/living/carbon/H)
 	if(H && H.mind)
 		brainmob.set_stat(CONSCIOUS)
 		H.mind.transfer_to(brainmob)
@@ -224,7 +224,7 @@
 
 	update_icon()
 
-	to_chat(brainmob, "<span class='notice'>You feel slightly disoriented. That's normal when you're just \a [initial(src.name)].</span>")
+	to_chat(brainmob, SPAN_NOTICE("You feel slightly disoriented. That's normal when you're just \a [initial(src.name)]."))
 	callHook("debrain", list(brainmob))
 
 /obj/item/organ/internal/posibrain/Process()
@@ -268,7 +268,7 @@
 					S.start()
 
 
-/obj/item/organ/internal/posibrain/removed(var/mob/living/user)
+/obj/item/organ/internal/posibrain/removed(mob/living/user)
 	if(!istype(owner))
 		return ..()
 	UpdateNames()
@@ -286,7 +286,7 @@
 		return
 	SetName("\the [initial(name)]")
 
-/obj/item/organ/internal/posibrain/replaced(var/mob/living/target)
+/obj/item/organ/internal/posibrain/replaced(mob/living/target)
 
 	if(!..()) return 0
 
@@ -310,7 +310,8 @@
 	if (self && self.mind)
 		self.visible_message("\The [self] unceremoniously falls lifeless.")
 		var/mob/observer/ghost/G = self.ghostize(FALSE)
-		G.timeofdeath = world.time
+		if (G) // In case of aghosts or keyless mobs
+			G.timeofdeath = world.time
 
 /*
 	This is for law stuff directly. This is how a human mob will be able to communicate with the posi_brainmob in the
@@ -330,4 +331,3 @@
 
 
 	brainmob.open_subsystem(/datum/nano_module/law_manager, usr)
-	

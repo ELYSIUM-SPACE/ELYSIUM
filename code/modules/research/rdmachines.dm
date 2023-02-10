@@ -2,7 +2,7 @@
 
 //All devices that link into the R&D console fall into thise type for easy identification and some shared procs.
 
-var/list/default_material_composition = list(MATERIAL_STEEL = 0, MATERIAL_ALUMINIUM = 0, MATERIAL_PLASTIC = 0, MATERIAL_GLASS = 0, MATERIAL_GOLD = 0, MATERIAL_SILVER = 0, MATERIAL_PHORON = 0, MATERIAL_URANIUM = 0, MATERIAL_DIAMOND = 0)
+var/global/list/default_material_composition = list(MATERIAL_STEEL = 0, MATERIAL_ALUMINIUM = 0, MATERIAL_PLASTIC = 0, MATERIAL_GLASS = 0, MATERIAL_GOLD = 0, MATERIAL_SILVER = 0, MATERIAL_PHORON = 0, MATERIAL_URANIUM = 0, MATERIAL_DIAMOND = 0)
 /obj/machinery/r_n_d
 	name = "R&D Device"
 	icon = 'icons/obj/machines/research.dmi'
@@ -25,11 +25,11 @@ var/list/default_material_composition = list(MATERIAL_STEEL = 0, MATERIAL_ALUMIN
 	return ..()
 
 
-/obj/machinery/r_n_d/proc/eject(var/material, var/amount)
+/obj/machinery/r_n_d/proc/eject(material, amount)
 	if(!(material in materials))
 		return
 	var/material/mat = SSmaterials.get_material_by_name(material)
-	var/eject = Clamp(round(materials[material] / mat.units_per_sheet), 0, amount)
+	var/eject = clamp(round(materials[material] / mat.units_per_sheet), 0, amount)
 	if(eject > 0)
 		mat.place_sheet(loc, eject)
 		materials[material] -= eject * mat.units_per_sheet
@@ -38,7 +38,7 @@ var/list/default_material_composition = list(MATERIAL_STEEL = 0, MATERIAL_ALUMIN
 	for(var/f in materials)
 		. += materials[f]
 
-/obj/machinery/r_n_d/proc/getLackingMaterials(var/datum/design/D)
+/obj/machinery/r_n_d/proc/getLackingMaterials(datum/design/D)
 	var/list/ret = list()
 	for(var/M in D.materials)
 		if(materials[M] < D.materials[M])

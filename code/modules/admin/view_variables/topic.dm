@@ -29,7 +29,7 @@
 		if(!istype(H))
 			to_chat(usr, "This can only be used on instances of type /mob/living/carbon/human")
 			return
-		var/decl/hierarchy/outfit/outfit = input("Select outfit.", "Select equipment.") as null|anything in outfits()
+		var/singleton/hierarchy/outfit/outfit = input("Select outfit.", "Select equipment.") as null|anything in outfits()
 		if(!outfit)
 			return
 
@@ -81,9 +81,9 @@
 		if(D && watched_variables[D])
 			watched_variables[D] -= href_list["varnameunwatch"]
 			var/list/datums_watched_vars = watched_variables[D]
-			if(!datums_watched_vars.len)
+			if(!length(datums_watched_vars))
 				watched_variables -= D
-		if(!watched_variables.len && watched_variables_window.is_processing)
+		if(!length(watched_variables) && watched_variables_window.is_processing)
 			STOP_PROCESSING(SSprocessing, watched_variables_window)
 
 	else if(href_list["mob_player_panel"])
@@ -201,7 +201,7 @@
 					to_chat(usr, "No objects of this type exist")
 					return
 				log_admin("[key_name(usr)] deleted all objects of type [O_type] ([i] objects deleted)")
-				message_admins("<span class='notice'>[key_name(usr)] deleted all objects of type [O_type] ([i] objects deleted)</span>")
+				message_admins(SPAN_NOTICE("[key_name(usr)] deleted all objects of type [O_type] ([i] objects deleted)"))
 			if("Type and subtypes")
 				var/i = 0
 				for(var/obj/Obj in world)
@@ -212,7 +212,7 @@
 					to_chat(usr, "No objects of this type exist")
 					return
 				log_admin("[key_name(usr)] deleted all objects of type or subtype of [O_type] ([i] objects deleted)")
-				message_admins("<span class='notice'>[key_name(usr)] deleted all objects of type or subtype of [O_type] ([i] objects deleted)</span>")
+				message_admins(SPAN_NOTICE("[key_name(usr)] deleted all objects of type or subtype of [O_type] ([i] objects deleted)"))
 
 	else if(href_list["explode"])
 		if(!check_rights(R_DEBUG|R_FUN))	return
@@ -365,7 +365,7 @@
 			to_chat(usr, "This can only be done to instances of type /mob")
 			return
 
-		if(!H.languages.len)
+		if(!length(H.languages))
 			to_chat(usr, "This mob knows no languages.")
 			return
 
@@ -530,7 +530,7 @@
 
 		if(amount != 0)
 			log_admin("[key_name(usr)] dealt [amount] amount of [Text] damage to [L]")
-			message_admins("<span class='notice'>[key_name(usr)] dealt [amount] amount of [Text] damage to [L]</span>")
+			message_admins(SPAN_NOTICE("[key_name(usr)] dealt [amount] amount of [Text] damage to [L]"))
 			href_list["datumrefresh"] = href_list["mobToDamage"]
 
 	else if(href_list["call_proc"])
@@ -563,6 +563,30 @@
 			return
 		var/mob/living/L = locate(href_list["debug_mob_ai"])
 		log_debug("AI Debugging toggled [L.ai_holder.debug() ? "ON" : "OFF"] for \the [L]")
+
+	else if (href_list["addmovementhandler"])
+		if (!check_rights(R_DEBUG))
+			return
+		var/datum/movement_handler/M = input("Add a movement handler to the mob.", "Movement Handler", null) as null|anything in typesof(/datum/movement_handler)
+		if (!M)
+			return
+		var/atom/movable/A = locate(href_list["addmovementhandler"])
+		if (!istype(A))
+			return
+		A.AddMovementHandler(M)
+		log_and_message_admins("Added the [M] movement handler to \the [A]")
+
+	else if (href_list["removemovementhandler"])
+		if (!check_rights(R_DEBUG))
+			return
+		var/atom/movable/A = locate(href_list["removemovementhandler"])
+		if (!istype(A))
+			return
+		var/choice = input("Remove which movement handler?", "Movement Handler", null) as null|anything in A.movement_handlers
+		if (!choice)
+			return
+		A.RemoveMovementHandler(choice)
+		log_and_message_admins("Removed the [choice] movement handler from \the [A]")
 
 	if(href_list["datumrefresh"])
 		var/datum/DAT = locate(href_list["datumrefresh"])

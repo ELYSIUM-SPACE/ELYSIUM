@@ -76,7 +76,7 @@
 			to_chat(user, "The [src] is already empty.")
 
 
-/obj/item/portable_destructive_analyzer/afterattack(var/atom/target, var/mob/living/user, proximity)
+/obj/item/portable_destructive_analyzer/afterattack(atom/target, mob/living/user, proximity)
 	if(!target)
 		return
 	if(!proximity)
@@ -91,7 +91,7 @@
 		I.forceMove(src)
 		loaded_item = I
 		for(var/mob/M in viewers())
-			M.show_message(text("<span class='notice'>[user] adds the [I] to the [src].</span>"), 1)
+			M.show_message(text(SPAN_NOTICE("[user] adds the [I] to the [src].")), 1)
 		desc = initial(desc) + "<br>It is holding \the [loaded_item]."
 		flick("portable_analyzer_load", src)
 		icon_state = "portable_analyzer_full"
@@ -173,7 +173,7 @@
 	icon = 'icons/obj/weapons/other.dmi'
 	icon_state = "autoharvester"
 
-/obj/item/robot_harvester/afterattack(var/atom/target, var/mob/living/user, proximity)
+/obj/item/robot_harvester/afterattack(atom/target, mob/living/user, proximity)
 	if(!target)
 		return
 	if(!proximity)
@@ -270,8 +270,8 @@
 /obj/item/form_printer/attack_self(mob/user as mob)
 	deploy_paper(get_turf(src))
 
-/obj/item/form_printer/proc/deploy_paper(var/turf/T)
-	T.visible_message("<span class='notice'>\The [src.loc] dispenses a sheet of crisp white paper.</span>")
+/obj/item/form_printer/proc/deploy_paper(turf/T)
+	T.visible_message(SPAN_NOTICE("\The [src.loc] dispenses a sheet of crisp white paper."))
 	new /obj/item/paper(T)
 
 
@@ -303,6 +303,7 @@
 	desc = "Hand-held device which allows rapid deployment and removal of inflatables."
 	icon = 'icons/obj/storage.dmi'
 	icon_state = "inf_deployer"
+	item_state = "RPED"
 	w_class = ITEM_SIZE_LARGE
 
 	var/stored_walls = 5
@@ -337,7 +338,7 @@
 		return
 
 	if (istype(target, /obj/structure/inflatable))
-		if (!do_after(user, 0.5 SECONDS, target))
+		if (!do_after(user, 0.5 SECONDS, target, DO_PUBLIC_UNIQUE))
 			return
 		playsound(loc, 'sound/machines/hiss.ogg', 75, 1)
 		var/obj/item/inflatable/I
@@ -359,7 +360,7 @@
 		)
 		if (I)
 			var/obj/structure/inflatable/S = target
-			I.health = S.health
+			copy_health(S, I)
 		qdel(target)
 
 	else if (istype(target, /obj/item/inflatable))
@@ -391,7 +392,7 @@
 		if (obstruction)
 			to_chat(user, SPAN_WARNING("\The [english_list(obstruction)] is blocking that spot."))
 			return
-		if (!do_after(user, 0.5 SECONDS))
+		if (!do_after(user, 0.5 SECONDS, T, DO_PUBLIC_UNIQUE))
 			return
 		obstruction = T.get_obstruction()
 		if (obstruction)
@@ -422,6 +423,8 @@
 	var/object_type                    //The types of object the rack holds (subtypes are allowed).
 	var/interact_type                  //Things of this type will trigger attack_hand when attacked by this.
 	var/capacity = 1                   //How many objects can be held.
+	/// Whether to attack_self on objects as they're deployed
+	var/attack_self_on_deploy = TRUE
 	var/list/obj/item/held = list()    //What is being held.
 
 /obj/item/robot_rack/examine(mob/user)
@@ -435,28 +438,39 @@
 
 /obj/item/robot_rack/attack_self(mob/user)
 	if(!length(held))
-		to_chat(user, "<span class='notice'>The rack is empty.</span>")
+		to_chat(user, SPAN_WARNING("\The [src] is empty."))
 		return
 	var/obj/item/R = held[length(held)]
 	R.dropInto(loc)
 	held -= R
-	R.attack_self(user) // deploy it
-	to_chat(user, "<span class='notice'>You deploy [R].</span>")
+	if (attack_self_on_deploy)
+		R.attack_self(user) // deploy it
+	to_chat(user, SPAN_NOTICE("You deploy \a [R]."))
 	R.add_fingerprint(user)
 
 /obj/item/robot_rack/resolve_attackby(obj/O, mob/user, click_params)
 	if(istype(O, object_type))
 		if(length(held) < capacity)
-			to_chat(user, "<span class='notice'>You collect [O].</span>")
+			to_chat(user, SPAN_NOTICE("You collect \the [O]."))
 			O.forceMove(src)
 			held += O
 			return
-		to_chat(user, "<span class='notice'>\The [src] is full and can't store any more items.</span>")
+		to_chat(user, SPAN_WARNING("\The [src] is full and can't store any more items."))
 		return
 	if(istype(O, interact_type))
 		O.attack_hand(user)
 		return
 	. = ..()
+
+/obj/item/robot_rack/verb/empty_rack()
+	set name = "Empty Rack"
+	set desc = "Empty all items from the rack."
+	set category = "Silicon Commands"
+	if(!length(held))
+		to_chat(usr, SPAN_WARNING("\The [src] is empty."))
+		return
+	while(length(held))
+		attack_self(usr)
 
 /obj/item/bioreactor
 	name = "bioreactor"
@@ -471,15 +485,15 @@
 		/obj/item/reagent_containers/food/snacks/fish = 1.5
 	)
 
-/obj/item/bioreactor/attack_self(var/mob/user)
-	if(contents.len >= 1)
+/obj/item/bioreactor/attack_self(mob/user)
+	if(length(contents) >= 1)
 		var/obj/item/removing = contents[1]
 		user.put_in_hands(removing)
 		to_chat(user, SPAN_NOTICE("You remove \the [removing] from \the [src]."))
 	else
 		to_chat(user, SPAN_WARNING("There is nothing loaded into \the [src]."))
 
-/obj/item/bioreactor/afterattack(var/atom/movable/target, var/mob/user, var/proximity_flag, var/click_parameters)
+/obj/item/bioreactor/afterattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag || !istype(target))
 		return
 
@@ -490,7 +504,7 @@
 		to_chat(user, SPAN_WARNING("\The [target] cannot be used as fuel by \the [src]."))
 		return
 
-	if(contents.len >= max_fuel_items)
+	if(length(contents) >= max_fuel_items)
 		to_chat(user, SPAN_WARNING("\The [src] can fit no more fuel inside."))
 		return
 	target.forceMove(src)
@@ -506,7 +520,7 @@
 
 /obj/item/bioreactor/Process()
 	var/mob/living/silicon/robot/R = loc
-	if(!istype(R) || !R.cell || R.cell.fully_charged() || !contents.len)
+	if(!istype(R) || !R.cell || R.cell.fully_charged() || !length(contents))
 		return
 
 	var/generating_power
@@ -517,7 +531,7 @@
 		if(istype(A, /obj/item/reagent_containers/food/snacks/grown))
 			generating_power = base_power_generation
 			using_item = A
-		else 
+		else
 			for(var/fuel_type in fuel_types)
 				if(istype(A, fuel_type))
 					generating_power = fuel_types[fuel_type] * base_power_generation

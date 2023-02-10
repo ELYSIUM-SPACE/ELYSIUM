@@ -7,7 +7,7 @@
 	round_description = "You are about to enter an asteroid belt!"
 	extended_round_description = "We are on an unavoidable collision course with an asteroid field. You have only a moment to prepare before you are barraged by dust and meteors. As if it was not enough, all kinds of negative events seem to happen more frequently. Good Luck."
 	config_tag = "meteor"
-	required_players = 15				// Definitely not good for low-pop
+	required_players = 1				// GET ON JUX'S WILD RIDE
 	votable = 1
 	shuttle_delay = 2
 	var/next_wave = INFINITY			// Set in post_setup() correctly to take into account potential longer pre-start times.
@@ -28,7 +28,7 @@
 	event_delay_mod_moderate = 0.5		// As a bonus, more frequent events.
 	event_delay_mod_major = 0.3
 
-/decl/vv_set_handler/meteor_severity_handler
+/singleton/vv_set_handler/meteor_severity_handler
 	handled_type = /datum/game_mode/meteor
 	handled_vars = list(
 		"meteor_severity" = /datum/game_mode/meteor/proc/set_meteor_severity,
@@ -36,7 +36,7 @@
 	)
 
 /datum/game_mode/meteor/proc/set_meteor_severity(value)
-	meteor_severity = Clamp(value, 0, maximal_severity)
+	meteor_severity = clamp(value, 0, maximal_severity)
 
 /datum/game_mode/meteor/proc/set_meteor_wave_delay(value)
 	meteor_wave_delay = max(10 SECONDS, value)

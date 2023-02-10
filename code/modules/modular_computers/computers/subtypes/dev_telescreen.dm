@@ -12,7 +12,7 @@
 	max_hardware_size = 2
 	steel_sheet_cost = 10
 	light_strength = 4
-	max_damage = 300
+	health_max = 300
 	broken_damage = 150
 	w_class = ITEM_SIZE_HUGE
 
@@ -21,7 +21,7 @@
 	// Allows us to create "north bump" "south bump" etc. named objects, for more comfortable mapping.
 	name = "telescreen"
 
-/obj/item/modular_computer/telescreen/attackby(var/obj/item/W as obj, var/mob/user as mob)
+/obj/item/modular_computer/telescreen/attackby(obj/item/W as obj, mob/user as mob)
 	if(isCrowbar(W))
 		if(anchored)
 			shutdown_computer()

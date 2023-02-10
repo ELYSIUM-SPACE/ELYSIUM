@@ -145,7 +145,7 @@
 /datum/gear/head/surgical
 	display_name = "standard surgical caps"
 	path = /obj/item/clothing/head/surgery
-	flags = GEAR_HAS_TYPE_SELECTION
+	flags = GEAR_HAS_TYPE_SELECTION | GEAR_HAS_NO_CUSTOMIZATION
 
 /datum/gear/head/surgical/custom
 	display_name = "surgical cap, colour select"
@@ -176,6 +176,7 @@
 /datum/gear/head/corporateberet
 	display_name = "corporate beret selection"
 	path = /obj/item/clothing/head/beret
+	flags = GEAR_HAS_NO_CUSTOMIZATION
 
 /datum/gear/head/corporateberet/New()
 	..()
@@ -183,3 +184,9 @@
 	options += /obj/item/clothing/head/beret/pcrc
 	options += /obj/item/clothing/head/beret/saare
 	gear_tweaks += new/datum/gear_tweak/path/specified_types_list(options)
+
+/datum/gear/head/deckcrew
+	display_name = "deck crew helmet"
+	path = /obj/item/clothing/head/deckcrew
+	flags = GEAR_HAS_TYPE_SELECTION
+	description = "A helmet with ear protection and a visor, used in hangars on many ships."

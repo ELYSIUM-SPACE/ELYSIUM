@@ -11,21 +11,22 @@ SUBSYSTEM_DEF(robots)
 
 	var/list/mob_types_by_title = list(
 		"robot, flying"  = /mob/living/silicon/robot/flying,
-		"drone, flying"  = /mob/living/silicon/robot/flying,
-		"cyborg, flying" = /mob/living/silicon/robot/flying
+		"drone, flying"  = /mob/living/silicon/robot/flying
 	)
 
 	var/list/mmi_types_by_title = list(
-		"cyborg"         = /obj/item/device/mmi,
 		"robot"          = /obj/item/organ/internal/posibrain,
 		"drone"          = /obj/item/device/mmi/digital/robot,
-		"cyborg, flying" = /obj/item/device/mmi,
 		"robot, flying"  = /obj/item/organ/internal/posibrain,
 		"drone, flying"  = /obj/item/device/mmi/digital/robot
 	)
 
-/datum/controller/subsystem/robots/Initialize()
-	. = ..()
+
+/datum/controller/subsystem/robots/UpdateStat(time)
+	return
+
+
+/datum/controller/subsystem/robots/Initialize(start_uptime)
 
 	// This is done via loop instead of just assignment in order to trim associations.
 	for(var/title in (mob_types_by_title|mmi_types_by_title))
@@ -49,7 +50,7 @@ SUBSYSTEM_DEF(robots)
 			all_module_names |= module_name
 	all_module_names = sortTim(all_module_names, /proc/cmp_text_asc)
 
-/datum/controller/subsystem/robots/proc/get_available_modules(var/module_category, var/crisis_mode, var/include_override)
+/datum/controller/subsystem/robots/proc/get_available_modules(module_category, crisis_mode, include_override)
 	. = list()
 	if(modules_by_category[module_category])
 		. += modules_by_category[module_category]
@@ -60,8 +61,8 @@ SUBSYSTEM_DEF(robots)
 		if(modules[include_override])
 			.[include_override] = modules[include_override]
 
-/datum/controller/subsystem/robots/proc/get_mmi_type_by_title(var/check_title)
+/datum/controller/subsystem/robots/proc/get_mmi_type_by_title(check_title)
 	. = mmi_types_by_title[lowertext(trim(check_title))] || /obj/item/device/mmi
 
-/datum/controller/subsystem/robots/proc/get_mob_type_by_title(var/check_title)
+/datum/controller/subsystem/robots/proc/get_mob_type_by_title(check_title)
 	. = mob_types_by_title[lowertext(trim(check_title))] || /mob/living/silicon/robot

@@ -10,7 +10,7 @@
 	minimal_player_age = 14
 	account_allowed = 0
 	economic_power = 0
-	outfit_type = /decl/hierarchy/outfit/job/silicon/ai
+	outfit_type = /singleton/hierarchy/outfit/job/silicon/ai
 	loadout_allowed = FALSE
 	hud_icon = "hudblank"
 	skill_points = 0
@@ -39,14 +39,14 @@
 		SKILL_CHEMISTRY     = SKILL_EXPERT
 	)
 
-/datum/job/ai/equip(var/mob/living/carbon/human/H)
+/datum/job/ai/equip(mob/living/carbon/human/H)
 	if(!H)	return 0
 	return 1
 
 /datum/job/ai/is_position_available()
-	return (empty_playable_ai_cores.len != 0)
+	return (length(empty_playable_ai_cores) != 0)
 
-/datum/job/ai/handle_variant_join(var/mob/living/carbon/human/H, var/alt_title)
+/datum/job/ai/handle_variant_join(mob/living/carbon/human/H, alt_title)
 	return H
 
 /datum/job/cyborg
@@ -60,15 +60,15 @@
 	account_allowed = 0
 	economic_power = 0
 	loadout_allowed = FALSE
-	outfit_type = /decl/hierarchy/outfit/job/silicon/cyborg
+	outfit_type = /singleton/hierarchy/outfit/job/silicon/cyborg
 	hud_icon = "hudblank"
 	skill_points = 0
 	no_skill_buffs = TRUE
 
-/datum/job/cyborg/handle_variant_join(var/mob/living/carbon/human/H, var/alt_title)
+/datum/job/cyborg/handle_variant_join(mob/living/carbon/human/H, alt_title)
 	return H && H.Robotize(SSrobots.get_mob_type_by_title(alt_title || title))
 
-/datum/job/cyborg/equip(var/mob/living/carbon/human/H)
+/datum/job/cyborg/equip(mob/living/carbon/human/H)
 	return !!H
 
 /datum/job/cyborg/New()
