@@ -541,8 +541,8 @@ GLOBAL_LIST_INIT(zombie_species, list(\
 	var/decl/hierarchy/outfit/outfit = pick(
 		/decl/hierarchy/outfit/job/science/scientist,\
 		/decl/hierarchy/outfit/job/engineering/engineer,\
-		/decl/hierarchy/outfit/job/cargo/mining,\
-		/decl/hierarchy/outfit/job/medical/chemist\
+		/decl/hierarchy/outfit/job/vstar/miner,\
+		/decl/hierarchy/outfit/job/medical/pharmacist\
 	)
 	outfit = outfit_by_type(outfit)
 	outfit.equip(src, OUTFIT_ADJUSTMENT_SKIP_SURVIVAL_GEAR)

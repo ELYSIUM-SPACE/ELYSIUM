@@ -30,8 +30,10 @@ GLOBAL_DATUM_INIT(revs, /datum/antagonist/revolutionary, new)
 	faction = "revolutionary"
 
 	blacklisted_jobs = list(/datum/job/ai, /datum/job/cyborg)
-	restricted_jobs = list(/datum/job/captain, /datum/job/hop, /datum/job/hos, /datum/job/chief_engineer, /datum/job/rd, /datum/job/cmo, /datum/job/lawyer)
-	protected_jobs = list(/datum/job/officer, /datum/job/warden, /datum/job/detective)
+	//restricted_jobs = list(/datum/job/captain, /datum/job/hop, /datum/job/hos, /datum/job/chief_engineer, /datum/job/rd, /datum/job/cmo, /datum/job/lawyer)
+	restricted_jobs = list(/datum/job/director, /datum/job/secretary, /datum/job/sfp_curator, /datum/job/chief_engineer, /datum/job/dev_head, /datum/job/cmo)
+	//protected_jobs = list(/datum/job/officer, /datum/job/warden, /datum/job/detective)
+	protected_jobs = list(/datum/job/sfp_agent, /datum/job/sfp_curator, /datum/job/sfp_investigator)
 
 
 /datum/antagonist/revolutionary/create_global_objectives()

@@ -105,7 +105,7 @@
 
 /obj/effect/landmark/corpse/chef
 	name = "Chef"
-	corpse_outfits = list(/decl/hierarchy/outfit/job/service/chef)
+	corpse_outfits = list(/decl/hierarchy/outfit/job/hotel/cook)
 
 /obj/effect/landmark/corpse/doctor
 	name = "Doctor"
@@ -128,10 +128,10 @@
 
 /obj/effect/landmark/corpse/miner
 	name = "Miner"
-	corpse_outfits = list(/decl/hierarchy/outfit/job/cargo/mining)
+	corpse_outfits = list(/decl/hierarchy/outfit/job/vstar/miner)
 
 /obj/effect/landmark/corpse/miner/rig
-	corpse_outfits = list(/decl/hierarchy/outfit/job/cargo/mining/void)
+	corpse_outfits = list(/decl/hierarchy/outfit/job/vstar/miner/void)
 
 
 /obj/effect/landmark/corpse/bridgeofficer
