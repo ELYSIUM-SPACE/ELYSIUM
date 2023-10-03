@@ -2793,6 +2793,9 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 6
 	},
+/obj/effect/landmark/start{
+	name = "Chief Medical Officer"
+	},
 /turf/simulated/floor/carpet/red,
 /area/liberty/medbay/cmo)
 "fU" = (
@@ -2850,6 +2853,9 @@
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
+	},
+/obj/effect/landmark/start{
+	name = "Medical Doctor"
 	},
 /turf/simulated/floor/wood/maple,
 /area/liberty/medbay/oncall_room)
@@ -3247,6 +3253,9 @@
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 8
 	},
+/obj/effect/landmark/start{
+	name = "Medical Doctor"
+	},
 /turf/simulated/floor/wood/maple,
 /area/liberty/medbay/oncall_room)
 "gP" = (
@@ -3641,6 +3650,9 @@
 	},
 /obj/effect/floor_decal/spline/fancy{
 	dir = 8
+	},
+/obj/effect/landmark/start{
+	name = "Psychologist"
 	},
 /turf/simulated/floor/wood,
 /area/liberty/psychologist/therapy_room)
@@ -9778,6 +9790,9 @@
 /obj/structure/bed/chair/comfy/black{
 	dir = 4
 	},
+/obj/effect/landmark/start{
+	name = "Corporate Representative"
+	},
 /turf/simulated/floor/carpet/blue,
 /area/liberty/corporate_office)
 "td" = (
@@ -11849,6 +11864,9 @@
 /obj/structure/bed/chair/comfy/black{
 	dir = 4
 	},
+/obj/effect/landmark/start{
+	name = "Private Eye"
+	},
 /turf/simulated/floor/carpet,
 /area/liberty/private_eye)
 "yd" = (
@@ -12638,6 +12656,9 @@
 "zG" = (
 /obj/structure/bed/chair/comfy/blue{
 	dir = 4
+	},
+/obj/effect/landmark/start{
+	name = "SCG Consul"
 	},
 /turf/simulated/floor/carpet/blue2,
 /area/liberty/scg/representative)
@@ -16985,6 +17006,9 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 6
 	},
+/obj/effect/landmark/start{
+	name = "Chaplain"
+	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/chapel/main)
 "Ll" = (
@@ -20226,6 +20250,9 @@
 "Tk" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 4
+	},
+/obj/effect/landmark/start{
+	name = "Janitor"
 	},
 /turf/simulated/floor/tiled/steel_grid,
 /area/liberty/janitor)
