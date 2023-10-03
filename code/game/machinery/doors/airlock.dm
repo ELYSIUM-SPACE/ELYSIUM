@@ -1485,3 +1485,14 @@ About the new airlock wires panel:
 		"toggle_door" = /decl/public_access/public_method/toggle_door,
 		"toggle_bolts" = /decl/public_access/public_method/airlock_toggle_bolts
 	)
+
+
+//--Temporary airlock as a hotfix for arrivals shuttle. Replace with proper solution when possible-----------
+//--Временный шлюз в качестве хотфикса для шаттла прибытия. Заменить на нормальное решение когда получится---
+
+/obj/machinery/door/airlock/external/arrivals
+
+/obj/machinery/door/airlock/external/arrivals/inherit_access_from_area()
+	return
+
+//-----------------------------------------------------------------------------------------------------------
