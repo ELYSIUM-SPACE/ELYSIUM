@@ -245,11 +245,11 @@
 /obj/effect/floor_decal/corner/blue/border{
 	dir = 1
 	},
-/obj/structure/sign/double/icarus/solgovflag/left{
-	pixel_y = 32
-	},
 /obj/effect/floor_decal/steeldecal/steel_decals4{
 	dir = 4
+	},
+/obj/structure/sign/double/solgovflag/right{
+	pixel_y = 32
 	},
 /turf/simulated/floor/tiled,
 /area/lucius/crew_quarters)
@@ -260,9 +260,6 @@
 	},
 /obj/effect/floor_decal/corner/blue/border{
 	dir = 1
-	},
-/obj/structure/sign/double/icarus/solgovflag/right{
-	pixel_y = 32
 	},
 /obj/effect/floor_decal/steeldecal/steel_decals4{
 	dir = 9
@@ -1418,6 +1415,9 @@
 	},
 /obj/machinery/light{
 	dir = 1
+	},
+/obj/structure/sign/double/solgovflag/left{
+	pixel_y = 32
 	},
 /turf/simulated/floor/tiled,
 /area/lucius/crew_quarters)
@@ -3070,6 +3070,12 @@
 	dir = 8
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/obj/effect/landmark/start{
+	name = "Captain"
+	},
+/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
+	name = "Captain"
+	},
 /turf/simulated/floor/tiled/white,
 /area/lucius/cryo)
 "hM" = (
@@ -3247,11 +3253,9 @@
 /turf/simulated/floor/plating,
 /area/lucius/xeno)
 "iq" = (
-/obj/structure/sign/icarus/solgov{
-	pixel_y = 32
-	},
+/obj/structure/sign/icarus_solgov,
 /turf/simulated/floor/shuttle_ceiling/sol,
-/area/lucius/maintenance/first/port)
+/area/lucius/bridge)
 "ir" = (
 /turf/simulated/wall/r_wall/hull,
 /area/lucius/maintenance/first/port)
@@ -3455,6 +3459,12 @@
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 1
+	},
+/obj/effect/landmark/start{
+	name = "Deck Technician"
+	},
+/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
+	name = "Deck Technician"
 	},
 /turf/simulated/floor/tiled/white,
 /area/lucius/cryo)
@@ -4038,7 +4048,6 @@
 /area/lucius/crew_quarters)
 "rG" = (
 /obj/structure/table/steel,
-/obj/item/device/pipe_painter,
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 1
 	},
@@ -4340,6 +4349,12 @@
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/effect/landmark/start{
+	name = "Scientist"
+	},
+/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
+	name = "Scientist"
 	},
 /turf/simulated/floor/tiled/white,
 /area/lucius/cryo)
@@ -5053,6 +5068,19 @@
 /obj/effect/floor_decal/industrial/warning,
 /turf/simulated/floor/tiled/white,
 /area/lucius/xeno)
+"Ke" = (
+/obj/effect/floor_decal/industrial/warning{
+	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/obj/effect/landmark/start{
+	name = "EXO Pilot"
+	},
+/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
+	name = "EXO Pilot"
+	},
+/turf/simulated/floor/tiled/white,
+/area/lucius/cryo)
 "Km" = (
 /obj/structure/navlight_shuttle/red{
 	dir = 8
@@ -5275,6 +5303,12 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/effect/landmark/start{
+	name = "Expeditor"
+	},
+/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
+	name = "Expeditor"
+	},
 /turf/simulated/floor/tiled/white,
 /area/lucius/cryo)
 "NZ" = (
@@ -5296,6 +5330,12 @@
 	d1 = 1;
 	d2 = 4;
 	icon_state = "1-4"
+	},
+/obj/effect/landmark/start{
+	name = "Field Medic"
+	},
+/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
+	name = "Field Medic"
 	},
 /turf/simulated/floor/tiled/white,
 /area/lucius/cryo)
@@ -5968,12 +6008,6 @@
 /obj/machinery/telecomms/processor/preset_lucius,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/lucius/telecomms)
-"ZJ" = (
-/obj/structure/sign/icarus/solgov{
-	pixel_y = -32
-	},
-/turf/simulated/floor/shuttle_ceiling/sol,
-/area/lucius/maintenance/first/starboard)
 
 (1,1,1) = {"
 aa
@@ -19610,7 +19644,7 @@ aF
 dz
 dz
 aF
-aF
+iq
 aF
 dz
 dz
@@ -24245,7 +24279,7 @@ aa
 aa
 aa
 aa
-ZJ
+ad
 DT
 al
 aD
@@ -24259,7 +24293,7 @@ eR
 fs
 fI
 hL
-hL
+Ke
 jp
 is
 lT
@@ -24267,7 +24301,7 @@ eY
 iI
 iO
 ir
-iq
+wb
 aa
 aa
 aa
