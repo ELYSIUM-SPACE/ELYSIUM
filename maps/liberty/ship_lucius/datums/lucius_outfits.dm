@@ -24,9 +24,9 @@
 	flags = OUTFIT_FLAGS_JOB_DEFAULT | OUTFIT_EXTENDED_SURVIVAL
 
 /decl/hierarchy/outfit/job/sev/scientist
-	name = OUTFIT_JOB_NAME("Scientist")
+	name = OUTFIT_JOB_NAME("EC Researcher")
 	id_types = list(/obj/item/card/id/sev/scientist)
 
-/decl/hierarchy/outfit/job/sev
+/decl/hierarchy/outfit/job/sev/sev_expeditor
 	name = OUTFIT_JOB_NAME("Expeditor")
 	id_types = list(/obj/item/card/id/sev)
