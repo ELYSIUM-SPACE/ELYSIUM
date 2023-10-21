@@ -14,9 +14,11 @@
 	job_access_type = /datum/job/secretary
 
 /obj/item/card/id/silver/consul
+	desc = "A silver card which shows honour and dedication."
 	job_access_type = /datum/job/consul
 
 /obj/item/card/id/silver/corpo_representative
+	desc = "A silver card which shows honour and dedication."
 	job_access_type = /datum/job/corpo_representative
 
 //----------Sol Federal Police---------------
@@ -139,7 +141,7 @@
 	job_access_type = /datum/job/freelancer
 
 /obj/item/card/id/civilian/freelancer_pilot
-	job_access_type = /datum/job/freelancer
+	job_access_type = /datum/job/freelancer_pilot
 	extra_details = list("onegoldstripe")
 
 /obj/item/card/id/civilian/farmer

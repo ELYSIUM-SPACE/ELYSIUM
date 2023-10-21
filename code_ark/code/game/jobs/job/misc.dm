@@ -183,7 +183,7 @@
 	economic_power = 3
 	access = list(priveye)
 	minimal_access = list(priveye)
-	outfit_type = /decl/hierarchy/outfit/job/visitor
+	outfit_type = /decl/hierarchy/outfit/job/pvt_eye
 
 //--------------------------------------------
 
@@ -198,7 +198,7 @@
 	economic_power = 3
 	access = list(maint)
 	minimal_access = list(maint)
-	outfit_type = /decl/hierarchy/outfit/job/visitor
+	outfit_type = /decl/hierarchy/outfit/job/freelancer
 
 //--------------------------------------------
 
@@ -211,9 +211,9 @@
 	spawn_positions = 1
 	supervisors = "the secretary"
 	economic_power = 3
-	access = list(bebo, maint)
-	minimal_access = list(bebo, maint)
-	outfit_type = /decl/hierarchy/outfit/job/visitor
+	access = list(maint, bebo)
+	minimal_access = list(maint, bebo)
+	outfit_type = /decl/hierarchy/outfit/job/freelancer_pilot
 
 //--------------------------------------------
 
