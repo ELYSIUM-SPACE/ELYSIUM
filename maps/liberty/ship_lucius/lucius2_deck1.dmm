@@ -3073,9 +3073,6 @@
 /obj/effect/landmark/start{
 	name = "Captain"
 	},
-/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
-	name = "Captain"
-	},
 /turf/simulated/floor/tiled/white,
 /area/lucius/cryo)
 "hM" = (
@@ -3461,9 +3458,6 @@
 	dir = 1
 	},
 /obj/effect/landmark/start{
-	name = "Deck Technician"
-	},
-/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
 	name = "Deck Technician"
 	},
 /turf/simulated/floor/tiled/white,
@@ -4351,10 +4345,7 @@
 	icon_state = "1-2"
 	},
 /obj/effect/landmark/start{
-	name = "Scientist"
-	},
-/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
-	name = "Scientist"
+	name = "EC Researcher"
 	},
 /turf/simulated/floor/tiled/white,
 /area/lucius/cryo)
@@ -5076,9 +5067,6 @@
 /obj/effect/landmark/start{
 	name = "EXO Pilot"
 	},
-/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
-	name = "EXO Pilot"
-	},
 /turf/simulated/floor/tiled/white,
 /area/lucius/cryo)
 "Km" = (
@@ -5306,9 +5294,6 @@
 /obj/effect/landmark/start{
 	name = "Expeditor"
 	},
-/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
-	name = "Expeditor"
-	},
 /turf/simulated/floor/tiled/white,
 /area/lucius/cryo)
 "NZ" = (
@@ -5332,9 +5317,6 @@
 	icon_state = "1-4"
 	},
 /obj/effect/landmark/start{
-	name = "Field Medic"
-	},
-/obj/effect/submap_landmark/spawnpoint/lucius_crewman{
 	name = "Field Medic"
 	},
 /turf/simulated/floor/tiled/white,

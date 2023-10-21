@@ -628,8 +628,8 @@
 	},
 /obj/structure/cable/cyan{
 	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
+	d2 = 8;
+	icon_state = "2-8"
 	},
 /turf/simulated/floor/plating,
 /area/lucius/lazarev)
@@ -2761,7 +2761,6 @@
 /obj/effect/floor_decal/steeldecal/steel_decals6{
 	dir = 10
 	},
-/obj/structure/cable/cyan,
 /obj/machinery/power/apc/sol{
 	pixel_y = -24
 	},
