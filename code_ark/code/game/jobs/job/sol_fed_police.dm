@@ -10,8 +10,8 @@
 	selection_color = "#8e2929"
 	req_admin_notify = 1
 	economic_power = 10
-	access = list(sfphos, sfparmory, sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_hydroponics)
-	minimal_access = list(sfphos, sfparmory, sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_hydroponics)
+	access = list(access_sol_sfp, access_sol_sfp_command, access_brig, access_armory, sfphos, sfparmory, sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_external_airlocks, access_hydroponics)
+	minimal_access = list(access_sol_sfp, access_sol_sfp_command, access_brig, access_armory,  sfphos, sfparmory, sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_external_airlocks, access_hydroponics)
 	minimal_player_age = 14
 	outfit_type = /decl/hierarchy/outfit/job/security/sfp_curator
 
@@ -33,8 +33,8 @@
 	selection_color = "#601c1c"
 	//alt_titles = list("Forensic Technician" = /decl/hierarchy/outfit/job/security/detective/forensic)
 	economic_power = 5
-	access = list(sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_hydroponics)
-	minimal_access = list(sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_hydroponics)
+	access = list(access_sol_sfp, access_brig, access_armory, sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_external_airlocks, access_hydroponics)
+	minimal_access = list(access_sol_sfp, access_brig, access_armory, sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_external_airlocks, access_hydroponics)
 	minimal_player_age = 7
 	outfit_type = /decl/hierarchy/outfit/job/security/sfp_investigator
 
@@ -51,7 +51,7 @@
 	selection_color = "#601c1c"
 	//alt_titles = list("Junior Officer")
 	economic_power = 4
-	access = list(sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_hydroponics)
-	minimal_access = list(sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_hydroponics)
+	access = list(access_sol_sfp, access_brig, access_armory, sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_external_airlocks, access_hydroponics)
+	minimal_access = list(access_sol_sfp, access_brig, access_armory, sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, access_external_airlocks, koni, access_hydroponics)
 	minimal_player_age = 7
 	outfit_type = /decl/hierarchy/outfit/job/security/sfp_agent
