@@ -14,6 +14,9 @@
 	create_record = TRUE
 	available_by_default = TRUE
 
+	min_skill = list()
+	max_skill = list()
+	skill_points = 16
 
 /datum/job/submap/venturestar/vstar_leader
 	title = "Excavation Leader"
