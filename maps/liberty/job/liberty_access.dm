@@ -244,7 +244,7 @@ access_aft_chkp
 /var/const/access_director_office = "access_liberty_director_office"
 /datum/access/liberty/access_director_office
 	id = access_director_office
-	desc = "Director Apartment"
+	desc = "Director Office"
 	region = ACCESS_REGION_GENERAL
 
 // Apartaments
