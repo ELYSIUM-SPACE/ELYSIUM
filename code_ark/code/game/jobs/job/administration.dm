@@ -19,9 +19,9 @@ var/datum/announcement/minor/captain_announcement = new(do_newscast = 1)
 	ideal_character_age = 70 // Old geezer captains ftw
 
 	access = list(access_director_apartment, access_director_office, maint, cargonia, hangar, engmain, engpower, engatmos, engtcom,
-					access_hydroponics, shop, hstaff, hadmin, kitchen, cargoboss, access_aft_chkp, access_janitor, psycho, priveye, chapl, keno)
+					access_hydroponics, shop, hstaff, hadmin, kitchen, cargoboss, access_aft_chkp, access_janitor, psycho, priveye, chapl, keno, penth)
 	minimal_access = list(access_director_apartment, access_director_office, maint, cargonia, hangar, engmain, engpower, engatmos, engtcom,
-					access_hydroponics, shop, hstaff, hadmin, kitchen, cargoboss, access_aft_chkp, access_janitor, psycho, priveye, chapl, keno)
+					access_hydroponics, shop, hstaff, hadmin, kitchen, cargoboss, access_aft_chkp, access_janitor, psycho, priveye, chapl, keno, penth)
 
 	outfit_type = /decl/hierarchy/outfit/job/director
 
@@ -48,9 +48,9 @@ var/datum/announcement/minor/captain_announcement = new(do_newscast = 1)
 	ideal_character_age = 50
 
 	access = list(access_director_office, maint, hangar, cargonia, engmain, engtcom, access_hydroponics, shop, hstaff,
-					hadmin, kitchen, cargoboss, access_aft_chkp, access_janitor, chapl)
+					hadmin, kitchen, cargoboss, access_aft_chkp, access_janitor, chapl, penth)
 	minimal_access = list(access_director_office, maint, hangar, cargonia, engmain, engtcom, access_hydroponics, shop, hstaff,
-					hadmin, kitchen, cargoboss, access_aft_chkp, access_janitor, chapl)
+					hadmin, kitchen, cargoboss, access_aft_chkp, access_janitor, chapl, penth)
 
 	outfit_type = /decl/hierarchy/outfit/job/secretary
 

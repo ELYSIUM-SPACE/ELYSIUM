@@ -8,8 +8,8 @@
 	supervisors = "the hotel manager"
 	selection_color = COLOR_PALE_BTL_GREEN
 	economic_power = 1
-	access = list(hstaff, kitchen, maint, access_hydroponics)
-	minimal_access = list(hstaff, kitchen, maint, access_hydroponics)
+	access = list(hstaff, penth, kitchen, maint, access_hydroponics)
+	minimal_access = list(hstaff, penth, kitchen, maint, access_hydroponics)
 	outfit_type = /decl/hierarchy/outfit/job/hotel/service_officer
 
 //--------------------------------------------
@@ -54,6 +54,6 @@
 	supervisors = "the secretary"
 	selection_color = COLOR_BOTTLE_GREEN
 	economic_power = 1
-	access = list(hadmin, hstaff, kitchen, maint, access_hydroponics)
-	minimal_access = list(hadmin, hstaff, kitchen, maint, access_hydroponics)
+	access = list(hadmin, hstaff, penth, kitchen, maint, access_hydroponics)
+	minimal_access = list(hadmin, penth, hstaff, kitchen, maint, access_hydroponics)
 	outfit_type = /decl/hierarchy/outfit/job/hotel/manager
