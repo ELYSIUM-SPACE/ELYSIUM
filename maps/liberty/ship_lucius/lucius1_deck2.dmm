@@ -628,8 +628,8 @@
 	},
 /obj/structure/cable/cyan{
 	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
+	d2 = 8;
+	icon_state = "2-8"
 	},
 /turf/simulated/floor/plating,
 /area/lucius/lazarev)
@@ -794,10 +794,10 @@
 /turf/simulated/floor/tiled,
 /area/lucius/hallway/second)
 "cN" = (
+/obj/structure/railing/mapped,
 /obj/machinery/alarm/sol{
 	pixel_y = 24
 	},
-/obj/structure/railing/mapped,
 /obj/structure/stairs/east,
 /turf/simulated/floor/tiled,
 /area/lucius/hallway/second)
@@ -2761,7 +2761,6 @@
 /obj/effect/floor_decal/steeldecal/steel_decals6{
 	dir = 10
 	},
-/obj/structure/cable/cyan,
 /obj/machinery/power/apc/sol{
 	pixel_y = -24
 	},
@@ -3338,10 +3337,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/lucius/hangar)
-"jt" = (
-/obj/structure/sign/icarus/solgov,
-/turf/simulated/wall/r_wall/hull,
-/area/lucius/hallway/second)
 "jw" = (
 /obj/item/stack/tile/floor,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
@@ -5614,7 +5609,6 @@
 	},
 /obj/effect/floor_decal/industrial/outline/yellow,
 /obj/structure/closet/crate,
-/obj/item/device/radio/beacon,
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/lazarev)
 "Wb" = (
@@ -21670,7 +21664,7 @@ Sn
 aq
 WN
 WN
-jt
+aq
 aa
 aa
 aa

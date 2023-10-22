@@ -369,6 +369,7 @@ var/const/NO_EMAG_ACT = -50
 	
 	to_chat(client, SPAN_WARNING("Input must be an existing rank belonging to military_branch - [var_value] is invalid"))
 
+/*
 /obj/item/card/id/silver
 	name = "identification card"
 	desc = "A silver card which shows honour and dedication."
@@ -381,6 +382,7 @@ var/const/NO_EMAG_ACT = -50
 	job_access_type = /datum/job/captain
 	color = "#d4c780"
 	extra_details = list("goldstripe")
+*/
 
 /obj/item/card/id/syndicate_command
 	name = "syndicate ID card"
@@ -492,7 +494,9 @@ var/const/NO_EMAG_ACT = -50
 	access = get_access_ids()
 	..()
 
+
 // Department-flavor IDs
+/* LIBERTY code in code_ark/code/game/objects/items/weapons
 /obj/item/card/id/medical
 	name = "identification card"
 	desc = "A card issued to medical staff."
@@ -613,6 +617,7 @@ var/const/NO_EMAG_ACT = -50
 	name = "identification card"
 	desc = "A card which represents common sense and responsibility."
 	extra_details = list("goldstripe")
+*/
 
 /obj/item/card/id/merchant
 	name = "identification card"

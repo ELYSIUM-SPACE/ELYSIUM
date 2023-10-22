@@ -1,9 +1,15 @@
 // NECCESSARY INCLUDES
 
+	#include "venturestar_access.dm"
 	#include "venturestar_areas.dm"
 	#include "venturestar_shuttles.dm"
-	#include "job/access.dm"
+
 	#include "machinery/eng_equip.dm"
+
+	#include "datums/venturestar_jobs.dm"
+	#include "datums/venturestar_outfits.dm"
+
+	#include "obj/items/weapons/cards_ids.dm"
 
 // TEMPLATE
 
@@ -32,5 +38,5 @@
 /decl/submap_archetype/venturestar
 	descriptor = "IMV VentureStar"
 	map = "IMV VentureStar"
-	crew_jobs = list(null) // ADD JOBS
+	crew_jobs = list(/datum/job/submap/venturestar/vstar_miner, /datum/job/submap/venturestar/vstar_leader) // ADD JOBS
 //	call_webhook = WEBHOOK_SUBMAP_LOADED_LUCIUS

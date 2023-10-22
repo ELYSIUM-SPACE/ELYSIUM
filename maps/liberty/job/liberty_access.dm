@@ -97,6 +97,14 @@
 	desc = "SFP - Chief office"
 	region = ACCESS_REGION_GENERAL
 
+/var/const/access_aft_chkp = "access_liberty_aftchkp"
+/datum/access/liberty/sfphos
+	id = sfphos
+	desc = "SFP - Aft Docks Checkpoint"
+	region = ACCESS_REGION_GENERAL
+
+access_aft_chkp
+
 // SCG
 
 /var/const/scgdocks = "access_liberty_scgdocks"
@@ -227,10 +235,16 @@
 
 // Director
 
-/var/const/bigboss = "access_liberty_bigboss"
-/datum/access/liberty/bigboss
-	id = bigboss
-	desc = "Director"
+/var/const/access_director_apartment = "access_liberty_director_apartment"
+/datum/access/liberty/access_liberty_director_apartment
+	id = access_director_apartment
+	desc = "Director Apartment"
+	region = ACCESS_REGION_GENERAL
+
+/var/const/access_director_office = "access_liberty_director_office"
+/datum/access/liberty/access_director_office
+	id = access_director_office
+	desc = "Director Office"
 	region = ACCESS_REGION_GENERAL
 
 // Apartaments

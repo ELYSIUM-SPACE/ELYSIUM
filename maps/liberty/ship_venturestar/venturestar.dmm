@@ -671,6 +671,9 @@
 /obj/effect/floor_decal/steeldecal/steel_decals4{
 	dir = 5
 	},
+/obj/effect/landmark/start{
+	name = "Miner"
+	},
 /turf/simulated/floor/tiled,
 /area/venturestar/crew_quarters)
 "bA" = (
@@ -1194,6 +1197,9 @@
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 4
 	},
+/obj/effect/landmark/start{
+	name = "Miner"
+	},
 /turf/simulated/floor/tiled,
 /area/venturestar/crew_quarters)
 "cu" = (
@@ -1500,6 +1506,9 @@
 "cZ" = (
 /obj/effect/floor_decal/industrial/warning{
 	dir = 8
+	},
+/obj/effect/landmark/start{
+	name = "Miner"
 	},
 /turf/simulated/floor/tiled,
 /area/venturestar/crew_quarters)
@@ -2405,6 +2414,16 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /turf/simulated/floor/plating,
+/area/venturestar/crew_quarters)
+"Ee" = (
+/obj/item/stool/padded,
+/obj/effect/floor_decal/corner/yellow/border{
+	dir = 8
+	},
+/obj/effect/landmark/start{
+	name = "Excavation Leader"
+	},
+/turf/simulated/floor/tiled,
 /area/venturestar/crew_quarters)
 "Fj" = (
 /obj/machinery/atmospherics/pipe/simple/visible{
@@ -6593,7 +6612,7 @@ aM
 bU
 ce
 cj
-bU
+Ee
 cA
 by
 as

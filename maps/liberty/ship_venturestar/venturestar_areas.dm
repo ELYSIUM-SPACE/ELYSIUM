@@ -1,6 +1,6 @@
 /area/venturestar
 	icon = 'maps/liberty/ship_venturestar/icons/areas.dmi'
-	req_access = list("ACCESS_VENTURESTAR")
+	req_access = list(access_venturestar)
 
 /area/venturestar/engineering
 	name = "IMV VentureStar - Engineering"

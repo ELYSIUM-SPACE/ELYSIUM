@@ -88,7 +88,6 @@
 
 /area/liberty/director
 	sound_env = MEDIUM_SOFTFLOOR
-	req_access = list(bigboss)
 
 ////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////// LEVEL ZERO ////////////////////////////////////
@@ -105,7 +104,7 @@
 /area/liberty/maintenance/zero
 	name = "\improper Level Zero - Emergency Storage"
 	icon_state = "emergency_storage_00"
-
+	req_access = list(hangar)
 
 /area/liberty/maintenance/zero/hangar
 	name = "\improper Maintenance - Level Zero - Hangar"
@@ -171,6 +170,7 @@
 /area/liberty/hallway/zero/port_docks
 	name = "\improper Level Zero - Port Docks"
 	icon_state = "lvl_0_port_docks"
+	req_access = list(engatmos)
 
 // HANGAR
 
@@ -545,6 +545,7 @@
 /area/liberty/sfp/aft_checkpoint
 	name = "\improper Level One - Aft Docks Checkpoint"
 	icon_state = "aft_docks_checkpoint"
+	req_access = list(access_aft_chkp)
 
 /area/liberty/sfp/lobby
 	name = "\improper SFP Field Office - Lobby"
@@ -974,10 +975,12 @@
 /area/liberty/director/office
 	name = "\improper Director's Office - Working Area"
 	icon_state = "director_office"
+	req_access = list(access_director_office)
 
 /area/liberty/director/apartment
 	name = "\improper Director's Quarters - Apartment"
 	icon_state = "director_apartment"
+	req_access = list(access_director_apartment)
 
 // HOLODECK
 
@@ -1215,3 +1218,10 @@
 /area/liberty/bebop/service
 	name = "\improper IFV Bebop - Service Compartment"
 	icon_state = "bebop_service_compartment"
+
+
+/area/liberty/arrivals_shuttle
+	name = "\improper Arrivals Shuttle"
+	icon_state = "lvl_1_arrivals_shuttle"
+	sound_env = LARGE_ENCLOSED
+	requires_power = FALSE

@@ -237,6 +237,7 @@
 	name = "wall locker"
 	req_access = list(access_security)
 	closet_appearance = /decl/closet_appearance/wall
+	density = FALSE
 
 	//too small to put a man in
 	large = 0

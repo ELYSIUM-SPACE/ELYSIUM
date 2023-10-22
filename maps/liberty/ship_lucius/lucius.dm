@@ -5,6 +5,8 @@
 	#include "lucius_turfs.dm"
 
 	#include "datums/programs/card.dm"
+	#include "datums/lucius_jobs.dm"
+	#include "datums/lucius_outfits.dm"
 
 	#include "machinery/eng_equip.dm"
 	#include "machinery/tcomms.dm"
@@ -12,6 +14,8 @@
 	#include "structures/closets.dm"
 	#include "structures/font.dm"
 	#include "structures/signs.dm"
+
+	#include "obj/items/weapons/cards_ids.dm"
 
 // TEMPLATE
 
@@ -43,5 +47,9 @@
 /decl/submap_archetype/lucius
 	descriptor = "SEV Lucius"
 	map = "SEV Lucius"
-	crew_jobs = list(null) // ADD JOBS
+	crew_jobs = list(/datum/job/submap/lucius/sev_captain, /datum/job/submap/lucius/sev_pilot, /datum/job/submap/lucius/sev_tech,
+				/datum/job/submap/lucius/sev_medic, /datum/job/submap/lucius/sev_scientist, /datum/job/submap/lucius/sev_expeditor)
 //	call_webhook = WEBHOOK_SUBMAP_LOADED_LUCIUS
+
+/obj/effect/submap_landmark/spawnpoint/lucius_crewman
+	name = "SEV Lucious Crewmember"
