@@ -550,6 +550,7 @@
 /area/liberty/sfp/lobby
 	name = "\improper SFP Field Office - Lobby"
 	icon_state = "department_lobby"
+	req_access = list()
 
 /area/liberty/sfp/office
 	name = "\improper SFP Field Office - Office"
@@ -863,7 +864,6 @@
 	name = "\improper Level Two - Conference Room"
 	icon_state = "conference_room"
 	sound_env = LARGE_SOFTFLOOR
-	req_access = list(conference)
 
 // SCG
 
@@ -955,7 +955,7 @@
 /area/liberty/command
 	name = "\improper Command - Bridge"
 	icon_state = "command_bridge"
-	req_access = list(access_bridge)
+	req_access = list(engtcom)
 	// icon = 'icons/turf/areas.dmi'	// WIP
 
 // TELECOMMS
