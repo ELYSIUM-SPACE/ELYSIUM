@@ -4556,7 +4556,7 @@
 	name = "SFP Lockdown"
 	},
 /turf/simulated/floor/holofloor/tiled/dark,
-/area/liberty/sfp/lobby)
+/area/liberty/scg/docks)
 "aiG" = (
 /obj/machinery/door/firedoor,
 /obj/effect/floor_decal/industrial/hatch,
@@ -4572,7 +4572,7 @@
 	icon_state = "1-2"
 	},
 /turf/simulated/floor/holofloor/tiled/dark,
-/area/liberty/sfp/lobby)
+/area/liberty/scg/docks)
 "aiH" = (
 /obj/effect/floor_decal/corner/grey{
 	dir = 9
