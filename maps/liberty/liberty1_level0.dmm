@@ -3513,9 +3513,6 @@
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/obj/machinery/light{
-	dir = 4
-	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/zero/starboard)
 "agK" = (
@@ -3699,6 +3696,9 @@
 	dir = 6
 	},
 /obj/structure/closet/emcloset,
+/obj/machinery/light{
+	dir = 4
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/zero/starboard)
 "ahe" = (
@@ -7670,10 +7670,6 @@
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/casino)
-"aqc" = (
-/obj/effect/floor_decal/corner/grey/mono,
-/turf/simulated/floor/tiled/dark,
-/area/liberty/hotel/casino)
 "aqd" = (
 /obj/random/trash,
 /turf/simulated/floor/tiled/steel_grid,
@@ -7695,8 +7691,8 @@
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/casino)
 "aqg" = (
-/obj/effect/floor_decal/corner/grey/mono,
 /obj/machinery/light/colorable,
+/obj/effect/floor_decal/corner/black/diagonal,
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/casino)
 "aqh" = (
@@ -44465,7 +44461,7 @@ amq
 aoW
 aps
 apF
-aqc
+aoW
 aqg
 dkt
 aoI
@@ -44667,8 +44663,8 @@ anv
 apn
 aoW
 apG
-aqc
-aqc
+aoW
+aoW
 dkt
 aoJ
 kVt
@@ -53962,7 +53958,7 @@ yhw
 ahv
 ahD
 ahM
-ahQ
+aiM
 aif
 aiR
 aiR

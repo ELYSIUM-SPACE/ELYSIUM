@@ -3025,6 +3025,9 @@
 /obj/effect/floor_decal/corner/grey{
 	dir = 5
 	},
+/obj/machinery/light{
+	dir = 1
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "afS" = (
@@ -4047,13 +4050,13 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "ahD" = (
-/obj/structure/bed/chair{
-	dir = 4
-	},
 /obj/effect/floor_decal/corner/grey{
 	dir = 5
 	},
 /obj/effect/floor_decal/steeldecal/steel_decals4{
+	dir = 4
+	},
+/obj/structure/bed/chair/comfy/beige{
 	dir = 4
 	},
 /turf/simulated/floor/tiled/techmaint,
@@ -4063,17 +4066,20 @@
 /obj/effect/floor_decal/corner/grey{
 	dir = 5
 	},
+/obj/machinery/light/spot{
+	dir = 1
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "ahF" = (
-/obj/structure/bed/chair{
-	dir = 8
-	},
 /obj/effect/floor_decal/corner/grey{
 	dir = 5
 	},
 /obj/effect/floor_decal/steeldecal/steel_decals4{
 	dir = 9
+	},
+/obj/structure/bed/chair/comfy/beige{
+	dir = 8
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
@@ -4098,11 +4104,11 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "ahI" = (
-/obj/structure/bed/chair{
-	dir = 8
-	},
 /obj/effect/floor_decal/corner/grey{
 	dir = 5
+	},
+/obj/structure/bed/chair/comfy/beige{
+	dir = 8
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
@@ -8474,9 +8480,6 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "aqc" = (
-/obj/structure/bed/chair/bench/green/right{
-	dir = 8
-	},
 /obj/structure/window/reinforced{
 	dir = 4;
 	pixel_x = 3
@@ -8487,17 +8490,20 @@
 /obj/effect/floor_decal/corner/lightgrey/border{
 	dir = 5
 	},
+/obj/structure/bed/chair/bench/beige/right{
+	dir = 8
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "aqd" = (
-/obj/structure/bed/chair/bench/green/left{
-	dir = 4
-	},
 /obj/effect/floor_decal/borderfloor{
 	dir = 9
 	},
 /obj/effect/floor_decal/corner/lightgrey/border{
 	dir = 9
+	},
+/obj/structure/bed/chair/bench/beige/left{
+	dir = 4
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
@@ -9285,17 +9291,14 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "arG" = (
-/obj/machinery/light,
 /obj/effect/floor_decal/borderfloor,
 /obj/effect/floor_decal/corner/lightgrey/border,
 /obj/effect/floor_decal/borderfloor/corner2,
 /obj/effect/floor_decal/corner/lightgrey/bordercorner2,
+/obj/machinery/light/spot,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "arH" = (
-/obj/structure/bed/chair/bench/green/left{
-	dir = 8
-	},
 /obj/structure/window/reinforced{
 	dir = 4;
 	pixel_x = 3
@@ -9306,30 +9309,29 @@
 /obj/effect/floor_decal/corner/lightgrey/border{
 	dir = 6
 	},
+/obj/structure/bed/chair/bench/beige/left{
+	dir = 8
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "arI" = (
-/obj/structure/bed/chair/bench/green/right{
-	dir = 4
-	},
 /obj/effect/floor_decal/borderfloor{
 	dir = 10
 	},
 /obj/effect/floor_decal/corner/lightgrey/border{
 	dir = 10
 	},
+/obj/structure/bed/chair/bench/beige/right{
+	dir = 4
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "arJ" = (
-/obj/machinery/light,
 /obj/effect/floor_decal/borderfloor,
 /obj/effect/floor_decal/corner/lightgrey/border,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "arK" = (
-/obj/structure/bed/chair/bench/green/right{
-	dir = 4
-	},
 /obj/effect/floor_decal/borderfloor{
 	dir = 10
 	},
@@ -9340,10 +9342,12 @@
 	dir = 1;
 	pixel_y = -24
 	},
+/obj/structure/bed/chair/bench/beige/right{
+	dir = 4
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "arL" = (
-/obj/machinery/light,
 /obj/effect/floor_decal/borderfloor,
 /obj/effect/floor_decal/corner/lightgrey/border,
 /obj/effect/floor_decal/borderfloor/corner2{
@@ -9353,6 +9357,7 @@
 	dir = 9
 	},
 /obj/effect/floor_decal/industrial/warning/corner,
+/obj/machinery/light/spot,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "arM" = (
@@ -11076,14 +11081,14 @@
 /obj/machinery/light/spot{
 	dir = 1
 	},
-/obj/structure/bed/chair/bench/blue/right,
+/obj/structure/bed/chair/bench/beige/right,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_port)
 "avr" = (
 /obj/effect/floor_decal/corner/grey{
 	dir = 5
 	},
-/obj/structure/bed/chair/bench/blue/left,
+/obj/structure/bed/chair/bench/beige/left,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_port)
 "avs" = (
@@ -11121,7 +11126,7 @@
 /obj/effect/floor_decal/corner/grey/three_quarters{
 	dir = 1
 	},
-/obj/structure/bed/chair/bench/blue/right{
+/obj/structure/bed/chair/bench/beige/right{
 	dir = 8
 	},
 /turf/simulated/floor/tiled/techmaint,
@@ -11761,7 +11766,7 @@
 /obj/effect/floor_decal/corner/grey{
 	dir = 6
 	},
-/obj/structure/bed/chair/bench/blue/left{
+/obj/structure/bed/chair/bench/beige/left{
 	dir = 8
 	},
 /turf/simulated/floor/tiled/techmaint,
@@ -13645,7 +13650,7 @@
 /obj/effect/floor_decal/industrial/warning/corner{
 	dir = 8
 	},
-/obj/structure/bed/chair/bench/green/right,
+/obj/structure/bed/chair/bench/beige/right,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_port)
 "aAC" = (
@@ -13655,7 +13660,7 @@
 /obj/effect/floor_decal/corner/grey{
 	dir = 10
 	},
-/obj/structure/bed/chair/bench/green/left,
+/obj/structure/bed/chair/bench/beige/left,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_port)
 "aAD" = (
@@ -27092,6 +27097,13 @@
 /obj/effect/floor_decal/steeldecal/steel_decals6{
 	dir = 10
 	},
+/obj/machinery/button/blast_door{
+	dir = 4;
+	pixel_x = -22;
+	pixel_y = -5;
+	name = "cargo shutters control";
+	req_access = list("access_liberty_cargonia")
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/aft_port)
 "aYw" = (
@@ -28148,7 +28160,8 @@
 /obj/machinery/button/blast_door{
 	dir = 1;
 	pixel_x = -32;
-	pixel_y = -24
+	pixel_y = -24;
+	id_tag = "kitch_shut"
 	},
 /obj/machinery/light_switch{
 	dir = 1;
@@ -28816,15 +28829,19 @@
 	dir = 8;
 	pixel_x = -3
 	},
-/obj/machinery/door/blast/shutters,
+/obj/machinery/door/blast/shutters{
+	id_tag = "kitch_shut"
+	},
 /obj/machinery/door/firedoor,
 /turf/simulated/floor/tiled/old_cargo,
 /area/liberty/hotel/kitchen)
 "bbK" = (
 /obj/effect/paint_stripe/yellow,
 /obj/effect/wallframe_spawn/reinforced/no_grille,
-/obj/machinery/door/blast/shutters,
 /obj/machinery/door/firedoor,
+/obj/machinery/door/blast/shutters{
+	id_tag = "kitch_shut"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/hotel/kitchen)
 "bbL" = (
@@ -31425,6 +31442,12 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/machinery/button/blast_door{
+	pixel_x = 7;
+	pixel_y = 24;
+	name = "cargo shutters control";
+	req_access = list("access_liberty_cargonia")
+	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/cargo_bay/one)
 "bfY" = (
@@ -31507,7 +31530,9 @@
 /obj/effect/floor_decal/corner/grey{
 	dir = 6
 	},
-/obj/structure/flora/tree/jungle/random,
+/obj/structure/flora/tree/jungle/random{
+	density = 0
+	},
 /obj/structure/railing/mapped{
 	dir = 4
 	},
@@ -31558,7 +31583,8 @@
 	name = "Medbay Lockdown"
 	},
 /obj/machinery/door/airlock/multi_tile/glass/medical/liberty_inverted{
-	name = "Medical Bay"
+	name = "Medical Bay";
+	id_tag = "medbay_left_door"
 	},
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/medbay/hallway/one)
@@ -31907,6 +31933,7 @@
 /obj/effect/floor_decal/techfloor{
 	dir = 5
 	},
+/obj/machinery/computer/shuttle_control/lift/cargo,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/cargo_bay/one)
 "bgW" = (
@@ -36986,25 +37013,19 @@
 /area/liberty/hallway/one/aft_terminal)
 "bpt" = (
 /obj/effect/floor_decal/corner/grey{
-	dir = 10
+	dir = 6
 	},
-/obj/machinery/firealarm{
-	dir = 1;
-	pixel_y = -24
+/obj/effect/floor_decal/corner/grey{
+	dir = 1
 	},
-/obj/machinery/atmospherics/pipe/simple/hidden/supply{
+/obj/structure/window/reinforced{
 	dir = 4
 	},
-/obj/structure/cable/green{
-	d1 = 4;
-	d2 = 8;
-	icon_state = "4-8"
+/obj/structure/bed/chair/bench/beige/right{
+	dir = 8
 	},
-/obj/effect/floor_decal/steeldecal/steel_decals4{
-	dir = 5
-	},
-/obj/effect/floor_decal/steeldecal/steel_decals4{
-	dir = 9
+/obj/machinery/firealarm{
+	pixel_y = 18
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/aft_terminal)
@@ -40371,6 +40392,15 @@
 	},
 /turf/space,
 /area/space)
+"cWt" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 5
+	},
+/obj/effect/floor_decal/steeldecal/steel_decals4{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/one/fore_terminal)
 "deN" = (
 /obj/effect/landmark/start{
 	name = "Service Officer"
@@ -40447,6 +40477,25 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/aft_starboard)
+"iDw" = (
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/door/firedoor,
+/obj/machinery/door/blast/shutters/open{
+	id_tag = "medbay_lockdown";
+	name = "Medbay Lockdown"
+	},
+/obj/machinery/door/airlock/multi_tile/glass/medical/liberty_inverted{
+	name = "Medical Bay";
+	id_tag = "medbay_right_door"
+	},
+/turf/simulated/floor/tiled/white/monotile,
+/area/liberty/medbay/hallway/one)
+"iWc" = (
+/obj/effect/floor_decal/borderfloor,
+/obj/effect/floor_decal/corner/lightgrey/border,
+/obj/machinery/light/spot,
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/one/fore_terminal)
 "jib" = (
 /obj/structure/lattice,
 /obj/item/stack/material/rods,
@@ -61604,7 +61653,7 @@ aaa
 aaa
 adl
 agX
-ahF
+afS
 agn
 ajC
 akS
@@ -61651,7 +61700,7 @@ blC
 bmL
 bnE
 bot
-bpt
+bpx
 bqs
 brk
 brO
@@ -62016,7 +62065,7 @@ amg
 anB
 aoR
 aqe
-arJ
+iWc
 agW
 aun
 aun
@@ -62412,7 +62461,7 @@ aaa
 aaa
 adl
 agX
-ahD
+cWt
 agn
 ajz
 akR
@@ -62456,7 +62505,7 @@ aCf
 bjA
 awS
 blC
-bmK
+bpt
 bnD
 bos
 bps
@@ -66490,7 +66539,7 @@ bbo
 bct
 bdL
 bfe
-bgl
+iDw
 bhv
 biH
 bjJ
