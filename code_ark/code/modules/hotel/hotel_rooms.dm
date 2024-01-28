@@ -99,11 +99,12 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 	var/list/room_guests = list()
 	var/room_reservation_start_time
 	var/room_reservation_end_time
+	var/room_timer_id
 
 	var/list/room_log = list()
 
 	var/obj/machinery/hotel_room_sign/room_sign
-	var/obj/machinery/computer/hotel_room_controller/room_controller
+	var/obj/machinery/hotel_room_controller/room_controller
 	var/obj/machinery/door/airlock/room_airlock
 
 /datum/hotel_room/New(var/room_number, var/hotel_room_preset_path)
@@ -123,24 +124,25 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 				room_sign = S
 				break
 		if(!room_sign)
-			crash_with("A hotel room ([room_number]) is unable to find its sign!")
+			crash_with("Hotel room ([room_number]) is unable to find its sign!")
 
-		for(var/obj/machinery/computer/hotel_room_controller/C in world)
+		for(var/obj/machinery/hotel_room_controller/C in world)
 			if (C.id_tag == "room_[room_number]_controller")
 				room_controller = C
+				room_controller.hotel_room = src
 				break
 		if(!room_controller)
-			crash_with("A hotel room ([room_number]) is unable to find its controller!")
+			crash_with("Hotel room ([room_number]) is unable to find its controller!")
 
 		for(var/obj/machinery/door/airlock/A in world)
 			if (A.id_tag == "room_[room_number]_airlock")
 				room_airlock = A
 				break
 		if(!room_airlock)
-			crash_with("A hotel room ([room_number]) is unable to find its door!")
+			crash_with("Hotel room ([room_number]) is unable to find its door!")
 
 	else
-		crash_with("A hotel room preset ([room_number]) is incorrect!")
+		crash_with("Hotel room preset ([room_number]) is incorrect!")
 
 	room_airlock.autoset_access = 0
 	room_airlock.req_access = list(list("ACCESS_LIBERTY_HOTEL", "ACCESS_LIBERTY_ROOM_[room_number]"))
@@ -259,6 +261,15 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 		return 1
 	return 0
 
+/datum/hotel_room/proc/complete_reservation()
+	var/log_entry = "\[[stationtime2text()]\] The room reservation was created. Guest list: [room_guests2text()]. Reservation start / end times: [time2text(room_reservation_start_time, "hh:mm")] / [room_end_time2text()]."
+	room_log.Add(log_entry)
+	room_status = 3
+	room_timer_id = addtimer(CALLBACK(src, /datum/hotel_room/proc/end_reservation), room_reservation_end_time - station_time_in_ticks, TIMER_UNIQUE|TIMER_STOPPABLE)
+
+/datum/hotel_room/proc/end_reservation()
+	clear_reservation(auto_clear = 1)
+
 /datum/hotel_room/proc/clear_reservation(var/auto_clear = 0, var/terminal_clear = 0, var/just_reset = 0)
 
 	if(room_status != 2 && room_status != 3 && room_status != 0)  // If the room has no reservation or hasn't been broken there's nothing to cancel
@@ -272,9 +283,11 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 			log_entry = "\[[stationtime2text()]\] An active room reservation was canceled by [get_user_id_name()]. Keycards of the following guests were rendered invalid: [room_guests2text()]. Room turnover required."
 		room_status = 4
 		room_requests = 3
+		deltimer(room_timer_id)
 	else
-		if (room_reservation_end_time && room_status == 0) // A broken room with an end time set indicates an existing reservation
+		if (room_reservation_end_time && room_status == 0) // A broken room with end time set indicates an existing reservation
 			log_entry = "\[[stationtime2text()]\] An active room reservation was automatically cancelled due to a fatal error! Keycards of the following guests were rendered invalid: [room_guests2text()]. Room unusable."
+			deltimer(room_timer_id)
 		else
 			if(auto_clear)
 				log_entry = "\[[stationtime2text()]\] Room reservation process was automatically terminated due to a"
@@ -295,6 +308,7 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 
 	room_reservation_start_time = null
 	room_reservation_end_time = null
+	room_timer_id = null
 	for(var/obj/item/card/id/hotel_key/K in room_keys)
 		K.expire()
 	room_keys = list()

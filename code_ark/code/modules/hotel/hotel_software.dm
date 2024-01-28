@@ -6,7 +6,7 @@
 	program_icon_state = "crew"
 	program_key_state = "generic_key"
 	program_menu_icon = "calendar"
-	extended_desc = "This program connects to the hotel reservations system and enables it to be managed."
+	extended_desc = "This program connects to hotel reservations system and enables it to be managed."
 	required_access = "ACCESS_LIBERTY_HOTEL"
 	requires_ntnet = 1
 	network_destination = "hotel reservations database"
@@ -111,7 +111,7 @@
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		locate_n_check_terminal() // We'll try to locate the terminal upon the first use of the program
-		setup_hotel_rooms() // The proc does check if the rooms have already been set up
+		// setup_hotel_rooms() // disabled since terminal will initialize them
 		ui = new(user, src, ui_key, "hotel.tmpl", "Hotel Reservations System", 390, 550, state = state)
 		ui.set_initial_data(data)
 		ui.open()
@@ -234,9 +234,14 @@
 	if (href_list["room_cancel"])
 		if(!selected_room)
 			return TOPIC_REFRESH
+		if(selected_room.room_status == 3)
+			if(alert("This will immediately cancel the reservation, invalidating keycards of the guests. Are you sure?",,"Yes","No")=="No")
+				return
 		selected_room.clear_reservation(just_reset = text2num(href_list["room_cancel"]) == 2 ? 1 : 0)
 		if (program_mode == 4)
 			reservation_duration = 1
+			program_mode = 4
+			reservation_status = 0
 			selected_room.room_reservation_start_time = station_time_in_ticks
 			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
 		return TOPIC_REFRESH
@@ -256,17 +261,31 @@
 		return TOPIC_REFRESH
 
 	if(href_list["room_pay"])
+		if(department_accounts["Service"].suspended)
+			to_chat(usr, "<span class='warning'>Payment gateway currently is unable to process the transaction. Please, contact hotel bank account administration.</span>") // replace USR //////////////!!!
+			return TOPIC_REFRESH
 		if(locate_n_check_terminal() == 3)
 			reservation_status = 1
 			connected_terminal.program_mode = 4
 			connected_terminal.flick_screen("hotel_terminal_loading")
 		return TOPIC_REFRESH
 
+	if(href_list["payment_cancel"])
+		reservation_status = 0
+		connected_terminal.program_mode = LAZYLEN(selected_room.room_guests) >= selected_room.guest_count ? 1 : 3
+		connected_terminal.flick_screen("hotel_terminal_loading")
+		return TOPIC_REFRESH
+
 /datum/nano_module/hotel_reservations/proc/give_error()
+	if(timeout_timer_id)
+		deltimer(timeout_timer_id)
+		timeout_timer_id = null
+
 	if(reservation_status == 2)
 		program_mode = 1
 		selected_room = null
 		reservation_status = 0
+		return
 	if(!selected_room)
 		return
 	selected_room.clear_reservation(auto_clear = 1)
@@ -274,9 +293,6 @@
 	if(istype(connected_terminal))
 		connected_terminal.program_mode = 1
 		connected_terminal.flick_screen("hotel_terminal_loading")
-	if(timeout_timer_id)
-		deltimer(timeout_timer_id)
-		timeout_timer_id = null
 	program_mode = 0
 
 /datum/nano_module/hotel_reservations/proc/locate_n_check_terminal()
