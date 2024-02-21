@@ -1448,7 +1448,7 @@
 	dir = 8;
 	pixel_x = 21
 	},
-/obj/machinery/hotel_room_controller{
+/obj/machinery/computer/hotel_room_controller{
 	id_tag = "room_101_controller"
 	},
 /turf/simulated/floor/carpet/blue,
@@ -3793,7 +3793,7 @@
 	dir = 8;
 	pixel_x = 21
 	},
-/obj/machinery/hotel_room_controller{
+/obj/machinery/computer/hotel_room_controller{
 	id_tag = "room_104_controller"
 	},
 /turf/simulated/floor/carpet/blue,
@@ -10668,7 +10668,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
-/obj/machinery/hotel_room_controller{
+/obj/machinery/computer/hotel_room_controller{
 	id_tag = "room_201_controller"
 	},
 /turf/simulated/floor/wood/walnut,
@@ -12770,7 +12770,7 @@
 	dir = 8;
 	pixel_x = 21
 	},
-/obj/machinery/hotel_room_controller{
+/obj/machinery/computer/hotel_room_controller{
 	id_tag = "room_103_controller"
 	},
 /turf/simulated/floor/carpet/blue,
@@ -15218,7 +15218,7 @@
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
 	},
-/obj/machinery/hotel_room_controller{
+/obj/machinery/computer/hotel_room_controller{
 	id_tag = "room_201_controller"
 	},
 /turf/simulated/floor/wood/walnut,
@@ -15968,7 +15968,7 @@
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 1
 	},
-/obj/machinery/hotel_room_controller{
+/obj/machinery/computer/hotel_room_controller{
 	id_tag = "room_303_controller"
 	},
 /turf/simulated/floor/wood/walnut,
@@ -17168,7 +17168,7 @@
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 1
 	},
-/obj/machinery/hotel_room_controller{
+/obj/machinery/computer/hotel_room_controller{
 	id_tag = "room_301_controller"
 	},
 /turf/simulated/floor/wood/walnut,
@@ -19687,7 +19687,7 @@
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 1
 	},
-/obj/machinery/hotel_room_controller{
+/obj/machinery/computer/hotel_room_controller{
 	id_tag = "room_302_controller"
 	},
 /turf/simulated/floor/wood/walnut,
@@ -21681,7 +21681,7 @@
 	dir = 8;
 	pixel_x = 21
 	},
-/obj/machinery/hotel_room_controller{
+/obj/machinery/computer/hotel_room_controller{
 	id_tag = "room_102_controller"
 	},
 /turf/simulated/floor/carpet/blue,

@@ -6996,7 +6996,7 @@
 	name = "Window shutters";
 	pixel_x = -24
 	},
-/obj/machinery/hotel_room_controller{
+/obj/machinery/computer/hotel_room_controller{
 	id_tag = "room_Penthouse_controller"
 	},
 /turf/simulated/floor/wood/walnut,
