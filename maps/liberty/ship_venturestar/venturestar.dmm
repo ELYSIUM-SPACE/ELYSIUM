@@ -2404,6 +2404,10 @@
 /obj/effect/overmap/visitable/sector/venturestarspace,
 /turf/space,
 /area/space)
+"pD" = (
+/obj/effect/overmap/visitable/ship/landable/venturestar,
+/turf/space,
+/area/space)
 "vD" = (
 /obj/effect/catwalk_plated,
 /obj/machinery/atmospherics/pipe/simple/hidden/cyan,
@@ -5894,7 +5898,7 @@ aa
 aa
 aa
 py
-aa
+pD
 aa
 aa
 aa
