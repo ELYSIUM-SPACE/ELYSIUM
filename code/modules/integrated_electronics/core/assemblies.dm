@@ -27,7 +27,7 @@
 	var/interact_page = 0
 	var/components_per_page = 5
 	/// Spark system used for creating sparks while the assembly is damaged and destroyed.
-	var/datum/effect/effect/system/spark_spread/spark_system	
+	var/datum/effect/effect/system/spark_spread/spark_system
 	var/adrone = FALSE
 	health = 30
 	pass_flags = 0
@@ -68,7 +68,7 @@
 			to_chat(user, SPAN_DANGER("\The [src] is covered in dents and punctured in several places."))
 		if(0.25 to 0.5)
 			to_chat(user, SPAN_DANGER("\The [src] looks seriously damaged!"))
-		else	
+		else
 			to_chat(user, SPAN_WARNING("\The [src] is barely holding together!"))
 
 	if((isobserver(user) && ckeys_allowed_to_scan[user.ckey]) || check_rights(R_ADMIN, 0, user))
@@ -96,7 +96,7 @@
 			spark_system.start()
 		playsound(loc, 'sound/items/electronic_assembly_empty.ogg', 100, 1)
 		icon = 0
-		addtimer(CALLBACK(src, .proc/fall_apart), 5.1)
+		addtimer(CALLBACK(src, PROC_REF(fall_apart)), 5.1)
 	else if(health <= initial(health)*0.25)
 		if(battery && battery.charge > 0)
 			visible_message(SPAN_WARNING("\The [src] sputters and sparks!"))

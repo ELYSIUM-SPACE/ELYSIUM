@@ -172,7 +172,7 @@ GLOBAL_LIST_INIT(zombie_species, list(\
 			M.reagents.add_reagent(/datum/reagent/zombie, 0.5) //Infect 'em
 
 	if (H && H.stat != CONSCIOUS)
-		addtimer(CALLBACK(src, .proc/handle_death_infection, H), 1 SECOND)
+		addtimer(CALLBACK(src, PROC_REF(handle_death_infection), H), 1 SECOND)
 
 /datum/species/zombie/handle_npc(mob/living/carbon/human/H)
 	H.resting = FALSE
@@ -195,7 +195,7 @@ GLOBAL_LIST_INIT(zombie_species, list(\
 		H.resist()
 		return
 
-	addtimer(CALLBACK(src, .proc/handle_action, H), rand(10, 20))
+	addtimer(CALLBACK(src, PROC_REF(handle_action), H), rand(10, 20))
 
 /datum/species/zombie/proc/handle_action(mob/living/carbon/human/H)
 	var/dist = 128
@@ -377,7 +377,7 @@ GLOBAL_LIST_INIT(zombie_species, list(\
 	new /obj/effect/decal/cleanable/vomit(T)
 	playsound(T, 'sound/effects/splat.ogg', 20, 1)
 
-	addtimer(CALLBACK(src, .proc/transform_zombie), 20)
+	addtimer(CALLBACK(src, PROC_REF(transform_zombie)), 20)
 
 /mob/living/carbon/human/proc/transform_zombie()
 	make_jittery(300)

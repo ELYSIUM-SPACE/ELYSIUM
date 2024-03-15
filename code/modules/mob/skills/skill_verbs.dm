@@ -51,7 +51,7 @@ GLOBAL_LIST_INIT(skill_verbs, init_subtypes(/datum/skill_verb))
 		return
 	cooling_down = 1
 	update_verb()
-	addtimer(CALLBACK(src, .proc/remove_cooldown), cooldown)
+	addtimer(CALLBACK(src, PROC_REF(remove_cooldown)), cooldown)
 /*
 The Instruct verb. buffs untrained -> basic and requires skill in the skill training as well as leadership.
 Robots and antags can instruct.
@@ -219,7 +219,3 @@ The Appraise verb. Used on objects to estimate their value.
 		add_client_color(/datum/client_color/noir)
 	else
 		to_chat(src, "You stop looking for clues.")
-
-
-
-
