@@ -29,7 +29,7 @@
 	vessel_size = SHIP_SIZE_SMALL
 
 /datum/shuttle/autodock/overmap/kenobi
-	name = "\improper GUP Kenobi"
+	name = "GUP Kenobi"
 	move_time = 6 SECONDS
 	warmup_time = 0.5 SECONDS
 	shuttle_area = list(
@@ -66,7 +66,7 @@
 	vessel_size = SHIP_SIZE_SMALL
 
 /datum/shuttle/autodock/overmap/bebop
-	name = "\improper ISV Bebop"
+	name = "ISV Bebop"
 	move_time = 6 SECONDS
 	warmup_time = 0.5 SECONDS
 	shuttle_area = list(
@@ -100,7 +100,7 @@
 	vessel_size = SHIP_SIZE_SMALL
 
 /datum/shuttle/autodock/overmap/konigstiger
-	name = "\improper FGS Konigstiger"
+	name = "FGS Konigstiger"
 	move_time = 4 SECONDS
 	warmup_time = 0.5 SECONDS
 	shuttle_area = list(
