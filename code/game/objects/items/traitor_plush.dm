@@ -23,7 +23,7 @@
 			else if (O.reagents.total_volume >= 1)
 				if (O.reagents.has_reagent(/datum/reagent/water, 1))
 					visible_message(SPAN_WARNING("\The [src] begins to shake as the liquid touches it."))
-					addtimer(CALLBACK(src, .proc/carpify), 5 SECONDS)
+					addtimer(CALLBACK(src, PROC_REF(carpify)), 5 SECONDS)
 
 /obj/item/dehydrated_carp/proc/carpify()
 	visible_message(SPAN_WARNING("\The [src] rapidly expands into a living space carp!"))
@@ -67,7 +67,7 @@
 	if (!phrase)
 		return
 	if (findtext(sanitize_phrase(msg), phrase))
-		addtimer(CALLBACK(src, .proc/activate), 5 SECONDS)
+		addtimer(CALLBACK(src, PROC_REF(activate)), 5 SECONDS)
 		visible_message(SPAN_DANGER("\The [src] begins to beep ominously!"))
 		playsound(loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 

@@ -17,7 +17,7 @@ GLOBAL_DATUM_INIT(reputation, /datum/reputation_statistics, new)
 
 /datum/reputation_statistics/proc/recalculate()
 	text = "<center><h1>TOP-10 PLAYERS</h1><br>"
-	sortTim(players, /proc/cmp_numeric_dsc, 1)
+	sortTim(players, GLOBAL_PROC_REF(cmp_numeric_dsc), 1)
 	var/place = 1
 	for(var/i in players)
 		if(players[i] < 1)

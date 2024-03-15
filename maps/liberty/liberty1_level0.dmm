@@ -652,8 +652,7 @@
 /obj/structure/closet/secure_closet/freezer/fridge,
 /obj/effect/decal/cleanable/filth,
 /obj/machinery/light/colorable{
-	dir = 1;
-	icon_state = "tube_map"
+	dir = 1
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/casino)
@@ -6212,8 +6211,7 @@
 /obj/machinery/computer/arcade,
 /obj/effect/decal/cleanable/filth,
 /obj/machinery/light/colorable{
-	dir = 1;
-	icon_state = "tube_map"
+	dir = 1
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/casino)
@@ -6739,8 +6737,7 @@
 /obj/effect/floor_decal/corner/black/diagonal,
 /obj/structure/closet/cabinet/walnut,
 /obj/effect/decal/cleanable/cobweb{
-	dir = 8;
-	icon_state = "cobweb1"
+	dir = 8
 	},
 /obj/effect/decal/cleanable/filth,
 /turf/simulated/floor/tiled/dark,
@@ -6774,6 +6771,7 @@
 /area/liberty/bebop/main)
 "anz" = (
 /obj/effect/floor_decal/spline/fancy/black/full,
+/obj/machinery/computer/shuttle_control/explore/bebop,
 /turf/simulated/floor/plating,
 /area/liberty/bebop/cockpit)
 "anA" = (
@@ -7368,8 +7366,7 @@
 "apq" = (
 /obj/effect/floor_decal/corner/black/diagonal,
 /obj/structure/bed/sofa/teal/left{
-	dir = 6;
-	icon_state = "couchteal_left"
+	dir = 6
 	},
 /obj/effect/decal/cleanable/filth,
 /turf/simulated/floor/tiled/dark,
@@ -7419,7 +7416,6 @@
 /obj/effect/decal/cleanable/filth,
 /obj/machinery/light_color_switch{
 	dir = 4;
-	icon_state = "light";
 	pixel_x = -23;
 	pixel_y = -5
 	},
@@ -7428,8 +7424,7 @@
 "apy" = (
 /obj/effect/floor_decal/corner/black/diagonal,
 /obj/structure/bed/sofa/teal/right{
-	dir = 4;
-	icon_state = "couchteal_right"
+	dir = 4
 	},
 /obj/effect/decal/cleanable/filth,
 /turf/simulated/floor/tiled/dark,
@@ -7479,8 +7474,7 @@
 "apG" = (
 /obj/effect/floor_decal/corner/black/diagonal,
 /obj/structure/bed/chair/armchair/teal{
-	dir = 8;
-	icon_state = "armchair_preview"
+	dir = 8
 	},
 /obj/effect/decal/cleanable/filth,
 /turf/simulated/floor/tiled/dark,
@@ -7921,8 +7915,7 @@
 /obj/machinery/door/firedoor,
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/window/brigdoor/northright{
-	id = "Cell 1";
-	id_tag = null
+	id = "Cell 1"
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
@@ -9584,8 +9577,7 @@
 /obj/machinery/atmospherics/unary/outlet_injector{
 	frequency = 1441;
 	icon_state = "map_injector";
-	id = "mixing_in";
-	id_tag = null
+	id = "mixing_in"
 	},
 /turf/simulated/floor/reinforced/airless,
 /area/liberty/engineering/atmos)
@@ -9800,6 +9792,8 @@
 	icon_state = "2-8"
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/effect/shuttle_landmark/kenobi,
+/obj/effect/overmap/visitable/ship/landable/kenobi,
 /turf/simulated/floor/tiled/techfloor,
 /area/liberty/kenobi/airlock)
 "cwd" = (
@@ -15130,7 +15124,7 @@
 	dir = 8
 	},
 /obj/effect/floor_decal/techfloor/corner,
-/obj/machinery/computer/shuttle_control,
+/obj/machinery/computer/shuttle_control/explore/kenobi,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/kenobi/cockpit)
 "iob" = (
@@ -16511,7 +16505,6 @@
 	pixel_x = -24
 	},
 /obj/structure/closet/secure_closet/brig{
-	id = null;
 	name = "Cell Locker"
 	},
 /obj/effect/floor_decal/spline/plain/grey{
@@ -18869,7 +18862,6 @@
 	pixel_x = -24
 	},
 /obj/structure/closet/secure_closet/brig{
-	id = null;
 	name = "Cell Locker"
 	},
 /obj/machinery/camera/network/security{
@@ -20446,8 +20438,7 @@
 	dir = 1;
 	frequency = 1441;
 	icon_state = "map_injector";
-	id = "h2_in";
-	id_tag = null
+	id = "h2_in"
 	},
 /turf/simulated/floor/reinforced/hydrogen,
 /area/liberty/engineering/atmos)
@@ -21825,7 +21816,6 @@
 	dir = 8
 	},
 /obj/structure/closet/secure_closet/brig{
-	id = null;
 	name = "Cell Locker"
 	},
 /obj/effect/floor_decal/spline/plain/grey{
@@ -23929,8 +23919,7 @@
 /area/liberty/maintenance/construction/zero/chapel)
 "rsu" = (
 /obj/effect/floor_decal/corner_techfloor_grid{
-	dir = 9;
-	icon_state = "corner_techfloor_grid"
+	dir = 9
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/space)
@@ -24143,8 +24132,7 @@
 	dir = 4;
 	frequency = 1441;
 	icon_state = "map_injector";
-	id = "o2_in";
-	id_tag = null
+	id = "o2_in"
 	},
 /turf/simulated/floor/reinforced/oxygen,
 /area/liberty/engineering/atmos)
@@ -26820,8 +26808,7 @@
 	dir = 1;
 	frequency = 1441;
 	icon_state = "map_injector";
-	id = "co2_in";
-	id_tag = null
+	id = "co2_in"
 	},
 /turf/simulated/floor/reinforced/carbon_dioxide,
 /area/liberty/engineering/atmos)
@@ -27172,8 +27159,7 @@
 /obj/machinery/atmospherics/unary/outlet_injector{
 	frequency = 1441;
 	icon_state = "map_injector";
-	id = "n2o_in";
-	id_tag = null
+	id = "n2o_in"
 	},
 /turf/simulated/floor/reinforced/n20,
 /area/liberty/engineering/atmos)
@@ -27753,6 +27739,11 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/zero/hangar)
+"vPP" = (
+/obj/effect/shuttle_landmark/bebop,
+/obj/effect/overmap/visitable/ship/landable/bebop,
+/turf/simulated/floor/lino,
+/area/liberty/bebop/main)
 "vRe" = (
 /obj/effect/floor_decal/corner/brown{
 	dir = 5
@@ -27849,8 +27840,7 @@
 	dir = 4;
 	frequency = 1441;
 	icon_state = "map_injector";
-	id = "n2_in";
-	id_tag = null
+	id = "n2_in"
 	},
 /turf/simulated/floor/reinforced/nitrogen,
 /area/liberty/engineering/atmos)
@@ -29059,7 +29049,6 @@
 	dir = 8
 	},
 /obj/structure/closet/secure_closet/brig{
-	id = null;
 	name = "Cell Locker"
 	},
 /obj/effect/floor_decal/spline/plain/grey{
@@ -29435,8 +29424,7 @@
 	dir = 4;
 	frequency = 1441;
 	icon_state = "map_injector";
-	id = "air_in";
-	id_tag = null
+	id = "air_in"
 	},
 /turf/simulated/floor/reinforced/airmix,
 /area/liberty/engineering/atmos)
@@ -38283,7 +38271,7 @@ oVe
 anl
 anr
 anB
-anC
+vPP
 anS
 aoa
 aoi

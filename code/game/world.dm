@@ -1,4 +1,4 @@
-#define RECOMMENDED_VERSION 512
+#define RECOMMENDED_VERSION 515
 #define FAILED_DB_CONNECTION_CUTOFF 5
 #define THROTTLE_MAX_BURST 15 SECONDS
 #define SET_THROTTLE(TIME, REASON) throttle[1] = base_throttle + (TIME); throttle[2] = (REASON);
@@ -88,7 +88,7 @@ GLOBAL_VAR(href_logfile)
 /world/New()
 	var/debug_server = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 	if (debug_server)
-		call(debug_server, "auxtools_init")()
+		LIBCALL(debug_server, "auxtools_init")()
 		enable_debugging()
 
 	name = "[server_name] - [GLOB.using_map.full_name]"

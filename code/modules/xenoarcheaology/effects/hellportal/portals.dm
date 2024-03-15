@@ -8,7 +8,7 @@
 /obj/effect/gateway/artifact/small/New(turf/T)
 	..()
 
-	addtimer(CALLBACK(src, .proc/create_and_delete), rand(15, 30) SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(create_and_delete)), rand(15, 30) SECONDS)
 
 /obj/effect/gateway/artifact/small/proc/create_and_delete()
 	var/mob/living/simple_animal/T = pickweight(spawnable)
@@ -50,7 +50,7 @@
 
 	mob_limit = health * 2
 	transform *= size_multiplier
-	addtimer(CALLBACK(src, .proc/spawn_monster), rand(30, 60) SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(spawn_monster)), rand(30, 60) SECONDS)
 
 /obj/effect/gateway/artifact/big/proc/spawn_monster()
 	var/mob/living/simple_animal/T = pickweight(spawnable)
@@ -80,4 +80,4 @@
 		visible_message(SPAN_WARNING("\The [src] deposits \the [T] into the world!"))
 
 
-	addtimer(CALLBACK(src, .proc/spawn_monster), rand(15, 30) SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(spawn_monster)), rand(15, 30) SECONDS)

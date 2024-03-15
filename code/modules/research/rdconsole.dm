@@ -270,7 +270,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		linked_destroy.busy = 1
 		screen = 0.1
 		flick("d_analyzer_process", linked_destroy)
-		addtimer(CALLBACK(src, .proc/finish_deconstruct, weakref(user)), 24)
+		addtimer(CALLBACK(src, PROC_REF(finish_deconstruct), weakref(user)), 24)
 
 	else if(href_list["lock"]) //Lock the console from use by anyone without tox access.
 		if(allowed(usr))
@@ -664,7 +664,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			if(linked_destroy)
 				dat += "<LI>Destructive Analyzer <A href='?src=\ref[src];disconnect=destroy'>(Disconnect)</A>"
 			else
-				if (can_analyze == TRUE) 
+				if (can_analyze == TRUE)
 					dat += "<LI>(No Destructive Analyzer Linked)"
 			if(linked_lathe)
 				dat += "<LI>Protolathe <A href='?src=\ref[src];disconnect=lathe'>(Disconnect)</A>"
@@ -879,7 +879,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole/core
 	name = "core fabricator console"
 	id = 1
-	
+
 
 #undef CHECK_LATHE
 #undef CHECK_IMPRINTER

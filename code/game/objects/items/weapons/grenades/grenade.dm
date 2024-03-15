@@ -53,7 +53,7 @@
 	icon_state = initial(icon_state) + "_active"
 	active = 1
 	playsound(loc, arm_sound, 75, 0, -3)
-	addtimer(CALLBACK(src, .proc/detonate), det_time)
+	addtimer(CALLBACK(src, PROC_REF(detonate)), det_time)
 
 /obj/item/grenade/proc/detonate()
 	var/turf/T = get_turf(src)

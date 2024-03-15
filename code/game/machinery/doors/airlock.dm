@@ -445,7 +445,7 @@ About the new airlock wires panel:
 			if(!src.justzap)
 				if(src.shock(user, 100))
 					src.justzap = TRUE
-					addtimer(CALLBACK(src, .proc/set_justzap, FALSE), 1 SECOND)
+					addtimer(CALLBACK(src, PROC_REF(set_justzap), FALSE), 1 SECOND)
 					return
 			else
 				return
@@ -1477,7 +1477,7 @@ About the new airlock wires panel:
 /decl/public_access/public_method/airlock_toggle_bolts
 	name = "toggle bolts"
 	desc = "Toggles whether the airlock is bolted or not, if possible."
-	call_proc = /obj/machinery/door/airlock/proc/toggle_lock
+	call_proc = TYPE_PROC_REF(/obj/machinery/door/airlock, toggle_lock)
 
 /decl/stock_part_preset/radio/receiver/airlock
 	frequency = AIRLOCK_FREQ

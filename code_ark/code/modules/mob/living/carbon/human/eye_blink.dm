@@ -56,7 +56,7 @@
 				create_eye_blink()
 
 			change_eye_color(RED, GREEN, BLUE, 1)
-			addtimer(CALLBACK(src, .proc/eye_blink_spawn), 1)
+			addtimer(CALLBACK(src, PROC_REF(eye_blink_spawn)), 1)
 
 		else if(eye_close_stat)
 
