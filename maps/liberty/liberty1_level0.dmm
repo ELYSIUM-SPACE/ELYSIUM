@@ -6771,6 +6771,7 @@
 /area/liberty/bebop/main)
 "anz" = (
 /obj/effect/floor_decal/spline/fancy/black/full,
+/obj/machinery/computer/shuttle_control/explore/bebop,
 /turf/simulated/floor/plating,
 /area/liberty/bebop/cockpit)
 "anA" = (
@@ -27738,6 +27739,11 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/zero/hangar)
+"vPP" = (
+/obj/effect/shuttle_landmark/bebop,
+/obj/effect/overmap/visitable/ship/landable/bebop,
+/turf/simulated/floor/lino,
+/area/liberty/bebop/main)
 "vRe" = (
 /obj/effect/floor_decal/corner/brown{
 	dir = 5
@@ -38265,7 +38271,7 @@ oVe
 anl
 anr
 anB
-anC
+vPP
 anS
 aoa
 aoi
