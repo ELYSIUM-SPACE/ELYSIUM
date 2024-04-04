@@ -85,6 +85,9 @@
 	anchored = TRUE
 	invisibility = 101
 
+	movable_flags = MOVABLE_FLAG_EFFECTMOVE
+
+
 /obj/effect/landmark/start/New()
 	..()
 	tag = "start*[name]"
