@@ -28,6 +28,7 @@
 	. = ..()
 	SetBounds()
 
+/*
 /obj/machinery/door/airlock/multi_tile/proc/SetBounds()
 	if(dir in list(NORTH, SOUTH))
 		bound_width = width * world.icon_size
@@ -35,7 +36,7 @@
 	else
 		bound_width = world.icon_size
 		bound_height = width * world.icon_size
-
+*/
 
 /obj/machinery/door/airlock/multi_tile/on_update_icon(state=0, override=0)
 	..()
@@ -71,9 +72,12 @@
 				for(var/b_type in blend_objects)
 					if( istype(O, b_type))
 						success = 1
-
-					if(success)
 						break
+
+				if(istype(O, /obj/effect/wallframe_spawn))
+					success = 1
+					break
+
 				if(success)
 					break
 

@@ -19,7 +19,7 @@ var/list/airlock_overlays = list()
 /obj/machinery/door/airlock
 	name = "airlock"
 	icon = 'icons/obj/doors/station/door.dmi'
-	icon_state = "preview"
+	icon_state = "closed"
 	power_channel = ENVIRON
 	interact_offline = FALSE
 
