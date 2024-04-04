@@ -3210,6 +3210,7 @@
 #include "code_ark\code\game\machinery\lightswitch_adv.dm"
 #include "code_ark\code\game\machinery\metal_detector.dm"
 #include "code_ark\code\game\machinery\music_system.dm"
+#include "code_ark\code\game\machinery\doors\airlock.dm"
 #include "code_ark\code\game\machinery\doors\blast_door.dm"
 #include "code_ark\code\game\machinery\doors\multi_tile.dm"
 #include "code_ark\code\game\objects\items\buttons.dm"

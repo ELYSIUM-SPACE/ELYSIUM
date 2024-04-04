@@ -1,3 +1,5 @@
+GLOBAL_LIST_EMPTY(hotel_room_controllers)
+
 /obj/machinery/hotel_room_controller
 	name = "hotel room controller"
 	desc = "It's a small wall screen with various functions to improve the guests' experience."
@@ -14,11 +16,13 @@
 /obj/machinery/hotel_room_controller/Initialize()
 	. = ..()
 	update_icon()
+	GLOB.hotel_room_controllers += src
 
 /obj/machinery/hotel_room_controller/Destroy()
 	if(hotel_room)
 		hotel_room.room_controller = null
 		hotel_room.room_test_n_update()
+	GLOB.hotel_room_controllers -= src
 	. = ..()
 
 /obj/machinery/hotel_room_controller/power_change()

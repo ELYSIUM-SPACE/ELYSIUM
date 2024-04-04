@@ -34,13 +34,24 @@
 /obj/machinery/hotel_terminal/Initialize()
 	. = ..()
 	update_icon()
-	setup_hotel_rooms()
 
+/obj/machinery/hotel_terminal/LateInitialize()
+	setup_hotel_rooms()
 
 /obj/machinery/hotel_terminal/Destroy()
 	if(master_program)
 		master_program.connected_terminal = null
 	. = ..()
+
+/obj/machinery/hotel_terminal/proc/setup_hotel_rooms()
+	if (!LAZYLEN(GLOB.hotel_rooms))
+		var/rooms_list = GLOB.hotel_room_presets
+		for(var/room_number in rooms_list)
+			var/hotel_room_preset_path = rooms_list[room_number]
+			var/datum/hotel_room/HR = new(room_number, hotel_room_preset_path)
+			GLOB.hotel_rooms += HR
+			HR.room_sign.update_icon()
+			HR.room_controller.update_icon()
 
 /obj/machinery/hotel_terminal/attackby(obj/item/W, mob/user)
 	var/obj/item/card/id/I = W.GetIdCard()

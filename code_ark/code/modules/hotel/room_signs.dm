@@ -1,3 +1,5 @@
+GLOBAL_LIST_EMPTY(hotel_room_signs)
+
 /obj/machinery/hotel_room_sign
 	name = "room sign"
 	desc = "This sign indicates the room number. Yellow color indicates that room cleaning is required, while red stands for 'do not disturb'."
@@ -12,17 +14,20 @@
 
 /obj/machinery/hotel_room_sign/Initialize()
 	. = ..()
+	GLOB.hotel_room_signs += src
 	update_icon()
 
 /obj/machinery/hotel_room_sign/Destroy()
-	hotel_room.room_sign = null
-	hotel_room.room_test_n_update()
+	if(hotel_room)
+		hotel_room.room_sign = null
+		hotel_room.room_test_n_update()
+	GLOB.hotel_room_signs -= src
 	. = ..()
 
 /obj/machinery/hotel_room_sign/on_update_icon()
 	overlays.Cut()
 	var/image/I = image(icon, icon_state)
-	if((stat & NOPOWER) || hotel_room.room_status == 0)
+	if((stat & NOPOWER) || !hotel_room || hotel_room.room_status == 0)
 		I.color = "#999999"
 		set_light(0)
 		overlays += I

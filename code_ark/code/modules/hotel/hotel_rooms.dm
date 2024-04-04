@@ -77,13 +77,6 @@ GLOBAL_LIST_INIT(hotel_room_presets, list(			// Make sure any rooms you've creat
 
 GLOBAL_LIST_EMPTY(hotel_rooms)
 
-/proc/setup_hotel_rooms()
-	if (!LAZYLEN(GLOB.hotel_rooms))
-		var/rooms_list = GLOB.hotel_room_presets
-		for(var/room_number in rooms_list)
-			var/hotel_room_preset_path = rooms_list[room_number]
-			GLOB.hotel_rooms += new/datum/hotel_room(room_number, hotel_room_preset_path)
-
 // Defining room datums
 
 /datum/hotel_room
@@ -108,33 +101,32 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 	var/obj/machinery/door/airlock/room_airlock
 
 /datum/hotel_room/New(var/room_number, var/hotel_room_preset_path)
-	src.room_number = room_number
+	room_number = room_number
 	if(ispath(hotel_room_preset_path, /hotel_room_preset))
 		var/hotel_room_preset/hotel_room_preset = decls_repository.get_decl(hotel_room_preset_path)
-		src.bed_count = hotel_room_preset.bed_count
+		bed_count = hotel_room_preset.bed_count
 		if(hotel_room_preset.guest_count)
-			src.guest_count = hotel_room_preset.guest_count
+			guest_count = hotel_room_preset.guest_count
 		else
-			src.guest_count = hotel_room_preset.bed_count
-		src.hourly_price = hotel_room_preset.hourly_price
-		src.special_room = hotel_room_preset.special_room
+			guest_count = hotel_room_preset.bed_count
+		hourly_price = hotel_room_preset.hourly_price
+		special_room = hotel_room_preset.special_room
 
-		for(var/obj/machinery/hotel_room_sign/S in world)
+		for(var/obj/machinery/hotel_room_sign/S in GLOB.hotel_room_signs)
 			if (S.id_tag == "room_[room_number]_sign")
 				room_sign = S
 				break
 		if(!room_sign)
 			crash_with("Hotel room ([room_number]) is unable to find its sign!")
 
-		for(var/obj/machinery/hotel_room_controller/C in world)
+		for(var/obj/machinery/hotel_room_controller/C in GLOB.hotel_room_controllers)
 			if (C.id_tag == "room_[room_number]_controller")
 				room_controller = C
 				room_controller.hotel_room = src
 				break
 		if(!room_controller)
 			crash_with("Hotel room ([room_number]) is unable to find its controller!")
-
-		for(var/obj/machinery/door/airlock/A in world)
+		for(var/obj/machinery/door/airlock/A in GLOB.hotel_room_airlocks)
 			if (A.id_tag == "room_[room_number]_airlock")
 				room_airlock = A
 				break
@@ -181,6 +173,14 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 		return 0
 	else
 		return 1
+
+/datum/hotel_room/Destroy()
+	if(room_controller)
+		room_controller.hotel_room = null
+	if(room_controller)
+		room_sign.hotel_room = null
+
+	. = ..()
 
 // SUPPORT PROCS
 

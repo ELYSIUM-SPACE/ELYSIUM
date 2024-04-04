@@ -4253,10 +4253,8 @@
 /obj/machinery/door/firedoor{
 	dir = 8
 	},
-/obj/machinery/door/airlock/multi_tile/civilian{
-	dir = 4;
-	id_tag = "room_penthouse_airlock";
-	name = "\improper Penthouse Hotel Room"
+/obj/machinery/door/airlock/multi_tile/civilian/hotel{
+	dir = 8
 	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hotel/room/penthouse)

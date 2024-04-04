@@ -99,3 +99,23 @@
 
 /obj/machinery/door/airlock/multi_tile/glass
 	opacity = 0
+
+//hotel penthause multitile airlock
+/obj/machinery/door/airlock/multi_tile/civilian/hotel
+	name = "\improper Penthouse Hotel Room"
+	desc = "A gate to a luxurious heaven. It opens and closes."
+
+	id_tag = "room_penthouse_airlock"
+
+/obj/machinery/door/airlock/multi_tile/civilian/Initialize()
+	. = ..()
+	GLOB.hotel_room_airlocks += src
+
+/obj/machinery/door/airlock/multi_tile/civilian/Destroy()
+	for(var/datum/hotel_room/HR in GLOB.hotel_rooms)
+		if(HR.room_airlock == src)
+			HR.room_airlock = null
+			HR.room_test_n_update()
+
+	GLOB.hotel_room_airlocks -= src
+	. = ..()
