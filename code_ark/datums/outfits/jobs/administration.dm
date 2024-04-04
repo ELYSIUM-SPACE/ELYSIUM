@@ -1,7 +1,5 @@
 /decl/hierarchy/outfit/job/director
 	name = OUTFIT_JOB_NAME("Director")
-	head = /obj/item/clothing/head/caphat
-	glasses = /obj/item/clothing/glasses/sunglasses
 	uniform = /obj/item/clothing/under/suit_jacket/charcoal
 	l_ear = /obj/item/device/radio/headset/heads/captain
 	shoes = /obj/item/clothing/shoes/laceup
