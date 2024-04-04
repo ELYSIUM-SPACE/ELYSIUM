@@ -2,9 +2,9 @@
 	name = OUTFIT_JOB_NAME("Director")
 	head = /obj/item/clothing/head/caphat
 	glasses = /obj/item/clothing/glasses/sunglasses
-	uniform = /obj/item/clothing/under/rank/captain
+	uniform = /obj/item/clothing/under/suit_jacket/charcoal
 	l_ear = /obj/item/device/radio/headset/heads/captain
-	shoes = /obj/item/clothing/shoes/brown
+	shoes = /obj/item/clothing/shoes/laceup
 	id_types = list(/obj/item/card/id/gold)
 	pda_type = /obj/item/modular_computer/pda/captain
 	backpack_contents = list(/obj/item/storage/box/ids = 1)
@@ -30,16 +30,16 @@
 
 /decl/hierarchy/outfit/job/secretary
 	name = OUTFIT_JOB_NAME("Secretary")
-	uniform = /obj/item/clothing/under/rank/head_of_personnel
+	uniform = /obj/item/clothing/under/suit_jacket/charcoal
 	l_ear = /obj/item/device/radio/headset/heads/hop
-	shoes = /obj/item/clothing/shoes/brown
+	shoes = /obj/item/clothing/shoes/laceup
 	id_types = list(/obj/item/card/id/silver)
 	pda_type = /obj/item/modular_computer/pda/heads/hop
 	backpack_contents = list(/obj/item/storage/box/ids = 1)
 
 /decl/hierarchy/outfit/job/consul
 	name = OUTFIT_JOB_NAME("SCG Consul")
-	uniform = /obj/item/clothing/under/rank/head_of_personnel
+	uniform = /obj/item/clothing/under/suit_jacket/navy
 	l_ear = /obj/item/device/radio/headset/heads/hop
 	shoes = /obj/item/clothing/shoes/brown
 	id_types = list(/obj/item/card/id/silver/consul)
@@ -48,9 +48,9 @@
 
 /decl/hierarchy/outfit/job/corpo_representative
 	name = OUTFIT_JOB_NAME("Corporation Representative")
-	uniform = /obj/item/clothing/under/rank/head_of_personnel
+	uniform = /obj/item/clothing/under/suit_jacket/burgundy
 	l_ear = /obj/item/device/radio/headset/heads/hop
-	shoes = /obj/item/clothing/shoes/brown
+	shoes = /obj/item/clothing/shoes/laceup
 	id_types = list(/obj/item/card/id/silver/corpo_representative)
 	pda_type = /obj/item/modular_computer/pda/heads/hop
 	backpack_contents = list(/obj/item/storage/box/ids = 1)

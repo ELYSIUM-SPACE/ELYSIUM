@@ -1,5 +1,11 @@
 /decl/hierarchy/outfit/job/visitor
 	name = OUTFIT_JOB_NAME("Visitor")
+
+	uniform = /obj/item/clothing/under/casual_pants/classicjeans
+	suit = /obj/item/clothing/suit/storage/toggle/bomber
+	l_ear = /obj/item/device/radio/headset
+	shoes = /obj/item/clothing/shoes/brown
+
 	id_types = list(/obj/item/card/id/civilian)
 
 /decl/hierarchy/outfit/job/trader
