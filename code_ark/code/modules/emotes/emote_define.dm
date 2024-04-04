@@ -2,14 +2,14 @@
 	var/list/emote_sound = null
 	// three-dimensional array
 	// first is the species, associated to a list of genders, associated to a list of the sound effects to use
-
+/*
 /decl/emote/audible/do_emote(var/atom/user, var/extra_params)
 	if(ismob(user))
 		var/mob/living/M = user
 		if (M.emoteCooldownCheck())
 			..()
 			if(emote_sound) do_extra(user)
-
+*/
 
 /decl/emote/audible/do_extra(var/atom/user)
 	var/mob/living/carbon/human/H = user
