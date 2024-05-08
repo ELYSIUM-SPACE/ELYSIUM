@@ -295,7 +295,7 @@
 
 	if(!istype(location))
 		return FALSE
-	
+
 	if(breach_cooldown)
 		return FALSE
 
@@ -318,7 +318,7 @@
 //disables breach detection temporarily
 /obj/machinery/alarm/proc/breach_start_cooldown()
 	breach_cooldown = TRUE
-	addtimer(CALLBACK(src,/obj/machinery/alarm/proc/breach_end_cooldown), 10 MINUTES, TIMER_UNIQUE | TIMER_OVERRIDE)
+	addtimer(CALLBACK(src, TYPE_PROC_REF(/obj/machinery/alarm, breach_end_cooldown)), 10 MINUTES, TIMER_UNIQUE | TIMER_OVERRIDE)
 	return
 
 /obj/machinery/alarm/proc/get_danger_level(var/current_value, var/list/danger_levels)
@@ -610,7 +610,7 @@
 		if(AALARM_SCREEN_SENSORS)
 			var/list/selected
 			var/thresholds[0]
-			
+
 			var/breach_data = list("selected" = breach_pressure)
 			data["breach_data"] = breach_data
 

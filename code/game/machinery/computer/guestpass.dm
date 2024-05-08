@@ -103,7 +103,7 @@
 				"selected" = (A in accesses))))
 
 		data["giver_access"] = giver_access
-		
+
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if(!ui)
 		ui = new(user, src, ui_key, "guestpass.tmpl", "Guest Pass Terminal", 600, 800)
@@ -186,7 +186,7 @@
 			pass.reason = reason
 			pass.SetName("guest pass #[number]")
 			pass.assignment = "Guest"
-			addtimer(CALLBACK(pass, /obj/item/card/id/guest/proc/expire), duration MINUTES, TIMER_UNIQUE)
+			addtimer(CALLBACK(pass, TYPE_PROC_REF(/obj/item/card/id/guest, expire)), duration MINUTES, TIMER_UNIQUE)
 			playsound(src.loc, 'sound/machines/ping.ogg', 25, 0)
 			. = TOPIC_REFRESH
 		else if(!giver)

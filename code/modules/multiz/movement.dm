@@ -145,7 +145,7 @@
 // Entered() which is part of Move(), by spawn()ing we let that complete.  But we want to preserve if we were in client movement
 // or normal movement so other move behavior can continue.
 /atom/movable/proc/begin_falling(var/lastloc, var/below)
-	addtimer(CALLBACK(src, /atom/movable/proc/fall_callback, below), 0)
+	addtimer(CALLBACK(src, TYPE_PROC_REF(/atom/movable, fall_callback), below), 0)
 
 /atom/movable/proc/fall_callback(var/turf/below)
 	var/mob/M = src
@@ -174,7 +174,7 @@
 				return FALSE
 
 		if(location_override.get_fluid_depth() >= FLUID_DEEP)
-			if(below == loc) //We are checking above, 
+			if(below == loc) //We are checking above,
 				if(!(below.get_fluid_depth() >= 0.95 * FLUID_MAX_DEPTH)) //No salmon skipping up a stream of falling water
 					return TRUE
 			return !can_float()

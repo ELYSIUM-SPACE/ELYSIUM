@@ -265,7 +265,7 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 	var/log_entry = "\[[stationtime2text()]\] The room reservation was created. Guest list: [room_guests2text()]. Reservation start / end times: [time2text(room_reservation_start_time, "hh:mm")] / [room_end_time2text()]."
 	room_log.Add(log_entry)
 	room_status = 3
-	room_timer_id = addtimer(CALLBACK(src, /datum/hotel_room/proc/end_reservation), room_reservation_end_time - station_time_in_ticks, TIMER_UNIQUE|TIMER_STOPPABLE)
+	room_timer_id = addtimer(CALLBACK(src, TYPE_PROC_REF(/datum/hotel_room, end_reservation)), room_reservation_end_time - station_time_in_ticks, TIMER_UNIQUE|TIMER_STOPPABLE)
 
 /datum/hotel_room/proc/end_reservation()
 	clear_reservation(auto_clear = 1)

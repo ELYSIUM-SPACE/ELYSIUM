@@ -228,7 +228,7 @@
 		selected_room.room_reservation_start_time = station_time_in_ticks
 		selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
 		selected_room.room_log.Add("\[[stationtime2text()]\] Room reservation process was initiated by [selected_room.get_user_id_name()]. Room not available.")
-		timeout_timer_id = addtimer(CALLBACK(src, /datum/nano_module/hotel_reservations/proc/give_error), 5 MINUTES, TIMER_UNIQUE|TIMER_STOPPABLE)
+		timeout_timer_id = addtimer(CALLBACK(src, TYPE_PROC_REF(/datum/nano_module/hotel_reservations, give_error)), 5 MINUTES, TIMER_UNIQUE|TIMER_STOPPABLE)
 		return TOPIC_REFRESH
 
 	if (href_list["room_cancel"])
@@ -332,4 +332,3 @@
 		give_error()
 
 	return terminal_status
-

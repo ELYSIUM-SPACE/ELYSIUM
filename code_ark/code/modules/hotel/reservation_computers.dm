@@ -307,7 +307,7 @@
 			selected_room.room_reservation_start_time = station_time_in_ticks
 			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
 			selected_room.room_log.Add("\[[stationtime2text()]\] Room reservation process was initiated in a guest terminal. Room not available.")
-			timeout_timer_id = addtimer(CALLBACK(src, /obj/machinery/hotel_terminal/proc/give_error), 5 MINUTES, TIMER_UNIQUE|TIMER_STOPPABLE)
+			timeout_timer_id = addtimer(CALLBACK(src, TYPE_PROC_REF(/obj/machinery/hotel_terminal, give_error)), 5 MINUTES, TIMER_UNIQUE|TIMER_STOPPABLE)
 			program_mode = 2
 			flick_screen(screen_icon_state = "hotel_terminal_loading")
 		return TOPIC_REFRESH

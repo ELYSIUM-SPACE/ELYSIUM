@@ -22,11 +22,10 @@
 	var/datum/genetics/side_effect/S = new tp
 
 	S.start(H)
-	addtimer(CALLBACK(H, /mob/proc/Weaken, rand(0, S.duration / 50)), 20)
+	addtimer(CALLBACK(H, TYPE_PROC_REF(/mob, Weaken), rand(0, S.duration / 50)), 20)
 	sleep(S.duration)
 	H.SetWeakened(0)
 	S.finish(H)
-
 
 /datum/genetics/side_effect/genetic_burn
 	name = "Genetic Burn"
