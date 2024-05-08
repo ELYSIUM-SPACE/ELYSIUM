@@ -175,12 +175,12 @@
 		if(M)
 			M.welding_eyecheck()//located in mob_helpers.dm
 			set_light(0.7, 2, 5, l_color = COLOR_LIGHT_CYAN)
-			addtimer(CALLBACK(src, /atom/proc/update_icon), 5)
-		return 1
+			addtimer(CALLBACK(src, TYPE_PROC_REF(/atom, update_icon)), 5)
+		return TRUE
 	else
 		if(M)
 			to_chat(M, SPAN_NOTICE("You need more [welding_resource] to complete this task."))
-		return 0
+		return FALSE
 
 /obj/item/weldingtool/proc/burn_fuel(var/amount)
 	if(!tank)
