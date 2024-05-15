@@ -317,7 +317,7 @@
 	. = ..()
 	owner = user
 	follow()
-	GLOB.moved_event.register(owner, src, /atom/movable/z_observer/proc/follow)
+	GLOB.moved_event.register(owner, src, TYPE_PROC_REF(/atom/movable/z_observer, follow))
 
 /atom/movable/z_observer/proc/follow()
 
@@ -341,7 +341,7 @@
 	qdel(src)
 
 /atom/movable/z_observer/Destroy()
-	GLOB.moved_event.unregister(owner, src, /atom/movable/z_observer/proc/follow)
+	GLOB.moved_event.unregister(owner, src, TYPE_PROC_REF(/atom/movable/z_observer, follow))
 	owner = null
 	. = ..()
 

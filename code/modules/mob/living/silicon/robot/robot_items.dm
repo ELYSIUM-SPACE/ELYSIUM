@@ -128,7 +128,7 @@
 	strobe_effect = L
 
 	// Make the light effect follow this party light object.
-	GLOB.moved_event.register(src, L, /atom/movable/proc/move_to_turf_or_null)
+	GLOB.moved_event.register(src, L, TYPE_PROC_REF(/atom/movable, move_to_turf_or_null))
 
 	update_icon()
 
@@ -136,7 +136,7 @@
 	activated = 0
 
 	// Cause the party light effect to stop following this object, and then delete it.
-	GLOB.moved_event.unregister(src, strobe_effect, /atom/movable/proc/move_to_turf_or_null)
+	GLOB.moved_event.unregister(src, strobe_effect, TYPE_PROC_REF(/atom/movable, move_to_turf_or_null))
 	QDEL_NULL(strobe_effect)
 
 	update_icon()
@@ -517,7 +517,7 @@
 		if(istype(A, /obj/item/reagent_containers/food/snacks/grown))
 			generating_power = base_power_generation
 			using_item = A
-		else 
+		else
 			for(var/fuel_type in fuel_types)
 				if(istype(A, fuel_type))
 					generating_power = fuel_types[fuel_type] * base_power_generation

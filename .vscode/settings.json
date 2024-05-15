@@ -6,5 +6,13 @@
 	"files.insertFinalNewline": true,
 	"files.trimFinalNewlines": true,
 	"files.trimTrailingWhitespace": true,
-	"gitblame.commitUrl": "https://github.com/baystation12/baystation12/commit/${hash}"
+	"gitblame.commitUrl": "https://github.com/baystation12/baystation12/commit/${hash}",
+	"files.exclude": {
+		"**/.git": true,
+		"**/*.log": true,
+		"**/.*": true,
+		"**/*.csproj": true,
+		"**/bin": true,
+		"**/obj": true
+	}
 }

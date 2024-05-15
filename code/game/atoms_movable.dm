@@ -181,8 +181,8 @@
 		GLOB.moved_event.register(master, src, follow_proc)
 		SetInitLoc()
 
-	GLOB.destroyed_event.register(master, src, /datum/proc/qdel_self)
-	GLOB.dir_set_event.register(master, src, /atom/proc/recursive_dir_set)
+	GLOB.destroyed_event.register(master, src, TYPE_PROC_REF(/datum, qdel_self))
+	GLOB.dir_set_event.register(master, src, TYPE_PROC_REF(/atom, recursive_dir_set))
 
 	. = ..()
 
