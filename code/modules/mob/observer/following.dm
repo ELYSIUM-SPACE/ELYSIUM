@@ -18,7 +18,7 @@
 	following = a
 	GLOB.destroyed_event.register(a, src, PROC_REF(stop_following))
 	GLOB.moved_event.register(a, src, PROC_REF(keep_following))
-	GLOB.dir_set_event.register(a, src, /atom/proc/recursive_dir_set)
+	GLOB.dir_set_event.register(a, src, TYPE_PROC_REF(/atom, recursive_dir_set))
 	keep_following(new_loc = get_turf(following))
 
 /mob/observer/proc/keep_following(var/atom/movable/moving_instance, var/atom/old_loc, var/atom/new_loc)

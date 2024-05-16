@@ -31,7 +31,7 @@
 		holding = null
 
 	update_icon()
-	GLOB.destroyed_event.unregister(I, src, /obj/structure/bed/roller/ironingboard/proc/remove_item)
+	GLOB.destroyed_event.unregister(I, src, TYPE_PROC_REF(/obj/structure/bed/roller/ironingboard, remove_item))
 
 // make a screeching noise to drive people mad
 /obj/structure/bed/roller/ironingboard/Move()
@@ -76,7 +76,7 @@
 
 		if(user.unEquip(I, src))
 			cloth = I
-			GLOB.destroyed_event.register(I, src, /obj/structure/bed/roller/ironingboard/proc/remove_item)
+			GLOB.destroyed_event.register(I, src, TYPE_PROC_REF(/obj/structure/bed/roller/ironingboard, remove_item))
 			update_icon()
 		return
 	else if(istype(I,/obj/item/ironingiron))
@@ -101,9 +101,9 @@
 		if(!cloth)
 			if(!holding && !R.enabled && user.unEquip(I, src))
 				holding = R
-				GLOB.destroyed_event.register(I, src, /obj/structure/bed/roller/ironingboard/proc/remove_item)
+				GLOB.destroyed_event.register(I, src, TYPE_PROC_REF(/obj/structure/bed/roller/ironingboard, remove_item))
 				update_icon()
-				return	
+				return
 			to_chat(user, "<span class='notice'>There isn't anything on the ironing board.</span>")
 			return
 
