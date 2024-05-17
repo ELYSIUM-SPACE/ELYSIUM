@@ -1879,7 +1879,7 @@
 /area/liberty/hotel/room/penthouse/bathroom)
 "fN" = (
 /obj/structure/sign/warning/airlock{
-	step_y = 32
+	pixel_y = 32
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/three/fore)
