@@ -9,7 +9,7 @@
 
 /obj/machinery/hotel_terminal
 	name = "hotel reservations systems terminal"
-	desc = "It can be used either for self-serivce reservations when set to automatic mode or as an ID scanner and payment terminal when operating in connection with a console."
+	desc = "It can be used either for self-service reservations when set to automatic mode or as an ID scanner and payment terminal when operating in connection with a console."
 	icon = 'code_ark/icons/obj/machinery.dmi'
 	icon_state = "hotel_terminal"
 	density = TRUE
@@ -34,6 +34,7 @@
 /obj/machinery/hotel_terminal/Initialize()
 	. = ..()
 	update_icon()
+	return INITIALIZE_HINT_LATELOAD
 
 /obj/machinery/hotel_terminal/LateInitialize()
 	setup_hotel_rooms()
