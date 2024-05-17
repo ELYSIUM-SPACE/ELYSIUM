@@ -105,7 +105,7 @@
 	name = "\improper Penthouse Hotel Room"
 	desc = "A gate to a luxurious heaven. It opens and closes."
 
-	id_tag = "room_penthouse_airlock"
+	id_tag = "room_Penthouse_airlock"
 
 /obj/machinery/door/airlock/multi_tile/civilian/Initialize()
 	. = ..()
