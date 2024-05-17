@@ -1298,7 +1298,7 @@
 /obj/structure/cable/green,
 /obj/machinery/button/alternate/door/bolts{
 	dir = 8;
-	id_tag = "bolts_hotel301";
+	id_tag = "room_301_airlock";
 	name = "Door Bolts";
 	pixel_x = 24
 	},
@@ -1606,7 +1606,7 @@
 	},
 /obj/machinery/button/alternate/door/bolts{
 	dir = 1;
-	id_tag = "bolts_hotel101";
+	id_tag = "room_101_airlock";
 	name = "Door Bolts";
 	pixel_x = 1;
 	pixel_y = -24
@@ -2057,7 +2057,7 @@
 /area/liberty/rnd/toxins)
 "eI" = (
 /obj/machinery/button/alternate/door/bolts{
-	id_tag = "bolts_hotel201";
+	id_tag = "room_201_airlock";
 	name = "Door Bolts";
 	pixel_y = 23
 	},
@@ -2073,6 +2073,10 @@
 /obj/structure/cable/green{
 	d2 = 4;
 	icon_state = "0-4"
+	},
+/obj/machinery/light_switch{
+	pixel_x = 8;
+	pixel_y = 24
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/room/two_zero_one)
@@ -4837,7 +4841,8 @@
 	},
 /obj/machinery/button/alternate/door/bolts{
 	pixel_x = -8;
-	pixel_y = 24
+	pixel_y = 24;
+	id_tag = "md_shower_1"
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
 	dir = 10
@@ -8371,7 +8376,7 @@
 	},
 /obj/machinery/button/alternate/door/bolts{
 	dir = 1;
-	id_tag = "bolts_hotel104";
+	id_tag = "room_104_airlock";
 	name = "Door Bolts";
 	pixel_x = 33;
 	pixel_y = -24
@@ -9268,7 +9273,7 @@
 /obj/structure/cable/green,
 /obj/machinery/button/alternate/door/bolts{
 	dir = 8;
-	id_tag = "bolts_hotel302";
+	id_tag = "room_302_airlock";
 	name = "Door Bolts";
 	pixel_x = 24
 	},
@@ -10002,7 +10007,7 @@
 	},
 /obj/machinery/button/alternate/door/bolts{
 	dir = 1;
-	id_tag = "bolts_hotel102";
+	id_tag = "room_102_airlock";
 	name = "Door Bolts";
 	pixel_x = 33;
 	pixel_y = -24
@@ -14664,7 +14669,7 @@
 /area/liberty/hotel/room/one_zero_one)
 "Fg" = (
 /obj/machinery/button/alternate/door/bolts{
-	id_tag = "bolts_hotel201";
+	id_tag = "room_202_airlock";
 	name = "Door Bolts";
 	pixel_y = 23
 	},
@@ -14680,6 +14685,10 @@
 /obj/structure/cable/green{
 	d2 = 4;
 	icon_state = "0-4"
+	},
+/obj/machinery/light_switch{
+	pixel_x = 8;
+	pixel_y = 24
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/room/two_zero_two)
@@ -15855,7 +15864,7 @@
 	},
 /obj/machinery/button/alternate/door/bolts{
 	dir = 1;
-	id_tag = "bolts_hotel103";
+	id_tag = "room_103_airlock";
 	name = "Door Bolts";
 	pixel_x = 33;
 	pixel_y = -24
@@ -19504,6 +19513,23 @@
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/room/two_zero_two)
+"Re" = (
+/obj/structure/hygiene/toilet{
+	dir = 8
+	},
+/obj/machinery/light/small{
+	dir = 1
+	},
+/obj/machinery/button/alternate/door/bolts{
+	pixel_x = -8;
+	pixel_y = 24;
+	id_tag = "md_shower_2"
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/supply{
+	dir = 10
+	},
+/turf/simulated/floor/tiled/white,
+/area/liberty/medbay/hallway/two)
 "Rf" = (
 /obj/effect/floor_decal/corner/grey{
 	dir = 10
@@ -20269,7 +20295,8 @@
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/medical/liberty{
-	name = "Shower"
+	name = "Shower";
+	id_tag = "md_shower_1"
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
@@ -20823,7 +20850,7 @@
 	},
 /obj/machinery/button/alternate/door/bolts{
 	dir = 8;
-	id_tag = "bolts_hotel303";
+	id_tag = "room_303_airlock";
 	name = "Door Bolts";
 	pixel_x = 24
 	},
@@ -22911,6 +22938,17 @@
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/library)
+"Zz" = (
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/medical/liberty{
+	name = "Shower";
+	id_tag = "md_shower_2"
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/turf/simulated/floor/tiled/white/monotile,
+/area/liberty/medbay/hallway/two)
 "ZA" = (
 /obj/structure/catwalk,
 /obj/structure/ladder/up,
@@ -49644,7 +49682,7 @@ qI
 tW
 hU
 im
-SS
+Zz
 iU
 jc
 jo
@@ -49847,7 +49885,7 @@ tW
 xe
 Wc
 tW
-iV
+Re
 je
 jq
 tW
