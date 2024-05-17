@@ -100,8 +100,8 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 	var/obj/machinery/hotel_room_controller/room_controller
 	var/obj/machinery/door/airlock/room_airlock
 
-/datum/hotel_room/New(var/room_number, var/hotel_room_preset_path)
-	room_number = room_number
+/datum/hotel_room/New(var/new_room_number, var/hotel_room_preset_path)
+	room_number = new_room_number
 	if(ispath(hotel_room_preset_path, /hotel_room_preset))
 		var/hotel_room_preset/hotel_room_preset = decls_repository.get_decl(hotel_room_preset_path)
 		bed_count = hotel_room_preset.bed_count
