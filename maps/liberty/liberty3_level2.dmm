@@ -10651,7 +10651,7 @@
 	dir = 4
 	},
 /obj/machinery/hotel_room_controller{
-	id_tag = "room_201_controller"
+	id_tag = "room_202_controller"
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/room/two_zero_two)
