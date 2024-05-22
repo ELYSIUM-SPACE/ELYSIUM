@@ -27,8 +27,8 @@
 	spawn_positions = 1
 	supervisors = "the director"
 	economic_power = 1
-	access = list(access_sol_high_command, access_sol_command, access_sol_pilot, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
-	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_pilot, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
+	access = list(access_sol_high_command, access_sol_command, access_sol_pilot, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
+	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_pilot, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
 	outfit_type = /decl/hierarchy/outfit/job/sev/captain
 
 //--------------------------------------------
@@ -39,8 +39,8 @@
 	total_positions = 1
 	spawn_positions = 1
 	economic_power = 1
-	access = list(access_sol_high_command, access_sol_command, access_sol_pilot, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
-	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_pilot, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
+	access = list(access_sol_high_command, access_sol_command, access_sol_pilot, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
+	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_pilot, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
 	outfit_type = /decl/hierarchy/outfit/job/sev/pilot
 
 //--------------------------------------------
@@ -51,8 +51,8 @@
 	total_positions = 1
 	spawn_positions = 1
 	economic_power = 1
-	access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
-	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
+	access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
+	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
 	outfit_type = /decl/hierarchy/outfit/job/sev/tech
 
 //--------------------------------------------
@@ -63,8 +63,8 @@
 	total_positions = 1
 	spawn_positions = 1
 	economic_power = 1
-	access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
-	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
+	access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
+	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
 	outfit_type = /decl/hierarchy/outfit/job/sev/medic
 
 //--------------------------------------------
@@ -75,8 +75,8 @@
 	total_positions = 1
 	spawn_positions = 1
 	economic_power = 1
-	access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
-	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
+	access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
+	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
 	outfit_type = /decl/hierarchy/outfit/job/sev/scientist
 
 //--------------------------------------------
@@ -87,6 +87,6 @@
 	total_positions = 2
 	spawn_positions = 2
 	economic_power = 1
-	access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
-	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci)
+	access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
+	minimal_access = list(access_sol_high_command, access_sol_command, access_sol_general, access_sol_maint, access_sol_eng, access_sol_med, access_sol_sci, scgdocks)
 	outfit_type = /decl/hierarchy/outfit/job/sev/sev_expeditor
