@@ -1408,9 +1408,6 @@
 /turf/simulated/floor/tiled/dark,
 /area/liberty/rnd/toxins)
 "dl" = (
-/obj/structure/bed/chair/wood/walnut{
-	dir = 1
-	},
 /obj/machinery/firealarm{
 	dir = 8;
 	pixel_x = -24
@@ -2463,13 +2460,13 @@
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/one_zero_four)
 "fu" = (
-/obj/structure/bed/chair/wood/maple,
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 4
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 8
 	},
+/obj/structure/bed/chair/wood/walnut,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/restaurant/upper)
 "fv" = (
@@ -5520,9 +5517,6 @@
 /turf/simulated/wall/prepainted,
 /area/liberty/hotel/dorm)
 "ka" = (
-/obj/structure/bed/chair/wood/walnut{
-	dir = 1
-	},
 /obj/machinery/firealarm{
 	dir = 8;
 	pixel_x = -24
@@ -9289,9 +9283,6 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two/aft)
 "sh" = (
-/obj/structure/bed/chair/wood/walnut{
-	dir = 1
-	},
 /obj/machinery/firealarm{
 	dir = 8;
 	pixel_x = -24
@@ -9822,7 +9813,9 @@
 /turf/simulated/floor/reinforced/airless,
 /area/space)
 "tk" = (
-/obj/machinery/door/airlock/civilian,
+/obj/machinery/door/airlock/civilian{
+	name = "Staff Room"
+	},
 /obj/machinery/door/firedoor,
 /obj/structure/cable/green{
 	d1 = 1;
@@ -10568,7 +10561,7 @@
 /obj/structure/bed/chair/bench/wood/walnut/left{
 	dir = 1
 	},
-/obj/machinery/light/spot{
+/obj/machinery/light{
 	dir = 8
 	},
 /turf/simulated/floor/carpet/red,
@@ -14187,14 +14180,14 @@
 /turf/simulated/wall/prepainted,
 /area/liberty/psychologist/waiting_room)
 "DX" = (
-/obj/structure/bed/chair/wood/maple{
-	dir = 1
-	},
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 4
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 8
+	},
+/obj/structure/bed/chair/wood/walnut{
+	dir = 1
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/restaurant/upper)
@@ -14792,9 +14785,6 @@
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/dorm)
 "Fy" = (
-/obj/structure/bed/chair/wood/maple{
-	dir = 4
-	},
 /obj/machinery/light/spot{
 	dir = 8
 	},
@@ -16872,6 +16862,9 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/machinery/door/airlock/civilian{
+	name = "Storeroom"
+	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hotel/warehouse)
 "KD" = (
@@ -18794,6 +18787,15 @@
 	},
 /turf/simulated/floor/carpet/blue,
 /area/liberty/hotel/room/three_zero_three)
+"Po" = (
+/obj/structure/fake_stairs/single{
+	dir = 1
+	},
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/dark,
+/area/liberty/chapel/main)
 "Pq" = (
 /obj/structure/catwalk,
 /obj/structure/reagent_dispensers/watertank,
@@ -18921,14 +18923,14 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two)
 "PE" = (
-/obj/structure/bed/chair/wood/maple{
-	dir = 1
-	},
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 8
 	},
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
+	},
+/obj/structure/bed/chair/wood/walnut{
+	dir = 1
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/restaurant/upper)
@@ -21610,9 +21612,6 @@
 /turf/simulated/floor/tiled/techfloor,
 /area/liberty/maintenance/two/port)
 "VQ" = (
-/obj/structure/bed/chair/wood/walnut{
-	dir = 1
-	},
 /obj/machinery/firealarm{
 	dir = 8;
 	pixel_x = -24
@@ -22347,7 +22346,7 @@
 /obj/structure/bed/chair/bench/wood/walnut/right{
 	dir = 1
 	},
-/obj/machinery/light/spot{
+/obj/machinery/light{
 	dir = 4
 	},
 /turf/simulated/floor/carpet/red,
@@ -22829,13 +22828,13 @@
 /turf/simulated/floor/tiled/white,
 /area/liberty/medbay/storage)
 "Zf" = (
-/obj/structure/bed/chair/wood/maple,
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 8
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 4
 	},
+/obj/structure/bed/chair/wood/walnut,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/restaurant/upper)
 "Zg" = (
@@ -47039,7 +47038,7 @@ qZ
 uM
 qZ
 qZ
-qZ
+uM
 jR
 jR
 Dl
@@ -48649,13 +48648,13 @@ QW
 Ba
 Ba
 Jb
-LB
+Po
 wh
 wh
 XP
 wh
 wh
-wh
+XP
 QR
 jR
 Dl

@@ -10686,6 +10686,9 @@
 /obj/machinery/atmospherics/portables_connector,
 /obj/machinery/portable_atmospherics/canister/air/airlock,
 /obj/effect/floor_decal/industrial/outline/yellow,
+/obj/machinery/light{
+	dir = 1
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/kenobi/airlock)
 "dtD" = (
@@ -12044,6 +12047,9 @@
 /obj/machinery/alarm{
 	pixel_y = 24
 	},
+/obj/machinery/light{
+	dir = 4
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/kenobi/airlock)
 "eWF" = (
@@ -13295,7 +13301,7 @@
 /area/liberty/engineering/primary_storage)
 "gqH" = (
 /turf/simulated/floor/tiled/techfloor,
-/area/space)
+/area/liberty/maintenance/zero/brig)
 "grB" = (
 /obj/effect/floor_decal/industrial/warning/narrow{
 	dir = 8
@@ -13792,6 +13798,9 @@
 /obj/structure/bed/chair/shuttle/blue,
 /obj/machinery/atmospherics/unary/vent_pump/on,
 /obj/effect/floor_decal/techfloor,
+/obj/machinery/light{
+	dir = 1
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/kenobi/passenger)
 "gVx" = (
@@ -14080,6 +14089,9 @@
 	dir = 8
 	},
 /obj/structure/catwalk,
+/obj/machinery/light{
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/liberty/kenobi/airlock)
 "hkq" = (
@@ -20926,7 +20938,7 @@
 	dir = 6
 	},
 /turf/simulated/floor/tiled/techfloor,
-/area/space)
+/area/liberty/maintenance/zero/brig)
 "ona" = (
 /obj/effect/floor_decal/industrial/outline/yellow,
 /obj/effect/floor_decal/steeldecal/steel_decals_central4,
@@ -23922,7 +23934,7 @@
 	dir = 9
 	},
 /turf/simulated/floor/tiled/techfloor,
-/area/space)
+/area/liberty/maintenance/zero/brig)
 "rsI" = (
 /obj/effect/floor_decal/corner/brown/three_quarters{
 	dir = 8
@@ -26687,7 +26699,7 @@
 "utt" = (
 /obj/effect/wallframe_spawn/reinforced,
 /turf/simulated/floor/plating,
-/area/space)
+/area/liberty/maintenance/zero/brig)
 "utu" = (
 /obj/effect/floor_decal/steeldecal/steel_decals4{
 	dir = 1
@@ -28720,6 +28732,13 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/sfp/hallway/zero)
+"wQG" = (
+/obj/effect/floor_decal/industrial/outline/yellow,
+/obj/machinery/light{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techfloor/grid,
+/area/liberty/kenobi/passenger)
 "wQP" = (
 /obj/machinery/door/firedoor,
 /obj/effect/floor_decal/industrial/hatch,
@@ -55646,7 +55665,7 @@ wyx
 wyx
 jhH
 jhH
-xaW
+wQG
 fkE
 ciJ
 xaW
