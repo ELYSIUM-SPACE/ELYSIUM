@@ -18,7 +18,7 @@
 	name = "sol federal police officer's pants"
 	desc = "Bad boys ...and girls... These standard SFP pants are made of a slightly sturdier material than a typical pair of jeans, to allow for robust protection. An SFP logo is engraved on the silver buckle."
 	icon = 'code_ark/icons/obj/clothing/obj_under_pants.dmi'
-	item_icons = list(slot_w_uniform_str = 'code_ark/icons/mob/onmob/onmob_under_pants.dmi')
+	item_icons = list(slot_w_uniform_str = 'code_ark/icons/mob/onmob/onmob_under.dmi')
 	icon_state = "sfp_pants"
 	worn_state = "sfp_pants"
 	gender = PLURAL
