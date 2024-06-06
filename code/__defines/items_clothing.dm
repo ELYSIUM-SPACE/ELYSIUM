@@ -175,8 +175,8 @@
 #define  FIRESUIT_MAX_PRESSURE 		100 * ONE_ATMOSPHERE   // Firesuis and atmos voidsuits
 #define  RIG_MAX_PRESSURE 			50 * ONE_ATMOSPHERE   // Rigs
 #define  LIGHT_RIG_MAX_PRESSURE 	25 * ONE_ATMOSPHERE   // Rigs
-#define  ENG_VOIDSUIT_MAX_PRESSURE 	50 * ONE_ATMOSPHERE 
-#define  VOIDSUIT_MAX_PRESSURE 		25 * ONE_ATMOSPHERE 
+#define  ENG_VOIDSUIT_MAX_PRESSURE 	50 * ONE_ATMOSPHERE
+#define  VOIDSUIT_MAX_PRESSURE 		25 * ONE_ATMOSPHERE
 #define  SPACE_SUIT_MAX_PRESSURE 	5 * ONE_ATMOSPHERE
 
 // Fire.
@@ -246,4 +246,25 @@ GLOBAL_LIST_INIT(default_onmob_icons, list(
 	slot_gloves_str = 'icons/mob/onmob/onmob_hands.dmi',\
 	slot_s_store_str = 'icons/mob/onmob/onmob_belt_mirror.dmi',\
 	slot_tie_str = 'icons/mob/onmob/onmob_accessories.dmi'\
+))
+
+GLOBAL_LIST_INIT(liberty_onmob_icons, list(
+	slot_l_hand_str = 'icons/mob/onmob/items/lefthand.dmi',\
+	slot_r_hand_str = 'icons/mob/onmob/items/righthand.dmi',\
+	slot_belt_str = 'icons/mob/onmob/onmob_belt.dmi',\
+	slot_back_str = 'icons/mob/onmob/onmob_back.dmi',\
+	slot_l_ear_str = 'icons/mob/onmob/onmob_ears.dmi',\
+	slot_r_ear_str = 'icons/mob/onmob/onmob_ears.dmi',\
+	slot_glasses_str = 'icons/mob/onmob/onmob_eyes.dmi',\
+	slot_wear_id_str = 'icons/mob/onmob/onmob_id.dmi',\
+	slot_w_uniform_str = 'code_ark/icons/mob/onmob/onmob_under.dmi',\
+	slot_wear_suit_str = 'code_ark/icons/mob/onmob/onmob_suit.dmi',\
+	slot_head_str = 'code_ark/icons/mob/onmob/onmob_head.dmi',\
+	slot_shoes_str = 'code_ark/icons/mob/onmob/onmob_feet.dmi',\
+	slot_wear_mask_str = 'icons/mob/onmob/onmob_mask.dmi',\
+	slot_handcuffed_str = 'icons/mob/onmob/onmob_cuff.dmi',\
+	slot_legcuffed_str = 'icons/mob/onmob/onmob_cuff.dmi',\
+	slot_gloves_str = 'code_ark/icons/mob/onmob/onmob_hands.dmi',\
+	slot_s_store_str = 'icons/mob/onmob/onmob_belt_mirror.dmi',\
+	slot_tie_str = 'code_ark/icons/mob/onmob/onmob_accessories.dmi'\
 ))

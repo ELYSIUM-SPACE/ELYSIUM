@@ -870,7 +870,8 @@ BLIND     // can't see anything
 	else
 		. = icon_state
 	if(!findtext(.,"_s", -2)) // If we don't already have our suffix
-		if((icon_state + "_f_s") in icon_states(GLOB.default_onmob_icons[slot_w_uniform_str]))
+		if(((icon_state + "_f_s") in icon_states(GLOB.default_onmob_icons[slot_w_uniform_str])) || \
+		((icon_state + "_f_s") in icon_states(GLOB.liberty_onmob_icons[slot_w_uniform_str])))		//checking for separate liberty sprites
 			. +=  get_gender_suffix()
 		else
 			. += "_s"
@@ -892,7 +893,8 @@ BLIND     // can't see anything
 		worn_state = icon_state
 	//autodetect rollability
 	if(rolled_down < 0)
-		if(("[worn_state]_d_s") in icon_states(GLOB.default_onmob_icons[slot_w_uniform_str]))
+		if((("[worn_state]_d_s") in icon_states(GLOB.default_onmob_icons[slot_w_uniform_str])) || \
+		((icon_state + "_d_s") in icon_states(GLOB.liberty_onmob_icons[slot_w_uniform_str])))		//checking for separate liberty sprites
 			rolled_down = 0
 
 /obj/item/clothing/under/proc/update_rolldown_status()
@@ -909,6 +911,8 @@ BLIND     // can't see anything
 		under_icon = item_icons[slot_w_uniform_str]
 	else
 		under_icon = GLOB.default_onmob_icons[slot_w_uniform_str]
+		if(worn_state in icon_states(GLOB.liberty_onmob_icons[slot_w_uniform_str]))		//checking for separate liberty sprites
+			under_icon = GLOB.liberty_onmob_icons[slot_w_uniform_str]
 
 	// The _s is because the icon update procs append it.
 	if(("[worn_state]_d_s") in icon_states(under_icon))
@@ -932,6 +936,8 @@ BLIND     // can't see anything
 		under_icon = item_icons[slot_w_uniform_str]
 	else
 		under_icon = GLOB.default_onmob_icons[slot_w_uniform_str]
+		if(worn_state in icon_states(GLOB.liberty_onmob_icons[slot_w_uniform_str]))		//checking for separate liberty sprites
+			under_icon = GLOB.liberty_onmob_icons[slot_w_uniform_str]
 
 	// The _s is because the icon update procs append it.
 	if(("[worn_state]_r_s") in icon_states(under_icon))
