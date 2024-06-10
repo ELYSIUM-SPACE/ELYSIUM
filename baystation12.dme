@@ -3255,7 +3255,6 @@
 #include "code_ark\code\modules\clothing\suits\sfp_suits.dm"
 #include "code_ark\code\modules\clothing\suits\toggle.dm"
 #include "code_ark\code\modules\clothing\under\formal_pants.dm"
-#include "code_ark\code\modules\clothing\under\sfp_under.dm"
 #include "code_ark\code\modules\clothing\under\under\jobs\lucius_uniform.dm"
 #include "code_ark\code\modules\clothing\under\under\jobs\medsci.dm"
 #include "code_ark\code\modules\clothing\under\under\jobs\sfp.dm"
