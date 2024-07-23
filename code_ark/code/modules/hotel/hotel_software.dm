@@ -40,7 +40,7 @@
 	for(var/datum/hotel_room/R in GLOB.hotel_rooms)
 
 		if (R == selected_room)
-			if (R.room_status == 0)
+			if (R.room_status == ROOM_STATUS_BROKEN)
 				give_error()
 			else
 				hotel_selected_room = list(
@@ -214,10 +214,10 @@
 	if (href_list["room_reserve"])
 		if(locate_n_check_terminal() != 3 || !selected_room)// Room shall not be reserved unless there's a properly functioning terminal
 			return TOPIC_REFRESH
-		if(selected_room.room_status != 1)
+		if(selected_room.room_status != ROOM_STATUS_AVAILABLE)
 			return TOPIC_REFRESH
 
-		selected_room.room_status = 2
+		selected_room.room_status = ROOM_STATUS_RESERVATION_IN_PROGRESS
 		reservation_duration = 1
 		program_mode = 4
 		reservation_status = 0
@@ -234,7 +234,7 @@
 	if (href_list["room_cancel"])
 		if(!selected_room)
 			return TOPIC_REFRESH
-		if(selected_room.room_status == 3)
+		if(selected_room.room_status == ROOM_STATUS_OCCUPIED)
 			if(alert("This will immediately cancel the reservation, invalidating keycards of the guests. Are you sure?",,"Yes","No")=="No")
 				return
 		selected_room.clear_reservation(just_reset = text2num(href_list["room_cancel"]) == 2 ? 1 : 0)

@@ -27,13 +27,13 @@ GLOBAL_LIST_EMPTY(hotel_room_signs)
 /obj/machinery/hotel_room_sign/on_update_icon()
 	overlays.Cut()
 	var/image/I = image(icon, icon_state)
-	if((stat & NOPOWER) || !hotel_room || hotel_room.room_status == 0)
+	if((stat & NOPOWER) || !hotel_room || hotel_room.room_status == ROOM_STATUS_BROKEN)
 		I.color = "#999999"
 		set_light(0)
 		overlays += I
 		return
 	else
-		I.color = (hotel_room.room_requests > 1) ? "#f5ea84" : hotel_room.room_requests == 1 ? "#f58484" : "#ffffff"
+		I.color = (hotel_room.room_requests > 1) ? "#f5ea84" : hotel_room.room_requests == ROOM_REQUEST_NOT_DISTURB ? "#f58484" : "#ffffff"
 	set_light(0.3, 0.1, 1, 2, I.color)
 	I.plane = EFFECTS_ABOVE_LIGHTING_PLANE
 	I.layer = ABOVE_LIGHTING_LAYER

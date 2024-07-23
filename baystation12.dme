@@ -3187,6 +3187,8 @@
 #include "code\unit_tests\virtual_mob_tests.dm"
 #include "code\unit_tests\zas_tests.dm"
 #include "code\unit_tests\~helpers.dm"
+#include "code_ark\code\__defines\hotel.dm"
+#include "code_ark\code\controllers\subsystems\hotel.dm"
 #include "code_ark\code\datums\reputation.dm"
 #include "code_ark\code\datums\audio\_tracks.dm"
 #include "code_ark\code\datums\extensions\underwear\undershirt.dm"

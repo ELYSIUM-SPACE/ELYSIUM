@@ -1,4 +1,10 @@
 // Objects' visuals and basics
+#define PROGRAM_MODE_ERROR				0
+#define PROGRAM_MODE_ROOM_SELECTION		1
+#define PROGRAM_MODE_RESERVATION		2
+#define PROGRAM_MODE_GUEST				3	//adding guests via ID scans
+#define PROGRAM_MODE_PAYMENT			4	//processing payment
+
 
 /obj/machinery/computer/modular/preset/hotel
 	default_software = list(
@@ -9,7 +15,7 @@
 
 /obj/machinery/hotel_terminal
 	name = "hotel reservations systems terminal"
-	desc = "It can be used either for self-service reservations when set to automatic mode or as an ID scanner and payment terminal when operating in connection with a console."
+	desc = "It can be used for self-service reservations when set to automatic mode, as an ID scanner and payment terminal when operating in connection with a console and for recycling expired hotel keycards by hotel staff. "
 	icon = 'code_ark/icons/obj/machinery.dmi'
 	icon_state = "hotel_terminal"
 	density = TRUE
@@ -17,10 +23,12 @@
 	power_channel = EQUIP
 	idle_power_usage = 50
 
-	var/auto_mode = 1		// 0 - manual, 1 - auto
-	var/program_mode = 1	// 0 - error, 1 - room selection, 2 - reservation, 3 - ID scan, 4 - payment
+	var/auto_mode = TRUE		// FALSE - manual
+	var/program_mode = PROGRAM_MODE_ROOM_SELECTION
+	var/keycard_recycle_required_access = "ACCESS_LIBERTY_HOTEL"
 
 	var/reservation_duration = 1
+	var/payment_complete = FALSE
 
 	var/datum/nano_module/hotel_reservations/master_program
 	var/datum/hotel_room/selected_room
@@ -34,34 +42,30 @@
 /obj/machinery/hotel_terminal/Initialize()
 	. = ..()
 	update_icon()
-	return INITIALIZE_HINT_LATELOAD
-
-/obj/machinery/hotel_terminal/LateInitialize()
-	setup_hotel_rooms()
 
 /obj/machinery/hotel_terminal/Destroy()
 	if(master_program)
 		master_program.connected_terminal = null
 	. = ..()
 
-/obj/machinery/hotel_terminal/proc/setup_hotel_rooms()
-	if (!LAZYLEN(GLOB.hotel_rooms))
-		var/rooms_list = GLOB.hotel_room_presets
-		for(var/room_number in rooms_list)
-			var/hotel_room_preset_path = rooms_list[room_number]
-			var/datum/hotel_room/HR = new(room_number, hotel_room_preset_path)
-			GLOB.hotel_rooms += HR
-			HR.room_sign.update_icon()
-			HR.room_controller.update_icon()
-
 /obj/machinery/hotel_terminal/attackby(obj/item/W, mob/user)
 	var/obj/item/card/id/I = W.GetIdCard()
+
+	if(istype(W, /obj/item/card/id/hotel_key))
+		if(keycard_recycle_required_access in I.access)
+			flick_screen("hotel_terminal_loading")
+			if(alert(user, "Are you sure you want to recycle \the [W]?", "Confirmation", "Confirm", "Cancel") == "Confirm")
+				if(user in range(src, 1) && user.get_active_hand() == W)	//sanity checks
+					qdel(W)
+		else
+			to_chat(user, "<span class='notice'>\The [src] flashes a \"Recycling of a keycard requires a staff member.\" warning.</span>")
+			return
 
 	if(I || istype(W, /obj/item/spacecash/ewallet))
 
 		visible_message("<span class='info'>\The [usr] swipes \the [I == W || W == null ? I : W] through \the [src].</span>")
 
-		if(program_mode == 3) // in case of guest scanning
+		if(program_mode == PROGRAM_MODE_GUEST) // in case of guest scanning
 			if(!I)
 				to_chat(user, "<span class='warning'>ID error. Check your ID.</span>")
 				return
@@ -75,11 +79,11 @@
 				if(room_to_add_to.add_guest(I.registered_name))
 					to_chat(user, "<span class='info'>Guest successfully added.</span>")
 					if(auto_mode)
-						program_mode = 2
+						program_mode = PROGRAM_MODE_RESERVATION
 						flick_screen(screen_icon_state = "hotel_terminal_loading")
 					else
 						if(LAZYLEN(room_to_add_to.room_guests) == room_to_add_to.guest_count)
-							program_mode = 1
+							program_mode = PROGRAM_MODE_ROOM_SELECTION
 							flick_screen(screen_icon_state = "hotel_terminal_loading")
 				else
 					to_chat(user, "<span class='warning'>Unable to add the guest to the room. Please, check your ID.</span>")
@@ -87,26 +91,26 @@
 				to_chat(user, "<span class='warning'>Unable to add the guest to the room. Please, check your ID.</span>")
 			return
 
-		if(program_mode == 4) // in case of payment
+		if(program_mode == PROGRAM_MODE_PAYMENT) // in case of payment
 
 			var/paid = 0
 			var/transaction_amount
 
 			if(auto_mode)
 				transaction_amount = reservation_duration * selected_room.hourly_price * (reservation_duration >= 24 ? 0.75 : 1)
-				if(selected_room.room_status != 2) // one last check for the room before charging someone
+				if(selected_room.room_status != ROOM_STATUS_RESERVATION_IN_PROGRESS) // one last check for the room before charging someone
 					give_error()
 					return
 			else
 				transaction_amount = master_program.reservation_duration * master_program.selected_room.hourly_price * (master_program.reservation_duration >= 24 ? 0.75 : 1)
-				if(master_program.selected_room.room_status != 2) // one last check for the room before charging someone
+				if(master_program.selected_room.room_status != ROOM_STATUS_RESERVATION_IN_PROGRESS) // one last check for the room before charging someone
 					give_error()
 					return
 
 
 			if(department_accounts["Service"].suspended) // In case department account is not available
 				to_chat(user, "<span class='warning'>Payment gateway is currently unable to process the transaction.</span>")
-				program_mode = 3
+				program_mode = PROGRAM_MODE_GUEST
 				return
 
 			if(I) // Payment with an ID card
@@ -127,7 +131,7 @@
 			if(istype(W, /obj/item/spacecash/ewallet)) // Payment with chargecard
 				var/obj/item/spacecash/ewallet/chargecard = W
 				if(transaction_amount > chargecard.worth)
-					to_chat(user, "<span class='warning'>Payment error. Inssuficient funds on chargecard.</span>")
+					to_chat(user, "<span class='warning'>Payment error. Insufficient funds on chargecard.</span>")
 				else
 					chargecard.worth -= transaction_amount
 					department_accounts["Service"].deposit(transaction_amount, "Hotel room reservation", "[chargecard.owner_name] (chargecard)")
@@ -137,13 +141,14 @@
 				playsound(src, 'sound/machines/chime.ogg', 50, 1)
 				src.visible_message("[icon2html(src, viewers(get_turf(src)))] \The [src] chimes and initiates keycard printing.")
 				to_chat(user, "<span class='info'>Payment processed successfully.</span>")
+				payment_complete = TRUE
 
 				if(auto_mode)
-					program_mode = 2
+					program_mode = PROGRAM_MODE_RESERVATION
 					selected_room.complete_reservation()
 					print_keycards(selected_room)
 				else
-					program_mode = 1
+					program_mode = PROGRAM_MODE_ROOM_SELECTION
 					master_program.reservation_status = 2
 					master_program.selected_room.complete_reservation()
 					print_keycards(master_program.selected_room)
@@ -220,7 +225,7 @@
 	for(var/datum/hotel_room/R in GLOB.hotel_rooms)
 
 		if (R == selected_room)
-			if (R.room_status == 0 || R.room_status == 4)
+			if (R.room_status == ROOM_STATUS_BROKEN || R.room_status == ROOM_STATUS_BLOCKED)
 				give_error()
 			else
 				hotel_selected_room = list(
@@ -237,16 +242,16 @@
 					"room_logs" = R.room_log
 					)
 
-		if (R.guest_count == 1 && !R.special_room && R.room_status == 1 && !single_room_available)
+		if (R.guest_count == 1 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE && !single_room_available)
 			single_room_available = R.hourly_price
 
-		if (R.guest_count == 2 && R.bed_count == 1 && !R.special_room && R.room_status == 1 && !double_room_single_bed_available)
+		if (R.guest_count == 2 && R.bed_count == 1 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE && !double_room_single_bed_available)
 			double_room_single_bed_available = R.hourly_price
 
-		if (R.guest_count == 2 && R.bed_count == 2 && !R.special_room && R.room_status == 1 && !double_room_two_beds_available)
+		if (R.guest_count == 2 && R.bed_count == 2 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE && !double_room_two_beds_available)
 			double_room_two_beds_available = R.hourly_price
 
-		if(R.special_room == 1 && R.room_status == 1)
+		if(R.special_room == 1 && R.room_status == ROOM_STATUS_AVAILABLE)
 			special_room_available = 1
 
 	data["mode"] = program_mode
@@ -268,20 +273,21 @@
 /obj/machinery/hotel_terminal/OnTopic(var/mob/user, var/list/href_list, state)
 
 	if (href_list["return_to_main"])
-		if(program_mode > 1)
+		if(program_mode > 1 && !payment_complete)
 			if(alert("This will erase the reservation. Are you sure?",,"Yes","No")=="No")
 				return TOPIC_REFRESH
 			deltimer(timeout_timer_id)
 			if(selected_room)
 				selected_room.clear_reservation(terminal_clear = 1)
-		program_mode = 1
+		program_mode = PROGRAM_MODE_ROOM_SELECTION
 		selected_room = null
 		flick_screen(screen_icon_state = "hotel_terminal_loading")
+		payment_complete = FALSE
 		return TOPIC_REFRESH
 
 	if (href_list["return_to_room"])
 		if(selected_room && auto_mode)
-			program_mode = 2
+			program_mode = PROGRAM_MODE_RESERVATION
 			flick_screen(screen_icon_state = "hotel_terminal_loading")
 		return TOPIC_REFRESH
 
@@ -290,32 +296,32 @@
 
 			switch(text2num(href_list["room_reserve"]))
 				if(1)
-					if(R.guest_count == 1 && !R.special_room && R.room_status == 1)
+					if(R.guest_count == 1 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE)
 						selected_room = R
 						break
 				if(2)
-					if(R.guest_count == 2 && R.bed_count == 1 && !R.special_room && R.room_status == 1)
+					if(R.guest_count == 2 && R.bed_count == 1 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE)
 						selected_room = R
 						break
 				if(3)
-					if(R.guest_count == 2 && R.bed_count == 2 && !R.special_room && R.room_status == 1)
+					if(R.guest_count == 2 && R.bed_count == 2 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE)
 						selected_room = R
 						break
 
 		if(selected_room)
 			reservation_duration = 1
-			selected_room.room_status = 2
+			selected_room.room_status = ROOM_STATUS_RESERVATION_IN_PROGRESS
 			selected_room.room_reservation_start_time = station_time_in_ticks
 			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
 			selected_room.room_log.Add("\[[stationtime2text()]\] Room reservation process was initiated in a guest terminal. Room not available.")
 			timeout_timer_id = addtimer(CALLBACK(src, TYPE_PROC_REF(/obj/machinery/hotel_terminal, give_error)), 5 MINUTES, TIMER_UNIQUE|TIMER_STOPPABLE)
-			program_mode = 2
+			program_mode = PROGRAM_MODE_RESERVATION
 			flick_screen(screen_icon_state = "hotel_terminal_loading")
 		return TOPIC_REFRESH
 
 	if(href_list["set_duration"])
 		reservation_duration = text2num(href_list["set_duration"])
-		if(program_mode == 2 && selected_room)
+		if(program_mode == PROGRAM_MODE_RESERVATION && selected_room)
 			selected_room.room_reservation_end_time = selected_room.room_reservation_start_time + reservation_duration HOURS
 		return TOPIC_REFRESH
 
@@ -329,13 +335,13 @@
 		return TOPIC_REFRESH
 
 	if(href_list["remove_guest"])
-		if(selected_room && program_mode == 2)
+		if(selected_room && program_mode == PROGRAM_MODE_RESERVATION)
 			selected_room.remove_guest(href_list["remove_guest"])
 		return TOPIC_REFRESH
 
 	if(href_list["add_guest"])
-		if(selected_room && program_mode == 2)
-			program_mode = 3
+		if(selected_room && program_mode == PROGRAM_MODE_RESERVATION)
+			program_mode = PROGRAM_MODE_GUEST
 			flick_screen("hotel_terminal_loading")
 		return TOPIC_REFRESH
 
@@ -343,8 +349,8 @@
 		if(department_accounts["Service"].suspended)
 			to_chat(user, "<span class='warning'>Payment gateway currently is unable to process the transaction. Please, contact hotel bank account administration.</span>")
 			return TOPIC_REFRESH
-		if(selected_room && program_mode == 2)
-			program_mode = 4
+		if(selected_room && program_mode == PROGRAM_MODE_RESERVATION)
+			program_mode = PROGRAM_MODE_PAYMENT
 			flick_screen("hotel_terminal_loading")
 		return TOPIC_REFRESH
 
@@ -354,13 +360,13 @@
 		return
 
 	if(selected_room)
-		if(selected_room.room_status == 3)
-			program_mode = 1
+		if(selected_room.room_status == ROOM_STATUS_OCCUPIED)
+			program_mode = PROGRAM_MODE_ROOM_SELECTION
 			selected_room = null
 		else
 			selected_room.clear_reservation(auto_clear = 1, terminal_clear = terminal_reset)
 			selected_room = null
-			program_mode = 0
+			program_mode = PROGRAM_MODE_ERROR
 	if(timeout_timer_id)
 		deltimer(timeout_timer_id)
 		timeout_timer_id = null
@@ -377,3 +383,10 @@
 			room_for_cards.room_keys += key_created
 
 			key_created.pixel_x = 10
+
+
+#undef PROGRAM_MODE_ERROR
+#undef PROGRAM_MODE_ROOM_SELECTION
+#undef PROGRAM_MODE_RESERVATION
+#undef PROGRAM_MODE_GUEST
+#undef PROGRAM_MODE_PAYMENT
