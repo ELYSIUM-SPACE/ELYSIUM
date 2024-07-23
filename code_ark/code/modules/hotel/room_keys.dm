@@ -33,7 +33,7 @@
 	to_chat(usr, SPAN_NOTICE("This keycard was issued to [registered_name]."))
 	to_chat(usr, SPAN_NOTICE("The room is [room_number]."))
 	if (expired)
-		to_chat(user, SPAN_NOTICE("This keycard indicates that the room's reservation period has ended. Better to return it to hotel staff."))
+		to_chat(usr, SPAN_NOTICE("This keycard indicates that the room's reservation period has ended. Better to return it to hotel staff."))
 		//Must be restored once hotel controllers get proper interface and functions
 		//to_chat(usr, SPAN_NOTICE("This keycard appears to have either expired or been invalidated."))
 
