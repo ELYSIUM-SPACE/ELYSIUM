@@ -242,23 +242,27 @@
 					"room_logs" = R.room_log
 					)
 
+		//101-103
 		if (R.guest_count == 1 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE && !single_room_available)
 			single_room_available = R.hourly_price
 
-		if (R.guest_count == 2 && R.bed_count == 1 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE && !double_room_single_bed_available)
-			double_room_single_bed_available = R.hourly_price
-
+		//201-202
 		if (R.guest_count == 2 && R.bed_count == 2 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE && !double_room_two_beds_available)
 			double_room_two_beds_available = R.hourly_price
 
+		//301-303
+		if (R.guest_count == 2 && R.bed_count == 1 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE && !double_room_single_bed_available)
+			double_room_single_bed_available = R.hourly_price
+
+		//penthouse
 		if(R.special_room == 1 && R.room_status == ROOM_STATUS_AVAILABLE)
 			special_room_available = 1
 
 	data["mode"] = program_mode
 	data["auto"] = auto_mode
 	data["single_room"] = single_room_available
-	data["double_single_room"] = double_room_single_bed_available
 	data["double_double_room"] = double_room_two_beds_available
+	data["double_single_room"] = double_room_single_bed_available
 	data["special_room"] = special_room_available
 	data["selected_room"] = hotel_selected_room
 	data["duration"] = reservation_duration
@@ -300,11 +304,11 @@
 						selected_room = R
 						break
 				if(2)
-					if(R.guest_count == 2 && R.bed_count == 1 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE)
+					if(R.guest_count == 2 && R.bed_count == 2 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE)
 						selected_room = R
 						break
 				if(3)
-					if(R.guest_count == 2 && R.bed_count == 2 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE)
+					if(R.guest_count == 2 && R.bed_count == 1 && !R.special_room && R.room_status == ROOM_STATUS_AVAILABLE)
 						selected_room = R
 						break
 

@@ -36,26 +36,6 @@ Used In File(s): code_ark\code\modules\hotel\reservation_computers.dm
                 </td>
             </tr></table>
         </div>
-        <H3><span class="white">Double Room - Single Bed</span></H3>
-        <div class="itemGroup" style = "width: 300px">
-            <table><tr>
-                <td>
-                    {{if !data.double_single_room}}
-                        {{:helper.link( 'Not Available', null, {'room_select' : 2},'disabled', null)}}
-                    {{else}}
-                        {{:helper.link( 'Available', null, {'room_reserve' : 2}, null, 'greenButton', null)}}
-                    {{/if}}
-                </td><td>
-                    <span class="white">Status: </span>
-                    {{if data.double_single_room}}
-                        <span class="good">ready for reservation</span>
-                    {{else}}
-                        <span class="average">not available</span>
-                    {{/if}}
-                    <br>{{if data.double_single_room}}1 bed - {{:data.double_single_room}} thalers per hour{{else}}no information available{{/if}}
-                </td>
-            </tr></table>
-        </div>
         <H3><span class="white">Double Room - Two Beds</span></H3>
         <div class="itemGroup" style = "width: 300px">
             <table><tr>
@@ -73,6 +53,26 @@ Used In File(s): code_ark\code\modules\hotel\reservation_computers.dm
                         <span class="average">not available</span>
                     {{/if}}
                     <br>{{if data.double_double_room}}2 beds - {{:data.double_double_room}} thalers per hour{{else}}no information available{{/if}}
+                </td>
+            </tr></table>
+        </div>
+        <H3><span class="white">Double Room - Single Bed</span></H3>
+        <div class="itemGroup" style = "width: 300px">
+            <table><tr>
+                <td>
+                    {{if !data.double_single_room}}
+                        {{:helper.link( 'Not Available', null, {'room_select' : 3},'disabled', null)}}
+                    {{else}}
+                        {{:helper.link( 'Available', null, {'room_reserve' : 3}, null, 'greenButton', null)}}
+                    {{/if}}
+                </td><td>
+                    <span class="white">Status: </span>
+                    {{if data.double_single_room}}
+                        <span class="good">ready for reservation</span>
+                    {{else}}
+                        <span class="average">not available</span>
+                    {{/if}}
+                    <br>{{if data.double_single_room}}1 bed - {{:data.double_single_room}} thalers per hour{{else}}no information available{{/if}}
                 </td>
             </tr></table>
         </div>
