@@ -1,3 +1,5 @@
+// Hotel room defines in /code_ark/code/datums/__defines/hotel.dm
+
 // Hotel room presets
 
 /hotel_room_preset
@@ -86,13 +88,12 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 	var/hourly_price
 	var/special_room
 
-	var/room_status = 0 // 0 - broken, 1 - available, 2 - reservation in progress, 3 - occupied, 4 - blocked
-	var/room_requests = 0 // 0 - nothing, 1 - do not disturb, 2 - make up the room, 3 - room turnover (set automatically at the end of the reservation)
+	var/room_status = ROOM_STATUS_BROKEN
+	var/room_requests = ROOM_REQUEST_NONE
 	var/list/room_keys = list()
 	var/list/room_guests = list()
 	var/room_reservation_start_time
 	var/room_reservation_end_time
-	var/room_timer_id
 
 	var/list/room_log = list()
 
@@ -141,52 +142,55 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 	room_controller.hotel_room = src
 	room_sign.hotel_room = src
 
-	room_status = 1
+	room_status = ROOM_STATUS_AVAILABLE
 
 	room_test_n_update()
-
-/datum/hotel_room/proc/room_test_n_update()
-	var/room_is_broken = 0
-
-	if (!istype(room_sign))
-		room_sign = null
-		room_is_broken = 1
-	else
-		room_sign.update_icon()
-
-	if (!istype(room_controller))
-		room_controller = null
-		room_is_broken = 1
-	else
-		room_controller.update_icon()
-
-	if (!istype(room_airlock))
-		room_airlock = null
-		room_is_broken = 1
-
-	if (room_is_broken && room_status)
-		room_status = 0
-		room_requests = 0
-		clear_reservation()
-
-	if (room_status == 0)
-		return 0
-	else
-		return 1
 
 /datum/hotel_room/Destroy()
 	if(room_controller)
 		room_controller.hotel_room = null
-	if(room_controller)
+		room_controller = null
+	if(room_sign)
 		room_sign.hotel_room = null
+		room_sign = null
+	room_airlock = null
 
 	. = ..()
 
 // SUPPORT PROCS
 
+/datum/hotel_room/proc/room_test_n_update()
+	var/room_is_broken = FALSE
+
+	if (!istype(room_sign))
+		room_sign = null
+		room_is_broken = TRUE
+	else
+		room_sign.update_icon()
+
+	if (!istype(room_controller))
+		room_controller = null
+		room_is_broken = TRUE
+	else
+		room_controller.update_icon()
+
+	if (!istype(room_airlock))
+		room_airlock = null
+		room_is_broken = TRUE
+
+	if (room_is_broken && room_status)
+		room_status = ROOM_STATUS_BROKEN
+		room_requests = ROOM_REQUEST_NONE
+		clear_reservation()
+
+	if (room_status == ROOM_STATUS_BROKEN)
+		return FALSE
+	else
+		return TRUE
+
 /datum/hotel_room/proc/room_guests2text()
 	var/room_guest_list = ""
-	if(room_status == 2 || room_status == 3)
+	if(room_status == ROOM_STATUS_RESERVATION_IN_PROGRESS || room_status == ROOM_STATUS_OCCUPIED)
 		var/N = 0
 		if(room_guests.len)
 			for(var/guest_name in room_guests)
@@ -215,22 +219,28 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 		. += " +[extra_days]"
 	return .
 
+//called by hotel subsystem
+/datum/hotel_room/proc/reservation_time_check()
+
+	if(room_status == ROOM_STATUS_OCCUPIED && world.time >= room_reservation_end_time)
+		end_reservation()
+
 // OPERATIONS WITH ROOMS
 
 /datum/hotel_room/proc/room_block()
-	if(room_status != 1)
+	if(room_status != ROOM_STATUS_AVAILABLE)
 		return
-	room_status = 4
+	room_status = ROOM_STATUS_BLOCKED
 	var/log_entry = "\[[stationtime2text()]\] The room was blocked by [get_user_id_name()]."
 
 	room_log.Add(log_entry)
 	room_test_n_update()
 
 /datum/hotel_room/proc/room_unblock()
-	if(room_status != 4)
+	if(room_status != ROOM_STATUS_BLOCKED)
 		return
-	if(room_requests != 3)
-		room_status = 1
+	if(room_requests != ROOM_REQUEST_TURNOVER)
+		room_status = ROOM_STATUS_AVAILABLE
 		var/log_entry = "\[[stationtime2text()]\] The room was unblocked by [get_user_id_name()]."
 		room_log.Add(log_entry)
 
@@ -240,10 +250,10 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 	var/log_entry
 	if(room_requests > 1)
 		log_entry = "\[[stationtime2text()]\] The room was reset by [get_user_id_name()]. "
-		room_requests = 0
-		if(room_status == 4)
+		room_requests = ROOM_REQUEST_NONE
+		if(room_status == ROOM_STATUS_BLOCKED)
 			log_entry += "Room turnover was marked as complete. Reservation possible."
-			room_status = 1
+			room_status = ROOM_STATUS_AVAILABLE
 		else
 			log_entry += "Make up request was marked as fulfilled."
 
@@ -256,7 +266,7 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 			room_guests -= guest_name
 
 /datum/hotel_room/proc/add_guest(var/guest_name)
-	if(LAZYLEN(room_guests) < guest_count && !(guest_name in room_guests) && room_status == 2)
+	if(LAZYLEN(room_guests) < guest_count && !(guest_name in room_guests) && room_status == ROOM_STATUS_RESERVATION_IN_PROGRESS)
 		room_guests += guest_name
 		return 1
 	return 0
@@ -264,30 +274,28 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 /datum/hotel_room/proc/complete_reservation()
 	var/log_entry = "\[[stationtime2text()]\] The room reservation was created. Guest list: [room_guests2text()]. Reservation start / end times: [time2text(room_reservation_start_time, "hh:mm")] / [room_end_time2text()]."
 	room_log.Add(log_entry)
-	room_status = 3
-	room_timer_id = addtimer(CALLBACK(src, TYPE_PROC_REF(/datum/hotel_room, end_reservation)), room_reservation_end_time - station_time_in_ticks, TIMER_UNIQUE|TIMER_STOPPABLE)
+	room_status = ROOM_STATUS_OCCUPIED
 
 /datum/hotel_room/proc/end_reservation()
-	clear_reservation(auto_clear = 1)
+	clear_reservation(auto_clear = TRUE)
 
-/datum/hotel_room/proc/clear_reservation(var/auto_clear = 0, var/terminal_clear = 0, var/just_reset = 0)
+/datum/hotel_room/proc/clear_reservation(var/auto_clear = FALSE, var/terminal_clear = FALSE, var/just_reset = FALSE)
 
-	if(room_status != 2 && room_status != 3 && room_status != 0)  // If the room has no reservation or hasn't been broken there's nothing to cancel
+	// If the room has no reservation or hasn't been broken there's nothing to cancel
+	if(room_status != ROOM_STATUS_RESERVATION_IN_PROGRESS && room_status != ROOM_STATUS_OCCUPIED && room_status != ROOM_STATUS_BROKEN)
 		return
 
 	var/log_entry
-	if(room_status == 3)
+	if(room_status == ROOM_STATUS_OCCUPIED)
 		if(auto_clear)
 			log_entry = "\[[stationtime2text()]\] An active room reservation ended. Keycards of the following guests were rendered expired automatically: [room_guests2text()]. Room turnover required."
 		else
 			log_entry = "\[[stationtime2text()]\] An active room reservation was canceled by [get_user_id_name()]. Keycards of the following guests were rendered invalid: [room_guests2text()]. Room turnover required."
-		room_status = 4
-		room_requests = 3
-		deltimer(room_timer_id)
+		room_status = ROOM_STATUS_BLOCKED
+		room_requests = ROOM_REQUEST_TURNOVER
 	else
-		if (room_reservation_end_time && room_status == 0) // A broken room with end time set indicates an existing reservation
+		if (room_reservation_end_time && room_status == ROOM_STATUS_BROKEN) // A broken room with end time set indicates an existing reservation
 			log_entry = "\[[stationtime2text()]\] An active room reservation was automatically cancelled due to a fatal error! Keycards of the following guests were rendered invalid: [room_guests2text()]. Room unusable."
-			deltimer(room_timer_id)
 		else
 			if(auto_clear)
 				log_entry = "\[[stationtime2text()]\] Room reservation process was automatically terminated due to a"
@@ -296,19 +304,18 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 						log_entry += " a terminal error (terminal reset). Room reset."
 					else
 						log_entry += " timeout. Room reset."
-					room_status = 1
+					room_status = ROOM_STATUS_AVAILABLE
 				else
 					log_entry += " fatal room error."
 			else
 				if(!just_reset)
 					log_entry = "\[[stationtime2text()]\] Room reservation process was terminated [terminal_clear ? "in a guest terminal" : "by " + get_user_id_name()]. Room reset."
-					room_status = 1
+					room_status = ROOM_STATUS_AVAILABLE
 	if(log_entry)
 		room_log.Add(log_entry)
 
 	room_reservation_start_time = null
 	room_reservation_end_time = null
-	room_timer_id = null
 	for(var/obj/item/card/id/hotel_key/K in room_keys)
 		K.expire()
 	room_keys = list()

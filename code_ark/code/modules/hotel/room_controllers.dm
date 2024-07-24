@@ -55,7 +55,8 @@ GLOBAL_LIST_EMPTY(hotel_room_controllers)
 
 /obj/machinery/hotel_room_controller/interface_interact(var/mob/user)
 	flick_screen("room_controller_screensaver")
-	ui_interact(user)
+	to_chat(user, "<span class='warning'>\The [src] is temporarily unavailable. Software update pending. For requests please contact hotel staff directly.</span>")
+	//ui_interact(user)
 	return TRUE
 
 /obj/machinery/hotel_room_controller/CanUseTopic(user, state)
@@ -65,6 +66,8 @@ GLOBAL_LIST_EMPTY(hotel_room_controllers)
 	return ..()
 
 /obj/machinery/hotel_room_controller/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
+
+	/*
 	var/list/data = new
 
 	data["room_status"] = hotel_room.room_status
@@ -78,3 +81,4 @@ GLOBAL_LIST_EMPTY(hotel_room_controllers)
 		ui.set_initial_data(data)
 		ui.open()
 		ui.set_auto_update(1)
+	*/
