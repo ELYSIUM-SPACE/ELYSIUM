@@ -787,19 +787,25 @@
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/hallway/second)
 "cM" = (
-/obj/structure/sign/deck/second{
-	pixel_y = 24
-	},
-/obj/structure/railing/mapped,
-/turf/simulated/floor/tiled,
-/area/lucius/hallway/second)
-"cN" = (
-/obj/structure/railing/mapped,
+/obj/effect/floor_decal/corner/blue/full,
 /obj/machinery/alarm/sol{
 	pixel_y = 24
 	},
-/obj/structure/stairs/east,
 /turf/simulated/floor/tiled,
+/area/lucius/hallway/second)
+"cN" = (
+/obj/structure/sign/deck/second{
+	pixel_y = 24
+	},
+/obj/structure/railing/mapped{
+	dir = 8
+	},
+/obj/structure/ladder/up,
+/obj/effect/floor_decal/industrial/outline/yellow,
+/obj/structure/railing/mapped{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
 /area/lucius/hallway/second)
 "cP" = (
 /obj/effect/floor_decal/industrial/warning/full,

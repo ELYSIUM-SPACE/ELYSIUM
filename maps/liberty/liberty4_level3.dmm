@@ -1533,6 +1533,7 @@
 "eu" = (
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/vending/games,
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/three)
 "ev" = (
@@ -1911,6 +1912,7 @@
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/warning/corner,
 /obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/vending/cigarette,
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/three)
 "fY" = (
@@ -4381,6 +4383,12 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/three/starboard)
+"rv" = (
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/vending/coffee,
+/turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/three)
 "rw" = (
 /turf/simulated/wall/r_wall/prepainted,
 /area/liberty/telecomms)
@@ -8046,6 +8054,12 @@
 	},
 /turf/space,
 /area/space)
+"GW" = (
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/vending/lavatory,
+/turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/three)
 "GY" = (
 /obj/machinery/atmospherics/pipe/simple/hidden,
 /obj/structure/catwalk,
@@ -9507,6 +9521,12 @@
 /obj/structure/largecrate,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/three/fore)
+"MR" = (
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/vending/cola,
+/turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/three)
 "MT" = (
 /obj/structure/cable/green{
 	d1 = 1;
@@ -10694,6 +10714,12 @@
 /obj/item/tape_roll,
 /turf/simulated/floor/tiled/techfloor,
 /area/liberty/maintenance/three/fore)
+"Se" = (
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/vending/snack,
+/turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/three)
 "Sf" = (
 /obj/machinery/atmospherics/binary/pump/on,
 /obj/effect/floor_decal/industrial/warning/cee,
@@ -10889,6 +10915,15 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/three/starboard)
+"ST" = (
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/light{
+	dir = 1
+	},
+/obj/machinery/vending/soda,
+/turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/three)
 "SW" = (
 /obj/structure/bed/chair/shuttle/white,
 /obj/effect/floor_decal/corner/white/border,
@@ -11339,6 +11374,7 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/machinery/vending/hotfood,
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/three)
 "UM" = (
@@ -26346,7 +26382,7 @@ NS
 zi
 Oo
 NS
-UK
+ST
 BW
 oW
 NA
@@ -26548,7 +26584,7 @@ NS
 zi
 Oo
 NS
-eu
+Se
 BW
 oW
 Ew
@@ -26750,7 +26786,7 @@ NS
 NS
 Qo
 NS
-eu
+GW
 BW
 oW
 Ew
@@ -27558,7 +27594,7 @@ NS
 NS
 RV
 NS
-eu
+rv
 BW
 oW
 Ew
@@ -27760,7 +27796,7 @@ NS
 Xv
 QJ
 NS
-eu
+MR
 BW
 oW
 Ew
