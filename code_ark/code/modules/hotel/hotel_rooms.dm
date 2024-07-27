@@ -89,7 +89,7 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 	var/special_room
 
 	var/room_status = ROOM_STATUS_BROKEN
-	var/room_requests = ROOM_REQUEST_NONE
+	var/room_request = ROOM_REQUEST_NONE
 	var/list/room_keys = list()
 	var/list/room_guests = list()
 	var/room_reservation_start_time
@@ -180,7 +180,7 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 
 	if (room_is_broken && room_status)
 		room_status = ROOM_STATUS_BROKEN
-		room_requests = ROOM_REQUEST_NONE
+		room_request = ROOM_REQUEST_NONE
 		clear_reservation()
 
 	if (room_status == ROOM_STATUS_BROKEN)
@@ -239,7 +239,7 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 /datum/hotel_room/proc/room_unblock()
 	if(room_status != ROOM_STATUS_BLOCKED)
 		return
-	if(room_requests != ROOM_REQUEST_TURNOVER)
+	if(room_request != ROOM_REQUEST_TURNOVER)
 		room_status = ROOM_STATUS_AVAILABLE
 		var/log_entry = "\[[stationtime2text()]\] The room was unblocked by [get_user_id_name()]."
 		room_log.Add(log_entry)
@@ -248,9 +248,9 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 
 /datum/hotel_room/proc/room_reset()
 	var/log_entry
-	if(room_requests > 1)
+	if(room_request > 1)
 		log_entry = "\[[stationtime2text()]\] The room was reset by [get_user_id_name()]. "
-		room_requests = ROOM_REQUEST_NONE
+		room_request = ROOM_REQUEST_NONE
 		if(room_status == ROOM_STATUS_BLOCKED)
 			log_entry += "Room turnover was marked as complete. Reservation possible."
 			room_status = ROOM_STATUS_AVAILABLE
@@ -292,7 +292,7 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 		else
 			log_entry = "\[[stationtime2text()]\] An active room reservation was canceled by [get_user_id_name()]. Keycards of the following guests were rendered invalid: [room_guests2text()]. Room turnover required."
 		room_status = ROOM_STATUS_BLOCKED
-		room_requests = ROOM_REQUEST_TURNOVER
+		room_request = ROOM_REQUEST_TURNOVER
 	else
 		if (room_reservation_end_time && room_status == ROOM_STATUS_BROKEN) // A broken room with end time set indicates an existing reservation
 			log_entry = "\[[stationtime2text()]\] An active room reservation was automatically cancelled due to a fatal error! Keycards of the following guests were rendered invalid: [room_guests2text()]. Room unusable."
@@ -321,4 +321,39 @@ GLOBAL_LIST_EMPTY(hotel_rooms)
 	room_keys = list()
 	room_guests = list()
 
+	if(room_controller)
+		room_controller.flick_screen("room_controller_screensaver")
+		room_controller.visible_message("<span class='notice'>[room_controller] screen flickers and it beeps, indicating the end of room reservation period.</span>")
+		playsound(room_controller, 'sound/machines/ping.ogg', 10)
+
 	room_test_n_update()
+
+/datum/hotel_room/proc/room_change_request(var/new_request = ROOM_REQUEST_NONE)
+	if(!istype(room_sign))
+		room_test_n_update()
+		return
+
+	room_request = new_request
+	room_sign.update_icon()
+
+/datum/hotel_room/proc/open_airlock()
+	if(!istype(room_airlock))
+		room_test_n_update()
+		return TRUE
+
+	if(room_airlock.locked)
+		return FALSE
+
+	room_airlock.open()
+	return TRUE
+
+/datum/hotel_room/proc/toggle_airlock_bolts()
+	if(!istype(room_airlock))
+		room_test_n_update()
+		return
+
+	if(room_airlock.density)
+		room_airlock.toggle_lock()
+	else
+		room_airlock.close()
+		addtimer(CALLBACK(room_airlock, TYPE_PROC_REF(/obj/machinery/door/airlock, toggle_lock)), 2 SECONDS, TIMER_UNIQUE)

@@ -47,7 +47,7 @@
 					"number" = R.room_number,
 					"status" = R.room_status,
 					"special" = R.special_room,
-					"requests" = R.room_requests,
+					"requests" = R.room_request,
 					"beds" = R.bed_count,
 					"capacity" = R.guest_count,
 					"price" = R.hourly_price,
@@ -64,7 +64,7 @@
 			hotel_special_room_list.Add(list(list("room" = list(
 				"number" = R.room_number,
 				"status" = R.room_status,
-				"requests" = R.room_requests,
+				"requests" = R.room_request,
 				"beds" = R.bed_count,
 				"capacity" = R.guest_count,
 				"price" = R.hourly_price,
@@ -76,7 +76,7 @@
 			hotel_double_room_list.Add(list(list("room" = list(
 				"number" = R.room_number,
 				"status" = R.room_status,
-				"requests" = R.room_requests,
+				"requests" = R.room_request,
 				"beds" = R.bed_count,
 				"capacity" = R.guest_count,
 				"price" = R.hourly_price,
@@ -88,7 +88,7 @@
 			hotel_single_room_list.Add(list(list("room" = list(
 				"number" = R.room_number,
 				"status" = R.room_status,
-				"requests" = R.room_requests,
+				"requests" = R.room_request,
 				"beds" = R.bed_count,
 				"capacity" = R.guest_count,
 				"price" = R.hourly_price,
@@ -111,7 +111,6 @@
 	ui = SSnano.try_update_ui(user, src, ui_key, ui, data, force_open)
 	if (!ui)
 		locate_n_check_terminal() // We'll try to locate the terminal upon the first use of the program
-		// setup_hotel_rooms() // disabled since terminal will initialize them
 		ui = new(user, src, ui_key, "hotel.tmpl", "Hotel Reservations System", 390, 550, state = state)
 		ui.set_initial_data(data)
 		ui.open()
