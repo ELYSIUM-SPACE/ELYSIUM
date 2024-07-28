@@ -33,7 +33,7 @@ GLOBAL_LIST_EMPTY(hotel_room_signs)
 		overlays += I
 		return
 	else
-		I.color = (hotel_room.room_requests > 1) ? "#f5ea84" : hotel_room.room_requests == ROOM_REQUEST_NOT_DISTURB ? "#f58484" : "#ffffff"
+		I.color = (hotel_room.room_request > 1) ? "#f5ea84" : hotel_room.room_request == ROOM_REQUEST_NOT_DISTURB ? "#f58484" : "#ffffff"
 	set_light(0.3, 0.1, 1, 2, I.color)
 	I.plane = EFFECTS_ABOVE_LIGHTING_PLANE
 	I.layer = ABOVE_LIGHTING_LAYER

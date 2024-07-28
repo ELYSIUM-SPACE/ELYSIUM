@@ -8,5 +8,5 @@
 
 #define ROOM_REQUEST_NONE			0		//default
 #define ROOM_REQUEST_NOT_DISTURB	1		//do not disturb
-#define ROOM_REQUEST_MAKE_UP		2		//clean the room
+#define ROOM_REQUEST_CLEANUP		2		//clean the room
 #define ROOM_REQUEST_TURNOVER		3		//room turnover (set automatically at the end of the reservation)

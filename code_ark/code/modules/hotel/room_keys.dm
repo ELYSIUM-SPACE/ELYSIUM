@@ -25,17 +25,13 @@
 	. = ..()
 	to_chat(user, SPAN_NOTICE("The room is [room_number]."))
 	if (expired)
-		to_chat(user, SPAN_NOTICE("This keycard indicates that the room's reservation period has ended. Better to return it to hotel staff."))
-		//Must be restored once hotel controllers get proper interface and functions
-		//to_chat(user, SPAN_NOTICE("This keycard appears to have either expired or been invalidated."))
+		to_chat(user, SPAN_NOTICE("This keycard appears to have either expired or been invalidated. Better to return it to hotel staff."))
 
 /obj/item/card/id/hotel_key/read()
 	to_chat(usr, SPAN_NOTICE("This keycard was issued to [registered_name]."))
 	to_chat(usr, SPAN_NOTICE("The room is [room_number]."))
 	if (expired)
-		to_chat(usr, SPAN_NOTICE("This keycard indicates that the room's reservation period has ended. Better to return it to hotel staff."))
-		//Must be restored once hotel controllers get proper interface and functions
-		//to_chat(usr, SPAN_NOTICE("This keycard appears to have either expired or been invalidated."))
+		to_chat(usr, SPAN_NOTICE("This keycard appears to have either expired or been invalidated. Better to return it to hotel staff."))
 
 /obj/item/card/id/hotel_key/attack_self(mob/user as mob)
 	user.visible_message("\The [user] shows you: [icon2html(src, viewers(get_turf(src)))] [src.name]. The room on the card: [src.room_number]",\
@@ -48,6 +44,6 @@
 	return temp_access
 
 /obj/item/card/id/hotel_key/proc/expire()
-	//temp_access = initial(temp_access) temporarily disabled until room controller gets proper interface and fucntions
+	temp_access = initial(temp_access)
 	icon_state = "vertex_keycard"
 	expired = TRUE
