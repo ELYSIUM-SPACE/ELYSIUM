@@ -1615,6 +1615,18 @@
 	},
 /turf/simulated/floor/tiled,
 /area/space)
+"eH" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 9
+	},
+/obj/machinery/light{
+	dir = 8
+	},
+/obj/machinery/atmospherics/unary/vent_pump/on{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/three)
 "eJ" = (
 /obj/effect/floor_decal/corner/grey{
 	dir = 6
@@ -1884,6 +1896,19 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/three/fore)
+"fO" = (
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
+	dir = 8
+	},
+/turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/three)
 "fP" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
 	dir = 4
@@ -5025,6 +5050,21 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/three/starboard)
+"us" = (
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/supply{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
+	dir = 8
+	},
+/turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/three)
 "uu" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 4
@@ -6803,6 +6843,13 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/three/port)
+"BL" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 5
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on,
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/three)
 "BO" = (
 /obj/structure/table/woodentable/walnut,
 /obj/item/device/flashlight/lamp/modern{
@@ -9935,6 +9982,18 @@
 	},
 /turf/simulated/floor/carpet/blue,
 /area/liberty/director/office)
+"OH" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 6
+	},
+/obj/effect/floor_decal/steeldecal/steel_decals6{
+	dir = 4
+	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on{
+	dir = 8
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/three)
 "OJ" = (
 /obj/effect/floor_decal/spline/fancy/black/corner{
 	dir = 1
@@ -10048,6 +10107,16 @@
 "Pp" = (
 /obj/structure/flora/jungle/bush/a_2,
 /turf/simulated/floor/grass,
+/area/liberty/hallway/three)
+"Pq" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 10
+	},
+/obj/machinery/light,
+/obj/machinery/atmospherics/unary/vent_pump/on{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/three)
 "Ps" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
@@ -10617,6 +10686,18 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/command)
+"RH" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 10
+	},
+/obj/effect/floor_decal/steeldecal/steel_decals6{
+	dir = 5
+	},
+/obj/machinery/atmospherics/unary/vent_pump/on{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/three)
 "RI" = (
 /obj/structure/table/woodentable_reinforced/walnut,
 /obj/machinery/photocopier,
@@ -10632,6 +10713,7 @@
 /obj/effect/floor_decal/steeldecal/steel_decals6{
 	dir = 9
 	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/three)
 "RK" = (
@@ -12396,6 +12478,19 @@
 	dir = 9
 	},
 /turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/three)
+"Zs" = (
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/structure/cable/green{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers,
+/obj/machinery/atmospherics/pipe/manifold/hidden/supply{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/three)
 "Zu" = (
 /obj/machinery/hologram/holopad,
@@ -23547,9 +23642,9 @@ Mh
 IJ
 LB
 ac
-BW
-aN
-Ew
+BL
+Zs
+ZV
 lk
 lk
 kw
@@ -24557,9 +24652,9 @@ aa
 aa
 SK
 fY
-BW
-aN
-Ew
+BL
+Zs
+ZV
 lk
 fJ
 RZ
@@ -25371,7 +25466,7 @@ IC
 Um
 IC
 IC
-IC
+fO
 IC
 IC
 CG
@@ -26181,9 +26276,9 @@ NS
 nR
 NS
 eu
-BW
-oW
-Ew
+BL
+Zs
+ZV
 lk
 lk
 lk
@@ -27999,9 +28094,9 @@ Xv
 QJ
 NS
 UK
-BW
-oW
-NA
+BL
+Zs
+Pq
 lk
 Wb
 St
@@ -28600,7 +28695,7 @@ dq
 IB
 ah
 lO
-Ur
+eH
 tw
 yh
 Ur
@@ -28802,7 +28897,7 @@ dy
 dv
 XX
 jO
-cu
+us
 cu
 cu
 cu
@@ -29004,7 +29099,7 @@ dk
 ly
 ah
 hu
-te
+OH
 dU
 pB
 te
@@ -29616,8 +29711,8 @@ dX
 yt
 NU
 RJ
-ZC
-Ew
+Zs
+ZV
 lk
 sE
 Ol
@@ -31636,8 +31731,8 @@ iL
 Cl
 NU
 RJ
-ZC
-wn
+Zs
+RH
 gq
 FX
 dw
