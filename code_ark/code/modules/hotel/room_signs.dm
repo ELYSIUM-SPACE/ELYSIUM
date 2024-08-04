@@ -6,6 +6,7 @@ GLOBAL_LIST_EMPTY(hotel_room_signs)
 	icon = 'code_ark/icons/obj/machinery.dmi'
 	icon_state = "101"
 
+	anchored = TRUE
 	density = FALSE
 	power_channel = EQUIP
 	idle_power_usage = 10

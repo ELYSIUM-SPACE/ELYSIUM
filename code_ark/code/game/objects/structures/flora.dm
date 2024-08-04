@@ -70,6 +70,7 @@
 
 /obj/structure/flora/jungle
 	icon = 'code_ark/icons/obj/flora/jungleflora.dmi'
+	anchored = TRUE
 
 /obj/structure/flora/jungle/rock
 	name = "rock"
@@ -251,6 +252,9 @@
 	..()
 
 // NON-ORGANIC DECORATIONS (I wish I knew a better place than "flora" to put it to)
+
+/obj/structure/flora/nonorganic
+	anchored = TRUE
 
 /obj/structure/flora/nonorganic/basalt
 	name = "basalt chunk"
