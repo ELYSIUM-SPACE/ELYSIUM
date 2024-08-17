@@ -7,7 +7,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the director"
-	selection_color = "#8e2929"
+	selection_color = "#1e3d66"
 	req_admin_notify = 1
 	economic_power = 10
 	access = list(access_sol_sfp, access_sol_sfp_command, access_brig, access_armory, sfphos, sfparmory, sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_external_airlocks, access_hydroponics)
@@ -30,7 +30,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the SFP curator"
-	selection_color = "#601c1c"
+	selection_color = "#2e5a93"
 	//alt_titles = list("Forensic Technician" = /decl/hierarchy/outfit/job/security/detective/forensic)
 	economic_power = 5
 	access = list(access_sol_sfp, access_brig, access_armory, sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_external_airlocks, access_hydroponics)
@@ -48,7 +48,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the SFP curator"
-	selection_color = "#601c1c"
+	selection_color = "#2e5a93"
 	//alt_titles = list("Junior Officer")
 	economic_power = 4
 	access = list(access_sol_sfp, access_brig, access_armory, sfpmain, sfplaba, access_aft_chkp, scgdocks, maint, koni, access_external_airlocks, access_hydroponics)

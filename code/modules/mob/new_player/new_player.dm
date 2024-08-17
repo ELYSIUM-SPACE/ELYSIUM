@@ -301,7 +301,8 @@
 	// TORCH JOBS
 	var/list/job_summaries
 	var/list/hidden_reasons = list()
-	for(var/datum/job/job in SSjobs.primary_job_datums)
+	var/list/sorted_L = sort_roles_list(SSjobs.primary_job_datums)
+	for(var/datum/job/job in sorted_L)
 		var/summary = job.get_join_link(client, "byond://?src=\ref[src];SelectedJob=[job.title]", show_invalid_jobs)
 		if(summary && summary != "")
 			LAZYADD(job_summaries, summary)

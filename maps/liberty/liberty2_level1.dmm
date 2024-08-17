@@ -40401,7 +40401,7 @@
 /area/liberty/hallway/one/fore_terminal)
 "deN" = (
 /obj/effect/landmark/start{
-	name = "Service Officer"
+	name = "Hotel Staff"
 	},
 /turf/simulated/floor/carpet/red,
 /area/liberty/hotel/restaurant/main)

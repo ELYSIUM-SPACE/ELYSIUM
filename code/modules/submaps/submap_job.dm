@@ -1,6 +1,7 @@
 /datum/job/submap
 	title = "Survivor"
 	supervisors = "your conscience"
+	selection_color = "#878787"
 	account_allowed = FALSE
 	latejoin_at_spawnpoints = TRUE
 	announced = FALSE

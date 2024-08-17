@@ -47,8 +47,8 @@
 /decl/submap_archetype/lucius
 	descriptor = "SEV Lucius"
 	map = "SEV Lucius"
-	crew_jobs = list(/datum/job/submap/lucius/sev_captain, /datum/job/submap/lucius/sev_pilot, /datum/job/submap/lucius/sev_tech,
-				/datum/job/submap/lucius/sev_medic, /datum/job/submap/lucius/sev_scientist, /datum/job/submap/lucius/sev_expeditor)
+	crew_jobs = list(/datum/job/submap/sev_captain, /datum/job/submap/sev_pilot, /datum/job/submap/sev_tech,
+				/datum/job/submap/sev_medic, /datum/job/submap/sev_scientist, /datum/job/submap/sev_expeditor)
 //	call_webhook = WEBHOOK_SUBMAP_LOADED_LUCIUS
 
 /obj/effect/submap_landmark/spawnpoint/lucius_crewman

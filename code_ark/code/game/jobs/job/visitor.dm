@@ -6,6 +6,7 @@
 	total_positions = -1
 	spawn_positions = -1
 	supervisors = "absolutely everyone"
+	selection_color = "#878787"
 	economic_power = 1
 	access = list()			//See /datum/job/visitor/get_access()
 	minimal_access = list()	//See /datum/job/visitor/get_access()

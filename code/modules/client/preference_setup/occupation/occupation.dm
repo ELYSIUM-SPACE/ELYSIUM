@@ -109,12 +109,11 @@
 
 			//The job before the current job. I only use this to get the previous jobs color when I'm filling in blank rows.
 			var/datum/job/lastJob
-			var/list/map_job_list = map_data["jobs"]
+			var/list/map_job_list = sort_roles_list(map_data["jobs"])
 			var/index = -1
 			if(splitLimit) limit = round((LAZYLEN(map_job_list)+1)/2)
 
 			for(var/datum/job/job in map_job_list)
-
 				var/datum/mil_rank/player_rank
 				var/datum/mil_branch/player_branch
 				var/branch_string = ""
@@ -203,10 +202,10 @@
 					. += "<del>[title_link]</del>[help_link][skill_link]<td>[bad_message]</td></tr>"
 					continue
 				else if((GLOB.using_map.default_assistant_title in pref.job_low) && (title != GLOB.using_map.default_assistant_title))
-					. += "<font color=grey>[title_link]</font>[help_link][skill_link]<td></td></tr>"
+					. += "<font color=[job.selection_text_color]>[title_link]</font>[help_link][skill_link]<td></td></tr>"
 					continue
 				else
-					. += "[title_link][help_link][skill_link]"
+					. += "<font color=[job.selection_text_color]>[title_link]</font>[help_link][skill_link]"
 
 				. += "<td>"
 				if(title == GLOB.using_map.default_assistant_title)//Assistant is special

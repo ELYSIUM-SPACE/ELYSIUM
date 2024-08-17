@@ -17,7 +17,7 @@
 	pda_type = /obj/item/modular_computer/pda
 
 /decl/hierarchy/outfit/job/hotel/service_officer
-	name = OUTFIT_JOB_NAME("Service Officer")
+	name = OUTFIT_JOB_NAME("Hotel Staff")
 	uniform = /obj/item/clothing/under/rank/bartender
 	id_types = list(/obj/item/card/id/hotel)
 	pda_type = /obj/item/modular_computer/pda

@@ -3200,6 +3200,7 @@
 #include "code_ark\code\game\jobs\job\dock.dm"
 #include "code_ark\code\game\jobs\job\engineering.dm"
 #include "code_ark\code\game\jobs\job\hotel.dm"
+#include "code_ark\code\game\jobs\job\job.dm"
 #include "code_ark\code\game\jobs\job\misc.dm"
 #include "code_ark\code\game\jobs\job\sol_fed_police.dm"
 #include "code_ark\code\game\jobs\job\techartel.dm"
