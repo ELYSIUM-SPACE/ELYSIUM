@@ -9,7 +9,8 @@ var/datum/announcement/minor/captain_announcement = new(do_newscast = 1)
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "company officials and Corporate Regulations"
-	selection_color = "#1d1d4f"
+	selection_color = "#262626"
+	selection_text_color = "#e7c769"
 	req_admin_notify = 1
 	access = list() 			//See get_access()
 	minimal_access = list() 	//See get_access()
@@ -41,7 +42,8 @@ var/datum/announcement/minor/captain_announcement = new(do_newscast = 1)
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the director"
-	selection_color = "#2f2f7f"
+	selection_color = "#343434"
+	selection_text_color = "#e7c769"
 	req_admin_notify = 1
 	minimal_player_age = 14
 	economic_power = 10
@@ -65,7 +67,8 @@ var/datum/announcement/minor/captain_announcement = new(do_newscast = 1)
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the director"
-	selection_color = "#2f2f7f"
+	selection_color = "#1e3d66"
+	selection_text_color = "#e7c769"
 	req_admin_notify = 1
 	minimal_player_age = 14
 	economic_power = 10
@@ -87,7 +90,7 @@ var/datum/announcement/minor/captain_announcement = new(do_newscast = 1)
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "company officials and Corporate Regulations"
-	selection_color = "#2f2f7f"
+	selection_color = "#93372e"
 	req_admin_notify = 1
 	minimal_player_age = 14
 	economic_power = 10

@@ -38,5 +38,5 @@
 /decl/submap_archetype/venturestar
 	descriptor = "IMV VentureStar"
 	map = "IMV VentureStar"
-	crew_jobs = list(/datum/job/submap/venturestar/vstar_miner, /datum/job/submap/venturestar/vstar_leader) // ADD JOBS
+	crew_jobs = list(/datum/job/submap/vstar_miner, /datum/job/submap/vstar_leader) // ADD JOBS
 //	call_webhook = WEBHOOK_SUBMAP_LOADED_LUCIUS

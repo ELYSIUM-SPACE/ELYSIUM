@@ -5,6 +5,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the secretary"
+	selection_color = "#53954f"
 	economic_power = 5
 	access = list(shop)
 	minimal_access = list(shop)
@@ -22,6 +23,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the secretary"
+	selection_color = "#53954f"
 	access = list(chapl)
 	minimal_access = list(chapl)
 	outfit_type = /decl/hierarchy/outfit/job/chaplain
@@ -149,6 +151,8 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the secretary"
+	selection_color = "#343434"
+	selection_text_color = "#e7c769"
 	access = list(access_janitor, maint, access_hydroponics)
 	minimal_access = list(access_janitor, maint, access_hydroponics)
 	//alt_titles = list("Custodian","Sanitation Technician")
@@ -166,6 +170,7 @@
 	economic_power = 5
 	minimal_player_age = 3
 	supervisors = "the secretary"
+	selection_color = "#53954f"
 	access = list(psycho)
 	minimal_access = list(psycho)
 	outfit_type = /decl/hierarchy/outfit/job/psychologist
@@ -180,6 +185,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the secretary"
+	selection_color = "#53954f"
 	economic_power = 3
 	access = list(priveye)
 	minimal_access = list(priveye)
@@ -195,6 +201,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the secretary"
+	selection_color = "#878787"
 	economic_power = 3
 	access = list(maint)
 	minimal_access = list(maint)
@@ -210,6 +217,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the secretary"
+	selection_color = "#878787"
 	economic_power = 3
 	access = list(maint, bebo)
 	minimal_access = list(maint, bebo)
@@ -224,6 +232,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the secretary"
+	selection_color = "#53954f"
 	access = list(access_hydroponics)
 	minimal_access = list(access_hydroponics)
 	//alt_titles = list("Hydroponicist")

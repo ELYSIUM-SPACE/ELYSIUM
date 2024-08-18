@@ -7,7 +7,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the director"
-	selection_color = "#ad6bad"
+	selection_color = "#692e78"
 	req_admin_notify = 1
 	economic_power = 15
 	access = list(rndboss, rndshop, rndbot, maint, access_hydroponics)
@@ -26,7 +26,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the head of development"
-	selection_color = "#633d63"
+	selection_color = "#9446a7"
 	economic_power = 7
 	access = list(rndshop, rndbot, maint, access_hydroponics)
 	minimal_access = list(rndshop, rndbot, maint, access_hydroponics)
@@ -44,7 +44,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of development"
-	selection_color = "#633d63"
+	selection_color = "#9446a7"
 	economic_power = 5
 	access = list(rndshop, rndbot, maint, access_hydroponics) //As a job that handles so many corpses, it makes sense for them to have morgue access.
 	minimal_access = list(rndshop, rndbot, maint, access_hydroponics) //As a job that handles so many corpses, it makes sense for them to have morgue access.

@@ -7,7 +7,8 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the director"
-	selection_color = "#7f6e2c"
+	selection_color = "#c8a607"
+	selection_text_color = "#000000"
 	req_admin_notify = 1
 	economic_power = 10
 
@@ -29,7 +30,8 @@
 	total_positions = 3
 	spawn_positions = 3
 	supervisors = "the chief engineer"
-	selection_color = "#5b4d20"
+	selection_color = "#efd144"
+	selection_text_color = "#000000"
 	economic_power = 5
 	minimal_player_age = 7
 	access = list(engmain, engpower, engatmos, access_external_airlocks, hangar, maint, access_hydroponics, keno)

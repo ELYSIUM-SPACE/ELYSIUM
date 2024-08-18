@@ -7,7 +7,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the director"
-	selection_color = "#026865"
+	selection_color = "#597839"
 	req_admin_notify = 1
 	economic_power = 10
 	access = list(chmo, doctor, farma, maint, access_hydroponics)
@@ -28,7 +28,7 @@
 	total_positions = 2
 	spawn_positions = 2
 	supervisors = "the chief medical officer"
-	selection_color = "#013d3b"
+	selection_color = "#72994a"
 	economic_power = 7
 	access = list(doctor, farma, maint, access_hydroponics)
 	minimal_access = list(doctor, farma, maint, access_hydroponics)
@@ -50,7 +50,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the chief medical officer"
-	selection_color = "#013d3b"
+	selection_color = "#72994a"
 	economic_power = 5
 	access = list(doctor, farma, maint, access_hydroponics)
 	minimal_access = list(doctor, farma, maint, access_hydroponics)
