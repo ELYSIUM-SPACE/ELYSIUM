@@ -13,6 +13,8 @@
 	selection_text_color = "#f88a22"
 	latejoin_at_spawnpoints = TRUE
 
+	hud_icon = "hudcaptain"
+
 	info = "You are a part of a crew onboard of Sol Exploration Vessel Lucius."
 
 	//potentially need to be changed
@@ -40,6 +42,8 @@
 	selection_color = "#424879"
 	selection_text_color = "#f88a22"
 	latejoin_at_spawnpoints = TRUE
+
+	hud_icon = "hudexopilot"
 
 	info = "You are a part of a crew onboard of Sol Exploration Vessel Lucius. Follow the commands of your captain."
 
@@ -69,6 +73,8 @@
 	selection_text_color = "#f88a22"
 	latejoin_at_spawnpoints = TRUE
 
+	hud_icon = "huddecktechnician"
+
 	info = "You are a part of a crew onboard of Sol Exploration Vessel Lucius. Follow the commands of your captain."
 
 	//potentially need to be changed
@@ -96,6 +102,8 @@
 	selection_color = "#424879"
 	selection_text_color = "#f88a22"
 	latejoin_at_spawnpoints = TRUE
+
+	hud_icon = "hudfieldmedic"
 
 	info = "You are a part of a crew onboard of Sol Exploration Vessel Lucius. Follow the commands of your captain."
 
@@ -125,6 +133,8 @@
 	selection_text_color = "#f88a22"
 	latejoin_at_spawnpoints = TRUE
 
+	hud_icon = "hudecresearcher"
+
 	info = "You are a part of a crew onboard of Sol Exploration Vessel Lucius. Follow the commands of your captain."
 
 	//potentially need to be changed
@@ -152,6 +162,8 @@
 	selection_color = "#424879"
 	selection_text_color = "#f88a22"
 	latejoin_at_spawnpoints = TRUE
+
+	hud_icon = "hudexpeditor"
 
 	info = "You are a part of a crew onboard of Sol Exploration Vessel Lucius. Follow the commands of your captain."
 
