@@ -9,6 +9,8 @@
 	selection_color = "#734926"
 	latejoin_at_spawnpoints = TRUE
 
+	hud_icon = "hudexcavationleader"
+
 	info = "You are a part of a crew onboard of Independent Mining Vessel VentureStar."
 
 	//potentially need to be changed
@@ -39,6 +41,8 @@
 	supervisors = "the excavation leader"
 	selection_color = "#966031"
 	latejoin_at_spawnpoints = TRUE
+
+	hud_icon = "hudminer"
 
 	info = "You are a part of a crew onboard of Independent Mining Vessel VentureStar. Follow the commands of your Excavation Leader."
 
