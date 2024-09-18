@@ -2597,6 +2597,11 @@
 /obj/effect/floor_decal/spline/fancy{
 	dir = 1
 	},
+/obj/machinery/button/alternate/door{
+	pixel_x = 1;
+	pixel_y = 27;
+	id_tag = "shutters_psychologist"
+	},
 /turf/simulated/floor/wood,
 /area/liberty/psychologist/therapy_room)
 "fC" = (
@@ -3646,7 +3651,7 @@
 /obj/structure/table/woodentable/walnut,
 /obj/machinery/button/blast_door{
 	dir = 4;
-	id_tag = "shutters_hotel303";
+	id_tag = "shutters_hotel302";
 	name = "Window shutters";
 	pixel_x = -24
 	},
@@ -4151,7 +4156,8 @@
 	dir = 8
 	},
 /obj/machinery/door/airlock/civilian{
-	name = "Psycologist's Office"
+	name = "Psychologist's Office";
+	id_tag = "consul_office"
 	},
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/hatch/yellow,
@@ -4170,7 +4176,8 @@
 /area/liberty/psychologist/waiting_room)
 "hX" = (
 /obj/machinery/door/airlock/civilian{
-	name = "Psycologist's Office"
+	name = "Psychologist's Office";
+	id_tag = "psichologist's office"
 	},
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/hatch/yellow,
@@ -5254,6 +5261,12 @@
 	pixel_y = 4
 	},
 /obj/item/towel/random,
+/obj/machinery/button/alternate/door{
+	dir = 8;
+	pixel_x = 24;
+	pixel_y = -6;
+	id_tag = "ward_3_airlock"
+	},
 /turf/simulated/floor/wood/maple,
 /area/liberty/medbay/ward/three)
 "jx" = (
@@ -5725,6 +5738,7 @@
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 1
 	},
+/obj/item/device/plunger/robot,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hotel/warehouse)
 "kx" = (
@@ -5803,13 +5817,15 @@
 /area/liberty/maintenance/two/fore)
 "kG" = (
 /obj/machinery/door/airlock/maintenance,
-/obj/machinery/door/firedoor,
 /obj/structure/cable/green{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/door/firedoor{
+	dir = 8
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/hallway/two/fore)
 "kH" = (
@@ -6987,6 +7003,12 @@
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 8
 	},
+/obj/machinery/button/alternate/door{
+	dir = 4;
+	pixel_x = -25;
+	pixel_y = -5;
+	id_tag = "corporative_representative_window"
+	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/corporate_office)
 "ni" = (
@@ -7150,6 +7172,9 @@
 /obj/machinery/door/airlock/multi_tile/civilian{
 	name = "Conference Room"
 	},
+/obj/machinery/door/firedoor,
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/conference_room)
 "nC" = (
@@ -9271,8 +9296,12 @@
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/two/starboard)
 "sa" = (
-/obj/effect/paint_stripe/white,
-/obj/effect/wallframe_spawn/reinforced,
+/obj/effect/wallframe_spawn/no_grille,
+/obj/machinery/door/blast/shutters/open{
+	dir = 4;
+	id_tag = "shutters_psychologist";
+	name = "Protective Shutters"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/psychologist/therapy_room)
 "sb" = (
@@ -9584,7 +9613,8 @@
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
-/turf/simulated/floor/tiled/techfloor/grid,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/turf/simulated/floor/tiled/monotile,
 /area/liberty/janitor)
 "sH" = (
 /obj/random/trash,
@@ -11094,7 +11124,8 @@
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/medical/liberty{
-	name = "Ward Two"
+	name = "Ward Two";
+	id_tag = "ward_2_airlock"
 	},
 /obj/structure/cable/green{
 	d1 = 1;
@@ -11300,6 +11331,12 @@
 	d1 = 1;
 	d2 = 4;
 	icon_state = "1-4"
+	},
+/obj/machinery/button/alternate/door{
+	dir = 4;
+	pixel_x = -25;
+	pixel_y = -5;
+	id_tag = "consul_office_window"
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/scg/representative)
@@ -11622,6 +11659,15 @@
 /obj/effect/floor_decal/corner/pink/mono,
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/laundry)
+"xh" = (
+/obj/effect/paint_stripe/white,
+/obj/effect/wallframe_spawn/reinforced,
+/obj/machinery/door/blast/shutters/open{
+	id_tag = "consul_office_window";
+	dir = 2
+	},
+/turf/simulated/floor/plating,
+/area/liberty/scg/representative)
 "xi" = (
 /obj/structure/table/woodentable/walnut,
 /obj/structure/flora/pottedplant/small,
@@ -11893,6 +11939,12 @@
 	},
 /obj/effect/landmark/start{
 	name = "Private Eye"
+	},
+/obj/machinery/button/alternate/door{
+	dir = 4;
+	pixel_x = -25;
+	pixel_y = -5;
+	id_tag = "detective's_office_window"
 	},
 /turf/simulated/floor/carpet,
 /area/liberty/private_eye)
@@ -12463,7 +12515,8 @@
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/medical/liberty{
-	name = "Ward 3"
+	name = "Ward 3";
+	id_tag = "ward_3_airlock"
 	},
 /obj/structure/cable/green{
 	d1 = 1;
@@ -13107,6 +13160,7 @@
 /obj/machinery/door/airlock/maintenance,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/hallway/two/fore)
 "AS" = (
@@ -14134,6 +14188,9 @@
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/one_zero_one)
 "DE" = (
+/obj/machinery/door/firedoor,
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/conference_room)
 "DG" = (
@@ -14169,7 +14226,8 @@
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/medical/liberty{
-	name = "Ward One"
+	name = "Ward One";
+	id_tag = "ward_1_airlock"
 	},
 /obj/structure/cable/green{
 	d1 = 1;
@@ -15189,7 +15247,8 @@
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
-/turf/simulated/floor/tiled/techfloor/grid,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/two/fore)
 "Go" = (
 /obj/effect/floor_decal/corner/grey/mono,
@@ -15746,7 +15805,9 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
-/turf/simulated/floor/tiled,
+/obj/machinery/door/firedoor,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/turf/simulated/floor/tiled/monotile,
 /area/liberty/library)
 "HD" = (
 /obj/effect/floor_decal/corner/grey{
@@ -16050,6 +16111,12 @@
 	pixel_y = 4
 	},
 /obj/item/towel/random,
+/obj/machinery/button/alternate/door{
+	dir = 8;
+	pixel_x = 24;
+	pixel_y = -6;
+	id_tag = "ward_2_airlock"
+	},
 /turf/simulated/floor/wood/maple,
 /area/liberty/medbay/ward/two)
 "Is" = (
@@ -16445,10 +16512,17 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/machinery/door/firedoor,
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/conference_room)
 "Jp" = (
 /obj/effect/wallframe_spawn/reinforced,
+/obj/machinery/door/blast/shutters/open{
+	dir = 4;
+	id_tag = "detective's_office_window"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/private_eye)
 "Jq" = (
@@ -17930,6 +18004,7 @@
 /obj/machinery/light/small{
 	dir = 1
 	},
+/obj/item/device/plunger/robot,
 /turf/simulated/floor/tiled/old_tile,
 /area/liberty/hotel/dorm)
 "MX" = (
@@ -18508,6 +18583,12 @@
 	pixel_y = 4
 	},
 /obj/item/towel/random,
+/obj/machinery/button/alternate/door{
+	dir = 8;
+	pixel_x = 24;
+	pixel_y = -6;
+	id_tag = "ward_1_airlock"
+	},
 /turf/simulated/floor/wood/maple,
 /area/liberty/medbay/ward/one)
 "OA" = (
@@ -18743,6 +18824,10 @@
 "Pa" = (
 /obj/effect/paint_stripe/white,
 /obj/effect/wallframe_spawn/reinforced,
+/obj/machinery/door/blast/shutters/open{
+	id_tag = "consul_office_window";
+	dir = 8
+	},
 /turf/simulated/floor/plating,
 /area/liberty/hallway/two)
 "Pb" = (
@@ -18860,6 +18945,12 @@
 /obj/item/reagent_containers/food/drinks/cans/waterbottle,
 /obj/item/reagent_containers/food/drinks/cans/waterbottle,
 /obj/item/reagent_containers/food/drinks/cans/waterbottle,
+/obj/machinery/button/alternate/door{
+	dir = 8;
+	pixel_x = 24;
+	pixel_y = 6;
+	id_tag = "conference_room_window"
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/conference_room)
 "Pm" = (
@@ -19144,6 +19235,9 @@
 "PU" = (
 /obj/effect/paint_stripe/white,
 /obj/effect/wallframe_spawn/reinforced,
+/obj/machinery/door/blast/shutters/open{
+	id_tag = "consul_office_window"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/scg/representative)
 "PV" = (
@@ -20139,7 +20233,8 @@
 	dir = 8
 	},
 /obj/machinery/door/airlock/civilian{
-	name = "Corporate Representative's Office"
+	name = "Corporate Representative's Office";
+	id_tag = "corporative_representative"
 	},
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/hatch/yellow,
@@ -20155,6 +20250,9 @@
 "Sn" = (
 /obj/effect/wallframe_spawn/reinforced,
 /obj/effect/paint_stripe/white,
+/obj/machinery/door/blast/shutters/open{
+	id_tag = "conference_room_window"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/conference_room)
 "So" = (
@@ -21808,6 +21906,9 @@
 "Wb" = (
 /obj/effect/paint_stripe/white,
 /obj/effect/wallframe_spawn/reinforced,
+/obj/machinery/door/blast/shutters/open{
+	id_tag = "corporative_representative_window"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/corporate_office)
 "Wc" = (
@@ -21937,7 +22038,8 @@
 	dir = 8
 	},
 /obj/machinery/door/airlock/civilian{
-	name = "Psycologist's Office"
+	name = "Consul's Office";
+	id_tag = "consul_office"
 	},
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/hatch/yellow,
@@ -40690,7 +40792,7 @@ qk
 Ii
 VT
 Sn
-pn
+lT
 pn
 Nc
 vH
@@ -40892,7 +40994,7 @@ tX
 TD
 VT
 Sn
-pn
+lT
 Vr
 ns
 AT
@@ -41094,7 +41196,7 @@ XJ
 lX
 CZ
 Sn
-pn
+lT
 Vr
 qz
 Sw
@@ -41296,7 +41398,7 @@ jh
 Ii
 rL
 nB
-pn
+lT
 Um
 hE
 Ts
@@ -43126,7 +43228,7 @@ GS
 HD
 EU
 Dw
-PU
+xh
 Dy
 Wy
 wM
