@@ -128,6 +128,8 @@
 /area/liberty/hotel/over_stage)
 "as" = (
 /obj/machinery/door/airlock/maintenance,
+/obj/machinery/door/firedoor,
+/obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/two)
 "at" = (
@@ -2597,10 +2599,11 @@
 /obj/effect/floor_decal/spline/fancy{
 	dir = 1
 	},
-/obj/machinery/button/alternate/door{
+/obj/machinery/button/blast_door{
+	pixel_y = 29;
 	pixel_x = 1;
-	pixel_y = 27;
-	id_tag = "shutters_psychologist"
+	id_tag = "shutters_psychologist";
+	name = "window shutters"
 	},
 /turf/simulated/floor/wood,
 /area/liberty/psychologist/therapy_room)
@@ -6259,7 +6262,7 @@
 /turf/simulated/floor/tiled/dark/monotile,
 /area/liberty/hotel/room/one_zero_four)
 "lC" = (
-/obj/effect/wallframe_spawn/no_grille,
+/obj/effect/wallframe_spawn/reinforced,
 /turf/simulated/floor/plating,
 /area/liberty/hallway/two)
 "lD" = (
@@ -7003,11 +7006,12 @@
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 8
 	},
-/obj/machinery/button/alternate/door{
+/obj/machinery/button/blast_door{
 	dir = 4;
+	id_tag = "corporative_representative_window";
+	name = "Window shutters";
 	pixel_x = -25;
-	pixel_y = -5;
-	id_tag = "corporative_representative_window"
+	pixel_y = -5
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/corporate_office)
@@ -7709,6 +7713,7 @@
 	icon_state = "1-2"
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/door/firedoor,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/two)
 "oL" = (
@@ -11332,11 +11337,12 @@
 	d2 = 4;
 	icon_state = "1-4"
 	},
-/obj/machinery/button/alternate/door{
+/obj/machinery/button/blast_door{
 	dir = 4;
+	id_tag = "consul_office_window";
+	name = "Window shutters";
 	pixel_x = -25;
-	pixel_y = -5;
-	id_tag = "consul_office_window"
+	pixel_y = -5
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/scg/representative)
@@ -11940,11 +11946,12 @@
 /obj/effect/landmark/start{
 	name = "Private Eye"
 	},
-/obj/machinery/button/alternate/door{
+/obj/machinery/button/blast_door{
 	dir = 4;
+	id_tag = "detective's_office_window";
+	name = "Window shutters";
 	pixel_x = -25;
-	pixel_y = -5;
-	id_tag = "detective's_office_window"
+	pixel_y = -5
 	},
 /turf/simulated/floor/carpet,
 /area/liberty/private_eye)
@@ -12848,6 +12855,9 @@
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
+	},
+/obj/machinery/door/firedoor{
+	dir = 8
 	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/chapel/lobby)
@@ -13789,6 +13799,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/space)
 "Cz" = (
@@ -18945,11 +18956,11 @@
 /obj/item/reagent_containers/food/drinks/cans/waterbottle,
 /obj/item/reagent_containers/food/drinks/cans/waterbottle,
 /obj/item/reagent_containers/food/drinks/cans/waterbottle,
-/obj/machinery/button/alternate/door{
+/obj/machinery/button/blast_door{
 	dir = 8;
-	pixel_x = 24;
-	pixel_y = 6;
-	id_tag = "conference_room_window"
+	id_tag = "conference_room_window";
+	name = "window shutters";
+	pixel_x = 24
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/conference_room)
@@ -19910,6 +19921,9 @@
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/airlock/multi_tile/civilian,
+/obj/machinery/door/firedoor{
+	dir = 8
+	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/chapel/lobby)
 "RD" = (
@@ -20824,9 +20838,13 @@
 /turf/simulated/floor/tiled/old_tile,
 /area/liberty/hallway/two/fore)
 "Tx" = (
-/obj/effect/wallframe_spawn/no_grille,
-/turf/simulated/floor/plating,
-/area/liberty/maintenance/two)
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/maintenance,
+/obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/turf/simulated/floor/tiled/techfloor/grid,
+/area/liberty/maintenance/two/fore)
 "Ty" = (
 /obj/effect/floor_decal/steeldecal/steel_decals_central7,
 /turf/simulated/floor/tiled/techmaint,
@@ -42802,7 +42820,7 @@ kl
 kL
 rq
 tu
-Ct
+Tx
 vg
 IG
 Mb
@@ -44251,7 +44269,7 @@ Qp
 JB
 Wo
 ZV
-Tx
+Za
 tf
 Za
 ab
@@ -44453,7 +44471,7 @@ pv
 JB
 Wo
 kt
-Tx
+Za
 tf
 Za
 ab
@@ -44857,7 +44875,7 @@ sv
 JB
 Wo
 ZV
-Tx
+Za
 tf
 Za
 ab
@@ -45059,7 +45077,7 @@ Qp
 JB
 Wo
 kt
-Tx
+Za
 tf
 Za
 ab
