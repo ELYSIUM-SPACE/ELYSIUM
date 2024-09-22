@@ -169,6 +169,19 @@
 	},
 /turf/simulated/floor/plating,
 /area/lucius/maintenance/second)
+"ax" = (
+/obj/effect/wallframe_spawn/reinforced_phoron,
+/obj/machinery/door/blast/regular/open{
+	dir = 8;
+	id_tag = "lucius_chamber";
+	name = "Reactor Blast Doors"
+	},
+/obj/machinery/door/firedoor/sol,
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 4
+	},
+/turf/simulated/floor/plating,
+/area/lucius/engineering)
 "aF" = (
 /obj/machinery/atmospherics/pipe/simple/hidden{
 	dir = 6
@@ -1678,11 +1691,6 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
 	dir = 4
 	},
-/obj/structure/cable/green{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/hallway/second)
 "eS" = (
@@ -1858,7 +1866,8 @@
 /obj/machinery/power/emitter/gyrotron/anchored{
 	dir = 8;
 	initial_id_tag = "lucius_fusion_gyro";
-	req_access = list("ACCESS_SOL_ENG")
+	req_access = list("ACCESS_SOL_ENG");
+	active_power_usage = 250
 	},
 /obj/structure/cable/yellow{
 	d2 = 4;
@@ -2073,11 +2082,6 @@
 /obj/effect/floor_decal/corner/black{
 	dir = 5
 	},
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/hallway/second)
 "fQ" = (
@@ -2255,12 +2259,12 @@
 /turf/simulated/floor/reinforced/airless,
 /area/lucius/engineering)
 "gl" = (
-/obj/machinery/fusion_fuel_injector/mapped{
-	dir = 8;
-	id_tag = "lucius_fusion_fuel"
+/obj/machinery/atmospherics/portables_connector{
+	dir = 8
 	},
-/turf/simulated/floor/tiled/techfloor/grid,
-/area/lucius/engineering)
+/obj/machinery/portable_atmospherics/canister/hydrogen,
+/turf/simulated/floor/plating,
+/area/lucius/maintenance/second)
 "gm" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -2419,11 +2423,6 @@
 /obj/effect/floor_decal/borderfloorblack,
 /obj/effect/floor_decal/corner/blue/border,
 /obj/effect/floor_decal/industrial/warning,
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/hallway/second)
 "gJ" = (
@@ -2615,6 +2614,9 @@
 /obj/structure/closet/crate/radiation,
 /obj/item/stack/material/tritium/ten,
 /obj/effect/floor_decal/industrial/outline/yellow,
+/obj/item/stack/material/deuterium{
+	amount = 20
+	},
 /turf/simulated/floor/tiled,
 /area/lucius/engineering)
 "hh" = (
@@ -2824,11 +2826,17 @@
 	dir = 1;
 	pixel_y = -24
 	},
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 4
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/lucius/engineering)
 "hH" = (
 /obj/effect/floor_decal/industrial/warning{
 	dir = 8
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 10
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/engineering)
@@ -3043,11 +3051,6 @@
 /obj/effect/floor_decal/steeldecal/steel_decals4{
 	dir = 4
 	},
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/hallway/second)
 "if" = (
@@ -3217,6 +3220,9 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 4
 	},
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 4
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/lucius/maintenance/second)
 "ix" = (
@@ -3381,11 +3387,6 @@
 	frequency = 1331;
 	id_tag = "lucius_dock_outer";
 	name = "Main Docking Port External Access"
-	},
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
 	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/lucius/hallway/second)
@@ -3982,11 +3983,6 @@
 /obj/effect/floor_decal/steeldecal/steel_decals4{
 	dir = 5
 	},
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/hallway/second)
 "sZ" = (
@@ -4094,6 +4090,9 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 4
 	},
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 5
+	},
 /turf/simulated/floor/plating,
 /area/lucius/maintenance/second)
 "vb" = (
@@ -4141,6 +4140,9 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 9
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/lucius/maintenance/second)
@@ -5235,6 +5237,7 @@
 	name = "Reactor Maintenance Hatch"
 	},
 /obj/machinery/door/firedoor/sol,
+/obj/machinery/atmospherics/pipe/simple/hidden,
 /turf/simulated/floor/tiled/techmaint,
 /area/lucius/engineering)
 "PT" = (
@@ -5313,6 +5316,15 @@
 	},
 /turf/simulated/floor/reinforced/airless,
 /area/lucius/storage)
+"RD" = (
+/obj/machinery/atmospherics/unary/outlet_injector{
+	dir = 4;
+	frequency = 1441;
+	icon_state = "map_injector";
+	id = "air_in"
+	},
+/turf/simulated/floor/reinforced/airless,
+/area/lucius/engineering)
 "RF" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 5
@@ -27330,7 +27342,7 @@ Ej
 Ej
 Ej
 Ej
-Ej
+RD
 bs
 TT
 UU
@@ -27532,7 +27544,7 @@ SX
 cj
 SX
 cj
-cj
+ax
 bs
 kf
 UU
@@ -27732,8 +27744,8 @@ ck
 dm
 dm
 fl
-gl
-gl
+dm
+dm
 hG
 mC
 in
@@ -28544,7 +28556,7 @@ mC
 hb
 mC
 Uu
-UU
+gl
 UU
 UU
 aa

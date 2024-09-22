@@ -263,6 +263,7 @@
 /obj/machinery/light{
 	dir = 8
 	},
+/obj/structure/closet/emcloset,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/three/starboard)
 "aM" = (
@@ -571,8 +572,9 @@
 /turf/simulated/floor/tiled/dark,
 /area/liberty/director/reception)
 "bw" = (
+/obj/effect/paint_stripe/white,
 /turf/simulated/wall/prepainted,
-/area/liberty/director/apartment)
+/area/liberty/hallway/three)
 "bx" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 4
@@ -1114,6 +1116,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/structure/closet/firecloset,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/three/starboard)
 "cQ" = (
@@ -1123,6 +1126,7 @@
 /obj/effect/floor_decal/corner/grey{
 	dir = 8
 	},
+/obj/machinery/disposal,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/three/starboard)
 "cR" = (
@@ -1714,6 +1718,10 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/command)
+"eW" = (
+/obj/effect/paint_stripe/yellow,
+/turf/simulated/wall/prepainted,
+/area/liberty/hallway/three)
 "fa" = (
 /obj/machinery/door/airlock/glass/civilian,
 /obj/machinery/door/firedoor,
@@ -1723,13 +1731,13 @@
 /turf/simulated/floor/tiled/dark/monotile,
 /area/liberty/holodeck)
 "fb" = (
-/obj/effect/wallframe_spawn/no_grille,
 /obj/machinery/door/blast/shutters/open{
 	dir = 4;
 	id_tag = "tcomms_shutters";
 	name = "Telecommunications Shutters"
 	},
 /obj/machinery/door/firedoor,
+/obj/effect/wallframe_spawn/reinforced,
 /turf/simulated/floor/plating,
 /area/liberty/telecomms)
 "fd" = (
@@ -2031,12 +2039,12 @@
 /turf/simulated/open,
 /area/liberty/engineering/substation/substation_level_three)
 "gq" = (
-/obj/effect/wallframe_spawn/no_grille,
 /obj/machinery/door/blast/shutters/open{
 	id_tag = "tcomms_shutters";
 	name = "Telecommunications Shutters"
 	},
 /obj/machinery/door/firedoor,
+/obj/effect/wallframe_spawn/reinforced,
 /turf/simulated/floor/plating,
 /area/liberty/telecomms)
 "gv" = (
@@ -2452,8 +2460,8 @@
 /turf/simulated/floor/tiled/dark/monotile,
 /area/liberty/maintenance/three/port)
 "iA" = (
-/obj/effect/wallframe_spawn/no_grille,
 /obj/machinery/door/firedoor,
+/obj/effect/wallframe_spawn/reinforced,
 /turf/simulated/floor/plating,
 /area/liberty/director/reception)
 "iB" = (
@@ -2820,6 +2828,7 @@
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/three/port)
 "ky" = (
+/obj/effect/paint_stripe/yellow,
 /turf/simulated/wall/r_wall/prepainted,
 /area/liberty/director/apartment)
 "kA" = (
@@ -3030,6 +3039,7 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/maintenance/three/port)
 "lD" = (
+/obj/effect/paint_stripe/yellow,
 /turf/simulated/wall/prepainted,
 /area/liberty/director/office)
 "lG" = (
@@ -3043,6 +3053,16 @@
 /obj/machinery/light,
 /turf/simulated/floor/tiled/techfloor,
 /area/liberty/maintenance/three/fore)
+"lL" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 6
+	},
+/obj/machinery/light{
+	dir = 4
+	},
+/obj/structure/closet/emcloset,
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/three/starboard)
 "lO" = (
 /obj/effect/floor_decal/corner/grey/three_quarters{
 	dir = 8
@@ -3353,6 +3373,13 @@
 "mZ" = (
 /turf/simulated/open,
 /area/liberty/hallway/three)
+"na" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 6
+	},
+/obj/structure/table/standard,
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/three/starboard)
 "nb" = (
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 8
@@ -3775,6 +3802,7 @@
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/three)
 "oX" = (
+/obj/effect/paint_stripe/yellow,
 /turf/simulated/wall/prepainted,
 /area/liberty/hallway/three/starboard)
 "oZ" = (
@@ -4278,6 +4306,10 @@
 /obj/random/trash,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/three/port)
+"qN" = (
+/obj/effect/paint_stripe/yellow,
+/turf/simulated/wall/prepainted,
+/area/liberty/maintenance/three/fore)
 "qP" = (
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers,
@@ -4835,6 +4867,10 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/three)
+"tj" = (
+/obj/effect/paint_stripe/yellow,
+/turf/simulated/wall/prepainted,
+/area/liberty/maintenance/three/starboard)
 "to" = (
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/hatch/yellow,
@@ -6203,6 +6239,10 @@
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/three/port)
+"zp" = (
+/obj/effect/paint_stripe/yellow,
+/turf/simulated/wall/r_wall/prepainted,
+/area/liberty/maintenance/three/starboard)
 "zq" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
 	dir = 4
@@ -7031,6 +7071,10 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/holodeck)
+"Cm" = (
+/obj/effect/paint_stripe/yellow,
+/turf/simulated/wall/r_wall/prepainted,
+/area/liberty/director/office)
 "Cn" = (
 /obj/effect/floor_decal/corner/grey{
 	dir = 1
@@ -9082,6 +9126,7 @@
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/three/starboard)
 "KO" = (
+/obj/effect/paint_stripe/yellow,
 /turf/simulated/wall/prepainted,
 /area/liberty/director/reception)
 "KP" = (
@@ -9416,6 +9461,10 @@
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/three/port)
+"LU" = (
+/obj/effect/wallframe_spawn/reinforced,
+/turf/simulated/floor/plating,
+/area/liberty/telecomms)
 "LV" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /turf/simulated/floor/tiled/techmaint,
@@ -12247,6 +12296,7 @@
 /turf/simulated/floor/carpet/blue,
 /area/liberty/director/office)
 "Yl" = (
+/obj/effect/paint_stripe/yellow,
 /turf/simulated/wall/r_wall/prepainted,
 /area/liberty/hallway/three/starboard)
 "Yo" = (
@@ -12337,9 +12387,9 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/three)
 "YE" = (
-/obj/structure/catwalk,
-/turf/simulated/floor/airless,
-/area/liberty/maintenance/three/port)
+/obj/effect/paint_stripe/white,
+/turf/simulated/wall/prepainted,
+/area/liberty/command)
 "YG" = (
 /obj/structure/bed/chair/bench/beige/right{
 	dir = 1
@@ -25520,8 +25570,8 @@ lk
 VW
 FE
 KF
-YE
-YE
+WB
+WB
 jo
 WB
 WB
@@ -25722,8 +25772,8 @@ lk
 UX
 AJ
 KF
-YE
-YE
+WB
+WB
 VG
 WB
 WB
@@ -31170,7 +31220,7 @@ Mk
 QE
 Es
 ek
-rW
+LU
 mc
 dM
 qr
@@ -31574,7 +31624,7 @@ Dl
 ew
 Es
 qm
-rW
+LU
 tC
 Cq
 jt
@@ -32776,22 +32826,22 @@ HT
 KJ
 eN
 xN
-HT
-UW
-UW
-UW
-HT
-UW
-UW
-UW
-HT
-ov
+bw
+hv
+hv
+hv
+bw
+hv
+hv
+hv
+bw
+YE
 tc
-ov
+YE
 to
-ov
-HT
-iB
+YE
+bw
+bb
 UW
 UW
 iB
@@ -32978,7 +33028,7 @@ Ta
 zV
 oW
 cr
-UW
+hv
 ap
 mZ
 mZ
@@ -32987,11 +33037,11 @@ mZ
 mZ
 ap
 ap
-ov
+YE
 CR
 tr
 fs
-ov
+YE
 ap
 ap
 mZ
@@ -33180,7 +33230,7 @@ CI
 BW
 ZC
 gZ
-UW
+hv
 ap
 mZ
 mZ
@@ -33382,7 +33432,7 @@ bb
 Kq
 md
 ZV
-UW
+hv
 ap
 mZ
 mZ
@@ -33584,7 +33634,7 @@ bb
 BW
 ZC
 Ew
-HT
+bw
 ap
 mZ
 mZ
@@ -33786,7 +33836,7 @@ cm
 Gt
 ZC
 Ew
-UW
+hv
 ap
 mZ
 mZ
@@ -33988,14 +34038,14 @@ cm
 pl
 ZC
 gZ
-UW
+hv
 ap
 ap
 ap
 ap
 ap
 ap
-ov
+YE
 OV
 hT
 HC
@@ -34003,7 +34053,7 @@ sm
 Zb
 hT
 wj
-ov
+YE
 ap
 ap
 ap
@@ -34190,7 +34240,7 @@ cm
 Zo
 ZC
 Ew
-UW
+hv
 ap
 mZ
 mZ
@@ -34392,7 +34442,7 @@ bb
 BW
 ZC
 Ew
-HT
+bw
 ap
 mZ
 mZ
@@ -34594,7 +34644,7 @@ bb
 Kq
 md
 ZV
-UW
+hv
 ap
 mZ
 mZ
@@ -34796,7 +34846,7 @@ Ii
 BA
 ZC
 gZ
-UW
+hv
 ap
 mZ
 mZ
@@ -34998,7 +35048,7 @@ HT
 Wt
 oW
 co
-UW
+hv
 ap
 mZ
 mZ
@@ -35007,11 +35057,11 @@ mZ
 mZ
 ap
 ap
-ov
+YE
 An
 sM
 qe
-ov
+YE
 ap
 ap
 mZ
@@ -35019,7 +35069,7 @@ mZ
 mZ
 mZ
 mZ
-HT
+iB
 iB
 Gk
 WB
@@ -35200,27 +35250,27 @@ HT
 KJ
 eN
 xN
-HT
-UW
-UW
-UW
-HT
-UW
-UW
-UW
-HT
-ov
+bw
+hv
+hv
+hv
+bw
+hv
+hv
+hv
+bw
+YE
 tc
-ov
+YE
 to
-ov
-HT
-UW
-UW
-UW
-UW
-UW
-HT
+YE
+bw
+hv
+hv
+hv
+hv
+hv
+bw
 iB
 iB
 Gk
@@ -35398,7 +35448,7 @@ ac
 ac
 ac
 Py
-HT
+eW
 Rs
 oW
 LL
@@ -35600,7 +35650,7 @@ SK
 SK
 ac
 fP
-HT
+eW
 Pc
 ji
 Jy
@@ -35802,16 +35852,16 @@ SK
 SK
 ac
 Pz
-HT
-HT
-HT
+eW
+eW
+eW
 XJ
-HT
-HT
-HT
-HT
-HT
-HT
+eW
+eW
+eW
+eW
+eW
+eW
 uB
 gE
 Im
@@ -36013,7 +36063,7 @@ TW
 gv
 gv
 ZY
-NS
+qN
 Xx
 gE
 uL
@@ -38024,14 +38074,14 @@ aa
 aa
 SK
 dr
-kU
-kU
-kU
-kU
-kU
+Cm
+Cm
+Cm
+Cm
+Cm
 bd
-kU
-kU
+Cm
+Cm
 lD
 lD
 pG
@@ -38836,9 +38886,9 @@ ky
 ky
 ky
 ky
-bw
+EI
 bp
-bw
+EI
 ky
 Vh
 Tz
@@ -39055,9 +39105,9 @@ OF
 oX
 cP
 DT
-eJ
-eJ
-hc
+na
+na
+lL
 cQ
 RL
 yH
@@ -39254,7 +39304,7 @@ TM
 TM
 TM
 Yl
-RM
+zp
 zY
 kA
 zY
@@ -40253,12 +40303,12 @@ Au
 Ai
 ky
 pp
-zY
-zY
+tj
+tj
 oV
-zY
-zY
-RM
+tj
+tj
+zp
 Gf
 Gf
 Gf
