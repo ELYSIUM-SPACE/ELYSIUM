@@ -169,19 +169,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/lucius/maintenance/second)
-"ax" = (
-/obj/effect/wallframe_spawn/reinforced_phoron,
-/obj/machinery/door/blast/regular/open{
-	dir = 8;
-	id_tag = "lucius_chamber";
-	name = "Reactor Blast Doors"
-	},
-/obj/machinery/door/firedoor/sol,
-/obj/machinery/atmospherics/pipe/simple/hidden{
-	dir = 4
-	},
-/turf/simulated/floor/plating,
-/area/lucius/engineering)
 "aF" = (
 /obj/machinery/atmospherics/pipe/simple/hidden{
 	dir = 6
@@ -1994,6 +1981,9 @@
 	dir = 4
 	},
 /obj/effect/floor_decal/industrial/outline/yellow,
+/obj/item/clothing/suit/radiation,
+/obj/item/clothing/head/radiation,
+/obj/item/device/geiger,
 /turf/simulated/floor/tiled,
 /area/lucius/engineering)
 "fw" = (
@@ -2259,12 +2249,10 @@
 /turf/simulated/floor/reinforced/airless,
 /area/lucius/engineering)
 "gl" = (
-/obj/machinery/atmospherics/portables_connector{
-	dir = 8
+/turf/simulated/floor/reinforced/carbon_dioxide{
+	initial_gas = list("carbon_dioxide" = 1000)
 	},
-/obj/machinery/portable_atmospherics/canister/hydrogen,
-/turf/simulated/floor/plating,
-/area/lucius/maintenance/second)
+/area/lucius/fuel)
 "gm" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -2390,11 +2378,11 @@
 /turf/simulated/floor/plating,
 /area/lucius/thrust)
 "gF" = (
-/obj/structure/catwalk,
 /obj/machinery/firealarm{
 	dir = 8;
 	pixel_x = -24
 	},
+/obj/structure/catwalk,
 /turf/simulated/floor/plating,
 /area/lucius/thrust)
 "gH" = (
@@ -2716,6 +2704,10 @@
 	},
 /obj/effect/decal/cleanable/filth,
 /obj/structure/closet/firecloset,
+/obj/item/clothing/suit/fire/heavy,
+/obj/item/clothing/gloves/fire,
+/obj/item/clothing/head/hardhat/firefighter,
+/obj/item/clothing/accessory/fire_overpants,
 /turf/simulated/floor/plating,
 /area/lucius/thrust)
 "hp" = (
@@ -2834,9 +2826,6 @@
 "hH" = (
 /obj/effect/floor_decal/industrial/warning{
 	dir = 8
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden{
-	dir = 10
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/engineering)
@@ -3005,6 +2994,9 @@
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/firedoor/sol,
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 4
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/lucius/thrust)
 "ic" = (
@@ -3218,9 +3210,6 @@
 	},
 /obj/machinery/door/firedoor/sol,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden{
 	dir = 4
 	},
 /turf/simulated/floor/tiled/techmaint,
@@ -4090,9 +4079,6 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 4
 	},
-/obj/machinery/atmospherics/pipe/simple/hidden{
-	dir = 5
-	},
 /turf/simulated/floor/plating,
 /area/lucius/maintenance/second)
 "vb" = (
@@ -4140,9 +4126,6 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 9
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden{
-	dir = 4
 	},
 /turf/simulated/floor/plating,
 /area/lucius/maintenance/second)
@@ -5237,7 +5220,6 @@
 	name = "Reactor Maintenance Hatch"
 	},
 /obj/machinery/door/firedoor/sol,
-/obj/machinery/atmospherics/pipe/simple/hidden,
 /turf/simulated/floor/tiled/techmaint,
 /area/lucius/engineering)
 "PT" = (
@@ -5245,6 +5227,7 @@
 	dir = 5
 	},
 /obj/random/tool,
+/obj/structure/catwalk,
 /turf/simulated/floor/plating,
 /area/lucius/thrust)
 "Qh" = (
@@ -5316,15 +5299,6 @@
 	},
 /turf/simulated/floor/reinforced/airless,
 /area/lucius/storage)
-"RD" = (
-/obj/machinery/atmospherics/unary/outlet_injector{
-	dir = 4;
-	frequency = 1441;
-	icon_state = "map_injector";
-	id = "air_in"
-	},
-/turf/simulated/floor/reinforced/airless,
-/area/lucius/engineering)
 "RF" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 5
@@ -27342,7 +27316,7 @@ Ej
 Ej
 Ej
 Ej
-RD
+Ej
 bs
 TT
 UU
@@ -27544,7 +27518,7 @@ SX
 cj
 SX
 cj
-ax
+cj
 bs
 kf
 UU
@@ -28556,7 +28530,7 @@ mC
 hb
 mC
 Uu
-gl
+UU
 UU
 UU
 aa
@@ -30771,7 +30745,7 @@ UU
 UU
 aS
 cv
-dB
+gl
 ex
 dB
 mD
