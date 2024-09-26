@@ -1994,6 +1994,9 @@
 	dir = 4
 	},
 /obj/effect/floor_decal/industrial/outline/yellow,
+/obj/item/clothing/suit/radiation,
+/obj/item/clothing/head/radiation,
+/obj/item/device/geiger,
 /turf/simulated/floor/tiled,
 /area/lucius/engineering)
 "fw" = (
@@ -2259,12 +2262,11 @@
 /turf/simulated/floor/reinforced/airless,
 /area/lucius/engineering)
 "gl" = (
-/obj/machinery/atmospherics/portables_connector{
-	dir = 8
+TRO9IN-patch-16
+/turf/simulated/floor/reinforced/carbon_dioxide{
+	initial_gas = list("carbon_dioxide" = 1000)
 	},
-/obj/machinery/portable_atmospherics/canister/hydrogen,
-/turf/simulated/floor/plating,
-/area/lucius/maintenance/second)
+/area/lucius/fuel)
 "gm" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -2390,11 +2392,11 @@
 /turf/simulated/floor/plating,
 /area/lucius/thrust)
 "gF" = (
-/obj/structure/catwalk,
 /obj/machinery/firealarm{
 	dir = 8;
 	pixel_x = -24
 	},
+/obj/structure/catwalk,
 /turf/simulated/floor/plating,
 /area/lucius/thrust)
 "gH" = (
@@ -2716,6 +2718,10 @@
 	},
 /obj/effect/decal/cleanable/filth,
 /obj/structure/closet/firecloset,
+/obj/item/clothing/suit/fire/heavy,
+/obj/item/clothing/gloves/fire,
+/obj/item/clothing/head/hardhat/firefighter,
+/obj/item/clothing/accessory/fire_overpants,
 /turf/simulated/floor/plating,
 /area/lucius/thrust)
 "hp" = (
@@ -3005,6 +3011,9 @@
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/firedoor/sol,
+/obj/machinery/atmospherics/pipe/simple/hidden{
+	dir = 4
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/lucius/thrust)
 "ic" = (
@@ -5245,6 +5254,7 @@
 	dir = 5
 	},
 /obj/random/tool,
+/obj/structure/catwalk,
 /turf/simulated/floor/plating,
 /area/lucius/thrust)
 "Qh" = (
@@ -30771,7 +30781,7 @@ UU
 UU
 aS
 cv
-dB
+gl
 ex
 dB
 mD

@@ -118,3 +118,5 @@
 	name = "MRM Lazarev - Main Compartment"
 	icon_state = "lazarev"
 	req_access = list(access_sol_general)
+	requires_power = FALSE
+
