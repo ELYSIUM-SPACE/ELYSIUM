@@ -1111,13 +1111,17 @@
 /turf/simulated/floor/reinforced/hydrogen/fuel,
 /area/lucius/fuel)
 "dE" = (
-/turf/simulated/floor/reinforced/carbon_dioxide,
+/turf/simulated/floor/reinforced/carbon_dioxide{
+	initial_gas = list("carbon_dioxide" = 1000)
+	},
 /area/lucius/fuel)
 "dF" = (
 /obj/machinery/firealarm{
 	pixel_y = 24
 	},
-/turf/simulated/floor/reinforced/carbon_dioxide,
+/turf/simulated/floor/reinforced/carbon_dioxide{
+	initial_gas = list("carbon_dioxide" = 1000)
+	},
 /area/lucius/fuel)
 "dI" = (
 /obj/machinery/door/blast/regular{
@@ -1566,7 +1570,9 @@
 	id = "lucius_propellant_in";
 	id_tag = null
 	},
-/turf/simulated/floor/reinforced/carbon_dioxide,
+/turf/simulated/floor/reinforced/carbon_dioxide{
+	initial_gas = list("carbon_dioxide" = 1000)
+	},
 /area/lucius/fuel)
 "eE" = (
 /obj/machinery/air_sensor{
@@ -1575,7 +1581,9 @@
 /obj/machinery/atmospherics/unary/vent_pump/siphon/on/atmos/tank{
 	id_tag = "lucius_propellant_out"
 	},
-/turf/simulated/floor/reinforced/carbon_dioxide,
+/turf/simulated/floor/reinforced/carbon_dioxide{
+	initial_gas = list("carbon_dioxide" = 1000)
+	},
 /area/lucius/fuel)
 "eH" = (
 /obj/machinery/atmospherics/pipe/simple/heat_exchanging{
@@ -2261,12 +2269,6 @@
 	},
 /turf/simulated/floor/reinforced/airless,
 /area/lucius/engineering)
-"gl" = (
-TRO9IN-patch-16
-/turf/simulated/floor/reinforced/carbon_dioxide{
-	initial_gas = list("carbon_dioxide" = 1000)
-	},
-/area/lucius/fuel)
 "gm" = (
 /obj/structure/cable/yellow{
 	d1 = 1;
@@ -28566,7 +28568,7 @@ mC
 hb
 mC
 Uu
-gl
+Vh
 UU
 UU
 aa
@@ -30781,7 +30783,7 @@ UU
 UU
 aS
 cv
-gl
+dE
 ex
 dB
 mD
