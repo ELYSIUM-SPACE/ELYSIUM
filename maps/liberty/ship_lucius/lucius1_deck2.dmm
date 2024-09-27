@@ -649,9 +649,6 @@
 /area/lucius/lazarev)
 "bT" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/red,
-/obj/structure/fuel_port{
-	pixel_x = 32
-	},
 /obj/structure/cable/cyan{
 	d2 = 8;
 	icon_state = "0-8"
@@ -887,7 +884,9 @@
 /area/lucius/lazarev)
 "db" = (
 /obj/effect/floor_decal/industrial/outline/yellow,
-/obj/machinery/suit_storage_unit/standard_unit,
+/obj/machinery/suit_storage_unit/explorer{
+	req_access = "ACCESS_SOL_EXP"
+	},
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/lazarev)
 "df" = (
@@ -2255,6 +2254,10 @@
 /area/lucius/lazarev)
 "gb" = (
 /obj/effect/floor_decal/corner/lightgrey/border,
+/obj/machinery/firealarm{
+	dir = 4;
+	pixel_x = 24
+	},
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/lazarev)
 "gg" = (
@@ -2987,9 +2990,7 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/atmospherics/pipe/simple/hidden/yellow{
-	dir = 4
-	},
+/obj/machinery/atmospherics/omni/mixer,
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/thrust)
 "hZ" = (
@@ -5337,6 +5338,15 @@
 	},
 /turf/simulated/floor/reinforced/airless,
 /area/lucius/engineering)
+"RE" = (
+/obj/machinery/atmospherics/portables_connector{
+	dir = 1
+	},
+/obj/machinery/portable_atmospherics/canister/carbon_dioxide{
+	start_pressure = 1000.00
+	},
+/turf/simulated/floor/plating,
+/area/lucius/thrust)
 "RF" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 5
@@ -5568,9 +5578,8 @@
 /obj/effect/floor_decal/corner/lightgrey/border{
 	dir = 1
 	},
-/obj/machinery/firealarm{
-	dir = 4;
-	pixel_x = 24
+/obj/structure/fuel_port{
+	pixel_x = 32
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/lucius/lazarev)
@@ -30783,7 +30792,7 @@ UU
 UU
 aS
 cv
-dE
+dB
 ex
 dB
 mD
@@ -32405,7 +32414,7 @@ fF
 Lf
 PE
 hY
-ru
+RE
 ru
 aa
 aa
