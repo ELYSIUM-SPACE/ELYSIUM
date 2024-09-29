@@ -45,3 +45,5 @@
 
 	away_site_budget = 3
 	id_hud_icons = 'maps/liberty/icons/assignment_hud.dmi'
+
+	lobby_screens = list('code_ark/icons/elysium_lobby.png')

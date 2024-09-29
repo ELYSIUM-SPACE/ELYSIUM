@@ -12847,6 +12847,9 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 4
 	},
+/obj/machinery/door/firedoor{
+	dir = 8
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/one/fore_port)
 "azb" = (
@@ -12877,6 +12880,9 @@
 	icon_state = "4-8"
 	},
 /obj/machinery/door/airlock/hatch/maintenance,
+/obj/machinery/door/firedoor{
+	dir = 8
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/one/fore_port)
 "azd" = (
@@ -13634,6 +13640,7 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
+/obj/machinery/door/firedoor,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/one/fore_port)
 "aAB" = (
@@ -14927,6 +14934,9 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
 	dir = 4
+	},
+/obj/machinery/door/firedoor{
+	dir = 8
 	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hydroponics)
@@ -24451,6 +24461,7 @@
 "aTL" = (
 /obj/machinery/door/airlock/maintenance,
 /obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/door/firedoor,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/rnd/equip)
 "aTM" = (
