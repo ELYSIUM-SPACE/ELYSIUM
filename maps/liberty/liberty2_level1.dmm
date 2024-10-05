@@ -4614,9 +4614,6 @@
 /obj/effect/floor_decal/corner/grey{
 	dir = 1
 	},
-/obj/machinery/atm{
-	pixel_x = -27
-	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "aiL" = (
@@ -5760,9 +5757,6 @@
 	},
 /obj/effect/floor_decal/industrial/warning{
 	dir = 4
-	},
-/obj/machinery/atm{
-	pixel_x = 27
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
@@ -14388,9 +14382,6 @@
 	dir = 5
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on,
-/obj/machinery/atm{
-	pixel_y = 28
-	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_port)
 "aBW" = (
@@ -17202,11 +17193,12 @@
 /obj/effect/floor_decal/corner/grey{
 	dir = 6
 	},
+/obj/machinery/firealarm{
+	dir = 4;
+	pixel_x = 24
+	},
 /obj/effect/floor_decal/industrial/warning/corner{
 	dir = 4
-	},
-/obj/machinery/atm{
-	pixel_x = 27
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one)
@@ -17883,7 +17875,6 @@
 /obj/machinery/light/spot{
 	dir = 1
 	},
-/obj/item/device/eftpos,
 /turf/simulated/floor/tiled/dark,
 /area/liberty/shopping/keeper)
 "aHL" = (
@@ -18644,10 +18635,6 @@
 	dir = 9
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
-/obj/structure/window/reinforced{
-	dir = 8;
-	pixel_x = -4
-	},
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/shopping)
 "aJq" = (
@@ -19616,10 +19603,6 @@
 	dir = 10
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
-/obj/structure/window/reinforced{
-	dir = 8;
-	pixel_x = -4
-	},
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/shopping)
 "aKY" = (
@@ -19640,7 +19623,6 @@
 	dir = 8;
 	pixel_x = -4
 	},
-/obj/machinery/door/window/brigdoor/southright,
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/shopping)
 "aLa" = (
@@ -22282,10 +22264,6 @@
 /obj/structure/window/reinforced{
 	pixel_y = -3
 	},
-/obj/structure/window/reinforced{
-	dir = 8;
-	pixel_x = -4
-	},
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/shopping)
 "aPL" = (
@@ -22314,10 +22292,6 @@
 	},
 /obj/structure/window/reinforced{
 	pixel_y = -3
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 3
 	},
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/shopping)
@@ -23072,10 +23046,6 @@
 /obj/effect/floor_decal/spline/plain/red{
 	dir = 10
 	},
-/obj/structure/window/reinforced{
-	dir = 8;
-	pixel_x = -4
-	},
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/shopping)
 "aRg" = (
@@ -23724,8 +23694,6 @@
 /obj/machinery/light{
 	dir = 1
 	},
-/obj/item/device/eftpos,
-/obj/item/device/eftpos,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/foyer)
 "aSr" = (
@@ -23760,9 +23728,6 @@
 	},
 /obj/effect/floor_decal/steeldecal/steel_decals6{
 	dir = 9
-	},
-/obj/machinery/atm{
-	pixel_x = 27
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/aft_port)
@@ -23818,10 +23783,6 @@
 /obj/structure/window/reinforced{
 	dir = 8;
 	pixel_x = -4
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 3
 	},
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/shopping)
@@ -23899,7 +23860,6 @@
 	},
 /obj/effect/floor_decal/corner/purple/mono,
 /obj/item/hand_labeler,
-/obj/item/device/eftpos,
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/rnd)
 "aSJ" = (
@@ -24383,10 +24343,6 @@
 "aTy" = (
 /obj/machinery/computer/modular/preset/hotel{
 	dir = 8
-	},
-/obj/item/paper{
-	name = "Персоналу отеля!";
-	info = "Системы отеля окончательно вышли из строя с момента последней магнитной бури.<BR> Мы откатились до базовой версии, так что я рассчитываю на то, что вы будете вручную вести дела!"
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/foyer)
@@ -25122,9 +25078,6 @@
 	dir = 4
 	},
 /obj/effect/floor_decal/steeldecal/steel_decals6,
-/obj/machinery/atm{
-	pixel_y = 28
-	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/aft_port)
 "aUR" = (
@@ -28381,7 +28334,6 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/obj/item/device/eftpos,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/cargo_bay/one/office)
 "baL" = (
@@ -29083,7 +29035,6 @@
 /obj/structure/table/standard,
 /obj/item/paper_bin,
 /obj/item/pen,
-/obj/item/device/eftpos,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/cargo_bay/one/office)
 "bca" = (
@@ -29252,7 +29203,6 @@
 /obj/effect/floor_decal/corner/green/border{
 	dir = 4
 	},
-/obj/item/device/eftpos,
 /turf/simulated/floor/wood/maple,
 /area/liberty/medbay/chemistry)
 "bcq" = (
@@ -30260,7 +30210,6 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/item/device/eftpos,
 /turf/simulated/floor/wood/maple,
 /area/liberty/medbay/exam)
 "bdT" = (
@@ -32783,7 +32732,6 @@
 /obj/machinery/light/spot{
 	dir = 8
 	},
-/obj/item/device/eftpos,
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/restaurant/main)
 "bhS" = (
@@ -40444,16 +40392,6 @@
 	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/arrivals_shuttle)
-"bLO" = (
-/obj/effect/floor_decal/corner/grey{
-	dir = 6
-	},
-/obj/machinery/firealarm{
-	dir = 4;
-	pixel_x = 24
-	},
-/turf/simulated/floor/tiled/techmaint,
-/area/liberty/hallway/one)
 "cvK" = (
 /obj/structure/railing/mapped,
 /obj/structure/railing/mapped{
@@ -40556,15 +40494,6 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/aft_starboard)
-"ilm" = (
-/obj/effect/floor_decal/corner/grey{
-	dir = 5
-	},
-/obj/machinery/atm{
-	pixel_y = 28
-	},
-/turf/simulated/floor/tiled/techmaint,
-/area/liberty/hallway/one/starboard)
 "iDw" = (
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/firedoor,
@@ -40641,15 +40570,6 @@
 	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/one/aft_terminal)
-"lGI" = (
-/obj/effect/floor_decal/corner/grey{
-	dir = 5
-	},
-/obj/machinery/atm{
-	pixel_y = 28
-	},
-/turf/simulated/floor/tiled/techmaint,
-/area/liberty/hallway/one/fore_port)
 "lYO" = (
 /obj/machinery/atmospherics/unary/vent_scrubber/on{
 	dir = 4
@@ -40788,15 +40708,6 @@
 	},
 /turf/simulated/floor/reinforced/airless,
 /area/space)
-"sEm" = (
-/obj/effect/floor_decal/corner/red/diagonal,
-/obj/machinery/atmospherics/pipe/simple/hidden/supply,
-/obj/structure/window/reinforced{
-	dir = 8;
-	pixel_x = -4
-	},
-/turf/simulated/floor/tiled/white,
-/area/liberty/shopping)
 "sKX" = (
 /obj/effect/floor_decal/industrial/warning/full,
 /obj/machinery/atmospherics/unary/vent_pump/high_volume/airlock,
@@ -40843,21 +40754,6 @@
 	},
 /turf/simulated/floor/reinforced/airless,
 /area/space)
-"sZP" = (
-/obj/structure/table/rack,
-/obj/effect/floor_decal/spline/plain/red{
-	dir = 6
-	},
-/obj/structure/window/reinforced{
-	dir = 8;
-	pixel_x = -4
-	},
-/obj/structure/window/reinforced{
-	dir = 4;
-	pixel_x = 3
-	},
-/turf/simulated/floor/tiled/white/monotile,
-/area/liberty/shopping)
 "ucr" = (
 /obj/machinery/cryopod,
 /obj/machinery/light,
@@ -54771,7 +54667,7 @@ aeO
 agr
 azb
 aAy
-lGI
+avu
 aCY
 aEo
 aFV
@@ -60235,7 +60131,7 @@ aKZ
 aHP
 aNY
 aPM
-sZP
+aKZ
 aHP
 aTD
 aUP
@@ -60432,8 +60328,8 @@ aDi
 aEE
 aGg
 aHR
-sEm
-sEm
+aJs
+aJs
 aJs
 aOa
 aJs
@@ -63267,7 +63163,7 @@ aOj
 aGk
 aJz
 aHX
-bLO
+aJz
 aCb
 aDl
 aGk
@@ -66298,7 +66194,7 @@ aQd
 aRs
 aSO
 aSQ
-ilm
+aUY
 aWm
 aXn
 aYJ
