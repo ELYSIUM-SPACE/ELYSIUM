@@ -2351,6 +2351,11 @@
 	dir = 4;
 	pixel_x = -24
 	},
+/obj/structure/table/steel,
+/obj/item/paper{
+	name = "Прочесть перед работой с камерой сгорания!";
+	info = "Не забудь докачать диоксид углерода! Он в канистре, которая находится в шлюзе между этим помещением и двигателями!"
+	},
 /turf/simulated/floor/plating,
 /area/lucius/fuel)
 "gB" = (
@@ -3397,6 +3402,7 @@
 /area/lucius/storage)
 "jy" = (
 /obj/effect/floor_decal/industrial/outline/yellow,
+/obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/simulated/floor/tiled/dark/monotile,
 /area/lucius/storage)
 "jz" = (
@@ -3877,6 +3883,7 @@
 /area/lucius/hangar)
 "pS" = (
 /obj/item/stack/tile/floor,
+/obj/machinery/power/port_gen/pacman,
 /turf/simulated/floor/plating,
 /area/lucius/storage)
 "pU" = (
@@ -5632,6 +5639,9 @@
 "UM" = (
 /obj/structure/closet/crate,
 /obj/effect/floor_decal/industrial/outline/yellow,
+/obj/item/stack/material/phoron{
+	amount = 10
+	},
 /turf/simulated/floor/tiled/dark/monotile,
 /area/lucius/storage)
 "UU" = (

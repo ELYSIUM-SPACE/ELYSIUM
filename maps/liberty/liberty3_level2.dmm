@@ -11153,6 +11153,15 @@
 	},
 /turf/simulated/floor/tiled/white,
 /area/liberty/rnd/toxins)
+"vT" = (
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 1
+	},
+/obj/machinery/atm{
+	pixel_y = 28
+	},
+/turf/simulated/floor/wood/walnut,
+/area/liberty/hotel/hallway/east)
 "vU" = (
 /obj/machinery/disposal,
 /obj/effect/floor_decal/spline/fancy{
@@ -12595,6 +12604,7 @@
 /obj/item/paper_bin,
 /obj/item/pen,
 /obj/machinery/light,
+/obj/item/device/eftpos,
 /turf/simulated/floor/carpet/blue2,
 /area/liberty/scg/representative)
 "zr" = (
@@ -13565,6 +13575,9 @@
 	dir = 1
 	},
 /obj/effect/floor_decal/industrial/warning/corner,
+/obj/machinery/atm{
+	pixel_y = 28
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two)
 "BS" = (
@@ -14012,6 +14025,15 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/two)
+"Dg" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 6
+	},
+/obj/machinery/atm{
+	pixel_x = 27
+	},
+/turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two)
 "Dh" = (
 /obj/structure/table/woodentable_reinforced/walnut,
@@ -15753,6 +15775,9 @@
 	},
 /obj/effect/floor_decal/industrial/warning/corner{
 	dir = 1
+	},
+/obj/machinery/atm{
+	pixel_y = 28
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two/fore)
@@ -20827,6 +20852,7 @@
 /obj/machinery/light/spot{
 	dir = 1
 	},
+/obj/item/device/eftpos,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/corporate_office)
 "Tw" = (
@@ -23121,6 +23147,7 @@
 /obj/item/device/flashlight/lamp/modern{
 	pixel_y = 5
 	},
+/obj/item/device/eftpos,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/private_eye)
 "Zo" = (
@@ -23334,6 +23361,9 @@
 	dir = 5
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on,
+/obj/machinery/atm{
+	pixel_y = 28
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two/fore)
 
@@ -38592,7 +38622,7 @@ kY
 oa
 oa
 oa
-Er
+vT
 QK
 IE
 IE
@@ -45681,7 +45711,7 @@ YL
 Sl
 YL
 Xr
-YL
+Dg
 HT
 lu
 tg
