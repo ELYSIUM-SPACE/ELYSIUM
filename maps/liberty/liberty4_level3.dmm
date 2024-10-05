@@ -2556,6 +2556,17 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/three)
+"jl" = (
+/obj/effect/floor_decal/carpet/blue{
+	dir = 1
+	},
+/obj/structure/table/woodentable/walnut,
+/obj/item/paper{
+	name = "Нашему коллеге!";
+	info = "Эффективность вашего сектора упала за последние несколько месяцев, директор.<BR> Мы надеемся на то, что ваши менеджерские таланты помогут исправить текущее положение дел."
+	},
+/turf/simulated/floor/carpet/blue,
+/area/liberty/director/office)
 "jm" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
 	dir = 10
@@ -5526,6 +5537,9 @@
 	},
 /obj/machinery/light{
 	dir = 1
+	},
+/obj/machinery/atm{
+	pixel_x = 27
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/three)
@@ -9422,6 +9436,15 @@
 	},
 /turf/simulated/floor/wood,
 /area/liberty/hotel/room/penthouse/bathroom)
+"LO" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 9
+	},
+/obj/machinery/atm{
+	pixel_x = -27
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/three)
 "LR" = (
 /obj/item/trash/cigbutt{
 	pixel_x = -2;
@@ -9595,6 +9618,7 @@
 	dir = 1
 	},
 /obj/structure/table/woodentable/walnut,
+/obj/machinery/photocopier/faxmachine,
 /turf/simulated/floor/carpet/blue,
 /area/liberty/director/office)
 "MB" = (
@@ -10487,6 +10511,15 @@
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/three/fore)
+"Qq" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 9
+	},
+/obj/machinery/atm{
+	pixel_x = -27
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/three/starboard)
 "Qs" = (
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
@@ -11967,6 +12000,22 @@
 /obj/random/junk,
 /turf/simulated/floor/tiled/techfloor,
 /area/liberty/maintenance/three/port)
+"Wr" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 5
+	},
+/obj/effect/floor_decal/steeldecal/steel_decals6{
+	dir = 8
+	},
+/obj/effect/floor_decal/industrial/warning/corner{
+	dir = 1;
+	icon_state = "warningcorner"
+	},
+/obj/machinery/atm{
+	pixel_y = 28
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/three)
 "Wt" = (
 /obj/effect/floor_decal/corner/grey{
 	dir = 5
@@ -25365,7 +25414,7 @@ IY
 AT
 Ur
 vl
-vl
+LO
 vl
 QA
 PH
@@ -35466,7 +35515,7 @@ ac
 ac
 Py
 eW
-Rs
+Wr
 oW
 LL
 AT
@@ -35477,7 +35526,7 @@ IY
 AT
 Bb
 XP
-vl
+LO
 Ur
 cK
 pl
@@ -37284,7 +37333,7 @@ hb
 SK
 SK
 Ti
-Mu
+jl
 aH
 ak
 ch
@@ -38504,7 +38553,7 @@ YT
 aQ
 ky
 uq
-nM
+Qq
 Ht
 wG
 oj
