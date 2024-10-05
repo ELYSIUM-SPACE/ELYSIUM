@@ -4614,6 +4614,9 @@
 /obj/effect/floor_decal/corner/grey{
 	dir = 1
 	},
+/obj/machinery/atm{
+	pixel_x = -27
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
 "aiL" = (
@@ -5757,6 +5760,9 @@
 	},
 /obj/effect/floor_decal/industrial/warning{
 	dir = 4
+	},
+/obj/machinery/atm{
+	pixel_x = 26
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
@@ -14382,6 +14388,9 @@
 	dir = 5
 	},
 /obj/machinery/atmospherics/unary/vent_pump/on,
+/obj/machinery/atm{
+	pixel_y = 29
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_port)
 "aBW" = (
@@ -14554,6 +14563,9 @@
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/universal{
 	dir = 4
+	},
+/obj/machinery/atm{
+	pixel_y = 29
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one)
@@ -17875,6 +17887,7 @@
 /obj/machinery/light/spot{
 	dir = 1
 	},
+/obj/item/device/eftpos,
 /turf/simulated/floor/tiled/dark,
 /area/liberty/shopping/keeper)
 "aHL" = (
@@ -20135,6 +20148,7 @@
 /obj/item/stamp/clown,
 /obj/item/pen,
 /obj/effect/floor_decal/spline/fancy/black,
+/obj/item/device/eftpos,
 /turf/simulated/floor/carpet/red,
 /area/liberty/hotel/administrator)
 "aLZ" = (
@@ -23694,6 +23708,8 @@
 /obj/machinery/light{
 	dir = 1
 	},
+/obj/item/device/eftpos,
+/obj/item/device/eftpos,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/foyer)
 "aSr" = (
@@ -23728,6 +23744,9 @@
 	},
 /obj/effect/floor_decal/steeldecal/steel_decals6{
 	dir = 9
+	},
+/obj/machinery/atm{
+	pixel_x = 26
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/aft_port)
@@ -23860,6 +23879,7 @@
 	},
 /obj/effect/floor_decal/corner/purple/mono,
 /obj/item/hand_labeler,
+/obj/item/device/eftpos,
 /turf/simulated/floor/tiled/white/monotile,
 /area/liberty/rnd)
 "aSJ" = (
@@ -25078,6 +25098,9 @@
 	dir = 4
 	},
 /obj/effect/floor_decal/steeldecal/steel_decals6,
+/obj/machinery/atm{
+	pixel_y = 29
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/aft_port)
 "aUR" = (
@@ -28334,6 +28357,7 @@
 /obj/machinery/light{
 	dir = 8
 	},
+/obj/item/device/eftpos,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/cargo_bay/one/office)
 "baL" = (
@@ -29035,6 +29059,7 @@
 /obj/structure/table/standard,
 /obj/item/paper_bin,
 /obj/item/pen,
+/obj/item/device/eftpos,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/cargo_bay/one/office)
 "bca" = (
@@ -29188,6 +29213,7 @@
 /obj/item/paper_bin,
 /obj/item/pen,
 /obj/item/folder/white,
+/obj/item/device/eftpos,
 /turf/simulated/floor/wood/maple,
 /area/liberty/medbay/chemistry)
 "bcp" = (
@@ -30210,6 +30236,7 @@
 /obj/machinery/light{
 	dir = 4
 	},
+/obj/item/device/eftpos,
 /turf/simulated/floor/wood/maple,
 /area/liberty/medbay/exam)
 "bdT" = (
@@ -32732,6 +32759,7 @@
 /obj/machinery/light/spot{
 	dir = 8
 	},
+/obj/item/device/eftpos,
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/restaurant/main)
 "bhS" = (
@@ -40563,6 +40591,15 @@
 /obj/structure/lattice,
 /turf/space,
 /area/space)
+"kVn" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 5
+	},
+/obj/machinery/atm{
+	pixel_y = 29
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/one/starboard)
 "lwm" = (
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/landmark{
@@ -66194,7 +66231,7 @@ aQd
 aRs
 aSO
 aSQ
-aUY
+kVn
 aWm
 aXn
 aYJ

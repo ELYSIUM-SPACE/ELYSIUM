@@ -3282,6 +3282,7 @@
 /obj/structure/sign/poster/bay_50{
 	pixel_y = 32
 	},
+/obj/item/device/eftpos,
 /turf/simulated/floor/wood,
 /area/liberty/psychologist/therapy_room)
 "gO" = (
@@ -9979,6 +9980,15 @@
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/room/three_zero_two)
+"tt" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 9
+	},
+/obj/machinery/atm{
+	pixel_x = -27
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/two/fore)
 "tu" = (
 /obj/structure/catwalk,
 /turf/simulated/floor/plating,
@@ -12765,6 +12775,15 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two)
+"zJ" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 5
+	},
+/obj/machinery/atm{
+	pixel_y = 29
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/two)
 "zK" = (
 /obj/structure/closet/secure_closet/medical1,
 /obj/item/device/flashlight/pen,
@@ -13565,6 +13584,9 @@
 	dir = 1
 	},
 /obj/effect/floor_decal/industrial/warning/corner,
+/obj/machinery/atm{
+	pixel_y = 29
+	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/two)
 "BS" = (
@@ -20827,6 +20849,7 @@
 /obj/machinery/light/spot{
 	dir = 1
 	},
+/obj/item/device/eftpos,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/corporate_office)
 "Tw" = (
@@ -21370,6 +21393,15 @@
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/chapel/lobby)
+"UR" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 6
+	},
+/obj/machinery/atm{
+	pixel_x = 26
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/two)
 "US" = (
 /obj/structure/bed/sofa/black/left,
 /obj/effect/floor_decal/spline/fancy/black{
@@ -23121,6 +23153,7 @@
 /obj/item/device/flashlight/lamp/modern{
 	pixel_y = 5
 	},
+/obj/item/device/eftpos,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/private_eye)
 "Zo" = (
@@ -38181,7 +38214,7 @@ SM
 Wm
 RL
 Af
-Wm
+tt
 KN
 jZ
 AP
@@ -42839,7 +42872,7 @@ pf
 ll
 hq
 GS
-Qp
+zJ
 iu
 QO
 PU
@@ -43640,8 +43673,8 @@ yQ
 Cj
 zI
 zx
-AL
 tb
+AL
 AL
 PD
 rJ
@@ -45681,7 +45714,7 @@ YL
 Sl
 YL
 Xr
-YL
+UR
 HT
 lu
 tg

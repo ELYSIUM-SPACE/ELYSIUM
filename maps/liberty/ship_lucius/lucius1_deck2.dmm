@@ -3397,6 +3397,7 @@
 /area/lucius/storage)
 "jy" = (
 /obj/effect/floor_decal/industrial/outline/yellow,
+/obj/machinery/portable_atmospherics/canister/oxygen,
 /turf/simulated/floor/tiled/dark/monotile,
 /area/lucius/storage)
 "jz" = (
@@ -3877,6 +3878,7 @@
 /area/lucius/hangar)
 "pS" = (
 /obj/item/stack/tile/floor,
+/obj/machinery/power/port_gen/pacman,
 /turf/simulated/floor/plating,
 /area/lucius/storage)
 "pU" = (
@@ -5632,6 +5634,7 @@
 "UM" = (
 /obj/structure/closet/crate,
 /obj/effect/floor_decal/industrial/outline/yellow,
+/obj/item/stack/material/phoron/ten,
 /turf/simulated/floor/tiled/dark/monotile,
 /area/lucius/storage)
 "UU" = (
