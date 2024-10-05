@@ -2312,15 +2312,13 @@
 /area/venturestar/engineering)
 "eA" = (
 /obj/structure/catwalk,
+/obj/machinery/suit_storage_unit/standard_unit,
 /obj/machinery/alarm/venturestar{
 	dir = 1;
 	pixel_y = -24
 	},
 /obj/machinery/atmospherics/pipe/simple/visible/fuel{
 	dir = 4
-	},
-/obj/machinery/suit_storage_unit/mining/alt{
-	req_access = list("ACCESS_VENTURESTAR")
 	},
 /turf/simulated/floor,
 /area/venturestar/engineering)
