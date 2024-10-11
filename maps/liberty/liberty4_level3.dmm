@@ -990,9 +990,7 @@
 /obj/machinery/light{
 	dir = 8
 	},
-/obj/machinery/atmospherics/unary/vent_scrubber/on{
-	dir = 4
-	},
+/obj/machinery/atmospherics/unary/vent_scrubber/on,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/maintenance/three/port)
 "cB" = (
@@ -1648,12 +1646,10 @@
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 8
 	},
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
-	dir = 4
-	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
 	dir = 4
 	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/maintenance/three/port)
 "eN" = (
@@ -1677,15 +1673,6 @@
 "eO" = (
 /turf/simulated/wall/r_wall/prepainted,
 /area/liberty/hotel/room/penthouse/bedroom)
-"eP" = (
-/obj/effect/wallframe_spawn/reinforced,
-/obj/machinery/door/firedoor,
-/obj/machinery/door/blast/shutters/open{
-	id_tag = "shutters_hotel201";
-	name = "Protective Shutters"
-	},
-/turf/simulated/floor/plating,
-/area/liberty/hotel/room/penthouse)
 "eR" = (
 /obj/effect/floor_decal/corner/black/mono,
 /obj/machinery/telecomms/server/liberty/admin,
@@ -2432,6 +2419,22 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/three/starboard)
+"it" = (
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/structure/catwalk,
+/obj/machinery/power/apc{
+	dir = 4;
+	name = "east bump";
+	pixel_x = 24
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/three/starboard)
 "iu" = (
 /obj/effect/floor_decal/corner/blue/three_quarters,
 /obj/machinery/computer/telecomms/server{
@@ -2443,21 +2446,8 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/telecomms)
 "iw" = (
-/obj/effect/floor_decal/spline/fancy/black{
-	dir = 8
-	},
-/obj/machinery/door/firedoor,
-/obj/machinery/door/airlock/multi_tile/civilian,
-/obj/machinery/atmospherics/pipe/simple/hidden/supply,
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
-/obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/effect/floor_decal/corner/grey/mono,
-/obj/effect/floor_decal/industrial/hatch/yellow,
-/turf/simulated/floor/tiled/dark/monotile,
+/obj/effect/wallframe_spawn/reinforced,
+/turf/simulated/floor/plating,
 /area/liberty/maintenance/three/port)
 "iA" = (
 /obj/machinery/door/firedoor,
@@ -2680,18 +2670,22 @@
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/three/port)
 "jN" = (
-/obj/effect/floor_decal/corner/grey{
-	dir = 10
+/obj/effect/floor_decal/spline/fancy/black{
+	dir = 8
 	},
-/obj/machinery/atmospherics/pipe/simple/hidden/supply,
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/multi_tile/civilian,
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/structure/cable/green{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/turf/simulated/floor/tiled/techmaint,
-/area/liberty/hallway/three)
+/obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/turf/simulated/floor/tiled/dark/monotile,
+/area/liberty/maintenance/three/port)
 "jO" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
@@ -2882,6 +2876,7 @@
 	dir = 8;
 	pixel_x = -24
 	},
+/obj/structure/table/woodentable_reinforced/walnut,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/maintenance/three/port)
 "kP" = (
@@ -3948,8 +3943,12 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/machinery/atmospherics/pipe/manifold4w/hidden/scrubbers,
-/obj/machinery/atmospherics/pipe/manifold4w/hidden/supply,
+/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/supply{
+	dir = 1
+	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/maintenance/three/port)
 "pz" = (
@@ -4527,6 +4526,7 @@
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 8
 	},
+/obj/machinery/disposal,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/maintenance/three/port)
 "rO" = (
@@ -5619,6 +5619,11 @@
 /obj/random/maintenance/clean,
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/three/port)
+"wE" = (
+/obj/effect/wallframe_spawn/reinforced,
+/obj/machinery/door/firedoor,
+/turf/simulated/floor/plating,
+/area/liberty/hotel/room/penthouse)
 "wG" = (
 /obj/effect/floor_decal/corner/grey{
 	dir = 9
@@ -6169,18 +6174,13 @@
 	d2 = 8;
 	icon_state = "4-8"
 	},
-/obj/machinery/atmospherics/pipe/manifold4w/hidden/supply,
-/obj/machinery/atmospherics/pipe/manifold4w/hidden/scrubbers,
 /obj/structure/cable/green{
 	d1 = 1;
 	d2 = 8;
 	icon_state = "1-8"
 	},
-/obj/structure/cable/green{
-	d1 = 2;
-	d2 = 4;
-	icon_state = "2-4"
-	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/supply,
+/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers,
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/three)
 "yZ" = (
@@ -7449,6 +7449,19 @@
 	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/telecomms)
+"DP" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 10
+	},
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/three)
 "DQ" = (
 /obj/machinery/door/airlock/maintenance,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
@@ -7904,19 +7917,19 @@
 	dir = 8
 	},
 /obj/structure/table/woodentable/walnut,
-/obj/machinery/button/windowtint{
-	dir = 4;
-	pixel_x = -24;
-	pixel_y = 10
-	},
 /obj/machinery/button/blast_door{
 	dir = 4;
-	id_tag = "shutters_hotel303";
+	id_tag = "shutters_hotel401";
 	name = "Window shutters";
 	pixel_x = -24
 	},
 /obj/machinery/hotel_room_controller{
 	id_tag = "room_Penthouse_controller"
+	},
+/obj/machinery/light_switch/advanced{
+	dir = 4;
+	pixel_x = -23;
+	pixel_y = 9
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/hotel/room/penthouse)
@@ -8772,14 +8785,10 @@
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 1
 	},
-/obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/structure/cable/green{
-	d1 = 1;
-	d2 = 2;
-	icon_state = "1-2"
-	},
-/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
-	dir = 4
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
 	},
 /turf/simulated/floor/wood/walnut,
 /area/liberty/maintenance/three/port)
@@ -8983,7 +8992,7 @@
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 4
 	},
-/obj/structure/table/woodentable_reinforced/walnut,
+/obj/structure/flora/pottedplant/minitree,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/maintenance/three/port)
 "Kt" = (
@@ -9895,6 +9904,13 @@
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 1
 	},
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 8;
+	icon_state = "1-8"
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/supply,
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/maintenance/three/port)
 "NS" = (
@@ -10419,6 +10435,15 @@
 "Qg" = (
 /turf/simulated/open,
 /area/liberty/maintenance/three/port)
+"Qh" = (
+/obj/effect/wallframe_spawn/reinforced,
+/obj/machinery/door/firedoor,
+/obj/machinery/door/blast/shutters/open{
+	id_tag = "shutters_hotel401";
+	name = "Protective Shutters"
+	},
+/turf/simulated/floor/plating,
+/area/liberty/hotel/room/penthouse)
 "Qk" = (
 /obj/effect/floor_decal/corner/grey{
 	dir = 10
@@ -10562,17 +10587,13 @@
 /area/liberty/maintenance/three/fore)
 "QM" = (
 /obj/effect/floor_decal/spline/fancy/black,
-/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
-	dir = 4
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden/supply{
-	dir = 4
-	},
 /obj/structure/cable/green{
 	d1 = 4;
 	d2 = 8;
 	icon_state = "4-8"
 	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers,
+/obj/machinery/atmospherics/pipe/manifold/hidden/supply,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/maintenance/three/port)
 "QQ" = (
@@ -11987,7 +12008,6 @@
 /obj/machinery/light{
 	dir = 4
 	},
-/obj/machinery/disposal,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/maintenance/three/port)
 "WB" = (
@@ -12273,6 +12293,26 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/holodeck)
+"Yc" = (
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/structure/cable/green{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/obj/structure/cable/green{
+	d1 = 2;
+	d2 = 4;
+	icon_state = "2-4"
+	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/supply{
+	dir = 1
+	},
+/obj/machinery/atmospherics/pipe/manifold/hidden/scrubbers{
+	dir = 1
+	},
+/turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/three)
 "Yd" = (
 /obj/effect/floor_decal/steeldecal/steel_decals6{
 	dir = 8
@@ -12603,7 +12643,6 @@
 /obj/effect/floor_decal/spline/fancy/black{
 	dir = 5
 	},
-/obj/structure/flora/pottedplant/minitree,
 /obj/machinery/power/apc{
 	dir = 4;
 	name = "east bump";
@@ -27187,12 +27226,12 @@ HT
 BW
 oW
 Ew
-cC
+iw
 cA
 eL
-rM
-kN
 nA
+kN
+rM
 Kr
 AC
 PZ
@@ -27388,7 +27427,7 @@ IJ
 of
 nK
 yW
-jN
+Ew
 iw
 Jx
 pt
@@ -27589,9 +27628,9 @@ QJ
 NS
 HT
 BW
-oW
-Ew
-Tc
+Yc
+DP
+jN
 NR
 QM
 pR
@@ -27606,7 +27645,7 @@ Jw
 Jw
 lX
 jE
-eP
+wE
 SK
 SK
 Gk
@@ -27793,7 +27832,7 @@ rv
 BW
 oW
 Ew
-cC
+Tc
 Wz
 pS
 Qg
@@ -27808,7 +27847,7 @@ yJ
 kg
 uC
 OB
-eP
+wE
 SK
 SK
 Gk
@@ -28212,7 +28251,7 @@ nb
 Jw
 FA
 Jg
-eP
+Qh
 SK
 SK
 Gk
@@ -28414,7 +28453,7 @@ RB
 fh
 fh
 zN
-eP
+Qh
 SK
 SK
 Gk
@@ -28818,7 +28857,7 @@ lf
 cz
 lY
 ds
-eP
+Qh
 SK
 SK
 Gk
@@ -29020,7 +29059,7 @@ lf
 cS
 dl
 dm
-eP
+Qh
 SK
 SK
 Gk
@@ -29424,7 +29463,7 @@ lf
 fh
 Gy
 dn
-eP
+Qh
 SK
 SK
 Gk
@@ -29626,7 +29665,7 @@ qq
 es
 es
 rn
-eP
+Qh
 SK
 SK
 Gk
@@ -30030,7 +30069,7 @@ nH
 nH
 nH
 nH
-eP
+Qh
 SK
 SK
 Gk
@@ -30232,7 +30271,7 @@ ty
 RK
 XL
 Dt
-eP
+Qh
 SK
 SK
 SK
@@ -32865,7 +32904,7 @@ iB
 hv
 hv
 iB
-SK
+iB
 Gk
 WB
 WB
@@ -33066,7 +33105,7 @@ mZ
 mZ
 mZ
 mZ
-iB
+ap
 iB
 Gk
 WB
@@ -35086,7 +35125,7 @@ mZ
 mZ
 mZ
 mZ
-iB
+ap
 iB
 Gk
 WB
@@ -41131,7 +41170,7 @@ pp
 pp
 pp
 Mc
-MI
+it
 MI
 Hc
 zO

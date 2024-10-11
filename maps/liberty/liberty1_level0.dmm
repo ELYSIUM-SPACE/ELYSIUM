@@ -5715,8 +5715,10 @@
 	d2 = 2;
 	icon_state = "1-2"
 	},
-/obj/machinery/door/airlock/external/bolted,
 /obj/machinery/atmospherics/pipe/simple/hidden,
+/obj/machinery/door/airlock/external/bolted{
+	frequency = 1331
+	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/zero/port_docks)
 "alx" = (
@@ -7923,7 +7925,8 @@
 /obj/machinery/door/firedoor,
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/window/brigdoor/northright{
-	id = "Cell 1"
+	id = "Cell 1";
+	req_access = list("ACCESS_BRIG")
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
@@ -9328,7 +9331,7 @@
 	dir = 4;
 	frequency = 1331;
 	id_tag = "engineering_shuttle_inner";
-	name = "Rawson Internal Access"
+	name = "Kenobi Internal Access"
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/yellow{
 	dir = 10
@@ -9555,7 +9558,7 @@
 	dir = 4;
 	frequency = 1331;
 	id_tag = "engineering_shuttle_outer";
-	name = "Rawson External Access"
+	name = "Kenobi External Access"
 	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/kenobi/airlock)
@@ -10230,18 +10233,14 @@
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/hangar)
 "cUz" = (
-/obj/machinery/atmospherics/pipe/simple/hidden/black{
-	dir = 4
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/external/bolted{
+	frequency = 1331
 	},
-/obj/machinery/airlock_sensor/airlock_exterior{
-	frequency = 1331;
-	id_tag = "bebop_shuttle_sensor_out";
-	master_tag = "bebop_shuttle";
-	pixel_y = -8
-	},
-/obj/effect/paint/black,
-/turf/simulated/wall/r_titanium,
-/area/liberty/bebop/service)
+/turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/zero/port_docks)
 "cUH" = (
 /obj/structure/table/rack,
 /obj/item/device/flash,
@@ -10468,6 +10467,20 @@
 	},
 /turf/simulated/floor/tiled/dark/monotile,
 /area/liberty/engineering/shower)
+"deo" = (
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/external/bolted{
+	frequency = 1331
+	},
+/obj/machinery/access_button/airlock_exterior{
+	frequency = 1331;
+	master_tag = "bebop_dock";
+	pixel_x = 24
+	},
+/turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/zero/port_docks)
 "der" = (
 /obj/effect/floor_decal/corner_steel_grid{
 	dir = 6
@@ -12883,6 +12896,9 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/engineering/hallway/engineering_hall_level_zero)
+"fLQ" = (
+/turf/space,
+/area/liberty/maintenance/zero/brig)
 "fMl" = (
 /obj/item/stack/cable_coil/single,
 /turf/simulated/floor/airless,
@@ -14708,7 +14724,7 @@
 	dir = 4;
 	frequency = 1331;
 	id_tag = "engineering_shuttle_outer";
-	name = "Rawson External Access"
+	name = "Kenobi External Access"
 	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/kenobi/airlock)
@@ -14889,6 +14905,18 @@
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/locker_room_m)
+"idk" = (
+/obj/machinery/power/apc{
+	dir = 1;
+	name = "north bump";
+	pixel_y = 18
+	},
+/obj/structure/cable/green{
+	d2 = 2;
+	icon_state = "0-2"
+	},
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/zero/brig)
 "idP" = (
 /obj/effect/floor_decal/industrial/outline/yellow,
 /obj/structure/largecrate/animal/cow,
@@ -15101,6 +15129,11 @@
 /obj/machinery/firealarm{
 	dir = 8;
 	pixel_x = -24
+	},
+/obj/structure/cable/green{
+	d1 = 1;
+	d2 = 2;
+	icon_state = "1-2"
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/zero/brig)
@@ -15922,6 +15955,8 @@
 /obj/item/storage/briefcase/crimekit,
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/outline,
+/obj/item/clothing/suit/storage/toggle/labcoat,
+/obj/item/clothing/suit/storage/toggle/labcoat,
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/sfp/laboratory)
 "jaE" = (
@@ -19444,7 +19479,7 @@
 	dir = 4;
 	frequency = 1331;
 	id_tag = "engineering_shuttle_inner";
-	name = "Rawson Internal Access"
+	name = "Kenobi Internal Access"
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden,
 /obj/machinery/atmospherics/pipe/simple/hidden/yellow{
@@ -22666,7 +22701,7 @@
 	dir = 8;
 	frequency = 1331;
 	id_tag = "engineering_shuttle";
-	name = "Rawson Docking Port Controller";
+	name = "Kenobi Docking Port Controller";
 	pixel_x = 24;
 	tag_exterior_sensor = "engineering_shuttle_exterior_sensor"
 	},
@@ -23415,7 +23450,7 @@
 	dir = 4;
 	frequency = 1331;
 	id_tag = "engineering_shuttle_inner";
-	name = "Rawson Internal Access"
+	name = "Kenobi Internal Access"
 	},
 /obj/machinery/atmospherics/pipe/manifold/hidden/yellow{
 	dir = 1
@@ -24547,6 +24582,12 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/zero/engineering)
+"scT" = (
+/obj/structure/railing/mapped{
+	dir = 4
+	},
+/turf/space,
+/area/liberty/maintenance/zero/brig)
 "sde" = (
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/structure/table/steel_reinforced,
@@ -26618,11 +26659,13 @@
 /obj/effect/floor_decal/corner/grey/mono,
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/firedoor,
-/obj/machinery/door/airlock/external/bolted,
 /obj/structure/cable/green{
 	d1 = 1;
 	d2 = 2;
 	icon_state = "1-2"
+	},
+/obj/machinery/door/airlock/external/bolted{
+	frequency = 1331
 	},
 /turf/simulated/floor/tiled/monotile,
 /area/liberty/hallway/zero/port_docks)
@@ -27593,6 +27636,9 @@
 	},
 /turf/simulated/floor/airless,
 /area/space)
+"vEP" = (
+/turf/space,
+/area/liberty/maintenance/zero/hangar)
 "vFA" = (
 /obj/structure/catwalk,
 /obj/machinery/alarm{
@@ -28817,6 +28863,30 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/sfp/hallway/zero)
+"wSX" = (
+/obj/effect/floor_decal/industrial/warning/full,
+/obj/structure/catwalk,
+/obj/structure/railing/mapped{
+	dir = 8
+	},
+/obj/machinery/atmospherics/unary/vent_pump/high_volume/shuttle{
+	dir = 8
+	},
+/obj/machinery/embedded_controller/radio/airlock/docking_port{
+	dir = 8;
+	display_name = "Aft Dock (Petrov)";
+	frequency = 1380;
+	id_tag = "petrov_shuttle_dock_airlock";
+	pixel_x = 24;
+	pixel_y = 0;
+	req_access = list(list("ACCESS_SECURITY","ACCESS_EXTERNAL","ACCESS_TORCH_PETROV"));
+	tag_airpump = "petrov_shuttle_dock_pump";
+	tag_chamber_sensor = "petrov_shuttle_dock_sensor";
+	tag_exterior_door = "petrov_shuttle_dock_outer";
+	tag_interior_door = "petrov_shuttle_dock_inner"
+	},
+/turf/simulated/floor/plating,
+/area/liberty/hallway/zero/port_docks)
 "wTH" = (
 /obj/effect/paint/white,
 /obj/effect/paint_stripe/sfp_blue,
@@ -28940,7 +29010,8 @@
 /obj/machinery/door/firedoor,
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/window/brigdoor/northleft{
-	id = "Cell 2"
+	id = "Cell 2";
+	req_access = list("ACCESS_BRIG")
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
@@ -29359,7 +29430,7 @@
 	dir = 4;
 	frequency = 1331;
 	id_tag = "engineering_shuttle_outer";
-	name = "Rawson External Access"
+	name = "Kenobi External Access"
 	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/kenobi/airlock)
@@ -29936,11 +30007,21 @@
 /turf/simulated/floor/tiled/old_tile,
 /area/liberty/sfp/prison)
 "yfL" = (
-/obj/machinery/atmospherics/unary/engine{
-	dir = 1
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/external/bolted{
+	frequency = 1331
 	},
-/turf/simulated/wall/r_titanium,
-/area/liberty/kenobi/airlock)
+/obj/effect/floor_decal/corner/grey/mono,
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/access_button/airlock_exterior{
+	frequency = 1331;
+	master_tag = "bebop_dock";
+	pixel_x = 24
+	},
+/turf/simulated/floor/tiled/monotile,
+/area/liberty/hallway/zero/port_docks)
 "yfZ" = (
 /obj/structure/railing/mapped{
 	dir = 8
@@ -37904,7 +37985,7 @@ wee
 jij
 pJW
 wee
-cUz
+llj
 aad
 alm
 alr
@@ -38107,10 +38188,10 @@ anT
 pQV
 lEt
 aoB
-aey
+cUz
 aln
 als
-aey
+cUz
 alD
 alO
 amf
@@ -38511,10 +38592,10 @@ luQ
 qaF
 lEt
 aoB
-aey
+yfL
 alp
 alu
-aey
+deo
 alF
 alQ
 amh
@@ -38714,7 +38795,7 @@ upA
 wee
 llj
 aad
-alq
+wSX
 alv
 aad
 alG
@@ -50007,10 +50088,10 @@ iQK
 aah
 iQK
 iQK
+scT
+fLQ
 rTG
-rTG
-ukf
-ukf
+idk
 inv
 glv
 glv
@@ -55685,7 +55766,7 @@ dcb
 hkk
 fFU
 gGn
-yfL
+vlg
 cqD
 acS
 tkK
@@ -56895,7 +56976,7 @@ vPk
 vPk
 vPk
 vcy
-vPk
+vEP
 vPk
 vPk
 vPk
