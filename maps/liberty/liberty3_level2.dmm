@@ -758,7 +758,8 @@
 	dir = 8
 	},
 /obj/structure/closet/secure_closet/wall{
-	pixel_x = 22
+	pixel_x = 22;
+	req_access = list()
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/three_zero_one)
@@ -906,7 +907,8 @@
 	dir = 8
 	},
 /obj/structure/closet/secure_closet/wall{
-	pixel_x = 22
+	pixel_x = 22;
+	req_access = list()
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/three_zero_two)
@@ -950,7 +952,8 @@
 	dir = 8
 	},
 /obj/structure/closet/secure_closet/wall{
-	pixel_x = 22
+	pixel_x = 22;
+	req_access = list()
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/one_zero_one)
@@ -996,7 +999,8 @@
 	dir = 8
 	},
 /obj/structure/closet/secure_closet/wall{
-	pixel_x = 22
+	pixel_x = 22;
+	req_access = list()
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/three_zero_three)
@@ -1658,7 +1662,6 @@
 /obj/machinery/door/firedoor{
 	dir = 8
 	},
-/obj/machinery/door/airlock/maintenance,
 /obj/structure/cable/green{
 	d1 = 4;
 	d2 = 8;
@@ -1668,6 +1671,9 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
+	dir = 4
+	},
+/obj/machinery/door/airlock/civilian{
 	dir = 4
 	},
 /turf/simulated/floor/tiled/techfloor/grid,
@@ -2350,7 +2356,8 @@
 	dir = 8
 	},
 /obj/structure/closet/secure_closet/wall{
-	pixel_x = 22
+	pixel_x = 22;
+	req_access = list()
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/one_zero_two)
@@ -2456,7 +2463,8 @@
 	dir = 8
 	},
 /obj/structure/closet/secure_closet/wall{
-	pixel_x = 22
+	pixel_x = 22;
+	req_access = list()
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/one_zero_three)
@@ -2495,7 +2503,8 @@
 	dir = 8
 	},
 /obj/structure/closet/secure_closet/wall{
-	pixel_x = 22
+	pixel_x = 22;
+	req_access = list()
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/one_zero_four)
@@ -2882,7 +2891,8 @@
 	dir = 1
 	},
 /obj/structure/closet/secure_closet/wall{
-	pixel_x = -22
+	pixel_x = -22;
+	req_access = list()
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/two_zero_one)
@@ -2962,7 +2972,8 @@
 	dir = 1
 	},
 /obj/structure/closet/secure_closet/wall{
-	pixel_x = -22
+	pixel_x = -22;
+	req_access = list()
 	},
 /turf/simulated/floor/tiled/dark,
 /area/liberty/hotel/room/two_zero_two)
@@ -23264,6 +23275,13 @@
 	},
 /turf/simulated/floor/wood/maple,
 /area/liberty/medbay/ward/two)
+"ZE" = (
+/obj/structure/closet/hydrant{
+	pixel_y = 32
+	},
+/obj/structure/catwalk,
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/two)
 "ZF" = (
 /obj/structure/table/woodentable_reinforced/walnut,
 /turf/simulated/floor/tiled/techmaint,
@@ -43090,7 +43108,7 @@ yM
 ZM
 Ws
 zs
-ou
+ZE
 mN
 oY
 ab

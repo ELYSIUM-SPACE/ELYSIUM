@@ -36804,6 +36804,10 @@
 	dir = 4
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/access_button/airlock_interior{
+	pixel_y = 23;
+	master_tag = "airlock_access"
+	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/aft_starboard)
 "boT" = (
@@ -36820,6 +36824,10 @@
 /obj/machinery/door/firedoor,
 /obj/machinery/door/airlock/external,
 /obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/access_button/airlock_interior{
+	pixel_y = 23;
+	master_tag = "airlock_access"
+	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/maintenance/one/aft_starboard)
 "boW" = (
@@ -39571,6 +39579,7 @@
 	name = "Docking Ports Lockdown"
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/door/airlock/multi_tile/glass/civilian,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/hallway/one/aft_docks)
 "btE" = (
@@ -40291,6 +40300,7 @@
 	dir = 8
 	},
 /obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/door/airlock/glass/civilian,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/hallway/one/aft_docks)
 "bvp" = (
@@ -40420,6 +40430,15 @@
 	},
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/liberty/arrivals_shuttle)
+"bGt" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 9
+	},
+/obj/machinery/light{
+	dir = 8
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/one/fore_docks)
 "cvK" = (
 /obj/structure/railing/mapped,
 /obj/structure/railing/mapped{
@@ -40452,6 +40471,15 @@
 	},
 /turf/simulated/floor/carpet/red,
 /area/liberty/hotel/restaurant/main)
+"drl" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 6
+	},
+/obj/machinery/light{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/one/fore_docks)
 "dsH" = (
 /obj/structure/cable/green{
 	d1 = 4;
@@ -40499,6 +40527,29 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/fore_port)
+"ehS" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 6
+	},
+/obj/machinery/light/spot{
+	dir = 4
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/one/fore_docks)
+"fJY" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 10
+	},
+/obj/machinery/light,
+/obj/machinery/access_button/airlock_exterior{
+	frequency = 1331;
+	master_tag = "sfp_shuttle";
+	req_access = list("ACCESS_SOL_SFP");
+	pixel_x = -23;
+	pixel_y = 9
+	},
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/scg/docks)
 "haX" = (
 /obj/structure/catwalk,
 /obj/machinery/atmospherics/pipe/simple/hidden{
@@ -40522,6 +40573,13 @@
 	},
 /turf/simulated/floor/plating,
 /area/liberty/maintenance/one/aft_starboard)
+"hzk" = (
+/obj/effect/wallframe_spawn/reinforced,
+/obj/machinery/door/firedoor,
+/obj/effect/paint_stripe/white,
+/obj/effect/paint/sfp_blue,
+/turf/simulated/floor/plating,
+/area/liberty/sfp/recreation)
 "iDw" = (
 /obj/effect/floor_decal/industrial/hatch/yellow,
 /obj/machinery/door/firedoor,
@@ -40579,6 +40637,13 @@
 	},
 /turf/simulated/floor/tiled/old_tile,
 /area/liberty/hotel/kitchen)
+"jOr" = (
+/obj/effect/floor_decal/corner/grey{
+	dir = 10
+	},
+/obj/machinery/light,
+/turf/simulated/floor/tiled/techmaint,
+/area/liberty/hallway/one/fore_docks)
 "kda" = (
 /obj/structure/railing/mapped{
 	dir = 4
@@ -40621,6 +40686,12 @@
 	},
 /turf/simulated/floor/reinforced/airless,
 /area/space)
+"mHn" = (
+/obj/machinery/light/spot{
+	dir = 8
+	},
+/turf/simulated/open,
+/area/liberty/engineering/supermatter_tegs)
 "mWp" = (
 /obj/structure/railing/mapped{
 	dir = 8
@@ -40637,6 +40708,20 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/arrivals_shuttle)
+"nJy" = (
+/obj/machinery/door/firedoor{
+	dir = 8
+	},
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/machinery/atmospherics/pipe/simple/hidden/supply{
+	dir = 4
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/scrubbers{
+	dir = 4
+	},
+/obj/machinery/door/airlock/glass/civilian,
+/turf/simulated/floor/tiled/techfloor/grid,
+/area/liberty/hallway/one/aft_docks)
 "nJV" = (
 /obj/structure/lattice,
 /obj/effect/floor_decal/industrial/outline/yellow,
@@ -40644,11 +40729,20 @@
 /turf/simulated/floor/airless/ceiling,
 /area/space)
 "obt" = (
-/obj/machinery/door/airlock/multi_tile/civilian{
-	locked = 1
+/obj/effect/floor_decal/industrial/warning/full,
+/obj/machinery/atmospherics/unary/vent_pump/high_volume/airlock,
+/obj/structure/catwalk,
+/obj/machinery/embedded_controller/radio/airlock/docking_port{
+	cycle_to_external_air = 1;
+	frequency = 1331;
+	id_tag = "sfp_shuttle";
+	name = "Airlock Port Controller";
+	pixel_y = 24;
+	req_access = list("ACCESS_SOL_SFP");
+	tag_exterior_sensor = "sfp_shuttle_exterior_sensor"
 	},
-/turf/space,
-/area/space)
+/turf/simulated/floor/plating,
+/area/liberty/maintenance/one/aft_starboard)
 "orX" = (
 /obj/effect/wallframe_spawn/reinforced,
 /turf/simulated/floor/plating,
@@ -40727,6 +40821,19 @@
 	},
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/hallway/one/fore_terminal)
+"qIY" = (
+/obj/machinery/door/firedoor,
+/obj/machinery/door/airlock/external{
+	frequency = 1331
+	},
+/obj/effect/floor_decal/industrial/hatch/yellow,
+/obj/structure/cable/green{
+	d1 = 4;
+	d2 = 8;
+	icon_state = "4-8"
+	},
+/turf/simulated/floor/tiled/techfloor/grid,
+/area/liberty/scg/docks)
 "qRL" = (
 /obj/structure/bed/chair/office/dark{
 	dir = 8
@@ -53680,7 +53787,7 @@ afW
 agx
 ahi
 aii
-ajh
+hzk
 akk
 alz
 amV
@@ -53882,7 +53989,7 @@ adt
 agy
 ahj
 aij
-ajh
+hzk
 akl
 alA
 amW
@@ -54490,7 +54597,7 @@ ahl
 aim
 ajg
 ajg
-ajh
+hzk
 amZ
 ajh
 ajh
@@ -57288,7 +57395,7 @@ aaa
 aac
 aac
 aac
-abZ
+qIY
 aac
 aac
 aac
@@ -57491,7 +57598,7 @@ aaa
 aac
 abE
 aca
-acp
+fJY
 aac
 aaa
 aaa
@@ -60010,7 +60117,7 @@ btT
 brG
 brG
 brG
-bvg
+nJy
 brG
 brG
 brG
@@ -64591,7 +64698,7 @@ aiP
 ajJ
 afU
 amo
-ajJ
+jOr
 akZ
 aql
 arQ
@@ -65063,7 +65170,7 @@ aaa
 aaa
 aaa
 aaa
-obt
+aaa
 aaa
 aaa
 aaa
@@ -65188,7 +65295,7 @@ aaa
 aaa
 aaa
 aeK
-afm
+bGt
 afm
 afm
 afm
@@ -65794,14 +65901,14 @@ aaa
 aaa
 aaa
 aeK
-afo
+drl
 afo
 afo
 afo
 aeK
 afo
 ajO
-afo
+ehS
 afo
 anJ
 akZ
@@ -70085,7 +70192,7 @@ bfm
 bfm
 bcD
 baa
-bnV
+obt
 boT
 bpY
 baa
@@ -71484,9 +71591,9 @@ aRI
 aTa
 aUb
 aVx
+mHn
 aWv
-aWv
-aWv
+mHn
 aVx
 bbA
 bcM
