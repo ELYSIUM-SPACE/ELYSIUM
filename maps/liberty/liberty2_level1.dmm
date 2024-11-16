@@ -2024,13 +2024,13 @@
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/sfp/chief)
 "adN" = (
-/obj/structure/closet/secure_closet/hos,
 /obj/item/device/radio/intercom/department/security{
 	pixel_y = 23
 	},
 /obj/effect/floor_decal/corner/grey/three_quarters{
 	dir = 1
 	},
+/obj/structure/closet/secure_closet/warden/ark,
 /turf/simulated/floor/tiled/techmaint,
 /area/liberty/sfp/chief)
 "adO" = (
@@ -5932,7 +5932,7 @@
 /turf/simulated/floor/carpet/blue,
 /area/liberty/sfp/dorm)
 "aly" = (
-/obj/structure/closet/secure_closet/security,
+/obj/structure/closet/secure_closet/security/ark,
 /turf/simulated/floor/carpet/blue,
 /area/liberty/sfp/dorm)
 "alz" = (
@@ -10378,10 +10378,10 @@
 	pixel_x = 3;
 	pixel_y = 28
 	},
-/obj/structure/closet/secure_closet/hos,
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 4
 	},
+/obj/structure/closet/secure_closet/warden/ark,
 /turf/simulated/floor/wood/walnut,
 /area/liberty/sfp/dorm)
 "atR" = (
