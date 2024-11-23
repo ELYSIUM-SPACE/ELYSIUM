@@ -22,7 +22,10 @@
 		/obj/item/clothing/accessory/storage/black_vest,
 		/obj/item/gun/energy/taser,
 		/obj/item/device/holowarrant,
-		/obj/item/clothing/shoes/jackboots/sfp
+		/obj/item/clothing/shoes/jackboots/sfp,
+		/obj/item/clothing/head/soft/sfp/white,
+		/obj/item/clothing/head/soft/sfp/blue,
+		/obj/item/clothing/accessory/armor/helmcover/sfp
 	)
 
 /obj/structure/closet/secure_closet/detective/ark
@@ -49,7 +52,10 @@
 		/obj/item/clothing/suit/armor/vest,
 		/obj/item/clothing/head/helmet,
 		/obj/item/clothing/accessory/storage/black_vest,
-		/obj/item/gun/energy/taser
+		/obj/item/gun/energy/taser,
+		/obj/item/clothing/head/soft/sfp/white,
+		/obj/item/clothing/head/soft/sfp/blue,
+		/obj/item/clothing/accessory/armor/helmcover/sfp
 	)
 
 /obj/structure/closet/secure_closet/warden/ark
@@ -77,5 +83,8 @@
 		/obj/item/clothing/gloves/sfp,
 		/obj/item/clothing/suit/armor/vest,
 		/obj/item/clothing/head/helmet,
-		/obj/item/melee/telebaton
+		/obj/item/melee/telebaton,
+		/obj/item/clothing/head/soft/sfp/white,
+		/obj/item/clothing/head/soft/sfp/blue,
+		/obj/item/clothing/accessory/armor/helmcover/sfp
 	)
