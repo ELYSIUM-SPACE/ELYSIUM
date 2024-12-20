@@ -1,7 +1,7 @@
 /obj/structure/closet/secure_closet/security/ark
 	name = "solfed security locker"
 	req_access = list(access_brig)
-	closet_appearance = /decl/closet_appearance/secure_closet/security
+	closet_appearance = /decl/closet_appearance/secure_closet/sfp
 
 /obj/structure/closet/secure_closet/security/ark/WillContain()
 	return list(
@@ -31,7 +31,7 @@
 /obj/structure/closet/secure_closet/detective/ark
 	name = "investigator's cabinet"
 	req_access = list(access_forensics_lockers)
-	closet_appearance = /decl/closet_appearance/cabinet/secure
+	closet_appearance = /decl/closet_appearance/secure_closet/sfp/forensics
 
 /obj/structure/closet/secure_closet/detective/ark/WillContain()
 	return list(
@@ -61,7 +61,7 @@
 /obj/structure/closet/secure_closet/warden/ark
 	name = "curator's locker"
 	req_access = list(access_armory)
-	closet_appearance = /decl/closet_appearance/secure_closet/security/warden
+	closet_appearance = /decl/closet_appearance/secure_closet/sfp/chief
 
 /obj/structure/closet/secure_closet/warden/ark/WillContain()
 	return list(
